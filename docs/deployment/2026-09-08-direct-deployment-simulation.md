@@ -98,7 +98,7 @@ before any authorized broadcast.
 
 The next public action is not “run deploy.” It is:
 
-1. friend reviews core `f4abdd7...` and the candidate v4 stack evidence;
+1. friend follows the [independent review gate](../review/2026-09-08-core-f4abdd7-and-v4-candidate.md) and separately accepts core `f4abdd7...` and the non-official candidate V4 stack;
 2. owner and a second actor obtain bounded faucet ETH and Stock Tokens;
 3. strict `scripts/verify-robinhood-testnet.ps1` passes;
 4. artifacts are regenerated from the then-current pending nonce;

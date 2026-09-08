@@ -828,7 +828,7 @@ Every live acceptance report must distinguish:
 
 ## 8. Deployment and key-safety policy
 
-The authorized testnet-only deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`; the same address is derived on every EVM chain. A current read-only check on 2026-09-08 confirmed Robinhood testnet chain ID `46630`, but the address has `0` test ETH and `0` of the five test Stock Tokens. The owner must complete Robinhood's browser faucet flow before any Robinhood testnet broadcast. That funding step is a real deployment blocker, but it does not block local implementation.
+The authorized testnet-only deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`; the same address is derived on every EVM chain. A current read-only check on 2026-09-08 confirmed Robinhood testnet chain ID `46630`, but the address has `0` test ETH and `0` of the five test Stock Tokens. The owner must complete Robinhood's official faucet flow before any Robinhood testnet broadcast. If the faucet requires a connected wallet, use a fresh test-only wallet that the owner or friend controls, retain it as the second actor, and transfer only bounded test assets to the public deployer address; never import the deployer key into an uncontrolled browser wallet. That funding step is a real deployment blocker, but it does not block local implementation.
 
 The same address remains funded on Base Sepolia for the secondary B20 lane. Re-check chain ID, native balance, token addresses, token balances, code hashes, and nonce immediately before every broadcast because chain state can change.
 
@@ -844,6 +844,12 @@ The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 - Set explicit chain ID and RPC; abort if either is unexpected.
 - Broadcast only bounded testnet transactions listed in a reviewed manifest.
 - Never use this EOA as final protocol governance; public alpha uses a Safe with role separation and a guardian runbook.
+
+Before funding is treated as ready or any nonce-derived artifact is regenerated,
+the second contributor must complete
+`docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md`. Core acceptance and
+acceptance of the non-official V4 candidate are separate decisions; both remain
+`NO_GO` until independently reproduced.
 
 ## 9. Hour-by-hour execution plan: public sandbox by Hour 32, hardened alpha by Hour 80
 

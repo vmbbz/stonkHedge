@@ -1,0 +1,28 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs and local evidence that may contain machine-specific data
+*.log
+tmp/
+
+# JavaScript/build outputs for the future product app
+node_modules/
+dist/
+build/
+coverage/
+.next/
+
+# Foundry outputs for future integration tooling
+cache/
+out/
+broadcast/

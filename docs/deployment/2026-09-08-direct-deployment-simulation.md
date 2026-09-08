@@ -8,11 +8,12 @@ Robinhood Chain testnet. All CREATE addresses matched, all receipts succeeded,
 all deployed runtimes were non-empty, final nonce was `16`, and 11
 post-deployment constructor/wiring assertions passed.
 
-No private key was read, no public transaction was signed or broadcast, and no
-stonkHedge contract exists on the public testnet. Public broadcast remains
-blocked because the deployer has zero native gas token and zero test Stock
-Tokens, and the core plus non-official candidate infrastructure still need a
-second contributor's review.
+No private key was read, no deployer transaction was signed or broadcast, and no
+stonkHedge contract exists on the public testnet. The official faucet later
+funded the deployer without consuming its nonce, as documented in
+[`2026-09-08-faucet-and-mainnet-safe-readiness.md`](./2026-09-08-faucet-and-mainnet-safe-readiness.md).
+Public broadcast remains blocked on a second actor, independent core and
+candidate-infrastructure review, and a fresh exact-artifact review.
 
 The sanitized machine-readable evidence is
 [`../../manifests/deployments/robinhood-testnet-direct-preflight-2026-09-08.json`](../../manifests/deployments/robinhood-testnet-direct-preflight-2026-09-08.json).
@@ -99,7 +100,7 @@ before any authorized broadcast.
 The next public action is not “run deploy.” It is:
 
 1. friend follows the [independent review gate](../review/2026-09-08-core-f4abdd7-and-v4-candidate.md) and separately accepts core `f4abdd7...` and the non-official candidate V4 stack;
-2. owner and a second actor obtain bounded faucet ETH and Stock Tokens;
+2. a distinct second actor obtains bounded faucet ETH and Stock Tokens; the deployer funding leg is complete;
 3. strict `scripts/verify-robinhood-testnet.ps1` passes;
 4. artifacts are regenerated from the then-current pending nonce;
 5. the exact regenerated plan passes a fresh fork simulation; and

@@ -225,17 +225,18 @@ owner, wiring, Stock Token, pause, multiplier, WETH, and test-USDC checks pass;
 the deployer funding line is `SKIPPED`. Any identity or state mismatch is
 `V4_CANDIDATE_REJECT`, not a reason to edit the manifest to current values.
 
-Then run the strict mode to prove that deployment is still blocked before
-funding:
+Then run strict mode to verify the live funding state:
 
 ```powershell
 pwsh -File .\scripts\verify-robinhood-testnet.ps1
 ```
 
-Expected before the faucet step: non-zero exit because deployer funding is
-`BLOCKED`, while preceding dependency checks still pass. A strict pass would
-mean the funding state changed and must be investigated before regenerating any
-nonce-derived artifact.
+Expected after faucet transaction
+`0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98`:
+exit `0`, with `0.01` test ETH, a positive balance for every reviewed Stock
+Token, and pending nonce `0`. Record the observed block and exact balances. A
+strict pass clears only deployer funding; it does not approve the core, V4
+candidate, second actor, derived artifacts, or broadcast.
 
 ### B3. Independently spot-check the critical V4 controls
 
@@ -349,10 +350,10 @@ cast call $stock 'balanceOf(address)(uint256)' $deployer --rpc-url $rpc
 pwsh -File .\scripts\verify-robinhood-testnet.ps1
 ```
 
-Funding is complete only when strict verification passes and the second actor
-retains enough test ETH and the selected Stock Token for the two-actor lifecycle.
-Faucet success alone is not proof that the correct address received usable
-assets.
+The deployer's funding leg is complete only when strict verification passes.
+The broader two-actor gate remains incomplete until a distinct actor retains
+enough test ETH and the selected Stock Token for the lifecycle. Faucet success
+alone is not proof that the correct address received usable assets.
 
 ## Review report template
 
@@ -388,6 +389,9 @@ Reason:
 ```
 
 `NONCE_REGENERATION_GATE` remains `NO_GO` unless both review decisions are
-accepted and strict funding verification passes. Only then may the operator
-read the current pending nonce, regenerate every derived address/config/bundle/
-plan, rerun the exact fork simulation, and request a separate broadcast review.
+accepted and strict deployer funding verification passes. Review can run in
+parallel with local implementation, tests, UI work, and fork rehearsal; it
+blocks the first public transaction that trusts the V4 candidate. Only after
+the gate passes may the operator read the current pending nonce, regenerate
+every derived address/config/bundle/plan, rerun the exact fork simulation, and
+request a separate broadcast review.

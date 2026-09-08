@@ -47,6 +47,15 @@
     "occupiedPredictedAddresses": 0,
     "fundingGate": "BLOCKED"
   },
+  "postSimulationFunding": {
+    "status": "DEPLOYER_PASS_SECOND_ACTOR_REQUIRED",
+    "transactionHash": "0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98",
+    "strictVerifierBlock": 115756898,
+    "senderPendingNonce": 0,
+    "senderNativeBalanceWei": "10000000000000000",
+    "senderEachStockTokenBalance": "5000000000000000000",
+    "note": "This later observation clears deployer funding but does not rewrite the historical fork-simulation preflight or authorize broadcast."
+  },
   "artifacts": {
     "directConfig": {
       "bytes": 9551,
@@ -215,8 +224,9 @@
   "broadcastGates": {
     "coreReview": "REQUIRED",
     "candidateInfrastructureReview": "REQUIRED",
-    "nativeFunding": "BLOCKED",
-    "stockTokenFunding": "BLOCKED",
+    "nativeFunding": "PASS",
+    "stockTokenFunding": "PASS",
+    "secondActorFunding": "REQUIRED",
     "freshNonceAndAddressRecheck": "REQUIRED",
     "publicBroadcast": "NOT_AUTHORIZED"
   }

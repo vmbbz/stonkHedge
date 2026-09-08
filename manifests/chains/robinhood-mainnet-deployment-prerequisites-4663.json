@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "status": "ONCHAIN_BATCH_PRIMITIVES_PRESENT_MAINNET_RELEASE_NOT_APPROVED",
+  "capturedAt": "2026-09-08T19:27:58Z",
+  "network": {
+    "name": "Robinhood Chain",
+    "chainId": 4663,
+    "rpcUrl": "https://rpc.mainnet.chain.robinhood.com"
+  },
+  "observation": {
+    "blockNumber": 57933888,
+    "blockHash": "0xa8bdcfcd6de46bd437aae6f8b2e3d6a7a3e9b62777a50e40063aa54f095d7b64",
+    "blockTimestamp": "2026-09-08T19:17:48Z"
+  },
+  "panopticCreate3": {
+    "address": "0x000000000000b361194cfe6312EE3210d53C15AA",
+    "runtimeBytes": 10812,
+    "runtimeCodeHash": "0xb7cfc5d258769f50c9fdc05c39485a86dbd23a0c984824d2c522e3e8d5dbcfb7",
+    "status": "PRESENT"
+  },
+  "safeV141": {
+    "registry": "https://github.com/safe-global/safe-deployments/tree/main/src/assets/v1.4.1",
+    "networkRegistered": true,
+    "contracts": {
+      "safeL2": {
+        "address": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+        "runtimeCodeHash": "0xb1f926978a0f44a2c0ec8fe822418ae969bd8c3f18d61e5103100339894f81ff"
+      },
+      "safe": {
+        "address": "0x41675C099F32341bf84BFc5382aF534df5C7461a",
+        "runtimeCodeHash": "0x1fe2df852ba3299d6534ef416eefa406e56ced995bca886ab7a553e6d0c5e1c4"
+      },
+      "proxyFactory": {
+        "address": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+        "runtimeCodeHash": "0x50c3cdc4074750a7a974204a716c999edd37482f907608d960b2b025ee0b3317"
+      },
+      "multiSend": {
+        "address": "0x38869bf66a61cF6bDB996A6aE40D5853Fd43B526",
+        "runtimeCodeHash": "0x0e4f7fc66550a322d1e7688e181b75e217e662a4f3f4d6a29b22bc61217c4b77"
+      },
+      "multiSendCallOnly": {
+        "address": "0x9641d764fc13c8B624c04430C7356C1C7C8102e2",
+        "runtimeCodeHash": "0xecd5bd14a08c5d2122379900b2f272bdf107a7e92423c10dd5fe3254386c9939"
+      }
+    },
+    "runtimeHashChecks": "PASS",
+    "hostedWalletAndTransactionService": "NOT_ESTABLISHED_BY_THIS_AUDIT"
+  },
+  "upstreamSaltAuthority": {
+    "embeddedRecipient": "0x82bf455e9ebd6a541ef10b683de1edcaf05ce7a1",
+    "ethereumRuntimeBytes": 171,
+    "ethereumSafeThreshold": 3,
+    "ethereumSafeOwnerCount": 5,
+    "robinhoodMainnetRuntimeBytes": 0,
+    "robinhoodTestnetRuntimeBytes": 0,
+    "effect": "The existing upstream salts cannot authorize stonkHedge. Mainnet needs Panoptic participation or freshly mined salts bound to a reviewed stonkHedge Safe."
+  },
+  "conclusion": {
+    "safeBatchExecution": "SUPPORTED_ONCHAIN",
+    "reuseUpstreamPanopticReleaseConfig": "BLOCKED_BY_SALT_BOUND_SAFE",
+    "mainnetDeployment": "NOT_AUTHORIZED"
+  }
+}

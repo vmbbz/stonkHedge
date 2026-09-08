@@ -1,7 +1,8 @@
 {
   "schemaVersion": 1,
-  "status": "QUALIFIED_READ_ONLY_AND_EXACT_SENDER_SIMULATED_REVIEW_REQUIRED",
+  "status": "QUALIFIED_FUNDED_AND_EXACT_SENDER_SIMULATED_REVIEW_REQUIRED",
   "capturedAt": "2026-09-08T17:03:05+02:00",
+  "updatedAt": "2026-09-08T19:27:58Z",
   "network": {
     "name": "Robinhood Chain Testnet",
     "chainId": 46630,
@@ -24,6 +25,25 @@
     "robinhoodExplorer": "https://explorer.testnet.chain.robinhood.com/",
     "uniswapOfficialRobinhoodMainnet": "https://github.com/Uniswap/contracts/blob/main/deployments/4663.md",
     "testnetReproducibilityManifest": "https://github.com/EqualFiLabs/statics/blob/master/deployments/robinhood-chain-testnet-46630.json"
+  },
+  "fundingEvidence": {
+    "status": "DEPLOYER_PASS_SECOND_ACTOR_REQUIRED",
+    "transactionHash": "0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98",
+    "blockNumber": 115750101,
+    "blockHash": "0x9ff10ea22ff3c0396d6f205895c24536a1032b37b43662dbd34269a416b38c14",
+    "blockTimestamp": "2026-09-08T19:07:49Z",
+    "faucetDistributor": "0x8762f93772c663c6a88ba50900bd5381df2717be",
+    "nativeBalanceWei": "10000000000000000",
+    "eachStockTokenBalance": "5000000000000000000",
+    "pendingNonceAfterClaim": 0,
+    "strictVerifier": {
+      "status": "PASS",
+      "blockNumber": 115756898,
+      "blockHash": "0x8d7f902d4969c72ecb1196dc69118d8a679089e11a3a600b4cbfd998431bb49d",
+      "blockTimestamp": "2026-09-08T19:22:39Z",
+      "durationSeconds": 130.7,
+      "failedOrBlockedAssertions": 0
+    }
   },
   "deploymentPreparation": {
     "status": "EXACT_SENDER_FORK_SIMULATION_PASS_BROADCAST_BLOCKED",
@@ -141,22 +161,22 @@
   },
   "deployer": {
     "address": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
-    "observedNativeBalanceWei": "0",
+    "observedNativeBalanceWei": "10000000000000000",
     "observedNonce": 0,
     "blockedByStockRegistry": false,
     "observedStockBalances": {
-      "AMZN": "0",
-      "AMD": "0",
-      "TSLA": "0",
-      "PLTR": "0",
-      "NFLX": "0"
+      "AMZN": "5000000000000000000",
+      "AMD": "5000000000000000000",
+      "TSLA": "5000000000000000000",
+      "PLTR": "5000000000000000000",
+      "NFLX": "5000000000000000000"
     },
-    "fundingGate": "BLOCKED",
+    "fundingGate": "PASS",
     "minimumNativeWeiForPreflight": "1",
     "requireAtLeastOnePositiveStockBalance": true
   },
   "marketSelection": {
-    "status": "BLOCKED_ON_FAUCET_BALANCES",
-    "rule": "Choose exactly one healthy Stock Token with positive deployer and second-actor faucet balances; do not select by ticker popularity alone."
+    "status": "DEPLOYER_READY_SECOND_ACTOR_REQUIRED",
+    "rule": "Choose exactly one healthy Stock Token only after a second actor has a positive balance and current health passes; do not select by ticker popularity alone."
   }
 }

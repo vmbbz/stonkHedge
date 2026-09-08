@@ -10,7 +10,9 @@ The current repository is the product and delivery control plane. It contains th
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
-- Complete the [independent core and candidate-V4 review gate](./docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md) before funding is treated as ready or any nonce-derived artifact is regenerated.
+- See the [verified faucet and mainnet Safe-readiness evidence](./docs/deployment/2026-09-08-faucet-and-mainnet-safe-readiness.md) for the current funding state and the distinction between on-chain Safe support and Panoptic's salt-bound Safe.
+- Complete the [independent core and candidate-V4 review gate](./docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md) before any public transaction trusts the candidate or any nonce-derived artifact is regenerated for broadcast.
+- Use the [controllable Stock Token specification](./docs/specs/controllable-stock-token.md) for local issuer-failure testing; never present that test double as issuer code or deploy it as a public Robinhood Stock Token.
 - Run `pwsh -File .\scripts\verify-robinhood-testnet.ps1` before any chain-specific simulation or broadcast. Use `-SkipFundingGate` only for read-only infrastructure qualification.
 - Treat all material before that section as background research, not an approved specification.
 - The current milestone is a valueless Robinhood Chain testnet vertical slice. No stonkHedge contracts have been deployed yet.

@@ -6,14 +6,14 @@ Chain `46630`, five issuer-shaped test Stock Token proxies, test WETH, and an ex
 
 The qualification is intentionally bounded: Uniswap's official deployment repository does not list chain `46630`, so the testnet stack is recorded as **reusable candidate infrastructure, not an official Uniswap deployment**. A second contributor must reproduce this report before its addresses become deployment inputs.
 
-No private key was read or printed and no transaction was signed or broadcast. The public deployer `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD` had nonce `0`, zero test ETH, and zero of all five Stock Tokens. Faucet funding therefore remains `BLOCKED`.
+No private key was read or printed and no deployer transaction was signed or broadcast during qualification. The public deployer `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD` initially had nonce `0`, zero test ETH, and zero of all five Stock Tokens. The official faucet subsequently funded it with `0.01` test ETH and `5` of each token without changing its nonce; see [`../deployment/2026-09-08-faucet-and-mainnet-safe-readiness.md`](../deployment/2026-09-08-faucet-and-mainnet-safe-readiness.md).
 
 The machine-readable evidence is [`../../manifests/chains/robinhood-testnet-46630.json`](../../manifests/chains/robinhood-testnet-46630.json), and the executable drift check is [`../../scripts/verify-robinhood-testnet.ps1`](../../scripts/verify-robinhood-testnet.ps1).
 
 The subsequent exact-sender deployment preparation is documented separately in
 [`../deployment/2026-09-08-direct-deployment-simulation.md`](../deployment/2026-09-08-direct-deployment-simulation.md).
-That fork simulation passed, but it did not change this report's public funding
-or independent-review blockers.
+That fork simulation passed. The later faucet claim cleared only the deployer's
+funding blocker; second-actor funding and independent-review gates remain.
 
 ## Evidence window
 
@@ -40,7 +40,7 @@ All five Stock addresses contain the same 283-byte beacon-proxy runtime hash and
 - `paused() == false` and `tokenPaused() == false`;
 - current and pending UI multipliers of `1e18`;
 - `effectiveAt() == 0`, so no multiplier transition was scheduled; and
-- a zero deployer balance.
+- a zero deployer balance at the original observation window.
 
 | Symbol | Address |
 |---|---|
@@ -60,7 +60,7 @@ Read-only qualification, allowing the known funding blocker:
 pwsh -File .\scripts\verify-robinhood-testnet.ps1 -SkipFundingGate
 ```
 
-Deployment preflight, which must remain non-zero until both ETH and at least one Stock Token are present:
+Deployment preflight, which now passes the deployer funding gate but not the separate review/second-actor gates:
 
 ```powershell
 pwsh -File .\scripts\verify-robinhood-testnet.ps1

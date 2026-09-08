@@ -127,9 +127,16 @@ The implementation and its test names must label these deviations:
 - proxy/beacon upgrade behavior is tested separately only if an integration
   failure requires it.
 
-## Acceptance gate
+## Acceptance gate and current state
 
-Hour 9 is complete when this specification is committed. Hours 10–11 require a
-red test first, the minimum implementation, deterministic tests, fuzz coverage,
-and a manifest that labels the contracts `LOCAL_TEST_DOUBLE_ONLY`. No address
-from the local fixture may enter a chain-`46630` deployment manifest.
+Hour 9 is complete. The standalone Hours 10–11 harness is also green at core
+commit `159dabdd09a8b1168b23aa732fec9cb562a3f22b`: it began with a recorded red
+test, uses the minimum test-only implementation, has deterministic and fuzz
+coverage, and is labeled `LOCAL_TEST_DOUBLE_ONLY` in the
+[evidence manifest](../../manifests/testing/controllable-stock-token-harness-2026-09-08.json).
+No address from the local fixture may enter a chain-`46630` deployment manifest.
+
+This does not complete the protocol half of Hour 11. Deposit, open, close,
+liquidation, and withdrawal failure semantics remain pending in the local
+Panoptic lifecycle integration described in the
+[harness evidence](../testing/2026-09-08-controllable-stock-token-harness.md).

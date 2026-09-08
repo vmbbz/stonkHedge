@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** The first deployment-preparation slice is complete and reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Its exact 16-contract plan for the public deployer passed a fresh Robinhood-testnet Anvil-fork simulation, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on second-person core/infrastructure review and faucet funding; the deployer still has zero test ETH and zero test Stock Tokens.
+**Status:** The first deployment-preparation slice is complete and reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Its exact 16-contract plan for the public deployer passed a fresh Robinhood-testnet Anvil-fork simulation, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Faucet transaction `0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98` subsequently funded the deployer with `0.01` test ETH and five units of each reviewed test Stock Token while its pending nonce remained `0`; the strict verifier passed afterward. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on second-actor funding, second-person core/infrastructure review, and fresh exact-artifact regeneration.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -572,7 +572,7 @@ The project deliberately uses three repositories so product code and upstream-de
 | Purpose | GitHub repository | Local checkout | Pinned planning baseline |
 |---|---|---|---|
 | Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 2 commit |
-| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`, including runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
+| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | standalone Stock Token harness `159dabdd09a8b1168b23aa732fec9cb562a3f22b` on direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`, including runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
 | SDK fork | https://github.com/vmbbz/panoptic-sdk | `C:\dev-shared\stonkHedge-sdk` | upstream `aa971d1f9ea5836546cd5266bcbfb94138ef4f57` |
 
 Remotes in both forks:
@@ -585,7 +585,7 @@ Do not fork Uniswap v4, Robinhood's test token implementation, or Base's standar
 Branch model:
 
 - Product repo: short branches such as `docs/plan-round-2`, `feat/testnet-manifest`, and `feat/web-vertical-slice`.
-- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. Neither branch is an approved public deployment input until independent review is recorded.
+- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. `feat/stock-token-compatibility-harness` adds only the local test double and focused tests at `159dabd...`. None is an approved public deployment input until independent review is recorded.
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
@@ -865,7 +865,7 @@ acceptance of the non-official V4 candidate are separate decisions; both remain
 
 This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour, not a week estimate. The earliest public sandbox is intentionally targeted for Hour 32; Hours 33–80 deepen safety, strategy coverage, reproducibility, and user experience. If a security, license, chain-identity, or accounting gate fails, record `BLOCKED` and do not hide the failure merely to meet the clock.
 
-Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastructure qualification, chain manifest, direct-CREATE preparation, exact-sender fork simulation, wiring checks, deployer faucet funding, and Hour 9 controllable-token specification are complete. This pulls forward the simulation part of Hour 23 without pretending that Hours 10–16 or the live market lifecycle are done. Second-actor funding and both independent reviews remain public-deployment blockers; local controllable-token, pool-lifecycle, adapter, UI, and monitoring work continues in parallel.
+Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastructure qualification, chain manifest, direct-CREATE preparation, exact-sender fork simulation, wiring checks, deployer faucet funding, Hour 9 specification, and the standalone token work in Hours 10–11 are complete. Core `159dabd...` has 16 focused tests plus fuzz coverage for multiplier, rounding, pause, blocklist, permit/allowance, role, burn, and recovery behavior. The Panoptic lifecycle half of Hour 11 and Hours 12–16 remain pending; this does not claim a working market. Second-actor funding and both independent reviews remain public-deployment blockers, while local pool-lifecycle, adapter, UI, and monitoring work continues in parallel.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 

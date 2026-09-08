@@ -13,6 +13,7 @@ The current repository is the product and delivery control plane. It contains th
 - See the [verified faucet and mainnet Safe-readiness evidence](./docs/deployment/2026-09-08-faucet-and-mainnet-safe-readiness.md) for the current funding state and the distinction between on-chain Safe support and Panoptic's salt-bound Safe.
 - Complete the [independent core and candidate-V4 review gate](./docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md) before any public transaction trusts the candidate or any nonce-derived artifact is regenerated for broadcast.
 - Use the [controllable Stock Token specification](./docs/specs/controllable-stock-token.md) for local issuer-failure testing; never present that test double as issuer code or deploy it as a public Robinhood Stock Token.
+- Reproduce the [standalone controllable-token harness evidence](./docs/testing/2026-09-08-controllable-stock-token-harness.md) at core commit `159dabd...`; protocol lifecycle integration remains pending.
 - Run `pwsh -File .\scripts\verify-robinhood-testnet.ps1` before any chain-specific simulation or broadcast. Use `-SkipFundingGate` only for read-only infrastructure qualification.
 - Treat all material before that section as background research, not an approved specification.
 - The current milestone is a valueless Robinhood Chain testnet vertical slice. No stonkHedge contracts have been deployed yet.

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-08T21:52:58+02:00",
+  "status": "STANDALONE_HARNESS_PASS_PROTOCOL_INTEGRATION_PENDING",
+  "classification": "LOCAL_TEST_DOUBLE_ONLY",
+  "repository": {
+    "url": "https://github.com/vmbbz/panoptic-v2-core.git",
+    "localPath": "C:\\dev-shared\\stonkHedge-core",
+    "branch": "feat/stock-token-compatibility-harness",
+    "commit": "159dabdd09a8b1168b23aa732fec9cb562a3f22b",
+    "parent": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "remoteBranchPublished": true
+  },
+  "files": [
+    "test/foundry/mocks/ControllableStockToken.sol",
+    "test/foundry/mocks/ControllableStockToken.t.sol"
+  ],
+  "redTest": {
+    "observed": true,
+    "reason": "ControllableStockToken.sol did not exist before the implementation was added"
+  },
+  "checks": [
+    {
+      "id": "standalone-token-tests",
+      "status": "PASS",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "fuzzRuns": 30
+    },
+    {
+      "id": "forge-format",
+      "status": "PASS"
+    },
+    {
+      "id": "inherited-multicall-regression",
+      "status": "PASS",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "id": "direct-deployment-python-regression",
+      "status": "PASS",
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "id": "panoptic-token-lifecycle-integration",
+      "status": "PENDING",
+      "requiredScenarios": [
+        "deposit",
+        "market-registration",
+        "open",
+        "premium-settlement",
+        "close-or-liquidate",
+        "withdraw"
+      ]
+    }
+  ],
+  "publicDeployment": {
+    "authorized": false,
+    "chainManifestAddressAllowed": false,
+    "reason": "Test-only controllable asset; independent core and candidate-V4 review remains required before public dependency use"
+  }
+}

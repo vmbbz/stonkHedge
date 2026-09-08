@@ -572,7 +572,7 @@ The project deliberately uses three repositories so product code and upstream-de
 | Purpose | GitHub repository | Local checkout | Pinned planning baseline |
 |---|---|---|---|
 | Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 2 commit |
-| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | two-actor Stock Token/Panoptic lifecycle `d90788202f622388a5bda1a9db32515662aea2af`, including initial lifecycle `e6646eb6a259a6152d770090e63ec61ecc67ed09` and standalone harness `159dabdd09a8b1168b23aa732fec9cb562a3f22b`, on direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` and runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
+| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | local Checkpoint B `cfaf42c29b5c59304540e2a31e24daee4d977797`, including residual reconciliation `ec3278b3871b92f7d3440cd792097c4e9d7e7cd9`, two-actor lifecycle `d90788202f622388a5bda1a9db32515662aea2af`, initial lifecycle `e6646eb6a259a6152d770090e63ec61ecc67ed09`, and standalone harness `159dabdd09a8b1168b23aa732fec9cb562a3f22b`, on direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` and runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
 | SDK fork | https://github.com/vmbbz/panoptic-sdk | `C:\dev-shared\stonkHedge-sdk` | upstream `aa971d1f9ea5836546cd5266bcbfb94138ef4f57` |
 
 Remotes in both forks:
@@ -585,7 +585,7 @@ Do not fork Uniswap v4, Robinhood's test token implementation, or Base's standar
 Branch model:
 
 - Product repo: short branches such as `docs/plan-round-2`, `feat/testnet-manifest`, and `feat/web-vertical-slice`.
-- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. `feat/stock-token-compatibility-harness` adds only local test doubles, fixtures, and focused lifecycle tests through `d907882...`. None is an approved public deployment input until independent review is recorded.
+- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. `feat/stock-token-compatibility-harness` adds only local test doubles, fixtures, lifecycle tests, and the loopback-Anvil verifier through `cfaf42c...`. None is an approved public deployment input until independent review is recorded.
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
@@ -865,7 +865,7 @@ acceptance of the non-official V4 candidate are separate decisions; both remain
 
 This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour, not a week estimate. The earliest public sandbox is intentionally targeted for Hour 32; Hours 33–80 deepen safety, strategy coverage, reproducibility, and user experience. If a security, license, chain-identity, or accounting gate fails, record `BLOCKED` and do not hide the failure merely to meet the clock.
 
-Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastructure qualification, chain manifest, direct-CREATE preparation, exact-sender fork simulation, wiring checks, deployer faucet funding, Hour 9 specification, and standalone token work are complete. Core `d907882...` now has 13 green local lifecycle tests covering no-hook V4 initialization/liquidity/swaps, market wiring, two actors with matched long/short positions, premium accrual, close, withdrawal, multiplier separation, pause/block recovery, paused-liquidation failure/recovery, and forced-burn observation. This advances Hours 12–15 and part of 16 without claiming Checkpoint B: clean Anvil replay, post-close residual reconciliation, and the local verifier remain pending. Public second-actor funding and both independent reviews remain deployment blockers, while this local work continues in parallel.
+Execution position on 2026-09-08: local Checkpoint B is complete at core `cfaf42c...`. Fourteen green lifecycle tests cover no-hook V4 initialization/liquidity/swaps, market wiring, two actors with matched long/short positions, premium accrual, close, withdrawal, multiplier separation, pause/block recovery, paused-liquidation failure/recovery, forced-burn observation, and bounded residual reconciliation. A clean chain-`31337` Anvil replay sent 33 sequential transactions with 33 successful receipts; the independent wrapper derived the final receipt from nonce, verified runtime/wiring/closed-position state, recomputed residuals, rejected non-loopback RPCs, and cleaned its artifacts. Public second-actor funding and both independent reviews remain deployment blockers; no Robinhood deployment is authorized yet.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
@@ -894,9 +894,9 @@ Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastruc
 | 13 | Seed two-sided liquidity and reconcile bidirectional swap deltas. | Pool state, balances, ticks, and allowances match expectations. |
 | 14 | Deploy the unmodified shared Panoptic V4 stack and register the pool. | Factory event, RiskEngine, SFPM, and both CollateralTrackers reconcile. |
 | 15 | Fund two actors, deposit collateral, open the smallest supported long/short pair, and settle premium. | Position IDs, solvency, and premium snapshots are recorded. |
-| 16 | Close, withdraw, replay once from clean Anvil, and run the independent verifier. | No residual accounting delta; unsafe replay is refused. |
+| 16 | Close, withdraw, replay once from clean Anvil, and run the independent verifier. | No unexplained or above-budget residual accounting delta; unsafe replay is refused. |
 
-**Checkpoint B:** Commit the local vertical-slice script, controllable test asset, tests, and verifier. Nothing in this checkpoint is represented as issuer code.
+**Checkpoint B:** Complete at core `cfaf42c...`: the local vertical-slice script, controllable test asset, tests, and verifier are committed and pushed. Nothing in this checkpoint is represented as issuer code or public deployment approval.
 
 ### Hours 17–24: bounded Robinhood Chain testnet deployment
 
@@ -1098,6 +1098,7 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-020 | Keep Robinhood testnet on direct CREATE, while retaining CREATE3 plus Safe batches as a separately planned mainnet option. | Chain `46630` lacks Panoptic's CREATE3 singleton; chain `4663` has it and canonical Safe runtimes, but Panoptic's salt-bound Safe is absent. | Panoptic publishes an official Robinhood release, deploys its Safe, or approves a different release process. |
 | D-021 | Deploy every nonce-dependent Panoptic CREATE before any pool-initialization transaction from the same EOA. | Pool initialization would consume the deployer nonce and stale a previously generated 16-contract plan; freezing the EOA after regeneration makes the reviewed sequence reproducible. | Panoptic deployment moves to a nonce-independent mechanism or a separate operator performs initialization. |
 | D-022 | Treat issuer pause and administrative burn as distinct solvency/exit hazards, not generic ERC-20 failures. | Local evidence shows owner close may succeed through internal balances during pause while withdrawal, external swaps, and liquidation fail; forced burn from PoolManager can also diverge raw reserves from cached CollateralTracker accounting. | Exact issuer behavior disproves the model or protocol-level reconciliation/guard controls are implemented and independently reviewed. |
+| D-023 | Define local close acceptance as no unexplained residual above `2e12` raw units, rather than literal zero. | The matched Foundry close and clean Anvil replay expose documented rounding/fee effects: at 18 decimals the replay observed `0`/`1` AMM dust, zero credited-asset residual, and `531`/`32` PoolManager-claim deviations, all far below the `0.000002`-token test cap. | Asset decimals change, the residual scales with position size, a production risk limit is designed, or any run breaches the bound. |
 
 ## 13. Open blockers and questions to resolve during execution
 

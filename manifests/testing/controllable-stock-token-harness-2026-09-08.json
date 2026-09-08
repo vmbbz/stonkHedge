@@ -1,14 +1,17 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-08T22:44:55+02:00",
-  "status": "LOCAL_TWO_ACTOR_LIFECYCLE_PASS_CHECKPOINT_B_PENDING",
+  "capturedAt": "2026-09-08T23:22:49+02:00",
+  "status": "LOCAL_CHECKPOINT_B_PASS_PUBLIC_DEPLOYMENT_BLOCKED",
   "classification": "LOCAL_TEST_DOUBLE_ONLY",
   "repository": {
     "url": "https://github.com/vmbbz/panoptic-v2-core.git",
     "localPath": "C:\\dev-shared\\stonkHedge-core",
     "branch": "feat/stock-token-compatibility-harness",
-    "commit": "d90788202f622388a5bda1a9db32515662aea2af",
+    "commit": "cfaf42c29b5c59304540e2a31e24daee4d977797",
     "parent": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "cleanAnvilVerifierCommit": "cfaf42c29b5c59304540e2a31e24daee4d977797",
+    "residualReconciliationCommit": "ec3278b3871b92f7d3440cd792097c4e9d7e7cd9",
+    "twoActorLifecycleCommit": "d90788202f622388a5bda1a9db32515662aea2af",
     "singleActorLifecycleCommit": "e6646eb6a259a6152d770090e63ec61ecc67ed09",
     "standaloneTokenCommit": "159dabdd09a8b1168b23aa732fec9cb562a3f22b",
     "remoteBranchPublished": true
@@ -17,7 +20,10 @@
     "test/foundry/mocks/ControllableStockToken.sol",
     "test/foundry/mocks/ControllableStockToken.t.sol",
     "test/foundry/integration/StockTokenPanopticFixture.sol",
-    "test/foundry/integration/StockTokenPanopticLifecycle.t.sol"
+    "test/foundry/integration/StockTokenPanopticLifecycle.t.sol",
+    "script/local/LocalStockPanopticReplay.s.sol",
+    "script/local/verify-local-stock-panoptic.ps1",
+    "script/local/README.md"
   ],
   "redTest": {
     "observed": true,
@@ -44,7 +50,7 @@
     {
       "id": "two-actor-panoptic-token-lifecycle",
       "status": "PASS",
-      "passed": 13,
+      "passed": 14,
       "failed": 0,
       "skipped": 0,
       "coveredScenarios": [
@@ -61,7 +67,8 @@
         "pause-and-block-recovery",
         "forced-burn-accounting-divergence",
         "matched-long-short-two-actor-lifecycle",
-        "paused-liquidation-atomic-failure-and-recovery"
+        "paused-liquidation-atomic-failure-and-recovery",
+        "bounded-post-close-residual-reconciliation"
       ]
     },
     {
@@ -92,13 +99,26 @@
       "failed": 0
     },
     {
-      "id": "checkpoint-b-remaining-integration",
-      "status": "PENDING",
-      "requiredScenarios": [
-        "clean-anvil-replay",
-        "post-close-residual-reconciliation",
-        "independent-local-verifier"
-      ]
+      "id": "clean-anvil-replay-and-independent-verifier",
+      "status": "PASS",
+      "chainId": 31337,
+      "sourceCommit": "cfaf42c29b5c59304540e2a31e24daee4d977797",
+      "transactions": 33,
+      "successfulReceipts": 33,
+      "finalReceiptDerivedFromNonce": true,
+      "nonLoopbackRpcRefused": true,
+      "generatedArtifactsRemoved": true,
+      "maxCloseResidualRawUnits": "2000000000000",
+      "observed": {
+        "ammResidualRawUnits": ["0", "1"],
+        "creditedAssetResidualRawUnits": ["0", "0"],
+        "claimDeltaRawUnits": ["531", "32"]
+      }
+    },
+    {
+      "id": "checkpoint-b",
+      "status": "PASS",
+      "detail": "Local controllable asset, two-actor lifecycle, clean Anvil broadcast replay, bounded residual reconciliation, and independent post-state verification are committed; no issuer-code or public-deployment claim is made."
     }
   ],
   "observedRisks": [
@@ -118,6 +138,6 @@
   "publicDeployment": {
     "authorized": false,
     "chainManifestAddressAllowed": false,
-    "reason": "Test-only controllable asset; independent core and candidate-V4 review remains required before public dependency use"
+    "reason": "Test-only controllable asset; second-actor funding, independent core and candidate-V4 review, fresh nonce regeneration, exact-sender simulation, and separate broadcast approval remain required"
   }
 }

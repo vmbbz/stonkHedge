@@ -136,10 +136,12 @@ and are labeled `LOCAL_TEST_DOUBLE_ONLY` in the
 [evidence manifest](../../manifests/testing/controllable-stock-token-harness-2026-09-08.json).
 No address from the local fixture may enter a chain-`46630` deployment manifest.
 
-Core commits `e6646eb6a259a6152d770090e63ec61ecc67ed09` and
-`d90788202f622388a5bda1a9db32515662aea2af` add the local Panoptic lifecycle:
-V4 initialization/liquidity/two-way swaps, market wiring, deposits, matched
-long/short actors, premium accrual, close, withdrawal, and issuer-control and
-liquidation transitions. Clean Anvil replay, residual reconciliation, and a
-standalone verifier are still required before Checkpoint B.
+Core commits `e6646eb6a259a6152d770090e63ec61ecc67ed09`,
+`d90788202f622388a5bda1a9db32515662aea2af`,
+`ec3278b3871b92f7d3440cd792097c4e9d7e7cd9`, and
+`cfaf42c29b5c59304540e2a31e24daee4d977797` complete local Checkpoint B: V4
+initialization/liquidity/two-way swaps, market wiring, deposits, matched
+long/short actors, premium accrual, close, withdrawal, issuer-control and
+liquidation transitions, bounded post-close residual reconciliation, and a
+clean loopback-Anvil replay with an independent verifier.
 See the [harness evidence](../testing/2026-09-08-controllable-stock-token-harness.md).

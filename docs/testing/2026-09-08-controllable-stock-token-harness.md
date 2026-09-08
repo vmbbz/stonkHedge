@@ -2,12 +2,14 @@
 
 ## Outcome
 
-The standalone Hours 10–11 compatibility harness and the first local
-Stock/quote Panoptic lifecycle are implemented and pushed on branch
+The Hours 10–16 local Stock Token/quote/Panoptic checkpoint is implemented and
+pushed on branch
 `feat/stock-token-compatibility-harness`. The latest evidence commit is
-`d90788202f622388a5bda1a9db32515662aea2af`, built on lifecycle commit
-`e6646eb6a259a6152d770090e63ec61ecc67ed09` and standalone token
-commit `159dabdd09a8b1168b23aa732fec9cb562a3f22b`.
+`cfaf42c29b5c59304540e2a31e24daee4d977797`, built on residual-reconciliation
+commit `ec3278b3871b92f7d3440cd792097c4e9d7e7cd9`, two-actor commit
+`d90788202f622388a5bda1a9db32515662aea2af`, initial lifecycle commit
+`e6646eb6a259a6152d770090e63ec61ecc67ed09`, and standalone token commit
+`159dabdd09a8b1168b23aa732fec9cb562a3f22b`.
 
 This is a local test double, not Robinhood issuer code, a synthetic equity, or
 a deployable public asset. It lives only under `test/foundry/mocks/`; no local
@@ -25,7 +27,7 @@ runs for scaled-view rounding.
 Reproduce from `C:\dev-shared\stonkHedge-core`:
 
 ```powershell
-git switch --detach d90788202f622388a5bda1a9db32515662aea2af
+git switch --detach cfaf42c29b5c59304540e2a31e24daee4d977797
 $env:FOUNDRY_PROFILE = "ci_test"
 forge test --match-path test/foundry/mocks/ControllableStockToken.t.sol --fuzz-runs 30
 forge fmt --check test/foundry/integration/StockTokenPanopticFixture.sol test/foundry/integration/StockTokenPanopticLifecycle.t.sol
@@ -35,6 +37,7 @@ forge test --match-path test/foundry/core/PanopticPool.t.sol
 forge test --match-path test/foundry/base/Multicall.t.sol
 python -m unittest discover -s script/tests -p "test_*direct_deployment.py"
 Remove-Item Env:\FOUNDRY_PROFILE
+pwsh -NoProfile -File .\script\local\verify-local-stock-panoptic.ps1
 ```
 
 Observed results:
@@ -43,12 +46,15 @@ Observed results:
 |---|---|
 | Controllable-token focused suite | `16 passed, 0 failed, 0 skipped` |
 | Fuzz multiplier/rounding cases | `30` runs |
-| Local Stock/quote Panoptic lifecycle | `13 passed, 0 failed, 0 skipped` |
+| Local Stock/quote Panoptic lifecycle | `14 passed, 0 failed, 0 skipped` |
 | Inherited Panoptic factory | `7 passed, 0 failed, 0 skipped` |
 | Inherited PanopticPool | `72 passed, 0 failed, 0 skipped` |
 | Scoped formatting | passed for both new integration files |
 | Inherited Multicall regression | `4 passed, 0 failed, 0 skipped` |
 | Direct-deployment Python tests | `11 passed` |
+| Clean loopback-Anvil replay | `33` transactions and `33` successful receipts |
+| Independent post-state verifier | `LOCAL_STOCK_PANOPTIC_VERIFY_PASS` at committed core SHA `cfaf42c...` |
+| Unsafe RPC refusal and artifact cleanup | passed |
 
 Inherited Solar preprocessor warnings about duplicate `stdMath` declarations
 remain visible during compilation and inherited compiler warnings remain in the
@@ -91,6 +97,9 @@ The first lifecycle layer uses the inherited `PoolManager`, `V4RouterSimple`,
   premium after swaps, closes, and withdraws stock collateral;
 - distinct short and long actors deposit, open matched positions in the same
   range, both accrue premium, and both close with their position counts cleared;
+- the matched close leaves no open Panoptic/SFPM position and keeps AMM dust,
+  credited-share asset value, and PoolManager-claim deviation below a strict
+  `2e12` raw-unit local-test budget;
 - the UI multiplier changes scaled views but not Panoptic's raw-unit collateral
   accounting;
 - token or registry pause and a blocked PoolManager reject affected deposits
@@ -111,20 +120,29 @@ and liquidation, and warn that liquidation liveness is lost until transfers
 resume. The monitor must compare raw PoolManager reserves with protocol
 accounting and fail closed on an unexplained issuer burn/deficit.
 
-## Remaining Checkpoint B work
+## Checkpoint B boundary and next work
 
 The fixture uses distinct option actors and an ERC-20 quote stand-in. Insolvency
 for the liquidation case is induced with a Foundry-only collateral-share edit;
 the test proves liquidation behavior after insolvency, not a natural route to
-insolvency. A clean standalone Anvil replay, post-close residual reconciliation,
-and the local independent verifier remain the next layer. This evidence does
-not claim Hour 16 or Checkpoint B complete.
+insolvency. The clean Anvil replay uses one random, unlocked local operator; the
+separate Foundry suite proves the distinct long/short actor behavior.
 
-This local work may continue while the independent review runs. The review of
-core `f4abdd7...` and the candidate V4 stack remains a hard gate before any
-public transaction trusts those dependencies. Later test-only commits on top do
-not change the exact review target unless they modify its deployment/runtime
-files.
+Local Checkpoint B is complete. Its verifier rejects non-loopback endpoints,
+requires a fresh nonce-zero chain-`31337` Anvil account, validates all 33
+receipts, derives the final receipt contract from the sender nonce, checks live
+runtime/wiring/closed-position state, independently recomputes the residual
+budget, stops Anvil, and removes ignored replay artifacts. The `2e12` cap is
+`0.000002` token at 18 decimals; the committed-SHA replay observed AMM residuals
+of `0` and `1` raw units, zero credited-asset residual, and claim deviations of
+`531` and `32` raw units.
+
+This local checkpoint does not approve a public deployment. The review of core
+`f4abdd7...` and the candidate V4 stack, second-actor public funding, fresh
+pending-nonce regeneration, exact-sender fork simulation, and separate
+broadcast approval remain hard gates. Later local test-only commits on top do
+not change the exact `f4abdd7...` review target unless they modify its
+deployment/runtime files.
 
 Machine-readable evidence is in
 [`../../manifests/testing/controllable-stock-token-harness-2026-09-08.json`](../../manifests/testing/controllable-stock-token-harness-2026-09-08.json).

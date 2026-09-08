@@ -1,14 +1,16 @@
 # stonkHedge
 
-stonkHedge is an early-stage project exploring Panoptic-native perpetual options and risk-management workflows for tokenized equities on Base.
+stonkHedge is an early-stage project exploring Panoptic-native perpetual options and risk-management workflows for Robinhood Stock Tokens. The first public integration lane targets Robinhood Chain testnet; Base Sepolia remains a secondary ERC-8056 compatibility lane.
 
 The current repository is the product and delivery control plane. It contains the researched execution plan and will later hold chain manifests, deployment verification, monitoring, and the developer-facing application. Protocol and SDK changes remain isolated in auditable upstream forks.
 
 ## Start here
 
-- Read [`plan.md`](./plan.md), beginning with **stonkHedge build and Base Sepolia launch plan**.
+- Read [`plan.md`](./plan.md), beginning with **stonkHedge build and Robinhood Chain testnet launch plan**.
+- Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
+- Use the checked-in baseline manifest and verifier before changing inherited protocol behavior.
 - Treat all material before that section as background research, not an approved specification.
-- The current milestone is a valueless Base Sepolia vertical slice. No stonkHedge contracts have been deployed yet.
+- The current milestone is a valueless Robinhood Chain testnet vertical slice. No stonkHedge contracts have been deployed yet.
 
 ## Repository map
 
@@ -17,6 +19,8 @@ The current repository is the product and delivery control plane. It contains th
 | [`vmbbz/stonkHedge`](https://github.com/vmbbz/stonkHedge) | Product, plans, manifests, monitoring, and later UI |
 | [`vmbbz/panoptic-v2-core`](https://github.com/vmbbz/panoptic-v2-core) | Protocol fork; upstream is `panoptic-labs/panoptic-v2-core` |
 | [`vmbbz/panoptic-sdk`](https://github.com/vmbbz/panoptic-sdk) | SDK fork; upstream is `panoptic-labs/panoptic-sdk` |
+
+The repositories are intentionally separate. Contract changes belong in the core fork, transaction construction and decoding belong in the SDK fork, and chain manifests, public evidence, monitoring, and the application belong here.
 
 ## Safety and licensing
 

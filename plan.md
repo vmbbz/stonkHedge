@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** Planning round 2; implementation has not started and no stonkHedge contracts have been deployed.
+**Status:** Implementation Checkpoint A in progress: repository topology, toolchain, license evidence, core release build, and 233 focused V4 passing tests are captured. Contract broadcast remains blocked by `PanopticPoolV2` runtime size; the complete product slice is also blocked by SDK source-workspace reproducibility. No inherited protocol behavior has been changed and no stonkHedge contracts have been deployed.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -553,6 +553,8 @@ Actions allowed in this plan are limited to repository study, local development,
 - preserve upstream notices and per-file SPDX headers; and
 - do not describe the core fork as MIT or unrestricted open source.
 
+The Checkpoint A on-chain audit at Ethereum block `25932700` found that both exact ENS nodes named by the license—`v2-license-grants.panoptic.eth` and `v2-license-date.panoptic.eth`—have zero owner and zero resolver in the ENS registry. The `panoptic.eth` parent exists, but its configured resolver does not support ENSIP-10 wildcard resolution and contains no direct grant/date records for those child nodes. Therefore no Additional Use Grant or earlier change date is currently resolvable. The working interpretation is limited to the license text itself: local development, redistribution with notices, and a bounded valueless testnet used for testing are non-production; production operation, fees/monetization, or mainnet use remain blocked pending written licensor permission or qualified legal advice. See `docs/baseline/panoptic-license-2026-09-08.md` for reproducible evidence. This is a project gate, not legal advice.
+
 ## 2. Repositories and source-control model
 
 The project deliberately uses three repositories so product code and upstream-derived protocol code stay reviewable.
@@ -576,6 +578,8 @@ Branch model:
 - Core fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA; despite its historical name, keep network constants outside protocol logic so the implementation remains chain-neutral.
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
+
+Checkpoint A found that the public SDK repository is a source sync from Panoptic's private monorepo, not a self-contained development checkout: it declares the internal unpublished `@panoptic-eng/deployments@workspace:*`, but neither that package nor the workspace lockfile is public. Until an authorized complete workspace is available or the standalone source is repaired with parity tests, do not modify and publish an unbuildable fork. The Hour-32 product lane may consume exact public package `@panoptic-eng/sdk@1.0.49`—whose registry artifact is self-contained—and place stonkHedge-specific adapters in the product repo. Pin its registry integrity and lockfile; do not claim those adapters are upstream SDK changes.
 
 Planning/implementation checkpoint rule:
 
@@ -683,6 +687,8 @@ First prove the pinned upstream code builds and its relevant V4 tests pass witho
 - the upstream protocol-analysis findings that apply to our chosen code SHA.
 
 The upstream repository contains security-analysis documents with medium-risk findings and proposed changes. Presence of those files is not proof that every finding is resolved in the pinned code. Build a finding-to-code matrix before testnet alpha and do not claim the fork is audited merely because audit files exist.
+
+Checkpoint A established 233 focused V4 passes, zero failures, and one inherited skip at the pinned commit. It also found a release-blocking bytecode problem: the upstream V4 config's Solidity `0.8.28`, optimizer-runs `399` `PanopticPoolV2` is `24,869` runtime bytes, `293` bytes over EIP-170. The upstream optimizer search finds runs `133` only exactly meets `24,576` bytes, while runs `1` is `24,501` and fails a modest 256-byte safety margin. Do not deploy at the exact boundary. Add a build-size regression with explicit headroom, then make the smallest reviewed source reduction and rerun the full Pool/RiskEngine/SFPM lanes before any testnet broadcast.
 
 ### 6.2 Test-asset strategy
 
@@ -837,7 +843,7 @@ This is a dependency-ordered plan for one primary builder. “Hour” means one 
 | 1 | Record core, SDK, submodule, Foundry, Node, package-manager, compiler, and OS versions. | Machine-readable baseline manifest committed in the product repo. |
 | 2 | Build pinned Panoptic core unchanged and capture sizes/warnings. | Build succeeds or an exact blocker is filed. |
 | 3 | Run focused V4 factory, SFPM, RiskEngine, and PanopticPool tests. | Commands and pass/fail/skip counts tied to the core SHA. |
-| 4 | Install, build, typecheck, and test the pinned SDK unchanged. | SDK baseline report; generated artifacts are accounted for. |
+| 4 | Verify exact public SDK `1.0.49` package integrity and smoke its required exports; separately attempt the pinned source-fork install/build. | Published-package lane is reproducible; the private-workspace source blocker is explicit and no fake deployment package is introduced. |
 | 5 | Resolve and archive Panoptic v2's live Additional Use Grant/change-date metadata. | Written testnet-use conclusion; public access remains gated if ambiguous. |
 | 6 | Map applicable upstream security findings and the full deploy → close lifecycle. | Finding matrix plus caller/token-flow diagram. |
 | 7 | Query chain `46630`; verify the five candidate Stock Tokens' code, shared implementation, roles, decimals, multiplier surface, and pause state. | Address-qualified asset report; ticker-only matches rejected. |
@@ -879,9 +885,9 @@ This is a dependency-ordered plan for one primary builder. “Hour” means one 
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 25 | Document TokenId encoding and Stock/WETH orientation from code; create Solidity/SDK golden vectors. | Pool, legs, ratios, ticks, token types, and direction round-trip. |
-| 26 | Add red SDK tests and implement protective-put and covered-call builders. | Wrong pool/order/chain/ticks fail closed; raw legs remain visible. |
-| 27 | Add transaction simulation, typed errors, deposit/open/settle/close builders, and package smoke tests. | No state-changing payload is returned after a failed simulation. |
+| 25 | Document TokenId encoding and Stock/WETH orientation from code; create Solidity/published-SDK golden vectors in the product adapter. | Pool, legs, ratios, ticks, token types, and direction round-trip. |
+| 26 | Add red product-adapter tests and implement protective-put and covered-call builders using exact SDK `1.0.49`; move them into the SDK fork only after its source build is reproducible. | Wrong pool/order/chain/ticks fail closed; raw legs remain visible. |
+| 27 | Add transaction simulation, typed errors, deposit/open/settle/close builders, and locked-package smoke tests. | No state-changing payload is returned after a failed simulation; registry integrity remains pinned. |
 | 28 | Scaffold a chain-`46630` wallet UI with explicit testnet, unaudited, non-endorsed, valueless-asset notices. | Wrong-chain wallets cannot construct or submit transactions. |
 | 29 | Add manifest-driven asset/market panel with explorer links and live code/pause/multiplier checks. | Symbol never substitutes for address; stale/mismatched contracts fail closed. |
 | 30 | Add deposit, protective-put, covered-call, position, settle, close, and raw-leg views. | UI output matches SDK golden vectors and surfaces simulation errors. |
@@ -982,6 +988,8 @@ This is a dependency-ordered plan for one primary builder. “Hour” means one 
 
 ## 10. After Hour 80: post-alpha hourly backlog
 
+### 10.1 Alpha hardening backlog
+
 The Hour-32 sandbox and Hour-80 alpha are engineering proofs, not safe real-value derivatives launches. Budget the next `120–240+` focused engineering, research, review, and operations hours for:
 
 - risk-parameter research and agent-based/economic simulations;
@@ -994,6 +1002,22 @@ The Hour-32 sandbox and Hour-80 alpha are engineering proofs, not safe real-valu
 - bug bounty/testnet campaign;
 - incident response, pause/unwind, and communication drills; and
 - a new candidate freeze and full acceptance run.
+
+### 10.2 Long-term critique and architecture challenge gates
+
+The initial architecture is a hypothesis to test, not a commitment to preserve Panoptic, a particular chain, or every planned feature regardless of evidence. After the first-user sandbox, retain these explicit challenge tracks in the long-term plan:
+
+- **Product/architecture fit:** benchmark Panoptic-native perpetual positions against simpler covered-strategy vaults, RFQ execution, dated options, and perpetual-futures hedges. Compare user comprehension, hedge error, capital efficiency, liquidity requirements, exit reliability, implementation risk, and licensing burden before deepening the fork.
+- **Liquidity before catalogue size:** define who supplies each option side and the underlying Stock Token/WETH liquidity, what spread/depth/utilization makes a strategy usable, the finite incentive budget, manipulation cost, market-maker concentration limits, and an orderly market-deprecation path. Do not multiply assets or strategy presets while the first market is structurally illiquid.
+- **Issuer and infrastructure dependency:** model proxy upgrades, blocklists, pauses, administrative burns, multiplier changes, feed outages, Stock Token redemption-policy changes, RPC/explorer/faucet instability, testnet resets, and chain discontinuation. Maintain a manifest-driven migration/unwind plan and measurable provider SLOs; composability does not remove these dependencies.
+- **User evidence:** instrument the sandbox for privacy-respecting funnel metrics such as faucet completion, simulation rejection, strategy completion, close/unwind success, time-to-hedge, comprehension failures, and support incidents. Define go/no-go thresholds before adding leverage, vault custody, more chains, or autonomous actions.
+- **Economic viability:** estimate deployment and verification cost, liquidity subsidies, monitoring/keeper expense, audit and legal cost, support load, fee revenue, adverse-selection loss, and tail-loss reserves. A technically working market is not automatically a sustainable product.
+- **Governance and escape:** specify upgrade boundaries, immutable components, role separation, timelocks, emergency powers, public change notices, market deprecation, and user exits. A public alpha must not depend indefinitely on one deployer EOA or an undocumented manual operator.
+- **Assurance depth:** add differential tests against the pinned upstream behavior, formal properties for stonkHedge-specific registry/guardian logic, independent economic review, and an external audit scope based on the actual final diff. Reusing audited dependencies does not audit their composition or our deployment.
+- **Distribution and jurisdiction:** obtain qualified analysis of product classification, eligible users, interface restrictions, disclosures, sanctions/privacy obligations, issuer branding terms, and incident communications before any real-value access. Do not rely on wallet permissionlessness as a distribution policy.
+- **Scope discipline:** keep the single-chain, one-market proof until reliability and user evidence justify expansion. Treat cross-chain messaging, new issuance, custom hooks, portfolio margin, automated vaults, and agent trading as separate products with their own threat models and stop/go decisions.
+
+Each track needs an owner, measurable acceptance evidence, a review date or triggering event, and an explicit decision. An unresolved challenge remains `BLOCKED`; it must not disappear into a generic future-work list.
 
 Mainnet requires a separate explicit authorization. Nothing in a green Robinhood testnet or Base Sepolia run authorizes movement of real funds or deployment to Robinhood chain ID `4663` or Base chain ID `8453`.
 
@@ -1031,12 +1055,17 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-009 | Testnet evidence never implies mainnet approval. | Live chain behavior, licensing, legal eligibility, audits, and ops remain distinct gates. | Explicit mainnet planning round and authorization. |
 | D-010 | Treat transferability, primary mint/redeem access, and legal eligibility as separate facts. | ERC-20 composability does not erase blocklist/pause powers or securities restrictions. | Issuer contracts and legal terms materially change. |
 | D-011 | Deploy pinned Uniswap v4 test infrastructure on chain `46630` only while no official deployment is registered. | Mainnet v4 exists, but no official testnet deployment was found in the current Uniswap registry. | Official Uniswap `46630` addresses appear; re-audit and re-plan before use. |
+| D-012 | Treat Panoptic as the fastest testable architecture, not an irreversible product choice. | The alpha must validate hedge utility, user comprehension, liquidity, and licensing cost before the project deepens a protocol fork. | Hour-32/Hour-80 evidence or a blocking license/security result favors a simpler architecture. |
+| D-013 | Keep expansion behind one-market evidence. | More assets, chains, vaults, and automation multiply liquidity, issuer-policy, operational, and legal failure modes. | The first market meets defined reliability, liquidity, unwind, and user-evidence thresholds. |
+| D-014 | Proceed only with a bounded, valueless, non-monetized testnet under the base BUSL non-production grant. | The two ENS names referenced for extra rights are unset at the audited block, so no additional production permission can be assumed. | Licensor publishes resolvable records, provides written permission, or qualified counsel changes the interpretation. |
+| D-015 | Use exact published SDK `1.0.49` plus product-local adapters for the first sandbox while retaining the SDK fork as a gated future lane. | The public source-sync fork cannot resolve its internal unpublished deployments workspace, while the public npm artifact is self-contained and has a pinned integrity hash. | An authorized complete workspace is available or the standalone fork is repaired and passes parity/build/package tests. |
 
 ## 13. Open blockers and questions to resolve during execution
 
-- What exactly does the live Panoptic v2 Additional Use Grant permit for a publicly accessible Robinhood Chain testnet derivative work?
+- Can the licensor or qualified counsel confirm that the planned valueless, non-monetized public sandbox remains non-production under BUSL-1.1? The current on-chain audit found no resolvable Additional Use Grant, so any production-like operation remains blocked.
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
-- Does the current Panoptic V4 deployment script compile and fit Robinhood Chain's limits unchanged with the pinned Foundry version?
+- What minimal tested source reduction gives `PanopticPoolV2` at least 256 bytes of EIP-170 runtime headroom? The exact upstream release profile is 293 bytes over, and optimizer-runs `1` is still 181 bytes over that safety target.
+- Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should stonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
 - Can the deployer and at least one independent user complete Robinhood's browser faucet flow, and exactly which assets/amounts does it deliver now?
 - Has Uniswap published an official chain-`46630` deployment since this audit? If yes, the external-address plan must be replaced before broadcast.
 - Which Chainlink feeds, if any, are officially supported on Robinhood testnet for the five faucet Stock Tokens? If none, the monitor uses an explicitly labelled test feed and mainnet feeds only in read-only fork tests.

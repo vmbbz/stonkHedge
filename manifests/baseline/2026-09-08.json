@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-08T14:41:32+02:00",
+  "purpose": "Checkpoint A reproducibility and pre-change gate",
+  "target": {
+    "name": "Robinhood Chain testnet",
+    "chainId": 46630,
+    "publicRpc": "https://rpc.testnet.chain.robinhood.com",
+    "deployer": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD"
+  },
+  "host": {
+    "os": "Microsoft Windows NT 10.0.26200.0",
+    "powerShell": "7.5.2"
+  },
+  "tools": {
+    "git": "2.47.0.windows.1",
+    "node": "22.15.0",
+    "npm": "11.6.2",
+    "pnpm": "10.30.2",
+    "python": "3.11.9",
+    "ethAbi": "5.2.0",
+    "forge": "1.8.1+982849d3140c01fd3b72905759581a132df7aa98",
+    "cast": "1.8.1+982849d3140c01fd3b72905759581a132df7aa98",
+    "anvil": "1.8.1+982849d3140c01fd3b72905759581a132df7aa98",
+    "bun": "1.4.2+744846f84",
+    "standaloneSolc": null,
+    "downloadedSolcVersionsObserved": [
+      "0.8.24",
+      "0.8.26",
+      "0.8.36"
+    ]
+  },
+  "repositories": [
+    {
+      "id": "product",
+      "localPath": "C:\\dev-shared\\stonkHedge",
+      "branch": "main",
+      "commit": "66061ce504cdf81e860e29d82c744f5df7067887",
+      "commitPolicy": "ancestor",
+      "remotes": {
+        "origin": "https://github.com/vmbbz/stonkHedge.git"
+      },
+      "requiredPaths": [
+        "plan.md",
+        "CONTRIBUTING.md",
+        "scripts/verify-baseline.ps1",
+        "manifests/baseline/2026-09-08.json"
+      ],
+      "requireInitializedSubmodules": false
+    },
+    {
+      "id": "core",
+      "localPath": "C:\\dev-shared\\stonkHedge-core",
+      "branch": "feature/equity-options-base",
+      "commit": "d65310d6cfbaadb6910fa9446cc59c6541060749",
+      "commitPolicy": "exact",
+      "remotes": {
+        "origin": "https://github.com/vmbbz/panoptic-v2-core.git",
+        "upstream": "https://github.com/panoptic-labs/panoptic-v2-core.git"
+      },
+      "requiredPaths": [
+        "foundry.toml",
+        ".gitmodules",
+        "contracts",
+        "test/foundry",
+        "build-config-v4.json"
+      ],
+      "requireInitializedSubmodules": true,
+      "recursiveSubmoduleCount": 48,
+      "recursiveSubmoduleStatusSha256": "bfe1f59bc28e8743032d541dbc981713a096fdad3a4b0876bad5b83714525b01"
+    },
+    {
+      "id": "sdk",
+      "localPath": "C:\\dev-shared\\stonkHedge-sdk",
+      "branch": "feature/equity-options-base",
+      "commit": "aa971d1f9ea5836546cd5266bcbfb94138ef4f57",
+      "commitPolicy": "exact",
+      "remotes": {
+        "origin": "https://github.com/vmbbz/panoptic-sdk.git",
+        "upstream": "https://github.com/panoptic-labs/panoptic-sdk.git"
+      },
+      "requiredPaths": [
+        "package.json",
+        "src",
+        "vitest.config.ts",
+        "tsconfig.build.json"
+      ],
+      "requireInitializedSubmodules": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "product-worktree-clean",
+      "status": "SKIPPED",
+      "detail": "Pre-existing untracked buildl.md remains deliberately untouched and excluded from this checkpoint. It is a worktree-hygiene warning, not a protocol or deployment blocker; strict verifier mode will continue to report the dirty tree."
+    },
+    {
+      "id": "core-build-default-profile",
+      "status": "PASS",
+      "detail": "forge build completed at d65310d6 after recursive submodule initialization; compiler output contains more than 256 inherited warnings and missing-foundry.lock dependency warnings."
+    },
+    {
+      "id": "core-default-profile-size",
+      "status": "FAIL",
+      "detail": "PanopticPoolV2 is 24658 bytes with the default profile and 24869 bytes with the exact Solidity 0.8.28/release optimizer-runs 399 profile. Runs 133 only meets the 24576-byte limit exactly; runs 1 is 24501 bytes and has only 75 bytes headroom. A tested source-size reduction is required."
+    },
+    {
+      "id": "core-release-toolchain",
+      "status": "PASS",
+      "detail": "Bun 1.4.2 is installed, the ignored MetadataPackage.json was generated, eth_abi 5.2.0 is available, and build_release.py --dry-run build-config-v4.json completed without writes."
+    },
+    {
+      "id": "core-v4-factory-tests",
+      "status": "PASS",
+      "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 7 passed, 0 failed, 0 skipped."
+    },
+    {
+      "id": "core-v4-pool-tests",
+      "status": "PASS",
+      "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 72 passed, 0 failed, 0 skipped."
+    },
+    {
+      "id": "core-v4-sfpm-tests",
+      "status": "PASS",
+      "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 37 passed, 0 failed, 1 explicitly skipped."
+    },
+    {
+      "id": "core-v4-risk-engine-tests",
+      "status": "PASS",
+      "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 117 passed, 0 failed, 0 skipped across 10 suites."
+    },
+    {
+      "id": "panoptic-license-record-audit",
+      "status": "PASS",
+      "detail": "At Ethereum block 25932700 both ENS child nodes named in the license had zero owner/resolver and the parent resolver had no wildcard support; only base BUSL non-production rights are assumed."
+    },
+    {
+      "id": "sdk-install",
+      "status": "BLOCKED",
+      "detail": "pnpm install --lockfile=false --ignore-scripts fails with ERR_PNPM_WORKSPACE_PKG_NOT_FOUND because @panoptic-eng/deployments@workspace:* is referenced but the synced standalone repository has no deployments workspace package or lockfile."
+    },
+    {
+      "id": "sdk-published-package",
+      "status": "PASS",
+      "detail": "Public @panoptic-eng/sdk@1.0.49 exists as a self-contained registry artifact with integrity sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg==; use exact version plus product-local adapters until source reproducibility is repaired."
+    }
+  ],
+  "temporaryEvidence": {
+    "v4ReleaseBundle": {
+      "bytes": 591489,
+      "sha256": "88fdf3d23ac0eca77927623782a873b838341cbedc62c45860fde999667f7339",
+      "committed": false,
+      "note": "Generated from upstream mainnet-oriented build-config-v4.json as a compile baseline only; it is not a Robinhood testnet deployment manifest."
+    },
+    "publishedSdk": {
+      "package": "@panoptic-eng/sdk",
+      "version": "1.0.49",
+      "registryIntegrity": "sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg=="
+    }
+  }
+}

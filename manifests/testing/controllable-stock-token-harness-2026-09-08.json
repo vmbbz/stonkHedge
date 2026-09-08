@@ -1,19 +1,22 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-08T21:52:58+02:00",
-  "status": "STANDALONE_HARNESS_PASS_PROTOCOL_INTEGRATION_PENDING",
+  "capturedAt": "2026-09-08T22:36:25+02:00",
+  "status": "LOCAL_SINGLE_ACTOR_LIFECYCLE_PASS_CHECKPOINT_B_PENDING",
   "classification": "LOCAL_TEST_DOUBLE_ONLY",
   "repository": {
     "url": "https://github.com/vmbbz/panoptic-v2-core.git",
     "localPath": "C:\\dev-shared\\stonkHedge-core",
     "branch": "feat/stock-token-compatibility-harness",
-    "commit": "159dabdd09a8b1168b23aa732fec9cb562a3f22b",
+    "commit": "e6646eb6a259a6152d770090e63ec61ecc67ed09",
     "parent": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "standaloneTokenCommit": "159dabdd09a8b1168b23aa732fec9cb562a3f22b",
     "remoteBranchPublished": true
   },
   "files": [
     "test/foundry/mocks/ControllableStockToken.sol",
-    "test/foundry/mocks/ControllableStockToken.t.sol"
+    "test/foundry/mocks/ControllableStockToken.t.sol",
+    "test/foundry/integration/StockTokenPanopticFixture.sol",
+    "test/foundry/integration/StockTokenPanopticLifecycle.t.sol"
   ],
   "redTest": {
     "observed": true,
@@ -30,7 +33,47 @@
     },
     {
       "id": "forge-format",
-      "status": "PASS"
+      "status": "PASS_SCOPED",
+      "scope": [
+        "test/foundry/integration/StockTokenPanopticFixture.sol",
+        "test/foundry/integration/StockTokenPanopticLifecycle.t.sol"
+      ],
+      "repositoryWideStatus": "INHERITED_DRIFT"
+    },
+    {
+      "id": "single-actor-panoptic-token-lifecycle",
+      "status": "PASS",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "coveredScenarios": [
+        "v4-pool-initialization",
+        "two-sided-liquidity",
+        "bidirectional-swaps",
+        "panoptic-market-registration-and-wiring",
+        "deposit",
+        "short-open",
+        "premium-accrual",
+        "close",
+        "withdraw",
+        "multiplier-raw-unit-separation",
+        "pause-and-block-recovery",
+        "forced-burn-accounting-divergence"
+      ]
+    },
+    {
+      "id": "inherited-panoptic-factory",
+      "status": "PASS",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "id": "inherited-panoptic-pool",
+      "status": "PASS",
+      "passed": 72,
+      "failed": 0,
+      "skipped": 0
     },
     {
       "id": "inherited-multicall-regression",
@@ -46,16 +89,24 @@
       "failed": 0
     },
     {
-      "id": "panoptic-token-lifecycle-integration",
+      "id": "checkpoint-b-remaining-integration",
       "status": "PENDING",
       "requiredScenarios": [
-        "deposit",
-        "market-registration",
-        "open",
-        "premium-settlement",
-        "close-or-liquidate",
-        "withdraw"
+        "second-actor-matched-long-short",
+        "liquidation-under-issuer-restrictions",
+        "clean-anvil-replay",
+        "independent-local-verifier"
       ]
+    }
+  ],
+  "observedRisks": [
+    {
+      "id": "pause-partial-exit",
+      "detail": "An open option can close through internal PoolManager accounting while stock withdrawal and stock-involving external swaps remain blocked."
+    },
+    {
+      "id": "issuer-burn-accounting-divergence",
+      "detail": "Administrative burn from PoolManager reduces raw reserves without changing CollateralTracker cached deposited assets."
     }
   ],
   "publicDeployment": {

@@ -129,14 +129,16 @@ The implementation and its test names must label these deviations:
 
 ## Acceptance gate and current state
 
-Hour 9 is complete. The standalone Hours 10–11 harness is also green at core
-commit `159dabdd09a8b1168b23aa732fec9cb562a3f22b`: it began with a recorded red
-test, uses the minimum test-only implementation, has deterministic and fuzz
-coverage, and is labeled `LOCAL_TEST_DOUBLE_ONLY` in the
+Hour 9 and the standalone Hours 10–11 harness are complete at core commit
+`159dabdd09a8b1168b23aa732fec9cb562a3f22b`: they began with a recorded red test,
+use the minimum test-only implementation, have deterministic and fuzz coverage,
+and are labeled `LOCAL_TEST_DOUBLE_ONLY` in the
 [evidence manifest](../../manifests/testing/controllable-stock-token-harness-2026-09-08.json).
 No address from the local fixture may enter a chain-`46630` deployment manifest.
 
-This does not complete the protocol half of Hour 11. Deposit, open, close,
-liquidation, and withdrawal failure semantics remain pending in the local
-Panoptic lifecycle integration described in the
-[harness evidence](../testing/2026-09-08-controllable-stock-token-harness.md).
+Core commit `e6646eb6a259a6152d770090e63ec61ecc67ed09` adds the first local Panoptic
+lifecycle layer: V4 initialization/liquidity/two-way swaps, market wiring,
+deposit, one short open, premium accrual, close, withdrawal, and issuer-control
+transitions. A second-actor matched long/short flow, explicit liquidation, clean
+Anvil replay, and a standalone verifier are still required before Checkpoint B.
+See the [harness evidence](../testing/2026-09-08-controllable-stock-token-harness.md).

@@ -572,7 +572,7 @@ The project deliberately uses three repositories so product code and upstream-de
 | Purpose | GitHub repository | Local checkout | Pinned planning baseline |
 |---|---|---|---|
 | Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 2 commit |
-| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | standalone Stock Token harness `159dabdd09a8b1168b23aa732fec9cb562a3f22b` on direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`, including runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
+| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | local Stock Token/Panoptic lifecycle `e6646eb6a259a6152d770090e63ec61ecc67ed09`, including standalone harness `159dabdd09a8b1168b23aa732fec9cb562a3f22b`, on direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` and runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
 | SDK fork | https://github.com/vmbbz/panoptic-sdk | `C:\dev-shared\stonkHedge-sdk` | upstream `aa971d1f9ea5836546cd5266bcbfb94138ef4f57` |
 
 Remotes in both forks:
@@ -585,7 +585,7 @@ Do not fork Uniswap v4, Robinhood's test token implementation, or Base's standar
 Branch model:
 
 - Product repo: short branches such as `docs/plan-round-2`, `feat/testnet-manifest`, and `feat/web-vertical-slice`.
-- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. `feat/stock-token-compatibility-harness` adds only the local test double and focused tests at `159dabd...`. None is an approved public deployment input until independent review is recorded.
+- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. `feat/stock-token-compatibility-harness` adds only local test doubles, fixtures, and focused lifecycle tests through `e6646eb...`. None is an approved public deployment input until independent review is recorded.
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
@@ -865,7 +865,7 @@ acceptance of the non-official V4 candidate are separate decisions; both remain
 
 This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour, not a week estimate. The earliest public sandbox is intentionally targeted for Hour 32; Hours 33–80 deepen safety, strategy coverage, reproducibility, and user experience. If a security, license, chain-identity, or accounting gate fails, record `BLOCKED` and do not hide the failure merely to meet the clock.
 
-Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastructure qualification, chain manifest, direct-CREATE preparation, exact-sender fork simulation, wiring checks, deployer faucet funding, Hour 9 specification, and the standalone token work in Hours 10–11 are complete. Core `159dabd...` has 16 focused tests plus fuzz coverage for multiplier, rounding, pause, blocklist, permit/allowance, role, burn, and recovery behavior. The Panoptic lifecycle half of Hour 11 and Hours 12–16 remain pending; this does not claim a working market. Second-actor funding and both independent reviews remain public-deployment blockers, while local pool-lifecycle, adapter, UI, and monitoring work continues in parallel.
+Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastructure qualification, chain manifest, direct-CREATE preparation, exact-sender fork simulation, wiring checks, deployer faucet funding, Hour 9 specification, and standalone token work are complete. Core `e6646eb...` adds a green local no-hook V4/Panoptic lifecycle: initialization, liquidity, bidirectional swaps, market wiring, deposit, short open, premium accrual, close, withdrawal, multiplier separation, pause/block recovery, and forced-burn observation. This advances Hours 12–14 and parts of 15–16 without claiming Checkpoint B: the distinct second-actor long/short flow, liquidation scenarios, clean Anvil replay, and local verifier remain pending. Second-actor funding and both independent reviews remain public-deployment blockers, while this local work continues in parallel.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
@@ -907,9 +907,9 @@ Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastruc
 | 19 | If reuse is approved, skip infrastructure broadcast. If rejected, simulate and deploy only the pinned unmodified PoolManager/minimum periphery with the exact sender. | Zero transactions for approved reuse, or predicted addresses, nonce, gas budget, and reviewed stonkHedge test-infrastructure receipts. |
 | 20 | Re-run the independent read-only verifier and compare runtime code, immutable wiring, constructor/control values, and ownership. | Verifier passes; explorer/provenance gaps are explicit and UI never says the candidate is official. |
 | 21 | Select one faucet Stock Token based on balances and health; validate it and test WETH immediately before use. | Exact pair, token order, decimals, pause state, multiplier, and provenance pinned. |
-| 22 | Initialize the no-hook Stock/WETH pool, seed strictly bounded liquidity, and execute minimum swaps both ways. | PoolId, StateView output, receipts, and token deltas reconcile. |
-| 23 | Simulate then deploy the Panoptic shared stack against that PoolManager. | All code and immutable external addresses match the manifest. |
-| 24 | Register the Panoptic market, initialize trackers, deposit tiny test collateral, and run the public verifier. | A functioning on-chain market exists; failed verification blocks the UI. |
+| 22 | Freeze deployer activity; pass the strict verifier; read the live pending nonce; regenerate the Panoptic shared-stack addresses/artifacts; rerun the exact-sender fork simulation; and obtain separate broadcast approval. | Every predicted address is empty, artifacts are tied to the current nonce, and no intervening deployer transaction is permitted. |
+| 23 | Deploy the Panoptic shared stack one transaction at a time against the accepted PoolManager, verifying each receipt, runtime, and immutable dependency before advancing. | All 16 expected contracts match the reviewed manifest; any mismatch stops the sequence. |
+| 24 | Initialize the no-hook Stock/WETH pool, seed bounded liquidity, test both swap directions, register the Panoptic market, initialize trackers, deposit tiny collateral, and run the public verifier. | A functioning on-chain market exists; PoolId, token deltas, market wiring, and code reconcile or the UI remains blocked. |
 
 **Checkpoint C:** Commit and push `robinhood-testnet-sandbox-0` deployment evidence. This is the first live-chain milestone, reached in hours, not weeks.
 
@@ -1096,6 +1096,8 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-018 | Keep planning offline and simulation loopback-only; do not ship a raw-key broadcaster with the preparation checkpoint. | Separating artifact generation, exact fork proof, and signing reduces accidental public execution and gives the second contributor reviewable hashes. | Funding and both reviews pass and a separately specified, stop-on-first-failure public operator is approved. |
 | D-019 | Treat independent review as a public-dependency gate, not an idle-work gate. | Local tests, fork rehearsal, adapters, UI, and monitoring do not consume public V4 state; public deployment and pool/liquidity actions do. | A reviewer finds a defect that invalidates local assumptions or the V4 candidate changes. |
 | D-020 | Keep Robinhood testnet on direct CREATE, while retaining CREATE3 plus Safe batches as a separately planned mainnet option. | Chain `46630` lacks Panoptic's CREATE3 singleton; chain `4663` has it and canonical Safe runtimes, but Panoptic's salt-bound Safe is absent. | Panoptic publishes an official Robinhood release, deploys its Safe, or approves a different release process. |
+| D-021 | Deploy every nonce-dependent Panoptic CREATE before any pool-initialization transaction from the same EOA. | Pool initialization would consume the deployer nonce and stale a previously generated 16-contract plan; freezing the EOA after regeneration makes the reviewed sequence reproducible. | Panoptic deployment moves to a nonce-independent mechanism or a separate operator performs initialization. |
+| D-022 | Treat issuer pause and administrative burn as distinct solvency/exit hazards, not generic ERC-20 failures. | Local evidence shows internal option close may succeed during pause while withdrawal/swaps fail, and forced burn from PoolManager can diverge raw reserves from cached CollateralTracker accounting. | Exact issuer behavior disproves the model or protocol-level reconciliation/guard controls are implemented and independently reviewed. |
 
 ## 13. Open blockers and questions to resolve during execution
 

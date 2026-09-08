@@ -8,7 +8,7 @@ The current repository is the product and delivery control plane. It contains th
 
 - Read [`plan.md`](./plan.md), beginning with **stonkHedge build and Robinhood Chain testnet launch plan**.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
-- Use the checked-in baseline manifest and verifier before changing inherited protocol behavior.
+- Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Treat all material before that section as background research, not an approved specification.
 - The current milestone is a valueless Robinhood Chain testnet vertical slice. No stonkHedge contracts have been deployed yet.
 

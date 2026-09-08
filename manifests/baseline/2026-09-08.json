@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-08T14:41:32+02:00",
-  "purpose": "Checkpoint A reproducibility and pre-change gate",
+  "capturedAt": "2026-09-08T16:35:24+02:00",
+  "purpose": "Checkpoint B reproducibility after the pool runtime-headroom fix",
   "target": {
     "name": "Robinhood Chain testnet",
     "chainId": 46630,
@@ -44,15 +44,16 @@
         "plan.md",
         "CONTRIBUTING.md",
         "scripts/verify-baseline.ps1",
-        "manifests/baseline/2026-09-08.json"
+        "manifests/baseline/2026-09-08.json",
+        "docs/baseline/2026-09-08-checkpoint-b.md"
       ],
       "requireInitializedSubmodules": false
     },
     {
       "id": "core",
       "localPath": "C:\\dev-shared\\stonkHedge-core",
-      "branch": "feature/equity-options-base",
-      "commit": "d65310d6cfbaadb6910fa9446cc59c6541060749",
+      "branch": "fix/pool-runtime-headroom",
+      "commit": "b0deb9f846dc15d890d96afdfd939c1091faeab9",
       "commitPolicy": "exact",
       "remotes": {
         "origin": "https://github.com/vmbbz/panoptic-v2-core.git",
@@ -95,19 +96,19 @@
       "detail": "Pre-existing untracked buildl.md remains deliberately untouched and excluded from this checkpoint. It is a worktree-hygiene warning, not a protocol or deployment blocker; strict verifier mode will continue to report the dirty tree."
     },
     {
-      "id": "core-build-default-profile",
+      "id": "core-release-build",
       "status": "PASS",
-      "detail": "forge build completed at d65310d6 after recursive submodule initialization; compiler output contains more than 256 inherited warnings and missing-foundry.lock dependency warnings."
+      "detail": "The exact V4 release builder completed for all nine configured logic contracts at b0deb9f; the generated bundle remains temporary compile evidence and the inherited missing-foundry.lock dependency warnings remain visible."
     },
     {
-      "id": "core-default-profile-size",
-      "status": "FAIL",
-      "detail": "PanopticPoolV2 is 24658 bytes with the default profile and 24869 bytes with the exact Solidity 0.8.28/release optimizer-runs 399 profile. Runs 133 only meets the 24576-byte limit exactly; runs 1 is 24501 bytes and has only 75 bytes headroom. A tested source-size reduction is required."
+      "id": "core-release-size-headroom",
+      "status": "PASS",
+      "detail": "Both exact V3 and V4 release configs pass EIP-170 with a required 256-byte margin and EIP-3860. PanopticPoolV2 uses optimizer-runs 1 and is 24275 runtime bytes, leaving 301 bytes of EIP-170 headroom."
     },
     {
       "id": "core-release-toolchain",
       "status": "PASS",
-      "detail": "Bun 1.4.2 is installed, the ignored MetadataPackage.json was generated, eth_abi 5.2.0 is available, and build_release.py --dry-run build-config-v4.json completed without writes."
+      "detail": "Bun 1.4.2 is installed, deterministic metadata was generated, Python now resolves Bun's Windows command wrapper explicitly, and the exact V4 release builder completed all configured contracts."
     },
     {
       "id": "core-v4-factory-tests",
@@ -122,12 +123,17 @@
     {
       "id": "core-v4-sfpm-tests",
       "status": "PASS",
-      "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 37 passed, 0 failed, 1 explicitly skipped."
+      "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 38 executed tests passed and 0 failed. One additional inherited test still contains an unconditional vm.skip and remains explicit in source."
     },
     {
       "id": "core-v4-risk-engine-tests",
       "status": "PASS",
       "detail": "FOUNDRY_PROFILE=ci_test pinned-block suite: 117 passed, 0 failed, 0 skipped across 10 suites."
+    },
+    {
+      "id": "core-multicall-regressions",
+      "status": "PASS",
+      "detail": "Four focused Multicall tests plus three inherited PanopticPool multicall range tests passed, covering empty and dynamic results, result order, caller/value propagation, exact revert bubbling, and atomic rollback."
     },
     {
       "id": "panoptic-license-record-audit",
@@ -136,8 +142,8 @@
     },
     {
       "id": "sdk-install",
-      "status": "BLOCKED",
-      "detail": "pnpm install --lockfile=false --ignore-scripts fails with ERR_PNPM_WORKSPACE_PKG_NOT_FOUND because @panoptic-eng/deployments@workspace:* is referenced but the synced standalone repository has no deployments workspace package or lockfile."
+      "status": "SKIPPED",
+      "detail": "The standalone source-fork install remains unavailable because @panoptic-eng/deployments@workspace:* is unpublished and absent. This is a future SDK-source contribution blocker, not a first-sandbox blocker; that lane is explicitly pinned to the self-contained public package."
     },
     {
       "id": "sdk-published-package",
@@ -147,8 +153,8 @@
   ],
   "temporaryEvidence": {
     "v4ReleaseBundle": {
-      "bytes": 591489,
-      "sha256": "88fdf3d23ac0eca77927623782a873b838341cbedc62c45860fde999667f7339",
+      "bytes": 588815,
+      "sha256": "f8981c6da71068e26d7ed3eabb59682d4826133aa5a0bb7949dbe91fc0c846c6",
       "committed": false,
       "note": "Generated from upstream mainnet-oriented build-config-v4.json as a compile baseline only; it is not a Robinhood testnet deployment manifest."
     },

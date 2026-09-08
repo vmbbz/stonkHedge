@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** Implementation Checkpoint A in progress: repository topology, toolchain, license evidence, core release build, and 233 focused V4 passing tests are captured. Contract broadcast remains blocked by `PanopticPoolV2` runtime size; the complete product slice is also blocked by SDK source-workspace reproducibility. No inherited protocol behavior has been changed and no stonkHedge contracts have been deployed.
+**Status:** Implementation Checkpoint B is captured: repository topology, toolchain, license evidence, 234 focused V4 passing tests, Multicall regression coverage, and exact V3/V4 release-size gates are reproducible. Core candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9` restores 301 bytes of `PanopticPoolV2` runtime headroom and is pushed for independent review. The first sandbox is not blocked by the SDK source sync because it uses pinned public package `@panoptic-eng/sdk@1.0.49`; source-fork work remains a separate gated lane. No stonkHedge contract has been deployed. Broadcast remains gated on second-person core review, chain/address qualification, exact simulation, and testnet funding.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -562,7 +562,7 @@ The project deliberately uses three repositories so product code and upstream-de
 | Purpose | GitHub repository | Local checkout | Pinned planning baseline |
 |---|---|---|---|
 | Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 2 commit |
-| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
+| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
 | SDK fork | https://github.com/vmbbz/panoptic-sdk | `C:\dev-shared\stonkHedge-sdk` | upstream `aa971d1f9ea5836546cd5266bcbfb94138ef4f57` |
 
 Remotes in both forks:
@@ -575,7 +575,7 @@ Do not fork Uniswap v4, Robinhood's test token implementation, or Base's standar
 Branch model:
 
 - Product repo: short branches such as `docs/plan-round-2`, `feat/testnet-manifest`, and `feat/web-vertical-slice`.
-- Core fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA; despite its historical name, keep network constants outside protocol logic so the implementation remains chain-neutral.
+- Core fork: `fix/pool-runtime-headroom` contains the pushed Checkpoint B candidate based on the pinned upstream `main` SHA. Keep network constants outside protocol logic so the implementation remains chain-neutral; merge or build deployment manifests from this branch only after independent review.
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
@@ -688,7 +688,9 @@ First prove the pinned upstream code builds and its relevant V4 tests pass witho
 
 The upstream repository contains security-analysis documents with medium-risk findings and proposed changes. Presence of those files is not proof that every finding is resolved in the pinned code. Build a finding-to-code matrix before testnet alpha and do not claim the fork is audited merely because audit files exist.
 
-Checkpoint A established 233 focused V4 passes, zero failures, and one inherited skip at the pinned commit. It also found a release-blocking bytecode problem: the upstream V4 config's Solidity `0.8.28`, optimizer-runs `399` `PanopticPoolV2` is `24,869` runtime bytes, `293` bytes over EIP-170. The upstream optimizer search finds runs `133` only exactly meets `24,576` bytes, while runs `1` is `24,501` and fails a modest 256-byte safety margin. Do not deploy at the exact boundary. Add a build-size regression with explicit headroom, then make the smallest reviewed source reduction and rerun the full Pool/RiskEngine/SFPM lanes before any testnet broadcast.
+Checkpoint A established 233 focused V4 passes, zero failures, and one inherited skip at the pinned upstream commit. It also found a release-blocking bytecode problem: the upstream V4 config's Solidity `0.8.28`, optimizer-runs `399` `PanopticPoolV2` was `24,869` runtime bytes, `293` bytes over EIP-170. Optimizer-runs `1` alone produced `24,501` bytes and still missed a 256-byte safety margin by 181 bytes.
+
+Checkpoint B resolves that measured blocker in pushed candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9`. Both release configs now compile `PanopticPoolV2` with optimizer-runs `1`, and a behavior-preserving assembly implementation of the inherited `Multicall` return-data path reduces the exact linked runtime to `24,275` bytes: 301 bytes below EIP-170 and 45 bytes inside the required margin. Exact V3 and V4 size gates pass for every configured logic contract; the V4 release builder passes; 234 focused V4 tests execute successfully with zero failures; four new Multicall tests and three inherited multicall-range tests pass. One additional inherited SFPM test still contains an unconditional `vm.skip` and remains visible in source. These results make the branch a review candidate, not a deployment authorization: a second contributor must inspect the assembly, size configuration, attribution, and test sufficiency before any broadcast.
 
 ### 6.2 Test-asset strategy
 
@@ -1059,12 +1061,13 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-013 | Keep expansion behind one-market evidence. | More assets, chains, vaults, and automation multiply liquidity, issuer-policy, operational, and legal failure modes. | The first market meets defined reliability, liquidity, unwind, and user-evidence thresholds. |
 | D-014 | Proceed only with a bounded, valueless, non-monetized testnet under the base BUSL non-production grant. | The two ENS names referenced for extra rights are unset at the audited block, so no additional production permission can be assumed. | Licensor publishes resolvable records, provides written permission, or qualified counsel changes the interpretation. |
 | D-015 | Use exact published SDK `1.0.49` plus product-local adapters for the first sandbox while retaining the SDK fork as a gated future lane. | The public source-sync fork cannot resolve its internal unpublished deployments workspace, while the public npm artifact is self-contained and has a pinned integrity hash. | An authorized complete workspace is available or the standalone fork is repaired and passes parity/build/package tests. |
+| D-016 | Use core candidate `b0deb9f...` for deployment planning only after independent review; require automated 256-byte release headroom in both V3 and V4 configurations. | The candidate changes a shared assembly path and optimizer setting, so green tests and 301 bytes of measured headroom are necessary but not sufficient authorisation to broadcast. | Reviewer rejects the implementation, release sizes regress, or broader testing exposes a behavior difference. |
 
 ## 13. Open blockers and questions to resolve during execution
 
 - Can the licensor or qualified counsel confirm that the planned valueless, non-monetized public sandbox remains non-production under BUSL-1.1? The current on-chain audit found no resolvable Additional Use Grant, so any production-like operation remains blocked.
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
-- What minimal tested source reduction gives `PanopticPoolV2` at least 256 bytes of EIP-170 runtime headroom? The exact upstream release profile is 293 bytes over, and optimizer-runs `1` is still 181 bytes over that safety target.
+- Will the second contributor approve core candidate `b0deb9f...` after reviewing the assembly return-data packing, payable/caller semantics, exact revert propagation, release configuration, attribution, and full test evidence? Until then it is a pushed candidate, not an approved deployment input.
 - Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should stonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
 - Can the deployer and at least one independent user complete Robinhood's browser faucet flow, and exactly which assets/amounts does it deliver now?
 - Has Uniswap published an official chain-`46630` deployment since this audit? If yes, the external-address plan must be replaced before broadcast.

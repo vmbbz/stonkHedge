@@ -407,62 +407,107 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 
 
 
-# stonkHedge build and Base Sepolia launch plan
+# stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** Planning round 1; implementation has not started and no stonkHedge contracts have been deployed.
-**Primary objective:** Deliver a reproducible Base Sepolia vertical slice for perpetual options and one-click equity hedging, then harden it into a public testnet alpha.
-**Primary pair for the vertical slice:** mock B20-style equity / official Base Sepolia USDC.
+**Status:** Planning round 2; implementation has not started and no stonkHedge contracts have been deployed.
+**Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
+**Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
+**Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
 **Mainnet:** Explicitly out of scope until the licensing, issuer, legal, audit, economic-risk, and operational gates below are all cleared.
 
 This section supersedes the earlier draft from line 410 onward. The material before this section is a research conversation, not an approved specification.
 
 ## 1. Verified facts and corrections to the earlier draft
 
-### 1.1 Base Sepolia and canonical contracts
+### 1.1 Robinhood provides issuer-shaped test assets now
 
-Base Sepolia is the right environment for the first live integration. It uses chain ID `84532` and the public RPC `https://sepolia.base.org`. The RPC is suitable for development and smoke tests, but a dedicated provider should be used for sustained indexing and CI.
+Robinhood Chain testnet is live at chain ID `46630` with public RPC `https://rpc.testnet.chain.robinhood.com`. Robinhood announced testnet-only Stock Tokens specifically for integration testing. A current RPC/explorer audit on 2026-09-08 found the following five 18-decimal test Stock Tokens deployed from one `StockFactory` proxy and sharing one verified `Stock` implementation:
 
-Canonical Base Sepolia addresses, verified against current first-party documentation:
-
-| Component | Address |
+| Test asset | Address |
 |---|---|
-| Uniswap v4 PoolManager | `0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408` |
-| Uniswap v4 PositionManager | `0x4b2c77d209d3405f41a037ec6c77f7f5b8e2ca80` |
-| Uniswap v4 Universal Router | `0x492e6456d9528771018deb9e87ef7750ef184104` |
-| Uniswap v4 StateView | `0x571291b572ed32ce6751a2cb2486ebee8defb9b4` |
-| Uniswap v4 Quoter | `0x4A6513c898fe1B2d0E78d3b0e0A4a151589B1cBa` |
-| Permit2 | `0x000000000022D473030F116dDEE9F6B43aC78BA3` |
-| Circle test USDC | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
-| Base WETH9 | `0x4200000000000000000000000000000000000006` |
+| AMZN | `0x5884aD2f920c162CFBbACc88C9C51AA75eC09E02` |
+| AMD | `0x71178BAc73cBeb415514eB542a8995b82669778d` |
+| TSLA | `0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E` |
+| PLTR | `0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0` |
+| NFLX | `0x3b8262A63d25f0477c4DDE23F83cfe22Cb768C93` |
+
+The same testnet currently exposes test WETH at `0x33e4191705c386532ba27cBF171Db86919200B94` and a faucet-style 18-decimal test USDC at `0xbf4479C07Dc6fdc6dAa764A0ccA06969e894275F`. This USDC is **not** Circle's official Base Sepolia test USDC and must never be represented as such.
+
+The verified test Stock implementation has the behavior stonkHedge needs to qualify: normal ERC-20 transfer/approval, ERC-8056-style current and scheduled multipliers, global/token pause, address blocking, role-gated mint/burn, and administrative burn. Testnet users obtain valueless assets through Robinhood's testnet faucet; faucet receipt addresses must be compared with the pinned table before the UI accepts them.
 
 Sources:
 
-- Uniswap v4 deployments: https://developers.uniswap.org/docs/protocols/v4/deployments
-- Base network/RPC reference: https://docs.base.org/base-chain/api-reference/rpc-overview
-- Base system-contract reference: https://docs.base.org/base-chain/network-information/base-contracts
-- Circle USDC addresses: https://developers.circle.com/stablecoins/usdc-contract-addresses
+- Testnet announcement: https://robinhood.com/us/en/newsroom/robinhood-chain-launches-public-testnet/
+- Network/RPC documentation: https://docs.robinhood.com/chain/connecting/
+- Testnet explorer: https://explorer.testnet.chain.robinhood.com/
+- Verified shared Stock implementation: https://explorer.testnet.chain.robinhood.com/address/0xBd14156E05c6AF28ad39aA53a2AB8eB9CDf657DA?tab=contract
+- Testnet faucet: https://faucet.testnet.chain.robinhood.com/
 
-### 1.2 A Uniswap v4 hook cannot be attached after pool creation
+### 1.2 Robinhood mainnet is composable, but transferability is not universal eligibility
+
+Robinhood Chain mainnet is live at chain ID `4663`. Robinhood's own documentation says its Stock Tokens are standard 18-decimal ERC-20s that can be held, transferred, and composed in compatible wallets and DeFi applications. The issuer is Robinhood Assets (Jersey) Limited (`RHJ`), and the tokens are debt securities providing economic exposure rather than legal or beneficial ownership of the referenced company shares.
+
+That resolves two distinctions the earlier plan blurred:
+
+1. **Secondary transfer/composability:** a holder can call ordinary ERC-20 operations and DeFi contracts can integrate the token, subject to the token not being paused and the sender, recipient, or spender not being blocked.
+2. **Primary issuance/redemption and legal access:** only authorized, KYB-onboarded participants can mint/burn directly with RHJ, and offers, sales, or delivery remain jurisdiction-restricted. A permissionless chain does not make a regulated instrument legally available to every person.
+
+Robinhood's canonical mainnet asset registry and `https://api.robinhood.com/rhj/assets` are address sources of truth; tickers and token names are not. Many Robinhood Chain projects create pools, vault shares, baskets, perps, or community tokens **using** RHJ Stock Tokens. They do not thereby become issuers of the underlying RHJ debt securities. Any independently issued security needs its own issuer, legal documents, custody/reserve evidence, transfer policy, oracle, and exact contract qualification.
+
+At the 2026-09-08 planning audit, Robinhood's `/rhj/assets` API returned `194` active Stock Token/ETF deployments, all on chain `4663`. This is broad instrument issuance by RHJ, not evidence of 194 issuers. Vimen and ATLAS illustrate the application layer: they mint redeemable index/basket ERC-20s backed by deposits of existing RHJ Stock Tokens. HoodFactory illustrates another category: it launches ordinary community ERC-20s and can pair them with a Stock Token as the quote asset. Those projects issue their own basket/community tokens, not the underlying RHJ instrument.
+
+Robinhood's current external-brand rules also require us to call its products “Stock Tokens” rather than “tokenized stocks” or “tokenized equities,” keep stonkHedge branding more prominent, and explicitly avoid suggesting endorsement. Generic architecture discussions may still describe the broader tokenized-asset category, but all public product copy must use Robinhood's approved terminology.
+
+Sources:
+
+- Stock Token overview and issuer disclosure: https://docs.robinhood.com/chain/stock-tokens/
+- Integration and transfer model: https://docs.robinhood.com/chain/building-with-stock-tokens/
+- Canonical contract registry: https://docs.robinhood.com/chain/contracts/
+- Asset metadata API: https://docs.robinhood.com/chain/stock-token-apis/
+- Live RHJ asset registry response: https://api.robinhood.com/rhj/assets
+- Robinhood 2026 Form 10-Q issuer disclosure: https://investors.robinhood.com/static-files/8b6703a6-90f8-4697-b225-caf577e5720a
+- Current ecosystem categories: https://docs.robinhood.com/chain/
+- Vimen basket contracts: https://github.com/vimenprotocol/vimen
+- ATLAS index protocol: https://www.atlasprotocolrh.com/
+- HoodFactory launchpad contracts: https://github.com/HoodFactory/Hoodfactory
+- Robinhood Chain terms and terminology: https://docs.robinhood.com/chain/terms-of-service/
+
+### 1.3 Uniswap v4 availability changes the testnet deployment path
+
+Uniswap's official repository records a complete v4 deployment on Robinhood Chain **mainnet**, including PoolManager `0x8366a39CC670B4001A1121B8F6A443A643e40951`. Robinhood also lists Uniswap as a public DEX. The official deployment registry does not currently contain a chain `46630` entry, so the 80-hour testnet plan must not invent a canonical Robinhood-testnet PoolManager address.
+
+For the public testnet vertical slice we will deploy a pinned, unmodified Uniswap v4 core PoolManager and only the minimum reviewed test periphery needed for initialization, liquidity, swaps, and state reads. These are **stonkHedge test infrastructure**, not official Uniswap deployments. Before broadcast, a fresh explorer/RPC audit must stop the deploy if an official `46630` deployment has appeared; if it has, re-plan around the canonical addresses.
+
+Base Sepolia still has official Uniswap v4 contracts and official Circle test USDC, so it remains a valuable second integration lane after the Robinhood Stock Token slice.
+
+Sources:
+
+- Uniswap Robinhood mainnet deployments: https://github.com/Uniswap/contracts/blob/main/deployments/4663.md
+- Robinhood deploy guide: https://docs.robinhood.com/chain/deploy-smart-contracts/
+- Base/Uniswap v4 deployments: https://developers.uniswap.org/docs/protocols/v4/deployments
+- Circle test USDC addresses: https://developers.circle.com/stablecoins/usdc-contract-addresses
+
+### 1.4 A Uniswap v4 hook cannot be attached after pool creation
 
 The earlier statement that we can deploy a hook and attach it to an already-existing pool is wrong. A v4 pool is identified by its full `PoolKey`: `currency0`, `currency1`, `fee`, `tickSpacing`, and `hooks`. Changing the hook changes the pool ID. If a custom stonkHedge hook becomes necessary, we must initialize a new pool whose key contains the mined hook address and seed liquidity into that new pool.
 
 Panoptic v2's current V4 architecture does **not** require its SFPM to be the pool's hook. `PanopticFactoryV4.deployNewPool` accepts an existing initialized `PoolKey`, checks it in PoolManager, and registers that pool with `SemiFungiblePositionManagerV4`. The upstream tests use `hooks = address(0)`. Therefore the cheapest Phase 1 route is:
 
-1. Use the canonical Uniswap v4 PoolManager.
-2. Initialize a normal mock-equity/USDC pool, initially with `hooks = address(0)`.
+1. Use the reviewed Robinhood-testnet PoolManager deployment recorded in the manifest.
+2. Initialize a normal test-Stock-Token/WETH pool, initially with `hooks = address(0)`.
 3. Deploy/register a Panoptic v2 stack over that pool.
 4. Add a custom hook only if a separately documented requirement cannot be met by Panoptic, the guardian, SDK, or monitoring layer.
 
-### 1.3 “Cash settlement” is not a small configuration change
+### 1.5 “Cash settlement” is not a small configuration change
 
 Panoptic perpetual options are liquidity-range positions with streaming premia, burn/close, force-exercise, and liquidation mechanics. They are not conventional dated, cash-settled OCC-style contracts. A new expiry and cash-settlement subsystem would materially change the protocol and its security model. It is excluded from the first testnet vertical slice.
 
 The first product should present familiar risk outcomes—protective put, covered call, collar—using Panoptic-native perpetual positions. Dated/cash-settled options become a separate future design only after market validation.
 
-### 1.4 Chainlink is a reference/risk input, not an automatic replacement oracle
+### 1.6 Chainlink is a reference/risk input, not an automatic replacement oracle
 
-Panoptic describes itself as oracle-free because position pricing and premium accounting derive from Uniswap liquidity and internal tick observations. Coinbase tokenized-equity Chainlink feeds report Total Return Value, combining equity price and the B20 multiplier. Those feeds are valuable for:
+Panoptic describes itself as oracle-free because position pricing and premium accounting derive from Uniswap liquidity and internal tick observations. Robinhood documents a per-asset Chainlink feed on mainnet whose value already includes the token's corporate-action multiplier. Those feeds are valuable for:
 
 - detecting AMM/reference-price divergence;
 - monitoring feed freshness and market-session state;
@@ -472,29 +517,32 @@ Panoptic describes itself as oracle-free because position pricing and premium ac
 
 They must not silently replace the inherited Panoptic oracle inside collateral math in Phase 1. Any such replacement would require a separate specification, manipulation/failure analysis, and full invariant review.
 
-### 1.5 B20 corporate actions affect risk even though raw AMM balances do not rebase
+Testnet feed addresses must be independently verified; the mainnet guarantee must not be projected onto chain `46630`. Until an official feed exists for the chosen test asset, use a transparent test feed for mutable scenarios and read mainnet data only in non-broadcast fork tests.
 
-B20 is an ERC-20-compatible superset. The Asset variant keeps raw `balanceOf`, transfers, and AMM inventory unchanged while a UI multiplier changes the share-equivalent display value. Current Base documentation also defines scheduled multiplier updates through the ERC-8056-compatible surface.
+### 1.7 ERC-8056 corporate actions affect risk even though raw AMM balances do not rebase
+
+Robinhood Stock Tokens implement the same central accounting property we planned to test for B20: raw `balanceOf`, transfers, and AMM inventory remain unchanged while `uiMultiplier()` changes the share-equivalent display amount. The verified testnet implementation exposes `newUIMultiplier()` and `effectiveAt()` for scheduled changes. Base B20 remains a secondary compatibility target using related ERC-8056 semantics.
 
 That means stonkHedge must model a dangerous transition window: the claim represented by one raw token can change at the effective timestamp, while the AMM's raw balances remain unchanged and its price moves only through trading/arbitrage. Phase 1 therefore needs:
 
-- a faithful mock with current and scheduled multipliers;
-- monitoring of `UIMultiplierUpdated`, cancellation, pause, and issuer-policy events;
+- Robinhood test Stock Tokens for real public integration plus a controllable local mock for deterministic multiplier/admin scenarios;
+- monitoring of `UIMultiplierUpdated`, pending/effective-time changes, pause, blocklist, administrative-burn, and other issuer-policy events;
 - a documented pre-effective and post-effective safe-mode policy;
 - tests for immediate emergency updates and scheduled updates; and
 - no automatic unlock until price/oracle divergence and pool health recover.
 
-Base B20 references:
+References:
 
+- Robinhood Stock Token integration: https://docs.robinhood.com/chain/building-with-stock-tokens/
 - Standard library: https://github.com/base/base-std
 - B20 overview: https://github.com/base/base-std/blob/main/docs/overview.md
 - Asset/multiplier behavior: https://github.com/base/base-std/blob/main/docs/concepts/multipliers.md
 
-### 1.6 Tokenized-stock availability is a product and compliance dependency
+### 1.8 Tokenized-stock availability is a product and compliance dependency
 
-Coinbase's current public material says its tokenized stocks are B20 tokens on Base, backed by underlying shares, and unavailable to US persons and other restricted jurisdictions. Testnet work must use valueless mocks until an issuer provides supported test assets and integration terms. Mainnet asset enablement must be allowlisted one contract address at a time after legal and technical qualification; tickers alone are never sufficient identifiers.
+Robinhood now provides supported, valueless test Stock Tokens on its public testnet, so the earlier “wait for an issuer” premise is rejected. This authorizes technical integration testing only. Mainnet RHJ Stock Tokens remain regulated debt securities with jurisdiction and primary-market restrictions. Any mainnet asset must be allowlisted one contract address at a time after legal and technical qualification; ticker, name, explorer popularity, or a third-party project's claim is never sufficient identity evidence.
 
-### 1.7 License gate: source-available does not equal unrestricted production use
+### 1.9 License gate: source-available does not equal unrestricted production use
 
 The current `panoptic-v2-core` `LICENSE` is Business Source License 1.1. It points to `v2-license-grants.panoptic.eth`, sets a change date no later than 2028-03-01, and applies its terms to modifications and derivative works. Interfaces and some files have different licenses, while the SDK is MIT.
 
@@ -511,7 +559,7 @@ The project deliberately uses three repositories so product code and upstream-de
 
 | Purpose | GitHub repository | Local checkout | Pinned planning baseline |
 |---|---|---|---|
-| Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 1 commit |
+| Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 2 commit |
 | Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
 | SDK fork | https://github.com/vmbbz/panoptic-sdk | `C:\dev-shared\stonkHedge-sdk` | upstream `aa971d1f9ea5836546cd5266bcbfb94138ef4f57` |
 
@@ -520,13 +568,13 @@ Remotes in both forks:
 - `upstream` → `panoptic-labs/...`, fetch only for normal work;
 - `origin` → `vmbbz/...`, used for feature branches and pull requests.
 
-Do not fork Uniswap v4 or Base's standard library unless we actually need to propose an upstream change. Pin them as dependencies. This minimizes our maintained diff and makes audits tractable.
+Do not fork Uniswap v4, Robinhood's test token implementation, or Base's standard library unless we actually need to propose an upstream change. Pin the exact upstream dependency SHA and deployed bytecode in the product manifest. This minimizes our maintained diff and makes audits tractable.
 
 Branch model:
 
 - Product repo: short branches such as `docs/plan-round-2`, `feat/testnet-manifest`, and `feat/web-vertical-slice`.
-- Core fork: `feature/equity-options-base` from the pinned upstream `main` SHA.
-- SDK fork: `feature/equity-options-base` from the pinned upstream `main` SHA.
+- Core fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA; despite its historical name, keep network constants outside protocol logic so the implementation remains chain-neutral.
+- SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
 Planning/implementation checkpoint rule:
@@ -540,13 +588,14 @@ Planning/implementation checkpoint rule:
 
 ## 3. Definition of the first running testnet vertical slice
 
-“Running on Base Sepolia” is not satisfied by a successful deploy command. The vertical slice is complete only when all of the following evidence exists:
+“Running on Robinhood Chain testnet” is not satisfied by a successful deploy command. The vertical slice is complete only when all of the following evidence exists:
 
 - The exact source SHAs and dependency SHAs are recorded.
-- The public RPC returns chain ID `84532` before any broadcast.
+- The public RPC returns chain ID `46630` before any broadcast.
 - Deployment scripts run once in simulation mode and show the expected deployer.
-- A valueless mock B20-style equity token exists with current multiplier, scheduled multiplier, pause, and policy/freeze behaviors needed by tests.
-- An official test USDC / mock equity Uniswap v4 pool is initialized on the canonical PoolManager and seeded with bounded test liquidity.
+- The chosen faucet-distributed Robinhood test Stock Token matches the pinned address, shared beacon/implementation, 18 decimals, multiplier interface, pause state, and expected symbol.
+- A controllable local test token separately covers scheduled multiplier, pause, blocked-address, mint/burn, and administrative-burn failure paths; it is never presented as an issuer token.
+- A test Stock Token / test WETH Uniswap v4 pool is initialized on the reviewed stonkHedge test PoolManager and seeded with bounded valueless liquidity.
 - The unmodified or minimally changed Panoptic V4 shared stack is deployed and verified where possible.
 - A Panoptic pool is registered over the exact pool key and its two CollateralTrackers are initialized.
 - Two distinct test actors can deposit collateral.
@@ -554,27 +603,27 @@ Planning/implementation checkpoint rule:
 - We can read position, premium, collateral, and solvency state through the SDK or an explicit interim script.
 - The actors can settle premia and close normally.
 - A controlled adverse-price scenario proves safe-mode/liquidation/force-exercise behavior without protocol insolvency.
-- A scheduled multiplier scenario proves the monitor locks the market before the effective timestamp and keeps it locked through divergence.
+- A deterministic local/fork multiplier scenario proves the monitor locks the market before the effective timestamp and keeps it locked through divergence. A live issuer-token multiplier test is required only if Robinhood schedules one during the test window.
 - Every address and transaction hash is stored in a chain-specific manifest; no private key or secret is stored with it.
 - A fresh machine can replay the read-only verification script against the manifest.
 
-The first live UI may be a developer dashboard. It must label assets as test tokens, show Base Sepolia, link to the explorer, and never imply that the testnet product is audited or production-ready.
+The first live UI may be a developer dashboard. It must label assets as valueless Robinhood Chain testnet tokens, show chain ID `46630`, link to the testnet explorer, distinguish stonkHedge-deployed Uniswap test infrastructure from official deployments, and never imply that the product is audited, issuer-endorsed, or production-ready.
 
 ## 4. Product scope
 
 ### 4.1 MVP testnet scope
 
-- One mock equity/USDC market.
+- One qualified Robinhood test Stock Token / test WETH market.
 - Panoptic-native single-leg long/short calls and puts.
 - One-click strategy encoders for protective put, covered call, cash-secured put, and collar.
 - Strategy preview with legs, token orientation, ticks/strikes, collateral impact, and worst-case warning.
 - Manual close, premium settlement, safe-mode status, and liquidation test tooling.
-- B20 multiplier/reference-price monitor with an operator runbook.
+- ERC-8056 multiplier/reference-price/issuer-policy monitor with an operator runbook.
 - Read-only portfolio view and transaction builder; no autonomous trade execution.
 
 ### 4.2 Public alpha expansion
 
-- Multiple qualified mock-equity markets.
+- Multiple qualified Robinhood test Stock Token markets, then a Base Sepolia B20 compatibility market.
 - Four-leg spread/straddle/strangle/iron-condor presets after single-leg invariants pass.
 - Scenario-based payoff and collateral views.
 - Market registry, event indexer, and health dashboard.
@@ -609,10 +658,10 @@ PanopticPoolV2 <----> RiskEngine <----> guardian safe-mode controls
 SemiFungiblePositionManagerV4
      |
      v
-Canonical Uniswap v4 PoolManager ----> equity/USDC PoolKey (hook fixed at creation)
+Reviewed testnet Uniswap v4 PoolManager ----> Stock Token/WETH PoolKey (hook fixed at creation)
 
 Independent monitoring path:
-B20 multiplier + issuer policy + Chainlink TRV + AMM state
+ERC-8056 multiplier + issuer policy + qualified feed + AMM state
           |
           v
 alerts / safe-mode recommendation / guardian runbook
@@ -635,19 +684,24 @@ First prove the pinned upstream code builds and its relevant V4 tests pass witho
 
 The upstream repository contains security-analysis documents with medium-risk findings and proposed changes. Presence of those files is not proof that every finding is resolved in the pinned code. Build a finding-to-code matrix before testnet alpha and do not claim the fork is audited merely because audit files exist.
 
-### 6.2 Mock equity asset
+### 6.2 Test-asset strategy
 
-Implement the test asset outside the inherited core whenever possible. It must:
+Use two assets for two different jobs:
+
+1. The public Robinhood testnet market uses an existing faucet-distributed Stock Token so the real proxy, access-control, ERC-8056, and wallet integration surfaces are exercised.
+2. Local and controlled testnet failure harnesses use a stonkHedge-owned token outside the inherited Panoptic core so tests can trigger states that Robinhood's roles do not let us mutate on demand.
+
+The controllable test asset must:
 
 - behave as ERC-20 for PoolManager/Panoptic interactions;
 - use configurable 18 decimals for simple first-pass accounting;
 - expose current UI multiplier, pending multiplier, and `effectiveAt`;
 - keep raw balances stable when the UI multiplier changes;
-- emit canonical-style scheduled-update and cancellation events;
-- support pause/freeze/policy failure scenarios; and
+- emit implementation-matching scheduled-update events and an explicitly documented test-only cancellation path;
+- support global pause, token pause, address-block, mint/burn, and administrative-burn scenarios; and
 - clearly identify itself as valueless and test-only.
 
-Prefer importing `base/base-std` interfaces and mocks over inventing incompatible B20 interfaces. A real B20 precompile smoke lane can be added after the mock lane is deterministic.
+Prefer the verified Robinhood test implementation's interfaces for the primary lane and import `base/base-std` for the secondary B20 lane. Do not invent a third incompatible “stock token” interface. Never assume control over issuer roles in a production token.
 
 ### 6.3 Market registry and asset qualification
 
@@ -683,8 +737,8 @@ Required equity scenarios:
 - 5%, 10%, 25%, 50%, and 80% discontinuous gaps;
 - low liquidity and one-sided liquidity;
 - reference feed stale, paused, reverted, or wildly divergent;
-- B20 scheduled split, reverse split, dividend adjustment, cancellation, and emergency immediate update;
-- B20 transfer pause/freeze/seize behavior during deposit, close, and liquidation;
+- ERC-8056 scheduled split, reverse split, dividend adjustment, rescheduling, and emergency immediate update;
+- issuer-token global/token pause, blocklist, administrative burn, and transfer failure during deposit, close, and liquidation;
 - USDC pause/blacklist-style transfer failure;
 - high utilization, interest-rate extremes, and liquidation cascades; and
 - sequencer/RPC outage with delayed monitoring.
@@ -729,10 +783,11 @@ Tests progress in this order. A later layer never substitutes for an earlier one
 4. Fuzz tests for token orientation, ticks, sizes, utilization, gaps, and multipliers.
 5. Stateful invariants for solvency, shares/assets, premium conservation, and close/liquidation liveness.
 6. Local Anvil V4 integration with mocks.
-7. Base-mainnet-fork or Base-Sepolia-fork read-only integration against canonical infrastructure.
-8. Base Sepolia simulation with the exact sender and manifest.
-9. Bounded Base Sepolia broadcast.
+7. Robinhood-mainnet-fork read-only integration against canonical Stock Tokens and official Uniswap v4; never broadcast from this lane.
+8. Robinhood Chain testnet simulation with the exact sender, candidate PoolManager, and manifest.
+9. Bounded Robinhood Chain testnet broadcast.
 10. Independent post-deploy verification from a clean process.
+11. Base Sepolia B20 compatibility smoke lane after the primary public slice is reproducible.
 
 Minimum invariants for our extensions:
 
@@ -755,7 +810,9 @@ Every live acceptance report must distinguish:
 
 ## 8. Deployment and key-safety policy
 
-The authorized Base Sepolia deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`. A current read-only check on 2026-09-08 confirmed chain ID `84532`, `0.026802719585322719` test ETH, and `19.9` official Base Sepolia test USDC. Re-check all three immediately before broadcast because balances and chain state can change.
+The authorized testnet-only deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`; the same address is derived on every EVM chain. A current read-only check on 2026-09-08 confirmed Robinhood testnet chain ID `46630`, but the address has `0` test ETH and `0` of the five test Stock Tokens. The owner must complete Robinhood's browser faucet flow before any Robinhood testnet broadcast. That funding step is a real deployment blocker, but it does not block local implementation.
+
+The same address remains funded on Base Sepolia for the secondary B20 lane. Re-check chain ID, native balance, token addresses, token balances, code hashes, and nonce immediately before every broadcast because chain state can change.
 
 The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 
@@ -768,177 +825,177 @@ The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 - Broadcast only bounded testnet transactions listed in a reviewed manifest.
 - Never use this EOA as final protocol governance; public alpha uses a Safe with role separation and a guardian runbook.
 
-## 9. Hour-by-hour execution plan: first 80 focused engineering hours
+## 9. Hour-by-hour execution plan: public sandbox by Hour 32, hardened alpha by Hour 80
 
-This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour; calendar time can be spread across days. If a gate fails, stop the clocked sequence, open a blocker entry, and fix or re-plan before advancing.
+This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour, not a week estimate. The earliest public sandbox is intentionally targeted for Hour 32; Hours 33–80 deepen safety, strategy coverage, reproducibility, and user experience. If a security, license, chain-identity, or accounting gate fails, record `BLOCKED` and do not hide the failure merely to meet the clock.
 
-### Preflight and Hours 1–8: repositories, licensing, and reproducible baseline
-
-| Hour | Work | Required output/gate |
-|---:|---|---|
-| Preflight | Verify all three local checkouts, remotes, default branches, and clean status. | Repo-topology record matches Section 2; no unexpected files. |
-| 1 | Configure fork remotes and create `feature/equity-options-base` without modifying fork `main`. | `origin` and `upstream` verified; branch pushed. |
-| 2 | Record core, SDK, submodule, Foundry, Node, npm/pnpm, and compiler versions. | Machine-readable baseline manifest committed in product repo. |
-| 3 | Resolve and archive the live Panoptic v2 Additional Use Grant/change-date metadata. | License note states what testnet use is allowed and what remains counsel-gated. |
-| 4 | Run secret scan and inspect all `.env.example`/deployment scripts for unsafe key use. | No secret value in Git history or working trees; remediation issues filed. |
-| 5 | Build pinned Panoptic core with no source changes. | Build log, bytecode-size snapshot, and warnings recorded. |
-| 6 | Run focused V4 factory and SFPM tests. | Exact commands and pass/fail counts recorded; failures become blockers. |
-| 7 | Run focused RiskEngine/PanopticPool tests relevant to V4. | Baseline behavior evidence linked to SHA. |
-| 8 | Install/build/test the pinned SDK without changing generated sources. | SDK baseline report; generated/untracked artifacts cleaned or ignored. |
-
-**Checkpoint A:** Commit baseline manifest and evidence in `stonkHedge`. Do not edit protocol behavior until Checkpoint A is green.
-
-### Hours 9–16: threat model and test asset
+### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 9 | Map deploy → register pool → deposit → open → settle → close → liquidate call flows. | Contract/caller/token-flow diagram reviewed against code. |
-| 10 | Map guardian, builder, treasurer, deployer, registry, and end-user authorities. | Least-privilege role matrix with testnet owners. |
-| 11 | Build the upstream-audit finding matrix for the pinned core SHA. | Each relevant medium/high item marked resolved, accepted, open, or not applicable with code evidence. |
-| 12 | Specify `MockB20Equity` against current Base B20/ERC-8056 interfaces. | Interface and behavioral test cases approved before implementation. |
-| 13 | Write failing tests for raw/scaled balance and multiplier conversions. | Red tests prove balance invariants and rounding expectations. |
-| 14 | Implement the minimal multiplier surface and scheduled activation. | Focused tests green; no AMM/core modification. |
-| 15 | Add pause/freeze/policy failure modes and canonical-style events. | Red-to-green tests cover deposit, transfer, and `transferFrom` failures. |
-| 16 | Add fuzz tests for multiplier values, timestamps, conversion rounding, and cancellation. | Fuzz lane passes with bounds documented. |
+| Preflight | Verify all three local checkouts, remotes, pinned branches, and clean status. | Repo topology matches Section 2; no unexpected files. |
+| 1 | Record core, SDK, submodule, Foundry, Node, package-manager, compiler, and OS versions. | Machine-readable baseline manifest committed in the product repo. |
+| 2 | Build pinned Panoptic core unchanged and capture sizes/warnings. | Build succeeds or an exact blocker is filed. |
+| 3 | Run focused V4 factory, SFPM, RiskEngine, and PanopticPool tests. | Commands and pass/fail/skip counts tied to the core SHA. |
+| 4 | Install, build, typecheck, and test the pinned SDK unchanged. | SDK baseline report; generated artifacts are accounted for. |
+| 5 | Resolve and archive Panoptic v2's live Additional Use Grant/change-date metadata. | Written testnet-use conclusion; public access remains gated if ambiguous. |
+| 6 | Map applicable upstream security findings and the full deploy → close lifecycle. | Finding matrix plus caller/token-flow diagram. |
+| 7 | Query chain `46630`; verify the five candidate Stock Tokens' code, shared implementation, roles, decimals, multiplier surface, and pause state. | Address-qualified asset report; ticker-only matches rejected. |
+| 8 | Owner completes Robinhood's browser faucet flow for the deployer and a second test actor; re-read ETH and token balances without exposing keys. | At least two bounded actors can transact, or live work is `BLOCKED` while local work continues. |
 
-**Checkpoint B:** Commit mock specification, implementation, and test evidence in the correct repo. Tag it test-only and valueless.
+**Checkpoint A:** Commit and push the reproducible baseline and asset-qualification evidence before changing protocol behavior.
 
-### Hours 17–24: local Uniswap v4 and Panoptic vertical slice
-
-| Hour | Work | Required output/gate |
-|---:|---|---|
-| 17 | Write local deployment config for canonical-like PoolManager, mock equity, and mock/official-interface USDC. | Config contains no secret and pins all addresses/fees/tick spacing. |
-| 18 | Deploy local tokens and initialize equity/USDC PoolKey with `hooks = address(0)`. | Deterministic local transaction trace and PoolId. |
-| 19 | Seed bounded two-sided liquidity and execute swaps in both directions. | StateView balances/tick and swap deltas reconcile. |
-| 20 | Deploy the unmodified shared Panoptic V4 stack locally. | SFPM, guardian, builder factory, RiskEngine, references, and factory addresses recorded. |
-| 21 | Register the Panoptic pool through `PanopticFactoryV4.deployNewPool`. | `PoolDeployed` event reconciles with PoolKey, RiskEngine, and trackers. |
-| 22 | Fund two actors and deposit both collateral assets. | Shares/assets and allowances reconcile for both CollateralTrackers. |
-| 23 | Reproduce the smallest upstream-supported short/long option flow. | Position TokenIds, sizes, collateral, and premium snapshots recorded. |
-| 24 | Settle and close the positions; verify all residual balances. | No unexplained debt, shares, allowance, or stuck-token delta. |
-
-**Checkpoint C:** Commit a reproducible local vertical-slice script plus read-only verifier. The script must be idempotent or explicitly refuse unsafe replay.
-
-### Hours 25–32: SDK strategy primitives
+### Hours 9–16: local Stock Token / Uniswap v4 / Panoptic slice
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 25 | Document TokenId leg encoding and equity/USDC token-orientation rules from code. | Golden vectors reviewed against Solidity utilities. |
-| 26 | Add failing SDK tests for protective-put encoding/decoding. | Red tests cover both token orderings and invalid ticks. |
-| 27 | Implement protective-put builder and simulation payload. | Golden vectors green; raw legs exposed. |
-| 28 | Add covered-call tests and builder. | Notional cannot exceed declared cover in helper validation. |
-| 29 | Add cash-secured-put tests and builder. | Stable collateral preview and max-size checks green. |
-| 30 | Add collar tests and atomic multi-leg builder. | Encode/decode round trip and ratio validation green. |
-| 31 | Add hostile-input tests: wrong chain, pool, hook, vegoid, decimals, and stale registry. | Every hostile input fails closed with typed errors. |
-| 32 | Run SDK typecheck, lint, unit tests, package build, and package smoke test. | All SDK gates pass; commit SHA recorded. |
+| 9 | Specify a controllable test Stock Token matching the observed ERC-20/ERC-8056/admin surfaces. | Test matrix distinguishes exact issuer behavior from test-only extensions. |
+| 10 | Write red tests, implement the minimum controllable token, and fuzz multiplier/rounding/timestamps. | Raw balance conservation and scheduled-multiplier tests pass. |
+| 11 | Add global/token pause, blocklist, mint/burn, and administrative-burn lifecycle tests. | Deposit/open/close/liquidation failure semantics are explicit. |
+| 12 | Deploy pinned Uniswap v4 PoolManager plus minimum local StateView/router and initialize Stock/WETH with `hooks = address(0)`. | Deterministic PoolKey, PoolId, and contract addresses recorded. |
+| 13 | Seed two-sided liquidity and reconcile bidirectional swap deltas. | Pool state, balances, ticks, and allowances match expectations. |
+| 14 | Deploy the unmodified shared Panoptic V4 stack and register the pool. | Factory event, RiskEngine, SFPM, and both CollateralTrackers reconcile. |
+| 15 | Fund two actors, deposit collateral, open the smallest supported long/short pair, and settle premium. | Position IDs, solvency, and premium snapshots are recorded. |
+| 16 | Close, withdraw, replay once from clean Anvil, and run the independent verifier. | No residual accounting delta; unsafe replay is refused. |
 
-**Checkpoint D:** Commit and push SDK helper round. Product repo manifest pins the SDK feature commit.
+**Checkpoint B:** Commit the local vertical-slice script, controllable test asset, tests, and verifier. Nothing in this checkpoint is represented as issuer code.
 
-### Hours 33–40: equity risk monitoring and safe mode
-
-| Hour | Work | Required output/gate |
-|---:|---|---|
-| 33 | Specify market-health inputs, freshness rules, session states, and deviation formula. | Monitoring ADR includes decimals and rounding direction. |
-| 34 | Write unit tests for Chainlink-style TRV reads: fresh, stale, negative, zero, revert, future timestamp. | Red tests cover every invalid feed state. |
-| 35 | Implement read-only reference-price adapter and frontend display conversion. | Adapter never becomes hidden collateral oracle. |
-| 36 | Write tests for scheduled multiplier event ingestion and effective-time transitions. | Red tests cover schedule, reschedule rejection, cancel, mature, emergency update. |
-| 37 | Implement monitor state machine: healthy → pre-action → guarded → recovery candidate. | Deterministic transition tests green. |
-| 38 | Define safe-mode thresholds and two-source alert policy; no automatic unlock. | Runbook gives exact actor, call, preconditions, and rollback. |
-| 39 | Integrate guarded status into transaction simulation so risk-increasing actions fail closed. | Open/increase blocked; permitted unwind behavior tested. |
-| 40 | Run gap/divergence/recovery scenarios and record alert latency. | Scenario report demonstrates guard before scheduled effective time. |
-
-**Checkpoint E:** Commit monitor and runbook. Guardian automation remains disabled until reviewed separately.
-
-### Hours 41–48: solvency, liquidation, and token-failure testing
+### Hours 17–24: bounded Robinhood Chain testnet deployment
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 41 | Create scenario harness for 5/10/25/50/80% gaps and both price directions. | Deterministic scenario seeds and expected solvency transitions. |
+| 17 | Define chain-`46630` manifest schema and hard chain/address/code-hash gates. | Manifest includes sources, compiler, sender, external contracts, txs, and zero secrets. |
+| 18 | Simulate deployment of the pinned unmodified V4 PoolManager and minimum test periphery with the exact sender. | Predicted addresses, nonce, gas budget, and bytecode hashes captured. |
+| 19 | Re-audit official Uniswap deployments; if no `46630` deployment exists, broadcast the reviewed test PoolManager/periphery. | Receipts succeed and UI label is `stonkHedge test infrastructure`. |
+| 20 | Verify source where supported and independently compare runtime code, constructor values, and ownership. | Read-only verifier passes; explorer gaps are explicit. |
+| 21 | Select one faucet Stock Token based on balances and health; validate it and test WETH immediately before use. | Exact pair, token order, decimals, pause state, multiplier, and provenance pinned. |
+| 22 | Initialize the no-hook Stock/WETH pool, seed strictly bounded liquidity, and execute minimum swaps both ways. | PoolId, StateView output, receipts, and token deltas reconcile. |
+| 23 | Simulate then deploy the Panoptic shared stack against that PoolManager. | All code and immutable external addresses match the manifest. |
+| 24 | Register the Panoptic market, initialize trackers, deposit tiny test collateral, and run the public verifier. | A functioning on-chain market exists; failed verification blocks the UI. |
+
+**Checkpoint C:** Commit and push `robinhood-testnet-sandbox-0` deployment evidence. This is the first live-chain milestone, reached in hours, not weeks.
+
+### Hours 25–32: minimum SDK, UI, and first-user sandbox
+
+| Hour | Work | Required output/gate |
+|---:|---|---|
+| 25 | Document TokenId encoding and Stock/WETH orientation from code; create Solidity/SDK golden vectors. | Pool, legs, ratios, ticks, token types, and direction round-trip. |
+| 26 | Add red SDK tests and implement protective-put and covered-call builders. | Wrong pool/order/chain/ticks fail closed; raw legs remain visible. |
+| 27 | Add transaction simulation, typed errors, deposit/open/settle/close builders, and package smoke tests. | No state-changing payload is returned after a failed simulation. |
+| 28 | Scaffold a chain-`46630` wallet UI with explicit testnet, unaudited, non-endorsed, valueless-asset notices. | Wrong-chain wallets cannot construct or submit transactions. |
+| 29 | Add manifest-driven asset/market panel with explorer links and live code/pause/multiplier checks. | Symbol never substitutes for address; stale/mismatched contracts fail closed. |
+| 30 | Add deposit, protective-put, covered-call, position, settle, close, and raw-leg views. | UI output matches SDK golden vectors and surfaces simulation errors. |
+| 31 | Run the complete flow with a second actor using only public instructions; document faucet and manual steps. | Independent user can reproduce or every blocker is recorded. |
+| 32 | Publish the bounded sandbox and limitations page; open structured feedback intake. | Users can try the testnet flow; no audit, issuer partnership, or mainnet claim. |
+
+**Checkpoint D:** Commit and push the SDK/UI sandbox and sanitized first-user acceptance report.
+
+### Hours 33–40: market-health monitoring and safe mode
+
+| Hour | Work | Required output/gate |
+|---:|---|---|
+| 33 | Specify AMM, multiplier, token-policy, sequencer, reference-price, and market-session health inputs. | ADR includes units, decimals, freshness, rounding, and source hierarchy. |
+| 34 | Add feed tests for fresh, stale, zero, negative, revert, future timestamp, and wrong-chain data. | Every invalid feed state fails closed. |
+| 35 | Implement a read-only adapter using an explicit test feed on `46630` and canonical feeds only in mainnet-fork reads. | No test feed is presented as official or used as a hidden collateral oracle. |
+| 36 | Test scheduled multiplier ingestion, maturity, reschedule, immediate update, and missing-event recovery. | State reconstruction is deterministic from chain reads plus events. |
+| 37 | Implement `healthy → pre-action → guarded → recovery candidate` monitor states. | Transition tests pass; guarded state blocks new/increased exposure. |
+| 38 | Define deviation/gap thresholds and a two-source operator alert policy. | Runbook gives exact actor, call, preconditions, and rollback. |
+| 39 | Integrate guarded status into SDK/UI simulation and retain permissible unwind paths. | Risk increase fails closed; close/withdraw behavior is tested. |
+| 40 | Run gap/divergence/outage/recovery scenarios and record alert latency. | Scenario evidence meets the documented bounds; unlock remains manual. |
+
+**Checkpoint E:** Commit the monitor, ADR, and runbook. Guardian automation remains disabled.
+
+### Hours 41–48: solvency and hostile-token testing
+
+| Hour | Work | Required output/gate |
+|---:|---|---|
+| 41 | Build deterministic 5/10/25/50/80% price-gap scenarios in both directions. | Expected solvency transitions and accepted loss bounds are written first. |
 | 42 | Test extreme utilization and one-sided/near-empty liquidity. | No divide-by-zero, overflow, stuck close, or unexplained loss. |
-| 43 | Test equity token pause during deposit/open/settle/close/liquidation. | Failure semantics documented; recovery path proven where possible. |
-| 44 | Test USDC transfer failure/blacklist-like behavior across the same lifecycle. | Atomicity and accounting invariants hold. |
-| 45 | Test multiplier transition before arbitrage, during divergence, and after recovery. | Guarded state prevents new exposure throughout unsafe window. |
-| 46 | Run stateful fuzzing across deposits, positions, swaps, settlements, and multiplier actions. | Solvency/share/premium invariants pass at agreed run depth. |
-| 47 | Run liquidation and force-exercise multi-actor tests with adversarial ordering. | No profitable self-dealing or protocol-loss path beyond accepted bounds. |
-| 48 | Review gas and runtime bytecode changes against baseline. | Regressions explained; EIP-170 and deployment budgets pass. |
+| 43 | Test issuer global/token pause and blocked sender/recipient/spender across the full lifecycle. | Atomicity, accounting, and recovery behavior are documented. |
+| 44 | Test administrative burn and quote-token transfer failures across the lifecycle. | Insolvency and denial-of-service implications are explicit. |
+| 45 | Test multiplier changes before arbitrage, during divergence, and after recovery. | Guard prevents new exposure throughout the unsafe window. |
+| 46 | Run stateful fuzzing across deposits, swaps, positions, settlement, close, liquidation, and token policy. | Solvency/share/premium/raw-balance invariants pass at recorded depth. |
+| 47 | Run liquidation and force-exercise with adversarial actor ordering and sequencer delays. | No unexplained self-dealing or protocol-loss path. |
+| 48 | Review gas/runtime bytecode against baseline and triage all findings. | Size budgets pass; every delta and unresolved risk has an owner. |
 
-**Checkpoint F:** Commit only after the deep risk lane is green. Any unexplained accounting delta blocks live deployment.
+**Checkpoint F:** Commit only after the deep-risk lane is green; any unexplained accounting delta guards the public market.
 
-### Hours 49–56: deployment hardening and fork rehearsal
-
-| Hour | Work | Required output/gate |
-|---:|---|---|
-| 49 | Define Base Sepolia deployment manifest schema and address-derivation checks. | JSON schema includes source, compiler, config, sender, chain, contracts, txs. |
-| 50 | Refactor test deployment scripts to accept explicit chain config and reject unknown chain IDs. | Negative-chain tests green. |
-| 51 | Remove direct private-key CLI examples from stonkHedge runbooks; add keystore flow. | Secret scan green and command history cannot expose key. |
-| 52 | Rehearse full deployment on fresh Anvil with exact script entrypoints. | One-command deploy plus independent verify succeeds. |
-| 53 | Rehearse on an Anvil fork of Base Sepolia canonical contracts. | Canonical PoolManager/StateView calls succeed at pinned block. |
-| 54 | Simulate deployment with the real Base Sepolia sender and no broadcast. | Predicted addresses, gas, nonce, and balance budget captured. |
-| 55 | Review manifest line by line; compare every external address to first-party sources. | Two-person review preferred; otherwise explicit self-review checklist. |
-| 56 | Freeze the candidate commits/config and rerun all release gates. | Candidate manifest hash and green evidence bundle. |
-
-**Checkpoint G:** Commit the deployment candidate. No source changes after this checkpoint without invalidating the candidate and repeating Hours 54–56.
-
-### Hours 57–64: bounded Base Sepolia deployment
+### Hours 49–56: complete strategy UX and registry controls
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 57 | Re-check chain ID, deployer derivation, nonce, ETH, official test USDC, and RPC health. | All values match the reviewed manifest/budget; key is never printed. |
-| 58 | Deploy mock equity and verify interface/event behavior on-chain. | Receipt successful; read-only verifier passes; test-only label published. |
-| 59 | Initialize the exact equity/USDC V4 pool and capture PoolId. | PoolKey/PoolId independently recomputed and StateView returns initialized state. |
-| 60 | Seed bounded liquidity and execute minimum bidirectional swaps. | Receipts and pool deltas reconcile; no excessive approvals remain. |
-| 61 | Deploy shared Panoptic V4 contracts in reviewed order. | Code exists at predicted addresses; constructor/immutable values verified. |
-| 62 | Deploy/register the Panoptic market and initialize CollateralTrackers. | `PoolDeployed` event and all getters match manifest. |
-| 63 | Verify contracts on explorer where supported and run independent read-only verification. | Source/compiler/constructor metadata linked; unresolved verification noted. |
-| 64 | Publish the deployment manifest and freeze it as `base-sepolia-alpha-0`. | Manifest contains every tx/address/commit and zero secrets. |
+| 49 | Implement cash-secured-put tests/builder with explicit quote-collateral semantics. | Size and collateral previews fail closed on insufficient cover. |
+| 50 | Implement collar tests and atomic multi-leg builder. | Encode/decode and leg-ratio invariants pass. |
+| 51 | Add hostile-input coverage for stale registry, proxy upgrade, wrong beacon, wrong hook, decimals, and chain. | Typed errors block every mismatch. |
+| 52 | Implement chain/address/code-hash-qualified market registry reads. | Tickers are display-only; registry evidence is inspectable. |
+| 53 | Add scenario payoff, collateral, premium, and solvency previews. | UI states assumptions and rounding; results match SDK tests. |
+| 54 | Add position history, RPC-confirmed critical state, and indexer-lag handling. | No critical action trusts indexer data alone. |
+| 55 | Run SDK typecheck/lint/unit/build/package tests and UI unit/integration tests. | Exact green counts and skips captured. |
+| 56 | Re-run a second independent user session across all four strategies. | Failures become release blockers or clearly disabled features. |
 
-**Checkpoint H:** Commit and push the live manifest. A receipt alone is insufficient; the read-only verifier must pass.
+**Checkpoint G:** Commit and push the complete strategy round; product manifest pins exact core and SDK SHAs.
+
+### Hours 57–64: candidate hardening and controlled upgrade
+
+| Hour | Work | Required output/gate |
+|---:|---|---|
+| 57 | Remove unsafe key examples, migrate to a password-protected Foundry keystore, and run secret/history scans. | No private value in files, output, shell history instructions, or Git history. |
+| 58 | Refactor all scripts around explicit chain configs and negative chain-ID/code-hash tests. | Unknown or drifted networks abort before broadcast. |
+| 59 | Rehearse from fresh Anvil and a pinned read-only Robinhood mainnet fork. | Test stack reproduces; mainnet Stock/Uniswap reads match official registries. |
+| 60 | Review all external addresses and bytecode against primary sources and current chain state. | Signed-off candidate manifest and risk exceptions. |
+| 61 | Freeze candidate commits and rerun all release gates. | Candidate hash plus complete evidence bundle. |
+| 62 | Simulate only required `sandbox-1` changes with exact sender; prefer no redeploy if immutable state is correct. | Change plan lists every transaction and rollback consequence. |
+| 63 | Broadcast approved testnet-only changes and verify each receipt/state transition. | No unlisted transaction; old/new manifest relationship is explicit. |
+| 64 | Publish immutable `robinhood-testnet-alpha-0` manifest and update the UI after verifier success. | Live addresses, txs, code hashes, commits, and limitations contain no secrets. |
+
+**Checkpoint H:** Commit and push the candidate/upgrade evidence. A receipt alone is never acceptance evidence.
 
 ### Hours 65–72: live lifecycle acceptance
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 65 | Fund/approve two bounded test actors and deposit both collateral types. | On-chain shares/assets reconcile. |
-| 66 | Open the covered short leg needed to supply the test protective put. | Writer remains solvent; position evidence recorded. |
-| 67 | Open the buyer protective-put leg through the SDK builder. | Simulation matched receipt; TokenId decodes exactly. |
+| 65 | Fund/approve two bounded actors and reconcile deposits of both collateral types. | On-chain shares/assets and remaining approvals match. |
+| 66 | Open the covered short leg that supplies the protective-put test. | Writer remains solvent; position evidence recorded. |
+| 67 | Open the buyer's protective-put leg through the SDK/UI. | Simulation matches receipt; TokenId decodes exactly. |
 | 68 | Generate controlled swaps/time progression and settle streaming premium. | Buyer/seller premium deltas reconcile within documented rounding. |
-| 69 | Close the normal position path and withdraw recoverable collateral. | End balances match expected lifecycle accounting. |
-| 70 | Repeat with collar multi-leg flow. | Atomic leg ratios and close path pass. |
-| 71 | Execute controlled adverse-price/liquidation or force-exercise scenario. | Solvency transition and incentive accounting match tests. |
-| 72 | Schedule a multiplier change and execute the live guard/recovery runbook. | Market blocks new risk before effective time; no automatic unlock. |
+| 69 | Close normally and withdraw recoverable collateral. | End balances match lifecycle accounting. |
+| 70 | Repeat with collar and one intentionally rejected unsafe strategy. | Atomic ratios pass; unsafe request fails before signature. |
+| 71 | Execute a bounded adverse-price liquidation/force-exercise scenario. | Solvency transition and incentives match test expectations. |
+| 72 | Execute the live guard/recovery runbook using controllable test infrastructure; on the issuer token, perform only authorized read/transfer scenarios. | Guard blocks risk and manual recovery is evidenced without pretending to control issuer roles. |
 
-**Checkpoint I:** Commit a sanitized acceptance report with explorer links, timestamps, expected/actual state, and explicit failures or gaps.
+**Checkpoint I:** Commit a sanitized acceptance report with explorer links, timestamps, expected/actual state, and explicit failures.
 
-### Hours 73–80: developer UI and handoff
+### Hours 73–80: public-alpha UX and handoff
 
 | Hour | Work | Required output/gate |
 |---:|---|---|
-| 73 | Scaffold Base-Sepolia-only developer UI with wallet connection and chain lock. | Wrong-chain state cannot build or submit transactions. |
-| 74 | Add market/asset panel sourced from the deployment manifest and live reads. | Addresses, test labels, pool health, and explorer links render correctly. |
-| 75 | Add strategy selector and raw-leg preview for four MVP presets. | Preview matches SDK golden vectors. |
-| 76 | Add collateral/premium/solvency preview with simulation errors surfaced. | No transaction can bypass preflight simulation in the UI. |
-| 77 | Add position list, settle, close, and guarded-market status. | Read model handles indexer lag by confirming critical state via RPC. |
-| 78 | Run desktop/mobile accessibility and failure-state pass. | Wallet rejection, RPC outage, stale feed, and guarded market are clear. |
-| 79 | Replay the complete vertical slice from a clean checkout using public docs. | Reproduction report lists exact setup time and any manual steps. |
-| 80 | Freeze alpha-0, publish limitations, and triage the next risk/UX backlog. | Testnet demo is running; no mainnet-readiness claim. |
+| 73 | Complete desktop/mobile accessibility and transaction-state UX. | Wallet rejection, pending/failure/replacement, and guarded state are clear. |
+| 74 | Add testnet faucet guidance and balance checks for every required asset. | A user cannot begin an impossible transaction. |
+| 75 | Add issuer/asset explanation separating transferability, minting, redemption, and eligibility. | UI avoids “available to everyone” and false share-ownership claims. |
+| 76 | Add live health dashboard for RPC, sequencer, token pause/multiplier, pool, and verifier state. | Stale/error states never render green. |
+| 77 | Add support bundle export containing public addresses, tx hashes, versions, and no secrets. | A user can report a reproducible failure safely. |
+| 78 | Run accessibility, mobile, hostile-wallet, RPC-outage, and stale-feed acceptance. | Results recorded with `PASS/FAIL/BLOCKED/SKIPPED`. |
+| 79 | Replay from a clean checkout and new wallet using only public docs. | Reproduction time and every manual step are measured. |
+| 80 | Freeze alpha-0, publish limitations/security contact, and triage the next hourly backlog. | Testnet alpha is usable; no mainnet-readiness or endorsement claim. |
 
-**Checkpoint J:** Commit UI/docs/reproduction evidence and tag the product repo `base-sepolia-alpha-0` only if every Definition-of-Done item in Section 3 passes.
+**Checkpoint J:** Commit UI/docs/reproduction evidence and tag `robinhood-testnet-alpha-0` only if every Definition-of-Done item in Section 3 passes.
 
-## 10. After Hour 80: public testnet alpha roadmap
+## 10. After Hour 80: post-alpha hourly backlog
 
-The 80-hour vertical slice is an engineering proof, not a safe public derivatives launch. Estimate another 6–10+ focused weeks for:
+The Hour-32 sandbox and Hour-80 alpha are engineering proofs, not safe real-value derivatives launches. Budget the next `120–240+` focused engineering, research, review, and operations hours for:
 
 - risk-parameter research and agent-based/economic simulations;
 - deeper invariant campaigns and differential tests against upstream;
 - market indexer, alerting, redundant RPCs, and operational dashboards;
 - role migration to reviewed Safe/timelock/guardian arrangements;
 - one capped vault prototype and keeper failure analysis;
-- issuer and legal qualification for any real tokenized equity;
+- RHJ asset-by-asset legal/technical qualification and eligibility design for any real-value market;
 - independent smart-contract and economic audits;
 - bug bounty/testnet campaign;
 - incident response, pause/unwind, and communication drills; and
 - a new candidate freeze and full acceptance run.
 
-Mainnet requires a separate explicit authorization. Nothing in a green Base Sepolia run authorizes movement of real funds or deployment to chain ID `8453`.
+Mainnet requires a separate explicit authorization. Nothing in a green Robinhood testnet or Base Sepolia run authorizes movement of real funds or deployment to Robinhood chain ID `4663` or Base chain ID `8453`.
 
 ## 11. Planning-round and implementation commit cadence
 
@@ -948,7 +1005,7 @@ At the end of each planning round:
 2. List assumptions promoted to decisions, rejected options, and open blockers.
 3. Run Markdown/link/secret/diff checks.
 4. Commit with `docs(plan): ...` in the product repo.
-5. Push and record the commit SHA here.
+5. Push and record the commit SHA in the planning handoff and repository history; do not attempt an impossible self-referential SHA inside the same commit.
 
 At the end of each implementation checkpoint:
 
@@ -963,23 +1020,27 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 
 | ID | Decision | Rationale | Revisit trigger |
 |---|---|---|---|
-| D-001 | Base Sepolia is the first live chain. | Canonical v4 contracts exist; cheap valueless testing. | Canonical deployment changes or chain instability. |
-| D-002 | Use Panoptic v2 core + SDK forks, not a new options AMM. | Shortest route to multi-leg perpetual option mechanics. | License denial, blocking core defects, or incompatible B20 behavior. |
+| D-001 | Robinhood Chain testnet is the first public live chain; Base Sepolia is the secondary B20 lane. | Robinhood provides issuer-shaped valueless Stock Tokens and direct ecosystem relevance. | Testnet/faucet instability, license block, or an official issuer test environment with better support. |
+| D-002 | Use Panoptic v2 core + SDK forks, not a new options AMM. | Shortest route to multi-leg perpetual option mechanics. | License denial, blocking core defects, or incompatible issuer-token behavior. |
 | D-003 | No custom v4 hook in the first pool. | Panoptic V4 accepts an initialized PoolKey and upstream tests use a zero hook. | A written requirement cannot be met by periphery/monitoring. |
-| D-004 | Use a faithful mock equity before a real issuer token. | Deterministic corporate-action/failure tests and no eligibility dependency. | Issuer offers supported test asset and integration terms. |
+| D-004 | Use Robinhood's faucet Stock Token publicly and a separate controllable mock locally. | The issuer-shaped test asset proves real integration; the local mock gives deterministic control over multiplier and administrative failures. | Robinhood publishes a supported way for developers to trigger all failure states on its test token. |
 | D-005 | Preserve Panoptic's internal price mechanics for vertical slice. | Replacing them with Chainlink changes the security model. | Separate oracle/risk specification and invariant proof accepted. |
 | D-006 | Start with minimal-diff upstream RiskEngine. | Most risk parameters are compile-time constants; variants are a material fork. | Offline conservative-engine tests justify a reviewed fork. |
 | D-007 | Strategy helpers live in SDK/periphery. | Better UX without enlarging core audit surface. | An enforceable on-chain invariant requires core validation. |
 | D-008 | Vaults follow direct strategies. | Vault accounting/keeper/custody risk is a separate scope. | Direct live lifecycle and deep risk tests pass. |
 | D-009 | Testnet evidence never implies mainnet approval. | Live chain behavior, licensing, legal eligibility, audits, and ops remain distinct gates. | Explicit mainnet planning round and authorization. |
+| D-010 | Treat transferability, primary mint/redeem access, and legal eligibility as separate facts. | ERC-20 composability does not erase blocklist/pause powers or securities restrictions. | Issuer contracts and legal terms materially change. |
+| D-011 | Deploy pinned Uniswap v4 test infrastructure on chain `46630` only while no official deployment is registered. | Mainnet v4 exists, but no official testnet deployment was found in the current Uniswap registry. | Official Uniswap `46630` addresses appear; re-audit and re-plan before use. |
 
 ## 13. Open blockers and questions to resolve during execution
 
-- What exactly does the live Panoptic v2 Additional Use Grant permit for a publicly accessible Base Sepolia derivative work?
+- What exactly does the live Panoptic v2 Additional Use Grant permit for a publicly accessible Robinhood Chain testnet derivative work?
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
-- Does the current Panoptic V4 deployment script compile and fit Base limits unchanged with the pinned Foundry version?
-- Which Chainlink Coinbase tokenized-equity feeds exist on Base Sepolia, if any? If none, the monitor uses mocks on testnet and real feed interfaces only in fork tests.
-- Can current Base Sepolia B20 precompiles support the exact corporate-action behaviors needed, or should alpha remain on the reference mock?
+- Does the current Panoptic V4 deployment script compile and fit Robinhood Chain's limits unchanged with the pinned Foundry version?
+- Can the deployer and at least one independent user complete Robinhood's browser faucet flow, and exactly which assets/amounts does it deliver now?
+- Has Uniswap published an official chain-`46630` deployment since this audit? If yes, the external-address plan must be replaced before broadcast.
+- Which Chainlink feeds, if any, are officially supported on Robinhood testnet for the five faucet Stock Tokens? If none, the monitor uses an explicitly labelled test feed and mainnet feeds only in read-only fork tests.
+- Can Base Sepolia B20 precompiles support the secondary compatibility scenarios, or should that lane remain on the reference mock?
 - What is the safest unwind policy when an issuer freezes transfers while positions are open?
 - Which jurisdiction, entity, and user eligibility model would apply to a later public UI? This needs qualified counsel, not a code-only answer.
 - Who will hold deployer, guardian, treasurer, registry, and Safe roles for public alpha?

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "QUALIFIED_READ_ONLY_REVIEW_REQUIRED",
+  "status": "QUALIFIED_READ_ONLY_AND_EXACT_SENDER_SIMULATED_REVIEW_REQUIRED",
   "capturedAt": "2026-09-08T17:03:05+02:00",
   "network": {
     "name": "Robinhood Chain Testnet",
@@ -24,6 +24,15 @@
     "robinhoodExplorer": "https://explorer.testnet.chain.robinhood.com/",
     "uniswapOfficialRobinhoodMainnet": "https://github.com/Uniswap/contracts/blob/main/deployments/4663.md",
     "testnetReproducibilityManifest": "https://github.com/EqualFiLabs/statics/blob/master/deployments/robinhood-chain-testnet-46630.json"
+  },
+  "deploymentPreparation": {
+    "status": "EXACT_SENDER_FORK_SIMULATION_PASS_BROADCAST_BLOCKED",
+    "manifest": "../deployments/robinhood-testnet-direct-preflight-2026-09-08.json",
+    "coreCommit": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "method": "EOA_CREATE",
+    "transactionCount": 16,
+    "planSha256": "b1e354db53ecfd89042492a7ab18efb4dba909c31e8af67d5cff6de41579dd42",
+    "publicContractsDeployed": 0
   },
   "infrastructureClassification": {
     "value": "REUSABLE_CANDIDATE_NOT_OFFICIAL",

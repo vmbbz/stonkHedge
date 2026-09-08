@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** Implementation Checkpoint B and the first read-only chain qualification are captured: repository topology, toolchain, license evidence, 234 focused V4 passing tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable Uniswap v4 testnet stack are reproducible. Core candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9` restores 301 bytes of `PanopticPoolV2` runtime headroom and is pushed for independent review. The first sandbox is not blocked by the SDK source sync because it uses pinned public package `@panoptic-eng/sdk@1.0.49`; source-fork work remains a separate gated lane. No stonkHedge contract has been deployed. Broadcast remains gated on second-person core/infrastructure review, exact simulation, and testnet funding; the deployer currently has zero ETH and zero test Stock Tokens.
+**Status:** The first deployment-preparation slice is complete and reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Its exact 16-contract plan for the public deployer passed a fresh Robinhood-testnet Anvil-fork simulation, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on second-person core/infrastructure review and faucet funding; the deployer still has zero test ETH and zero test Stock Tokens.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -490,6 +490,14 @@ Sources:
 - Base/Uniswap v4 deployments: https://developers.uniswap.org/docs/protocols/v4/deployments
 - Circle test USDC addresses: https://developers.circle.com/stablecoins/usdc-contract-addresses
 
+### 1.3.1 The Panoptic deployment path is direct CREATE, not upstream CREATE3
+
+Panoptic's upstream release flow targets the canonical sub-zero CREATE3 deployer at `0x000000000000b361194cfe6312EE3210d53C15AA`. A fresh chain-`46630` read found no code at that address, so the upstream Safe batches cannot be replayed on Robinhood testnet. The fastest bounded route is an isolated EOA direct-CREATE sequence using the public deployer and its live nonce.
+
+Core branch `feat/robinhood-testnet-direct-deployment` now provides an offline config/plan generator and a simulator that refuses non-loopback and non-Anvil RPCs. At commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`, the generated 16-transaction sequence passed on a fresh Anvil fork of Robinhood testnet. Every created address matched its prediction, the final nonce was `16`, the largest deployment used `10,749,128` gas under a `16,711,680` per-transaction cap, and 11 constructor-role/wiring assertions passed. The plan SHA-256 is `b1e354db53ecfd89042492a7ab18efb4dba909c31e8af67d5cff6de41579dd42`.
+
+This is simulation evidence, not permission to broadcast. Direct CREATE makes nonce discipline critical: a mined failed deployment consumes its nonce and invalidates safe continuation. Public execution must recheck chain ID, pending nonce, predicted-address emptiness, dependency hashes, funding, and review, then send one transaction at a time and stop on the first mismatch. See `docs/deployment/2026-09-08-direct-deployment-simulation.md` and `manifests/deployments/robinhood-testnet-direct-preflight-2026-09-08.json`.
+
 ### 1.4 A Uniswap v4 hook cannot be attached after pool creation
 
 The earlier statement that we can deploy a hook and attach it to an already-existing pool is wrong. A v4 pool is identified by its full `PoolKey`: `currency0`, `currency1`, `fee`, `tickSpacing`, and `hooks`. Changing the hook changes the pool ID. If a custom stonkHedge hook becomes necessary, we must initialize a new pool whose key contains the mined hook address and seed liquidity into that new pool.
@@ -564,7 +572,7 @@ The project deliberately uses three repositories so product code and upstream-de
 | Purpose | GitHub repository | Local checkout | Pinned planning baseline |
 |---|---|---|---|
 | Product, docs, deployment manifests, later web app/indexer | https://github.com/vmbbz/stonkHedge | `C:\dev-shared\stonkHedge` | planning round 2 commit |
-| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
+| Protocol fork | https://github.com/vmbbz/panoptic-v2-core | `C:\dev-shared\stonkHedge-core` | direct-deployment candidate `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`, including runtime fix `b0deb9f846dc15d890d96afdfd939c1091faeab9`, based on upstream `d65310d6cfbaadb6910fa9446cc59c6541060749` |
 | SDK fork | https://github.com/vmbbz/panoptic-sdk | `C:\dev-shared\stonkHedge-sdk` | upstream `aa971d1f9ea5836546cd5266bcbfb94138ef4f57` |
 
 Remotes in both forks:
@@ -577,7 +585,7 @@ Do not fork Uniswap v4, Robinhood's test token implementation, or Base's standar
 Branch model:
 
 - Product repo: short branches such as `docs/plan-round-2`, `feat/testnet-manifest`, and `feat/web-vertical-slice`.
-- Core fork: `fix/pool-runtime-headroom` contains the pushed Checkpoint B candidate based on the pinned upstream `main` SHA. Keep network constants outside protocol logic so the implementation remains chain-neutral; merge or build deployment manifests from this branch only after independent review.
+- Core fork: `fix/pool-runtime-headroom` retains the pushed runtime candidate. `feat/robinhood-testnet-direct-deployment` builds on it with chain-neutral offline planning and loopback-only simulation tools at `f4abdd7...`. Neither branch is an approved public deployment input until independent review is recorded.
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
@@ -824,6 +832,8 @@ The authorized testnet-only deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b0
 
 The same address remains funded on Base Sepolia for the secondary B20 lane. Re-check chain ID, native balance, token addresses, token balances, code hashes, and nonce immediately before every broadcast because chain state can change.
 
+On Robinhood testnet the upstream sub-zero CREATE3 deployer is absent, so the reviewed candidate uses 16 ordinary CREATE transactions from nonce `0` through `15`. The exact plan has passed a fresh exact-sender fork simulation and post-deployment wiring checks. At public block `115718190` (`0xbfdbef350a9ac84b34817197eec0f0d2535beb895b97e406d735760769402fff`, `2026-09-08T18:01:02Z`), the live deployer nonce remained `0`, all 16 predicted addresses were empty, and the CREATE3 deployer still had no code. These facts must be re-read immediately before any broadcast.
+
 The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 
 - Never print, paste, commit, copy, or transmit the key.
@@ -838,6 +848,8 @@ The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 ## 9. Hour-by-hour execution plan: public sandbox by Hour 32, hardened alpha by Hour 80
 
 This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour, not a week estimate. The earliest public sandbox is intentionally targeted for Hour 32; Hours 33–80 deepen safety, strategy coverage, reproducibility, and user experience. If a security, license, chain-identity, or accounting gate fails, record `BLOCKED` and do not hide the failure merely to meet the clock.
+
+Execution position on 2026-09-08: the baseline, runtime repair, asset/infrastructure qualification, chain manifest, direct-CREATE preparation, exact-sender fork simulation, and wiring checks are complete. This pulls forward the simulation part of Hour 23 without pretending that Hours 9–16 or the live market lifecycle are done. Hour 8/21 funding and both independent reviews remain the immediate blockers; local controllable-token and pool-lifecycle work can proceed in parallel with those human steps.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
@@ -1064,12 +1076,14 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-014 | Proceed only with a bounded, valueless, non-monetized testnet under the base BUSL non-production grant. | The two ENS names referenced for extra rights are unset at the audited block, so no additional production permission can be assumed. | Licensor publishes resolvable records, provides written permission, or qualified counsel changes the interpretation. |
 | D-015 | Use exact published SDK `1.0.49` plus product-local adapters for the first sandbox while retaining the SDK fork as a gated future lane. | The public source-sync fork cannot resolve its internal unpublished deployments workspace, while the public npm artifact is self-contained and has a pinned integrity hash. | An authorized complete workspace is available or the standalone fork is repaired and passes parity/build/package tests. |
 | D-016 | Use core candidate `b0deb9f...` for deployment planning only after independent review; require automated 256-byte release headroom in both V3 and V4 configurations. | The candidate changes a shared assembly path and optimizer setting, so green tests and 301 bytes of measured headroom are necessary but not sufficient authorisation to broadcast. | Reviewer rejects the implementation, release sizes regress, or broader testing exposes a behavior difference. |
+| D-017 | Use a 16-transaction EOA direct-CREATE plan on chain `46630`; do not pretend the absent canonical sub-zero CREATE3 deployer exists. | Exact addresses can be derived from the isolated sender's nonce, while preserving the upstream release builder's linking and constructor resolution. | The canonical deployer becomes available, the sender nonce changes, any predicted address is occupied, or reviewer rejects the direct path. |
+| D-018 | Keep planning offline and simulation loopback-only; do not ship a raw-key broadcaster with the preparation checkpoint. | Separating artifact generation, exact fork proof, and signing reduces accidental public execution and gives the second contributor reviewable hashes. | Funding and both reviews pass and a separately specified, stop-on-first-failure public operator is approved. |
 
 ## 13. Open blockers and questions to resolve during execution
 
 - Can the licensor or qualified counsel confirm that the planned valueless, non-monetized public sandbox remains non-production under BUSL-1.1? The current on-chain audit found no resolvable Additional Use Grant, so any production-like operation remains blocked.
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
-- Will the second contributor approve core candidate `b0deb9f...` after reviewing the assembly return-data packing, payable/caller semantics, exact revert propagation, release configuration, attribution, and full test evidence? Until then it is a pushed candidate, not an approved deployment input.
+- Will the second contributor approve core candidate `f4abdd7...`, including inherited runtime fix `b0deb9f...`, after reviewing Multicall semantics, release configuration, direct-CREATE nonce handling, loopback guardrails, attribution, and full test/simulation evidence? Until then it is a pushed candidate, not an approved public deployment input.
 - Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should stonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
 - Can the deployer and at least one independent user complete Robinhood's browser faucet flow, and exactly which assets/amounts does it deliver now?
 - Will the second contributor approve reuse of the non-official chain-`46630` v4 candidate after reproducing code hashes, PoolManager controls, PositionManager wiring, and source provenance? Has Uniswap added an official `46630` registry entry since the last check?

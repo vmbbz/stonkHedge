@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-08T16:35:24+02:00",
-  "purpose": "Checkpoint B reproducibility after the pool runtime-headroom fix",
+  "capturedAt": "2026-09-08T20:01:02+02:00",
+  "purpose": "Current reproducibility baseline after runtime-headroom repair and exact-sender direct-deployment simulation",
   "target": {
     "name": "Robinhood Chain testnet",
     "chainId": 46630,
@@ -44,16 +44,20 @@
         "plan.md",
         "CONTRIBUTING.md",
         "scripts/verify-baseline.ps1",
+        "scripts/verify-robinhood-testnet.ps1",
         "manifests/baseline/2026-09-08.json",
-        "docs/baseline/2026-09-08-checkpoint-b.md"
+        "manifests/chains/robinhood-testnet-46630.json",
+        "manifests/deployments/robinhood-testnet-direct-preflight-2026-09-08.json",
+        "docs/baseline/2026-09-08-checkpoint-b.md",
+        "docs/deployment/2026-09-08-direct-deployment-simulation.md"
       ],
       "requireInitializedSubmodules": false
     },
     {
       "id": "core",
       "localPath": "C:\\dev-shared\\stonkHedge-core",
-      "branch": "fix/pool-runtime-headroom",
-      "commit": "b0deb9f846dc15d890d96afdfd939c1091faeab9",
+      "branch": "feat/robinhood-testnet-direct-deployment",
+      "commit": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
       "commitPolicy": "exact",
       "remotes": {
         "origin": "https://github.com/vmbbz/panoptic-v2-core.git",
@@ -64,7 +68,10 @@
         ".gitmodules",
         "contracts",
         "test/foundry",
-        "build-config-v4.json"
+        "build-config-v4.json",
+        "script/prepare_direct_deployment.py",
+        "script/simulate_direct_deployment.py",
+        "script/DIRECT_DEPLOYMENT.md"
       ],
       "requireInitializedSubmodules": true,
       "recursiveSubmoduleCount": 48,
@@ -98,7 +105,7 @@
     {
       "id": "core-release-build",
       "status": "PASS",
-      "detail": "The exact V4 release builder completed for all nine configured logic contracts at b0deb9f; the generated bundle remains temporary compile evidence and the inherited missing-foundry.lock dependency warnings remain visible."
+      "detail": "The exact direct-CREATE V4 release builder completed for seven metadata and nine configured logic contracts at f4abdd7; the generated bundle remains temporary evidence and inherited missing-foundry.lock dependency warnings remain visible."
     },
     {
       "id": "core-release-size-headroom",
@@ -136,6 +143,21 @@
       "detail": "Four focused Multicall tests plus three inherited PanopticPool multicall range tests passed, covering empty and dynamic results, result order, caller/value propagation, exact revert bubbling, and atomic rollback."
     },
     {
+      "id": "core-direct-deployment-tests",
+      "status": "PASS",
+      "detail": "Eleven Python unit tests passed for offline CREATE config/plan validation, Windows-safe initcode hashing, loopback and Anvil enforcement, bounded receipt polling, exact address checks, and EIP-7825 gas rejection."
+    },
+    {
+      "id": "robinhood-exact-sender-fork-simulation",
+      "status": "PASS",
+      "detail": "Plan b1e354db53ecfd89042492a7ab18efb4dba909c31e8af67d5cff6de41579dd42 deployed 7 metadata and 9 logic contracts at all 16 predicted CREATE addresses on a fresh chain-46630 Anvil fork; final nonce 16 and 11 post-deployment wiring assertions passed."
+    },
+    {
+      "id": "robinhood-public-broadcast",
+      "status": "SKIPPED",
+      "detail": "No public broadcast is authorized. The deployer still has zero native gas token and zero Stock Tokens, and second-person review of core and non-official candidate v4 infrastructure remains required."
+    },
+    {
       "id": "panoptic-license-record-audit",
       "status": "PASS",
       "detail": "At Ethereum block 25932700 both ENS child nodes named in the license had zero owner/resolver and the parent resolver had no wildcard support; only base BUSL non-production rights are assumed."
@@ -162,6 +184,17 @@
       "package": "@panoptic-eng/sdk",
       "version": "1.0.49",
       "registryIntegrity": "sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg=="
+    },
+    "robinhoodDirectDeployment": {
+      "sourceCommit": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+      "configSha256": "728898b3f201e3c4421b00e9fcb2b7587796971e55fef73ac504a081da489cc0",
+      "bundleSha256": "50a4fe99a0e01f3885f40b811913968394c03d3a129aa743091a9c71d158cbf8",
+      "planSha256": "b1e354db53ecfd89042492a7ab18efb4dba909c31e8af67d5cff6de41579dd42",
+      "simulationReportSha256": "7878c2e189c2424ec83c3afad99f68e85d6d4aa8728ef79c286d4230f50a0bed",
+      "transactionCount": 16,
+      "simulationStatus": "PASS",
+      "committed": false,
+      "sanitizedEvidence": "manifests/deployments/robinhood-testnet-direct-preflight-2026-09-08.json"
     }
   }
 }

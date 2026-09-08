@@ -21,6 +21,10 @@ This guide is the working agreement for the project owner, collaborators, and ex
    pwsh -File .\scripts\verify-robinhood-testnet.ps1
    ```
 
+   Direct-deployment work also requires the core runbook at
+   `script/DIRECT_DEPLOYMENT.md` on the exact core commit pinned by the baseline
+   manifest. A passing local simulation is evidence, not broadcast authority.
+
 4. Do not treat a testnet receipt, green unit test, or third-party audit file as proof that the complete product is safe or mainnet-ready.
 
 ## 2. Choose the correct repository

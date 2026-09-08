@@ -1,5 +1,10 @@
 # Checkpoint B runtime-headroom report — 2026-09-08
 
+> Historical checkpoint: the current baseline manifest has advanced to core
+> commit `f4abdd7...`, which contains this runtime fix plus the separately
+> documented exact-sender direct-deployment simulation. The measurements below
+> remain the immutable evidence for commit `b0deb9f...`.
+
 ## Outcome
 
 The release-size blocker recorded at Checkpoint A is resolved in the pushed core-fork candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9` on `fix/pool-runtime-headroom`. Exact V3 and V4 release configurations now enforce a 256-byte EIP-170 margin and pass. The largest contract, `PanopticPoolV2`, is 24,275 runtime bytes, leaving 301 bytes of raw headroom and passing the project margin by 45 bytes.

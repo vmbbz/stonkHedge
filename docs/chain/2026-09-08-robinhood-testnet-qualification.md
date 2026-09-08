@@ -10,6 +10,11 @@ No private key was read or printed and no transaction was signed or broadcast. T
 
 The machine-readable evidence is [`../../manifests/chains/robinhood-testnet-46630.json`](../../manifests/chains/robinhood-testnet-46630.json), and the executable drift check is [`../../scripts/verify-robinhood-testnet.ps1`](../../scripts/verify-robinhood-testnet.ps1).
 
+The subsequent exact-sender deployment preparation is documented separately in
+[`../deployment/2026-09-08-direct-deployment-simulation.md`](../deployment/2026-09-08-direct-deployment-simulation.md).
+That fork simulation passed, but it did not change this report's public funding
+or independent-review blockers.
+
 ## Evidence window
 
 Most pinned state was read at block `115636679`, hash `0x18f11247efe58b3c909446f08ed28798ac79a6a89f844c514654dc807c6c5871`, timestamp `2026-09-08T14:54:53Z`. The public RPC lacked two historical trie nodes while reading code hashes. Those hashes were re-read at current block `115639902`, hash `0x0443f9395c2185d2e7221894be5777c189458dce4853dee2d7bdd384385009a4`, timestamp `2026-09-08T15:03:05Z`. The verifier deliberately checks latest state so any later drift fails closed.

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "status": "QUALIFIED_READ_ONLY_REVIEW_REQUIRED",
+  "capturedAt": "2026-09-08T17:03:05+02:00",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+    "explorerUrl": "https://explorer.testnet.chain.robinhood.com",
+    "blockscoutApiUrl": "https://explorer.testnet.chain.robinhood.com/api/"
+  },
+  "observationWindow": {
+    "stateBlock": 115636679,
+    "stateBlockHash": "0x18f11247efe58b3c909446f08ed28798ac79a6a89f844c514654dc807c6c5871",
+    "stateBlockTimestamp": "2026-09-08T14:54:53Z",
+    "finalCodeBlock": 115639902,
+    "finalCodeBlockHash": "0x0443f9395c2185d2e7221894be5777c189458dce4853dee2d7bdd384385009a4",
+    "finalCodeBlockTimestamp": "2026-09-08T15:03:05Z",
+    "note": "The public RPC served pinned state calls but lacked two older trie nodes during code-hash reads. Those two hashes were re-read at the pinned current head and all verifier checks intentionally run against latest state to detect drift."
+  },
+  "sources": {
+    "robinhoodNetwork": "https://docs.robinhood.com/chain/connecting/",
+    "robinhoodTestAssets": "https://robinhood.com/us/en/newsroom/robinhood-chain-launches-public-testnet/",
+    "robinhoodExplorer": "https://explorer.testnet.chain.robinhood.com/",
+    "uniswapOfficialRobinhoodMainnet": "https://github.com/Uniswap/contracts/blob/main/deployments/4663.md",
+    "testnetReproducibilityManifest": "https://github.com/EqualFiLabs/statics/blob/master/deployments/robinhood-chain-testnet-46630.json"
+  },
+  "infrastructureClassification": {
+    "value": "REUSABLE_CANDIDATE_NOT_OFFICIAL",
+    "officialUniswap46630RegistryEntryObserved": false,
+    "requiredReview": "A second contributor must reproduce runtime hashes, PoolManager controls, PositionManager wiring, and source provenance before deployment planning consumes these addresses."
+  },
+  "infrastructure": {
+    "poolManager": {
+      "address": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+      "runtimeBytes": 24009,
+      "runtimeCodeHash": "0xbd3881180b547f5fe817545743cfb4343e96b1bc6640dcd70c106b0066e95626",
+      "owner": "0x9701fb0aDe1E269c8f64Ec0C7b3cfADB31A13A52",
+      "ownerRuntimeBytes": 0,
+      "protocolFeeController": "0x0000000000000000000000000000000000000000",
+      "officialRobinhoodMainnetRuntimeCodeHash": "0xbd3881180b547f5fe817545743cfb4343e96b1bc6640dcd70c106b0066e95626"
+    },
+    "positionManager": {
+      "address": "0x58daec3116aae6D93017bAAea7749052E8a04fA7",
+      "runtimeBytes": 23877,
+      "runtimeCodeHash": "0xf3a0edb689229fa4bf135a728f2ec2eb4a2fbee2e41e3e74ffadb7b4c56e8a6d",
+      "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951"
+    },
+    "quoter": {
+      "address": "0x8Dc178eFB8111BB0973Dd9d722ebeFF267c98F94",
+      "runtimeBytes": 6118,
+      "runtimeCodeHash": "0xd707b1da8cb165e5ea35a3b4450d971eb562ec171e23492aa117036b78a868f6"
+    },
+    "stateView": {
+      "address": "0xF3334192D15450CdD385c8B70e03f9A6bD9E673b",
+      "runtimeBytes": 3531,
+      "runtimeCodeHash": "0x7d9c591e0956fd89d98feb4ffcfe8bf1f7a62bd485edd979fa21d104b49878a6"
+    },
+    "universalRouter": {
+      "address": "0x8876789976dEcBfCbBbe364623C63652db8C0904",
+      "runtimeBytes": 24546,
+      "runtimeCodeHash": "0xfdd90802f39ce5fc8bac4c2f1b3ac7bac530fd17ff46b0630f1bd00f1e14082f"
+    },
+    "permit2": {
+      "address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "runtimeBytes": 9152,
+      "runtimeCodeHash": "0x0117e0ed818bc3f2a8729ffc336c837e63e965f04b473047b39b35ad86aac259"
+    }
+  },
+  "sharedStockInfrastructure": {
+    "registryAndBeacon": "0x1dF3cA0fD30ED5eeb09eB01938f4E9c5196E6Ca5",
+    "registryRuntimeBytes": 2332,
+    "registryRuntimeCodeHash": "0x404e8188c4b1d0c9804205e0da253d11570e9d48d03964962cb689072b1735d2",
+    "registryPaused": false,
+    "implementation": "0xBd14156E05c6AF28ad39aA53a2AB8eB9CDf657DA",
+    "implementationRuntimeBytes": 10992,
+    "implementationRuntimeCodeHash": "0x137f26aacb7b1675d89017cebbf5018515c7bf4b87ae1848984494a56f3e1912",
+    "proxyRuntimeBytes": 283,
+    "proxyRuntimeCodeHash": "0x2f367e6a678e7b30ab613d5963e541e6f4d3ca586de76e2f441fbfeb1a27c440"
+  },
+  "quoteAssets": {
+    "weth": {
+      "address": "0x33e4191705c386532ba27cBF171Db86919200B94",
+      "symbol": "WETH",
+      "decimals": 18,
+      "runtimeBytes": 1730,
+      "runtimeCodeHash": "0x55f8ac53c64450f01880d8249fc5cb0c69c064e4bcb097ea80a02fff40485a7c"
+    },
+    "testUsdc": {
+      "address": "0xbf4479C07Dc6fdc6dAa764A0ccA06969e894275F",
+      "symbol": "USDC",
+      "decimals": 18,
+      "runtimeBytes": 4147,
+      "runtimeCodeHash": "0x642c73f233f09c821e18fa52a7f96105745c74183e221a0e561a26f1250f945b",
+      "warning": "Faucet-style Robinhood testnet token; not Circle USDC and not suitable for a production identity assumption."
+    }
+  },
+  "stockTokens": [
+    {
+      "name": "Amazon",
+      "symbol": "AMZN",
+      "address": "0x5884aD2f920c162CFBbACc88C9C51AA75eC09E02"
+    },
+    {
+      "name": "AMD",
+      "symbol": "AMD",
+      "address": "0x71178BAc73cBeb415514eB542a8995b82669778d"
+    },
+    {
+      "name": "Tesla",
+      "symbol": "TSLA",
+      "address": "0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E"
+    },
+    {
+      "name": "Palantir Technologies",
+      "symbol": "PLTR",
+      "address": "0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0"
+    },
+    {
+      "name": "Netflix",
+      "symbol": "NFLX",
+      "address": "0x3b8262A63d25f0477c4DDE23F83cfe22Cb768C93"
+    }
+  ],
+  "requiredStockState": {
+    "decimals": 18,
+    "paused": false,
+    "tokenPaused": false,
+    "uiMultiplier": "1000000000000000000",
+    "newUiMultiplier": "1000000000000000000",
+    "effectiveAt": "0"
+  },
+  "deployer": {
+    "address": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+    "observedNativeBalanceWei": "0",
+    "observedNonce": 0,
+    "blockedByStockRegistry": false,
+    "observedStockBalances": {
+      "AMZN": "0",
+      "AMD": "0",
+      "TSLA": "0",
+      "PLTR": "0",
+      "NFLX": "0"
+    },
+    "fundingGate": "BLOCKED",
+    "minimumNativeWeiForPreflight": "1",
+    "requireAtLeastOnePositiveStockBalance": true
+  },
+  "marketSelection": {
+    "status": "BLOCKED_ON_FAUCET_BALANCES",
+    "rule": "Choose exactly one healthy Stock Token with positive deployer and second-actor faucet balances; do not select by ticker popularity alone."
+  }
+}

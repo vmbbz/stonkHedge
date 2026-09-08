@@ -14,6 +14,13 @@ This guide is the working agreement for the project owner, collaborators, and ex
    pwsh -File .\scripts\verify-baseline.ps1
    ```
 
+   Before chain-specific simulation or deployment work, also run the live Robinhood testnet verifier. `-SkipFundingGate` is permitted only for read-only qualification; deployment preflight uses strict mode:
+
+   ```powershell
+   pwsh -File .\scripts\verify-robinhood-testnet.ps1 -SkipFundingGate
+   pwsh -File .\scripts\verify-robinhood-testnet.ps1
+   ```
+
 4. Do not treat a testnet receipt, green unit test, or third-party audit file as proof that the complete product is safe or mainnet-ready.
 
 ## 2. Choose the correct repository

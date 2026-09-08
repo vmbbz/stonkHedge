@@ -16,7 +16,10 @@ function Invoke-CheckedGit {
         [Parameter(Mandatory)] [string[]]$Arguments
     )
 
-    $output = & git -c "safe.directory=$RepositoryPath" -C $RepositoryPath @Arguments 2>&1
+    # Disable the caller's global excludes file so an unreadable user-level
+    # ignore path cannot be mistaken for repository status output. Strict
+    # verification should also see every repository-local untracked file.
+    $output = & git -c "safe.directory=$RepositoryPath" -c "core.excludesFile=" -C $RepositoryPath @Arguments 2>&1
     if ($LASTEXITCODE -ne 0) {
         throw "git $($Arguments -join ' ') failed in $RepositoryPath`n$($output -join "`n")"
     }
@@ -66,7 +69,7 @@ foreach ($repository in $manifest.repositories) {
     try {
         $actualCommit = Invoke-CheckedGit -RepositoryPath $repositoryPath -Arguments @("rev-parse", "HEAD")
         if ($repository.commitPolicy -eq "ancestor") {
-            & git -c "safe.directory=$repositoryPath" -C $repositoryPath merge-base --is-ancestor $repository.commit HEAD 2>&1 | Out-Null
+            & git -c "safe.directory=$repositoryPath" -c "core.excludesFile=" -C $repositoryPath merge-base --is-ancestor $repository.commit HEAD 2>&1 | Out-Null
             $commitStatus = if ($LASTEXITCODE -eq 0) { "PASS" } else { "FAIL" }
             $commitExpectation = "must contain baseline $($repository.commit)"
         }

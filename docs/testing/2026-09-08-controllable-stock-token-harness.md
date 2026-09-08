@@ -5,7 +5,8 @@
 The standalone Hours 10–11 compatibility harness and the first local
 Stock/quote Panoptic lifecycle are implemented and pushed on branch
 `feat/stock-token-compatibility-harness`. The latest evidence commit is
-`e6646eb6a259a6152d770090e63ec61ecc67ed09`, built on the standalone token
+`d90788202f622388a5bda1a9db32515662aea2af`, built on lifecycle commit
+`e6646eb6a259a6152d770090e63ec61ecc67ed09` and standalone token
 commit `159dabdd09a8b1168b23aa732fec9cb562a3f22b`.
 
 This is a local test double, not Robinhood issuer code, a synthetic equity, or
@@ -24,7 +25,7 @@ runs for scaled-view rounding.
 Reproduce from `C:\dev-shared\stonkHedge-core`:
 
 ```powershell
-git switch --detach e6646eb6a259a6152d770090e63ec61ecc67ed09
+git switch --detach d90788202f622388a5bda1a9db32515662aea2af
 $env:FOUNDRY_PROFILE = "ci_test"
 forge test --match-path test/foundry/mocks/ControllableStockToken.t.sol --fuzz-runs 30
 forge fmt --check test/foundry/integration/StockTokenPanopticFixture.sol test/foundry/integration/StockTokenPanopticLifecycle.t.sol
@@ -42,7 +43,7 @@ Observed results:
 |---|---|
 | Controllable-token focused suite | `16 passed, 0 failed, 0 skipped` |
 | Fuzz multiplier/rounding cases | `30` runs |
-| Local Stock/quote Panoptic lifecycle | `11 passed, 0 failed, 0 skipped` |
+| Local Stock/quote Panoptic lifecycle | `13 passed, 0 failed, 0 skipped` |
 | Inherited Panoptic factory | `7 passed, 0 failed, 0 skipped` |
 | Inherited PanopticPool | `72 passed, 0 failed, 0 skipped` |
 | Scoped formatting | passed for both new integration files |
@@ -88,28 +89,36 @@ The first lifecycle layer uses the inherited `PoolManager`, `V4RouterSimple`,
   trackers, and underlying tokens reconcile;
 - an actor deposits both assets, opens an in-range short, accrues observable
   premium after swaps, closes, and withdraws stock collateral;
+- distinct short and long actors deposit, open matched positions in the same
+  range, both accrue premium, and both close with their position counts cleared;
 - the UI multiplier changes scaled views but not Panoptic's raw-unit collateral
   accounting;
 - token or registry pause and a blocked PoolManager reject affected deposits
   atomically and recover after the restriction is lifted;
 - an option already open at pause can close using PoolManager internal balances,
   while stock withdrawal and external stock-involving swaps stay blocked; and
+- liquidation of an intentionally insolvent account needs an underlying Stock
+  Token transfer from the liquidator, so pause blocks it atomically; liquidator
+  shares and the victim position remain unchanged until unpause permits the
+  liquidation; and
 - forced administrative burn of Stock Tokens held by PoolManager reduces the
   raw on-chain reserve without updating CollateralTracker's cached deposited
   assets.
 
-The last two findings require explicit product controls. A pause is not a simple
-all-functions-off state: the UI must distinguish internal option close from
-underlying withdrawal. The monitor must compare raw PoolManager reserves with
-protocol accounting and fail closed on an unexplained issuer burn/deficit.
+These findings require explicit product controls. A pause is not a simple
+all-functions-off state: the UI must distinguish owner close from withdrawal
+and liquidation, and warn that liquidation liveness is lost until transfers
+resume. The monitor must compare raw PoolManager reserves with protocol
+accounting and fail closed on an unexplained issuer burn/deficit.
 
 ## Remaining Checkpoint B work
 
-The fixture uses one option actor and an ERC-20 quote stand-in. It has not yet
-proven a separately controlled long/short pair, forced liquidation under issuer
-restrictions, a clean standalone Anvil replay, or the local independent
-verifier. These remain the next test layer; this evidence does not claim Hours
-15–16 or Checkpoint B complete.
+The fixture uses distinct option actors and an ERC-20 quote stand-in. Insolvency
+for the liquidation case is induced with a Foundry-only collateral-share edit;
+the test proves liquidation behavior after insolvency, not a natural route to
+insolvency. A clean standalone Anvil replay, post-close residual reconciliation,
+and the local independent verifier remain the next layer. This evidence does
+not claim Hour 16 or Checkpoint B complete.
 
 This local work may continue while the independent review runs. The review of
 core `f4abdd7...` and the candidate V4 stack remains a hard gate before any

@@ -1,14 +1,15 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-08T22:36:25+02:00",
-  "status": "LOCAL_SINGLE_ACTOR_LIFECYCLE_PASS_CHECKPOINT_B_PENDING",
+  "capturedAt": "2026-09-08T22:44:55+02:00",
+  "status": "LOCAL_TWO_ACTOR_LIFECYCLE_PASS_CHECKPOINT_B_PENDING",
   "classification": "LOCAL_TEST_DOUBLE_ONLY",
   "repository": {
     "url": "https://github.com/vmbbz/panoptic-v2-core.git",
     "localPath": "C:\\dev-shared\\stonkHedge-core",
     "branch": "feat/stock-token-compatibility-harness",
-    "commit": "e6646eb6a259a6152d770090e63ec61ecc67ed09",
+    "commit": "d90788202f622388a5bda1a9db32515662aea2af",
     "parent": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "singleActorLifecycleCommit": "e6646eb6a259a6152d770090e63ec61ecc67ed09",
     "standaloneTokenCommit": "159dabdd09a8b1168b23aa732fec9cb562a3f22b",
     "remoteBranchPublished": true
   },
@@ -41,9 +42,9 @@
       "repositoryWideStatus": "INHERITED_DRIFT"
     },
     {
-      "id": "single-actor-panoptic-token-lifecycle",
+      "id": "two-actor-panoptic-token-lifecycle",
       "status": "PASS",
-      "passed": 11,
+      "passed": 13,
       "failed": 0,
       "skipped": 0,
       "coveredScenarios": [
@@ -58,7 +59,9 @@
         "withdraw",
         "multiplier-raw-unit-separation",
         "pause-and-block-recovery",
-        "forced-burn-accounting-divergence"
+        "forced-burn-accounting-divergence",
+        "matched-long-short-two-actor-lifecycle",
+        "paused-liquidation-atomic-failure-and-recovery"
       ]
     },
     {
@@ -92,9 +95,8 @@
       "id": "checkpoint-b-remaining-integration",
       "status": "PENDING",
       "requiredScenarios": [
-        "second-actor-matched-long-short",
-        "liquidation-under-issuer-restrictions",
         "clean-anvil-replay",
+        "post-close-residual-reconciliation",
         "independent-local-verifier"
       ]
     }
@@ -102,11 +104,15 @@
   "observedRisks": [
     {
       "id": "pause-partial-exit",
-      "detail": "An open option can close through internal PoolManager accounting while stock withdrawal and stock-involving external swaps remain blocked."
+      "detail": "An owner can close through internal PoolManager accounting while stock withdrawal, stock-involving external swaps, and liquidation remain blocked; unpause restores those paths."
     },
     {
       "id": "issuer-burn-accounting-divergence",
       "detail": "Administrative burn from PoolManager reduces raw reserves without changing CollateralTracker cached deposited assets."
+    },
+    {
+      "id": "liquidation-fixture-boundary",
+      "detail": "The paused-liquidation test induces insolvency with a Foundry-only collateral-share edit; it validates post-insolvency behavior, not a natural insolvency path."
     }
   ],
   "publicDeployment": {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "IN_PROGRESS_STOPPED_AFTER_INDEX_6",
-  "recordedAt": "2026-09-09T07:25:40Z",
+  "status": "IN_PROGRESS_STOPPED_AFTER_INDEX_7",
+  "recordedAt": "2026-09-09T07:35:36Z",
   "testnetOnly": true,
   "chainId": 46630,
   "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
@@ -9,9 +9,9 @@
   "planSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
   "operatorSha256": "556e0751d787df3149412bc2dd417f57d7c10e7481878a9acf35853709e4db25",
   "authorizationManifestSha256": "d24e0caa019c14c845dc00ca04836ee4207e0976d4aa312c8d8109635d091374",
-  "completedTransactionCount": 7,
-  "lastCompletedTransactionIndex": 6,
-  "nextTransactionIndex": 7,
+  "completedTransactionCount": 8,
+  "lastCompletedTransactionIndex": 7,
+  "nextTransactionIndex": 8,
   "transactions": [
     {
       "transactionIndex": 0,
@@ -159,22 +159,43 @@
         "outsideRepositoryPath": "C:\\dev-shared\\stonkHedge-review\\artifacts\\robinhood-46630-20260909-public\\nonce-06-74d6aaf6.json",
         "sha256": "86b4b75ff5972cceffa7331bb2cd7d1112e99f967641e611aae4c7448d3527d4"
       }
+    },
+    {
+      "transactionIndex": 7,
+      "label": "PanopticMath",
+      "nonce": 7,
+      "transactionHash": "0x76517a4e1b3c045a474a0123508143d29a0d6571b492a9f84a756ba151d0e9ca",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/tx/0x76517a4e1b3c045a474a0123508143d29a0d6571b492a9f84a756ba151d0e9ca",
+      "receiptStatus": 1,
+      "blockNumber": 116091933,
+      "blockHash": "0x66ee20cbeed160f106fac19da55e02862511970752d4519df836161a8b593b73",
+      "transactionPosition": 2,
+      "createdAddress": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7",
+      "gasUsed": 805690,
+      "effectiveGasPriceWei": 10000000,
+      "runtimeBytes": 3217,
+      "runtimeCodeHash": "0x3ac5052d577e4eab2a5d19f2f6fa439ef8a566842b27fcc00cd6316ecc1a563a",
+      "postTransactionPendingNonce": 8,
+      "operatorEvidence": {
+        "outsideRepositoryPath": "C:\\dev-shared\\stonkHedge-review\\artifacts\\robinhood-46630-20260909-public\\nonce-07-76517a4e.json",
+        "sha256": "4fc3ccf713b773506dbe3de523045ed8f4e87b62227801c76386469928d4eba4"
+      }
     }
   ],
   "independentContinuationPreflight": {
-    "checkedAt": "2026-09-09T07:25:40Z",
-    "blockNumber": 116088413,
-    "blockHash": "0x60292eecb17340e38e075f50ab47dc605bdf8cb124a97da06ece8394c9449ca1",
+    "checkedAt": "2026-09-09T07:35:36Z",
+    "blockNumber": 116092969,
+    "blockHash": "0xbba24d437c22b925bd413e0226d5235f68560e8dbb27809e93e2d12e75ad0701",
     "status": "READ_ONLY_PREFLIGHT_PASS",
-    "pendingNonce": 7,
-    "balanceWei": "9668648920000000",
-    "priorAddressesVerified": 7,
-    "emptyFutureAddressesVerified": 9,
-    "nextLabel": "PanopticMath",
-    "nextExpectedCreatedAddress": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7",
-    "nextGasEstimate": 829760,
+    "pendingNonce": 8,
+    "balanceWei": "9660592020000000",
+    "priorAddressesVerified": 8,
+    "emptyFutureAddressesVerified": 8,
+    "nextLabel": "InteractionHelper",
+    "nextExpectedCreatedAddress": "0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A",
+    "nextGasEstimate": 1690538,
     "nextGasLimit": 16711680,
     "broadcastAttempted": false
   },
-  "continuationPolicy": "STOPPED; index 7 requires a separate explicit local operator invocation and post-transaction reconciliation"
+  "continuationPolicy": "STOPPED; index 8 requires a separate explicit local operator invocation and post-transaction reconciliation"
 }

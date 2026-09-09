@@ -23,9 +23,11 @@ Start with:
 
 The first live, read-only market qualification passed at block `116408992`.
 Read the [first-market selection record](./markets/2026-09-09-first-market-selection.md)
-for the five exact PoolIds, PLTR/WETH recommendation, architecture, PAIRS
-memory aid, and unresolved owner decisions. No market transaction is yet
-authorized.
+for the five exact PoolIds and the
+[offline PLTR/WETH genesis design](./markets/2026-09-09-pltr-weth-offline-genesis-design.md)
+for the accepted planning boundary, synthetic price, proposed exposure,
+architecture, transaction sequence, and ZERO memory aid. No market transaction
+is yet authorized.
 
 ## Documentation by audience
 

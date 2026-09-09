@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Read-only candidate qualification complete; owner selection required |
+| Status | PLTR/WETH accepted for offline planning; unsigned rehearsal plan complete; exposure review and fork rehearsal required |
 | Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated focused engineering time | 6–10 hours, excluding faucet, RPC, or review delays |
@@ -25,16 +25,20 @@ This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
 
-### Current progress: first read-only gate complete
+### Current progress: offline design gate complete
 
 At block `116408992`, the repository qualifier passed `79/79` checks across
 chain identity, external and Panoptic runtimes, Stock Token controls, both
 accounts, five candidate PoolIds, and factory mappings. All five candidates are
-eligible. PLTR/WETH is recommended because PLTR is the only eligible Stock
-Token that sorts as `currency0` against WETH. Owner acceptance, price policy,
-exposure, and roles remain unresolved, and no transaction is authorized. See
-the [selection record](../markets/2026-09-09-first-market-selection.md) and
-[machine-readable manifest](../../manifests/markets/robinhood-testnet-market-selection-2026-09-09.json).
+eligible. PLTR/WETH was recommended because PLTR is the only eligible Stock
+Token that sorts as `currency0` against WETH. The owner has now accepted that
+exact PoolKey, a synthetic mechanism-test price class, and the second actor's
+roles for offline planning only. The repository has generated the unsigned
+design; its bounded exposure is still a proposal and no transaction is
+authorized. See the
+[selection record](../markets/2026-09-09-first-market-selection.md),
+[offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
+and [machine-readable plan](../../manifests/markets/robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json).
 
 ## 2. Entry gates already complete
 
@@ -46,7 +50,7 @@ the [selection record](../markets/2026-09-09-first-market-selection.md) and
 - both public accounts received bounded faucet ETH and all five Stock Tokens;
 - local pool/liquidity/market/position lifecycle: pass at `cfaf42c...`.
 
-## 3. Decisions required before building a transaction plan
+## 3. Decisions and calculations for the transaction plan
 
 ### 3.1 Select one Stock Token by evidence
 
@@ -63,8 +67,8 @@ only after recording:
 The result should be a small machine-readable asset-selection manifest. Every
 other Stock Token remains out of scope for Checkpoint C.
 
-Current result: all five pass; PLTR is technically recommended but has not been
-accepted by the owner.
+Current result: all five passed; the owner accepted the exact PLTR/WETH
+fee-`3000`, spacing-`60`, no-hook candidate for offline planning only.
 
 ### 3.2 Freeze the complete PoolKey
 

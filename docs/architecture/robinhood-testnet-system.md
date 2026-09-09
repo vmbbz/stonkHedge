@@ -469,7 +469,7 @@ an independent audit, or transaction authorization.
 
 The next checkpoint is **market genesis**, not Docusaurus. The first read-only
 selection gate passed at block `116408992`: all five candidates were eligible,
-and [PLTR/WETH is technically recommended](../markets/2026-09-09-first-market-selection.md)
+and [PLTR/WETH is accepted for offline planning only](../markets/2026-09-09-pltr-weth-offline-genesis-design.md)
 because it preserves Stock Token as `currency0`. Owner acceptance, initial
 price, exposure, and transaction roles remain open. We must then initialize
 exactly one valueless Stock Token/WETH market, seed bounded liquidity, register

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "status": "OWNER_ACCEPTED_FOR_OFFLINE_PLANNING_ONLY",
+  "recordedAt": "2026-09-09T20:58:48Z",
+  "selectionBinding": {
+    "path": "robinhood-testnet-market-selection-2026-09-09.json",
+    "sha256": "53c98120cf485f7a71b2afb59f97ef360a0b6b86ff6337d02e20c976713abedf"
+  },
+  "acceptedDesign": {
+    "symbol": "PLTR",
+    "stockToken": "0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0",
+    "weth": "0x33e4191705c386532ba27cBF171Db86919200B94",
+    "poolKey": {
+      "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "fee": 3000,
+      "tickSpacing": 60,
+      "hooks": "0x0000000000000000000000000000000000000000"
+    },
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "pricePolicy": {
+      "classification": "SYNTHETIC_MECHANISM_TEST_ONLY_NOT_A_MARKET_QUOTE",
+      "currency1RawUnitsPerCurrency0RawUnitNumerator": "1",
+      "currency1RawUnitsPerCurrency0RawUnitDenominator": "1000",
+      "humanDisplay": "0.001 test WETH per PLTR, equivalently 1000 PLTR per test WETH",
+      "bothTokensDecimals": 18,
+      "sqrtPriceRounding": "Floor the integer square root of (1 / 1000) multiplied by 2^192.",
+      "executionDeviationPolicy": "Require the exact planned sqrtPriceX96 before liquidity; any initialization or pre-mint price mismatch blocks the step.",
+      "uiRestriction": "Never label or display this synthetic ratio as a live PLTR, equity, or issuer price."
+    },
+    "roles": {
+      "actor": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+      "poolInitializer": "SECOND_ACTOR",
+      "liquidityProvider": "SECOND_ACTOR",
+      "liquidityNftRecipient": "SECOND_ACTOR",
+      "panopticMarketDeployer": "SECOND_ACTOR",
+      "panopticFactoryNftRecipient": "SECOND_ACTOR",
+      "administrativeDeployerExcluded": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD"
+    }
+  },
+  "proposedExposureForOfflineCalculationOnly": {
+    "status": "PROPOSAL_REQUIRES_SEPARATE_OWNER_ACCEPTANCE",
+    "wrapNativeWei": "4000000000000000",
+    "maximumPltrForInitialLiquidity": "2000000000000000000",
+    "maximumWethForInitialLiquidity": "2000000000000000",
+    "minimumNativeReserveBeforeGasWei": "6000000000000000",
+    "minimumPltrReserveAfterLiquidity": "3000000000000000000",
+    "minimumWethReserveAfterLiquidity": "2000000000000000",
+    "rangeWidthTicksEachSideBeforeOutwardSpacingRounding": 12000,
+    "liquidityBudgetUtilizationBps": 9900,
+    "permit2AllowanceLifetimeSeconds": 7200,
+    "liquidityDeadlineSeconds": 3600,
+    "factorySalt": "0",
+    "allowanceCleanupRequired": true
+  },
+  "rehearsalClock": {
+    "basis": "HISTORICAL_SELECTION_SNAPSHOT_ONLY",
+    "referenceTimestampUnix": 1788981230,
+    "note": "The derived deadlines are deliberately rehearsal-only. A future execution candidate must be regenerated from a fresh accepted timestamp and live pending nonce."
+  },
+  "authorization": {
+    "publicBroadcast": false,
+    "signing": false,
+    "wrapping": false,
+    "approvals": false,
+    "poolInitialization": false,
+    "liquidity": false,
+    "swaps": false,
+    "panopticMarketRegistration": false,
+    "collateralOrTrading": false
+  },
+  "nextGate": "GENERATE_AND_TEST_OFFLINE_REHEARSAL_PLAN_THEN_REVIEW_EXPOSURE_AND_SIMULATE_NO_BROADCAST"
+}

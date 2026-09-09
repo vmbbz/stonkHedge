@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Read-only qualification passed; owner acceptance required |
+| Status | Read-only qualification passed; PLTR/WETH later accepted for offline planning only |
 | Snapshot | Block `116408992`, `2026-09-09T19:13:50Z` |
 | Technical recommendation | PLTR/WETH, fee `3000`, tick spacing `60`, no hook |
 | Candidate PoolId | `0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae` |
@@ -32,9 +32,11 @@ reduces accidental inversion in price math, SDK adapters, charts, copy, and
 collateral reporting. Ticker popularity, market capitalization, and real-world
 investment merit were not considered.
 
-The recommendation is not an owner decision and not transaction authorization.
-The exact selection, initial price policy, exposure limits, and account roles
-remain open.
+The recommendation was not itself an owner decision. The owner later accepted
+the exact candidate, synthetic-price class, and second-actor roles for offline
+planning only. The exposure remains a separate proposal and no transaction is
+authorized. See the
+[offline genesis design](./2026-09-09-pltr-weth-offline-genesis-design.md).
 
 ## 2. Where this fits in the architecture
 
@@ -161,22 +163,22 @@ whole faucet balance as liquidity.
 
 Using the second actor as the LP and eventual market-NFT recipient keeps the
 temporary guardian/treasurer deployer separate from ordinary market activity.
-That is the preferred role split, but it still needs to be encoded in the
-reviewed plan.
+That role split is now encoded in the offline plan. It is still not authorized
+for a public transaction.
 
-## 7. What remains deliberately undecided
+## 7. Later decision status
 
 ### 7.1 Asset and complete key
 
-The owner must accept one exact Stock Token and the full PoolKey. “PLTR/WETH”
-alone is incomplete because fee, tick spacing, and hook address determine a
-different pool identity.
+The owner accepted PLTR/WETH with fee `3000`, tick spacing `60`, and hooks zero
+for offline planning. This does not authorize initialization.
 
 ### 7.2 Initial price
 
 The local lifecycle used `sqrtPriceX96 = 2^96`, which means a raw-unit 1:1
-ratio. It must not be copied silently to public testnet. The approved policy
-must say whether the price is synthetic or reference-derived and must record:
+ratio. It was not copied silently to public testnet. The owner accepted a
+synthetic mechanism-test price class for offline planning, and the generator
+records:
 
 - which human-readable direction is displayed;
 - decimal normalization;
@@ -186,22 +188,25 @@ must say whether the price is synthetic or reference-derived and must record:
 - source and timestamp if reference-derived; and
 - maximum tolerated drift before initialization.
 
-Because both assets are valueless faucet assets, a clearly labelled synthetic
-mechanism-test price is the fastest honest route. It must never be displayed as
-a live PLTR equity quote.
+The resulting offline target is `0.001` test WETH per PLTR with exact
+`sqrtPriceX96 = 2505414483750479311864138015` and tick `-69082`. It must never
+be displayed as a live PLTR equity quote, and exact exposure still needs a
+separate decision.
 
 ### 7.3 Maximum exposure and liquidity shape
 
-The unsigned plan must cap ETH wrapped, Stock Token spent, allowances, LP
-range, slippage, deadline, swaps, and collateral. It must reserve Stock Token
-for the later two-actor Panoptic lifecycle and native ETH for gas.
+The unsigned plan proposes caps of `0.004 ETH` wrapped, `2 PLTR` and `0.002
+WETH` for liquidity, a `-81120` to `-57060` range, and explicit allowance
+cleanup. These are calculated review inputs, not accepted exposure or
+broadcast authority.
 
 ### 7.4 Roles and ownership
 
-The plan must name who initializes the pool, owns the V4 LP position, calls
-`PanopticFactoryV4.deployNewPool`, receives the factory NFT, deposits each
-collateral asset, and performs the second-user trade. One person controlling
-two keys gives functional separation, not independent review.
+The owner accepted the second actor as pool initializer, LP and V4 NFT owner,
+Panoptic market deployer, and factory-NFT recipient for offline planning. The
+later two-user collateral/trade roles are not part of this genesis plan. One
+person controlling two keys gives functional separation, not independent
+review.
 
 ## 8. Memory aid: PAIRS
 
@@ -240,11 +245,11 @@ state-changing step.
 
 ## 10. Next engineering gate
 
-After owner acceptance of the exact PLTR/WETH candidate, the next code artifact
-is an offline market-plan generator plus exact price/tick and liquidity-budget
-calculators. That generator remains unsigned and non-broadcasting. It will feed
-a fresh fork rehearsal; only a separately reviewed authorization may later
-permit one public transaction at a time.
+The offline market-plan generator, exact price/tick calculator, bounded
+liquidity calculator, acceptance manifest, and unsigned plan are now complete.
+The next code artifact is the strict market verifier, followed by a fresh-head
+fork rehearsal. Only a separately reviewed execution plan and authorization
+may later permit one public transaction at a time.
 
 Until then, there is no permission to wrap ETH, approve tokens, initialize the
 pool, add liquidity, swap, deploy the Panoptic market, deposit collateral, or

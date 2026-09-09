@@ -3,8 +3,8 @@
 ## Current state
 
 The authorized Robinhood Chain testnet direct-CREATE sequence is in progress
-and stopped safely after transaction index `9`. Exactly ten of the 16 approved
-zero-value CREATE transactions have been broadcast.
+and stopped safely after transaction index `10`. Exactly eleven of the 16
+approved zero-value CREATE transactions have been broadcast.
 
 The machine-readable checkpoint is
 [`../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json`](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json).
@@ -201,19 +201,38 @@ the public RPC and matched the frozen plan exactly.
 The `CollateralTrackerV2` receipt and runtime were independently re-read from
 the public RPC and matched the frozen plan exactly.
 
+## Transaction 10 evidence
+
+| Item | Verified value |
+|---|---|
+| Plan SHA-256 | `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Label | `PanopticGuardian` |
+| Nonce | `10` |
+| Transaction | [`0xf8d25dc1...65b222`](https://explorer.testnet.chain.robinhood.com/tx/0xf8d25dc1dc40287c926474dc5c3468c9dab06a618cfa248ce068cfaeb465b222) |
+| Receipt | success (`status = 1`) |
+| Block | `116111093` |
+| Created address | `0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e` |
+| Gas used | `1,358,396` |
+| Runtime length | `5,562` bytes |
+| Runtime code hash | `0xe62ac18a0713d7683a572bf73fc70666164e13a265d16c37d820ae11df24bc2c` |
+| External operator evidence SHA-256 | `809f3f0addde67c87847f17125992fcd2b7b440f0ba80801999a1d089a1044ac` |
+
+The `PanopticGuardian` receipt and runtime were independently re-read from the
+public RPC and matched the frozen plan exactly.
+
 ## Continuation gate
 
-A read-only index-10 operator preflight passed at block `116106249`:
+A read-only index-11 operator preflight passed at block `116112475`:
 
-- deployer pending nonce: `10`;
-- prior deployments verified: `10`;
-- remaining predicted addresses verified empty: `6`;
-- deployer balance: `0.00959480051` test ETH;
-- next deployment: `PanopticGuardian` at
-  `0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e`; and
-- next gas estimate: `1,345,842`, below the plan gas limit of `16,711,680`.
+- deployer pending nonce: `11`;
+- prior deployments verified: `11`;
+- remaining predicted addresses verified empty: `5`;
+- deployer balance: `0.00958121655` test ETH;
+- next deployment: `BuilderFactory` at
+  `0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B`; and
+- next gas estimate: `948,727`, below the plan gas limit of `16,711,680`.
 
-No index-10 transaction was signed or broadcast during that preflight. The
+No index-11 transaction was signed or broadcast during that preflight. The
 sequence remains governed by the approved one-transaction/wait/verify/stop
 policy. Pool initialization, liquidity provision, and market registration are
 still outside this authorization.

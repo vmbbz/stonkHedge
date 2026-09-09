@@ -3,8 +3,8 @@
 ## Current state
 
 The authorized Robinhood Chain testnet direct-CREATE sequence is in progress
-and stopped safely after transaction index `8`. Exactly nine of the 16
-approved zero-value CREATE transactions have been broadcast.
+and stopped safely after transaction index `9`. Exactly ten of the 16 approved
+zero-value CREATE transactions have been broadcast.
 
 The machine-readable checkpoint is
 [`../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json`](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json).
@@ -182,19 +182,38 @@ public RPC and matched the frozen plan exactly.
 The `InteractionHelper` receipt and runtime were independently re-read from
 the public RPC and matched the frozen plan exactly.
 
+## Transaction 9 evidence
+
+| Item | Verified value |
+|---|---|
+| Plan SHA-256 | `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Label | `CollateralTrackerV2` |
+| Nonce | `9` |
+| Transaction | [`0xada976f6...5af8cb`](https://explorer.testnet.chain.robinhood.com/tx/0xada976f64a54e3b95945e8a0d1a3e2018ef8208967e8f737954b71376b5af8cb) |
+| Receipt | success (`status = 1`) |
+| Block | `116105325` |
+| Created address | `0x41119aAd1c69dba3934D0A061d312A52B06B27DF` |
+| Gas used | `4,920,578` |
+| Runtime length | `21,338` bytes |
+| Runtime code hash | `0x62777e330adfa9346f10108b958b4a903c8f4b53f3d33588dc9dbe8917d22e35` |
+| External operator evidence SHA-256 | `c51dc718db179815ec59a789dcd6ddfc3721117f5fedb92d83203b28a690a084` |
+
+The `CollateralTrackerV2` receipt and runtime were independently re-read from
+the public RPC and matched the frozen plan exactly.
+
 ## Continuation gate
 
-A read-only index-9 operator preflight passed at block `116101398`:
+A read-only index-10 operator preflight passed at block `116106249`:
 
-- deployer pending nonce: `9`;
-- prior deployments verified: `9`;
-- remaining predicted addresses verified empty: `7`;
-- deployer balance: `0.00964400629` test ETH;
-- next deployment: `CollateralTrackerV2` at
-  `0x41119aAd1c69dba3934D0A061d312A52B06B27DF`; and
-- next gas estimate: `5,010,674`, below the plan gas limit of `16,711,680`.
+- deployer pending nonce: `10`;
+- prior deployments verified: `10`;
+- remaining predicted addresses verified empty: `6`;
+- deployer balance: `0.00959480051` test ETH;
+- next deployment: `PanopticGuardian` at
+  `0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e`; and
+- next gas estimate: `1,345,842`, below the plan gas limit of `16,711,680`.
 
-No index-9 transaction was signed or broadcast during that preflight. The
+No index-10 transaction was signed or broadcast during that preflight. The
 sequence remains governed by the approved one-transaction/wait/verify/stop
 policy. Pool initialization, liquidity provision, and market registration are
 still outside this authorization.

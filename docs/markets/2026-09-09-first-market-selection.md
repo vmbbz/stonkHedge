@@ -248,11 +248,13 @@ state-changing step.
 The offline market-plan generator, exact price/tick calculator, bounded
 liquidity calculator, acceptance manifest, and unsigned plan are now complete.
 The strict initial market verifier is also complete and passed at block
-`116478616`; see the
-[preflight record](./2026-09-09-pltr-weth-initial-preflight.md). The next code
-artifact is the loopback-only fresh-head fork rehearsal. Only a separately
-reviewed execution plan and authorization may later permit one public
-transaction at a time.
+`116510322`; see the
+[preflight record](./2026-09-09-pltr-weth-initial-preflight.md). The subsequent
+[loopback-only exact-head fork rehearsal](./2026-09-10-pltr-weth-fork-rehearsal.md)
+passed all twelve genesis transitions and four expected failure cases. Its
+state was discarded. The next gate is the owner's exact exposure decision;
+only a separately reviewed execution plan, one-step operator, and hash-bound
+authorization may later permit one public transaction at a time.
 
 Until then, there is no permission to wrap ETH, approve tokens, initialize the
 pool, add liquidity, swap, deploy the Panoptic market, deposit collateral, or

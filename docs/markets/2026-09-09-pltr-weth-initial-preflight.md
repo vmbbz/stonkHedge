@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | Read-only initial preflight passed; local fork rehearsal and exposure acceptance remain required |
+| Status | Read-only initial preflight passed and exact-head fork rehearsal completed; exposure acceptance remains required |
 | Chain | Robinhood Chain testnet `46630` |
-| Pinned block | `116478616` |
-| Block hash | `0xbc1efcf5cf57918e156a5bd39a44bc9b3465141d362c2bf67309750298ed2ca4` |
-| Block timestamp | `2026-09-09T21:55:53Z` |
+| Pinned block | `116510322` |
+| Block hash | `0x7e2f9ad36e849939324d92c992bddc8a8e5dd96071047044cc95602994812e74` |
+| Block timestamp | `2026-09-09T23:06:06Z` |
 | Shared qualification | `79/79` passed |
 | Plan-specific pre-state | `17/17` passed |
 | Public execution | Not ready and not authorized |
@@ -33,7 +33,7 @@ The pass proves that, at the pinned block:
   enough faucet assets for the proposed caps and reserves;
 - the actor started with zero WETH and zero PLTR/WETH allowances at both the
   ERC-20-to-Permit2 and Permit2-to-PositionManager layers;
-- PositionManager `nextTokenId()` was readable and returned `3732`; and
+- PositionManager `nextTokenId()` was readable and returned `3740`; and
 - the predicted PanopticPool and both CollateralTracker addresses had no code.
 
 This is a pre-state snapshot, not a state transition. Nothing was wrapped or
@@ -64,7 +64,7 @@ The evidence used here records:
 | Offline plan file | `889eb501f7b20c4ae2f352ce878c76c4f18bbf1b2438027c5c9a7b876e006417` |
 | Strict verifier | `30200c330a7f42209073cbbabe481cf6f8321c1745813b8689c8280f4a65157d` |
 | Complete qualifier | `71a1f9d995a4c11efd98cfb4fcc58af7a4eca3837b51276f3e9f0d10b475e228` |
-| Preflight evidence file | `8eefef3bf19407dfa3b2fef38857dc0a41395fea869bb500abd6108168c0210f` |
+| Preflight evidence file | `d9d06889b2e4c73d0c741a6fdc4585b1880f1522c2b0f3a43640f0802a14c098` |
 
 The evidence-file hash is an external review checksum; it is not embedded in
 the file itself.
@@ -80,26 +80,25 @@ and using Panoptic factory salt `0`—has not been accepted for public execution
 The current blockers are therefore independent of the green preflight:
 
 1. no accepted exact exposure;
-2. no successful exact-head positive and negative fork rehearsal;
-3. no fresh execution timestamps or nonce-bound execution plan;
-4. no market-specific one-step operator; and
-5. no hash-bound signing or broadcast authorization.
+2. no fresh execution timestamps or nonce-bound execution plan;
+3. no market-specific one-step operator; and
+4. no hash-bound signing or broadcast authorization.
 
-## Fork-rehearsal boundary
+## Fork-rehearsal follow-on
 
-The first attempt to launch a local Anvil fork at the older accepted block
-`116408992` did not establish a loopback listener, so it produced no rehearsal
-evidence and is not counted as a pass. The committed calldata cannot simply be
-replayed at a current timestamp because its historical deadlines are meant to
-fail closed.
+The committed calldata cannot simply be replayed at a current timestamp because
+its historical deadlines are meant to fail closed. A separate fork transformer
+therefore refreshed only the local Permit2 expirations and PositionManager
+deadline while preserving the exact accepted mechanism and all false public
+authorization flags.
 
-The next safe implementation round is a separate, explicitly fork-only
-rehearsal artifact pinned to a fresh head and fresh local rehearsal clock. It
-must preserve the accepted PoolKey and proposed exposure, keep every public
-authorization false, run only against loopback Anvil, and leave the committed
-offline plan unchanged. Only after the positive transition sequence and
-negative cases pass should the owner decide whether to accept the exact
-exposure for a separately generated public-execution candidate.
+That exact-head rehearsal has now passed all twelve positive transitions and
+four snapshot-isolated negative cases. Read the
+[full fork-rehearsal record](./2026-09-10-pltr-weth-fork-rehearsal.md). Its
+Anvil state was discarded, so this preflight remains a public pre-state
+snapshot rather than evidence of a public pool. The next decision is whether
+the owner accepts the exact exposure for a separately generated
+public-execution candidate.
 
 ## Memory aid: READ
 

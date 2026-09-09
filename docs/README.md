@@ -8,9 +8,9 @@ publishing layer, not a substitute for accurate manifests and runbooks.
 ## Current milestone
 
 The 16-contract shared Panoptic V4 stack is deployed and reconciled on
-Robinhood Chain testnet. A Stock Token/WETH Uniswap V4 pool, its per-market
-Panoptic contracts, collateral deposits, option positions, and the user
-application are not live yet.
+Robinhood Chain testnet. PLTR/WETH genesis has passed an exact-head local fork
+rehearsal, but its Uniswap V4 pool, per-market Panoptic contracts, collateral
+deposits, option positions, and the user application are not live yet.
 
 Start with:
 
@@ -28,8 +28,10 @@ for the five exact PoolIds and the
 for the accepted planning boundary, synthetic price, proposed exposure,
 architecture, transaction sequence, and ZERO memory aid. The subsequent
 [strict initial preflight](./markets/2026-09-09-pltr-weth-initial-preflight.md)
-passed `79/79` shared checks and `17/17` exact-plan checks at block `116478616`.
-No market transaction is yet authorized.
+passed `79/79` shared checks and `17/17` exact-plan checks at block `116510322`.
+The [exact-head fork rehearsal](./markets/2026-09-10-pltr-weth-fork-rehearsal.md)
+then passed `12/12` local transitions and `4/4` expected reverts. Its local
+state was discarded. No market transaction is yet authorized.
 
 ## Documentation by audience
 

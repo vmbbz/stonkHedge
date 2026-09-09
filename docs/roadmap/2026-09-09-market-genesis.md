@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | PLTR/WETH offline plan and strict initial preflight complete; exposure review and fork rehearsal required |
+| Status | PLTR/WETH offline plan, strict preflight, and exact-head genesis fork rehearsal complete; exact exposure decision and public operator required |
 | Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
-| Estimated focused engineering time | 6–10 hours, excluding faucet, RPC, or review delays |
+| Estimated remaining focused engineering time | 3–6 hours to public genesis, excluding faucet, RPC, or review delays |
 
 ## 1. Objective
 
@@ -25,7 +25,7 @@ This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
 
-### Current progress: offline design and initial preflight complete
+### Current progress: genesis mechanism proven locally
 
 At block `116408992`, the repository qualifier passed `79/79` checks across
 chain identity, external and Panoptic runtimes, Stock Token controls, both
@@ -34,13 +34,16 @@ eligible. PLTR/WETH was recommended because PLTR is the only eligible Stock
 Token that sorts as `currency0` against WETH. The owner has now accepted that
 exact PoolKey, a synthetic mechanism-test price class, and the second actor's
 roles for offline planning only. The repository has generated the unsigned
-design and its strict initial preflight passed at block `116478616`: the full
+design and its fresh strict initial preflight passed at block `116510322`: the full
 qualification passed `79/79` and all `17/17` plan-specific starting-state
-checks passed. Its bounded exposure is still a proposal and no transaction is
-authorized. See the
+checks passed. A loopback-only fork of that exact head then passed all twelve
+genesis transitions and four snapshot-isolated negative cases. The Anvil state
+was discarded. Its bounded exposure is still a proposal and no public
+transaction is authorized. See the
 [selection record](../markets/2026-09-09-first-market-selection.md),
 [offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
 the [initial preflight record](../markets/2026-09-09-pltr-weth-initial-preflight.md),
+the [fork-rehearsal record](../markets/2026-09-10-pltr-weth-fork-rehearsal.md),
 and [machine-readable plan](../../manifests/markets/robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json).
 
 ## 2. Entry gates already complete
@@ -51,7 +54,11 @@ and [machine-readable plan](../../manifests/markets/robinhood-testnet-pltr-weth-
 - strict chain, V4 dependency, Stock Token, WETH, and account verifier: pass;
 - two encrypted testnet keystores exist outside the repository;
 - both public accounts received bounded faucet ETH and all five Stock Tokens;
-- local pool/liquidity/market/position lifecycle: pass at `cfaf42c...`.
+- local pool/liquidity/market/position lifecycle: pass at `cfaf42c...`;
+- deterministic twelve-step unsigned market-genesis plan: complete;
+- fresh public preflight: `79/79` shared plus `17/17` exact-plan checks; and
+- exact-head genesis rehearsal: `12/12` transitions plus `4/4` required
+  reverts.
 
 ## 3. Decisions and calculations for the transaction plan
 
@@ -176,6 +183,27 @@ The operator must:
 
 ## 5. Fork rehearsal
 
+### 5.1 Completed genesis subset
+
+The exact-head rehearsal at block `116510322` completed the state-creation
+subset needed before asking the owner for public exposure acceptance:
+
+1. bounded ETH wrapping;
+2. exact two-layer PLTR/WETH permissions;
+3. exact PoolKey initialization;
+4. bounded two-sided liquidity and actor-owned NFT;
+5. complete permission revocation;
+6. deterministic Panoptic market and tracker deployment; and
+7. event, mapping, runtime, ownership, immutable-wiring, delta, and SFPM
+   reconciliation.
+
+Duplicate initialization, expired liquidity, occupied CREATE3 proxy, and
+duplicate Panoptic registration all reverted inside restored snapshots. The
+[full evidence record](../markets/2026-09-10-pltr-weth-fork-rehearsal.md)
+explains the loopback-only architecture and why no public state changed.
+
+### 5.2 Broader lifecycle rehearsal still required
+
 Fork a fresh Robinhood testnet head into local Anvil and impersonate only the
 exact planned public accounts. Rehearse the final transaction order, including
 all approvals and deadlines.
@@ -198,7 +226,8 @@ At minimum the rehearsal must cover:
 12. verify all balances and residuals against a scale-appropriate public-test
     budget.
 
-The fork must also exercise at least these negative paths:
+Across genesis and the later lifecycle, the fork suite must exercise at least
+these negative paths:
 
 - wrong chain, PoolKey, token order, hook, fee, or tick spacing;
 - already initialized pool or occupied predicted market address;
@@ -217,16 +246,18 @@ flowchart TD
     B -- no --> X[BLOCKED: no transaction]
     B -- yes --> C[Generate unsigned deterministic plan]
     C --> D[Independent or explicitly labelled owner reproduction]
-    D --> E[Exact-head fork rehearsal]
-    E --> F{Lifecycle and negative gates pass?}
+    D --> E[Exact-head genesis fork rehearsal: PASS]
+    E --> F{Exact exposure accepted?}
     F -- no --> X
-    F -- yes --> G[Separate explicit authorization]
-    G --> H[Execute one transaction]
-    H --> I[Reconcile receipt and post-state]
-    I --> J{More authorized steps?}
-    J -- yes --> H
-    J -- no --> K[Full market reconciliation]
-    K --> L[Commit Checkpoint C evidence]
+    F -- yes --> G[Fresh execution plan and one-step operator]
+    G --> H[Fresh verify and fork replay]
+    H --> I[Separate explicit authorization]
+    I --> J[Execute one transaction]
+    J --> K[Reconcile receipt and post-state]
+    K --> L{More authorized steps?}
+    L -- yes --> J
+    L -- no --> M[Full market reconciliation]
+    M --> N[Commit public genesis evidence]
 ```
 
 The previous authorization ended at shared-deployment transaction index `15`.

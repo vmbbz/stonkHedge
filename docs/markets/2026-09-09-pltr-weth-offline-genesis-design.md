@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Offline design and unsigned rehearsal plan complete; strict initial preflight passed; exposure review and fork rehearsal required |
+| Status | Offline design, strict preflight, and exact-head genesis fork rehearsal complete; exact exposure review required |
 | Public chain state | Pool and Panoptic market were still absent at the accepted qualification snapshot |
 | PoolKey | PLTR/WETH, fee `3000`, tick spacing `60`, hooks zero |
 | PoolId | `0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae` |
@@ -52,10 +52,13 @@ collateral deposited or options traded     NO
 ```
 
 That snapshot is historical. The strict initial verifier subsequently proved
-the same required pre-state at block `116478616`, where the full qualification
-passed `79/79` and the plan-specific checks passed `17/17`. See the
-[initial preflight record](./2026-09-09-pltr-weth-initial-preflight.md). A fork
-or execution candidate must still consume a fresh, explicitly pinned head.
+the same required pre-state at block `116510322`, where the full qualification
+passed `79/79` and the plan-specific checks passed `17/17`. The exact-head
+genesis rehearsal then passed twelve positive transitions and four isolated
+negative cases. See the
+[initial preflight record](./2026-09-09-pltr-weth-initial-preflight.md) and
+[fork-rehearsal record](./2026-09-10-pltr-weth-fork-rehearsal.md). A future
+execution candidate must still consume a fresh, explicitly pinned head.
 
 ## 3. Architecture of the planned market
 
@@ -277,9 +280,9 @@ this document intentionally avoids duplicating them.
 
 ## 10. What remains before any public transaction
 
-The strict read-only market verifier is now implemented and has passed against
-a pinned live head. The next work is an exact-head local fork rehearsal. Before
-that rehearsal can mature into execution, all of these gates must pass:
+The strict read-only market verifier and exact-head local genesis rehearsal are
+now implemented and passing. Before that rehearsal can mature into execution,
+all of these gates must pass:
 
 1. owner accepts the exact `0.004 ETH`, `2 PLTR`, `0.002 WETH`, tick range,
    liquidity, and salt proposal;
@@ -288,9 +291,8 @@ that rehearsal can mature into execution, all of these gates must pass:
    mapping, and predicted-address emptiness;
 3. fresh execution timestamps and actor pending nonce replace the historical
    rehearsal clock and null nonces;
-4. a fork of that exact head passes the twelve positive transitions and all
-   wrong-key, stale-price, excess-allowance, deadline, duplicate, wrong-sender,
-   and address-occupancy negatives;
+4. a fork of that exact execution-candidate head repeats the twelve positive
+   transitions and required negative gates without source or state drift;
 5. a separate one-step market operator binds the execution-plan hash and
    decodes the selected intent before prompting for the encrypted keystore;
 6. the owner gives a new hash-bound testnet-only authorization; and

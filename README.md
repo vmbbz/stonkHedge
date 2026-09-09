@@ -20,7 +20,10 @@ The current repository is the product and delivery control plane. It contains th
   records the synthetic price, exposure proposal, exact unsigned sequence, and
   remaining gates. Its [strict initial preflight](./docs/markets/2026-09-09-pltr-weth-initial-preflight.md)
   passed `79/79` shared checks plus `17/17` exact-plan checks at a pinned live
-  head; this is read-only rehearsal readiness, not transaction authorization.
+  head. The subsequent [exact-head fork rehearsal](./docs/markets/2026-09-10-pltr-weth-fork-rehearsal.md)
+  passed all 12 genesis transitions and four required failure cases on
+  loopback Anvil. That state was discarded; neither result authorizes a public
+  transaction.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -33,9 +36,11 @@ The current repository is the product and delivery control plane. It contains th
 - Run `pwsh -File .\scripts\verify-robinhood-testnet.ps1` before any chain-specific simulation or broadcast. Use `-SkipFundingGate` only for read-only infrastructure qualification.
 - Treat all material before that section as background research, not an approved specification.
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
-  Robinhood Chain testnet. The first Stock Token/WETH pool, liquidity, per-market
-  Panoptic contracts, and user application remain undeployed; no new public
-  transaction is authorized by the completed shared-stack approval.
+  Robinhood Chain testnet. The first Stock Token/WETH pool, liquidity,
+  per-market Panoptic contracts, and user application remain undeployed even
+  though their genesis mechanism now passes an exact-head local fork rehearsal;
+  no new public transaction is authorized by the completed shared-stack
+  approval or the rehearsal.
 
 ## Repository map
 

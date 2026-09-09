@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-09 |
+| State date | 2026-09-10 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure deployed; first market not yet initialized |
+| Current state | Shared Panoptic V4 infrastructure deployed; first market genesis passes exact-head local rehearsal but is not public |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -24,13 +24,16 @@ sandbox:
 - every transaction, address, runtime byte length, and runtime hash has been
   reconciled with the frozen plan;
 - all 11 externally observable constructor/wiring assertions pass; and
-- the chain/dependency/token/deployer verifier passes with deployer nonce `16`.
+- the chain/dependency/token/deployer verifier passes with deployer nonce `16`;
+- PLTR/WETH has a deterministic, unsigned, bounded genesis design; and
+- its exact-head fork rehearsal passed twelve positive transitions and four
+  isolated negative cases without keys, signing, or public mutation.
 
 This is meaningful infrastructure, but it is not yet a functioning market.
-There is no selected public Stock Token/WETH PoolKey, no initialized Uniswap V4
-pool, no seeded liquidity, no per-market PanopticPool clone, no initialized
-CollateralTracker pair, no public collateral deposit, and no live option
-position.
+PLTR/WETH is selected only for the offline test mechanism. There is still no
+owner-accepted public exposure, initialized Uniswap V4 pool, seeded public
+liquidity, per-market PanopticPool clone, initialized CollateralTracker pair,
+public collateral deposit, or live option position.
 
 ### Milestone memory aid
 
@@ -39,13 +42,14 @@ flowchart LR
     A[Qualified external assets] --> B[Local full lifecycle proof]
     B --> C[Reviewed and simulated release]
     C --> D[16 shared contracts deployed]
-    D --> E[Next: initialize one V4 market]
-    E --> F[Then: SDK and first-user sandbox]
+    D --> E[Genesis exact-head fork rehearsal]
+    E --> F[Next: exposure decision and public genesis]
+    F --> G[Then: lifecycle, SDK, and first-user sandbox]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D done;
-    class E,F next;
+    class A,B,C,D,E done;
+    class F,G next;
 ```
 
 ## 2. System boundaries
@@ -431,6 +435,8 @@ asset residual, and `531/32` PoolManager-claim deviations.
 | Runtime reconciliation | 16 of 16 exact byte lengths and hashes |
 | Constructor/wiring reconciliation | 11 of 11 pass |
 | Strict public verifier after deployment | pass; deployer nonce `16` |
+| PLTR/WETH fresh strict preflight | `79/79` shared and `17/17` exact-plan checks at block `116510322` |
+| PLTR/WETH exact-head genesis rehearsal | `12/12` positive transitions and `4/4` expected reverts |
 
 Primary local records:
 
@@ -441,7 +447,9 @@ Primary local records:
 - [chain and external dependency qualification](../chain/2026-09-08-robinhood-testnet-qualification.md);
 - [core/candidate review](../review/2026-09-08-core-f4abdd7-and-v4-candidate.md);
 - [owner clean-room reproduction](../review/2026-09-09-owner-clean-room-reproduction.md); and
-- [local issuer-failure lifecycle](../testing/2026-09-08-controllable-stock-token-harness.md).
+- [local issuer-failure lifecycle](../testing/2026-09-08-controllable-stock-token-harness.md);
+- [PLTR/WETH offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md); and
+- [PLTR/WETH exact-head fork rehearsal](../markets/2026-09-10-pltr-weth-fork-rehearsal.md).
 
 Re-run the current external health verifier from the product repository:
 
@@ -461,19 +469,21 @@ an independent audit, or transaction authorization.
 | Temporary deployer EOA | Holds deployer, guardian-admin, and treasurer roles | Single-key compromise controls emergency and treasury functions; forbidden for production |
 | Panoptic fork | Focused tests and owner reproduction, not an external audit | Unknown inherited/composition defects remain possible |
 | License | Base BUSL non-production use only | Production-like or monetized use remains blocked |
-| Price/reference policy | Not chosen for the public market | Pool initialization and user UI must remain blocked |
+| Price/reference policy | Synthetic `0.001` test-WETH-per-PLTR mechanism price rehearsed locally; not accepted for public execution | Never display it as a market quote; initialization remains blocked pending exact exposure acceptance |
 | Liquidity | Only faucet-sized balances exist | This is mechanism testing, not economically meaningful depth |
 | UI/SDK | Not implemented in product repository | No first-user path exists yet |
 
 ## 13. What is next
 
-The next checkpoint is **market genesis**, not Docusaurus. The first read-only
-selection gate passed at block `116408992`: all five candidates were eligible,
-and [PLTR/WETH is accepted for offline planning only](../markets/2026-09-09-pltr-weth-offline-genesis-design.md)
-because it preserves Stock Token as `currency0`. Owner acceptance, initial
-price, exposure, and transaction roles remain open. We must then initialize
-exactly one valueless Stock Token/WETH market, seed bounded liquidity, register
-its Panoptic market, and reconcile it end-to-end. See the
+The next checkpoint is still **public market genesis**, not Docusaurus. The
+PLTR/WETH design now has a green exact-head local rehearsal. The initial price,
+range, amounts, salt, and second-actor roles are fully specified, but were
+accepted only for offline planning. The next gate is an owner decision on that
+exact exposure, followed by a fresh nonce/time-bound execution plan, a separate
+one-step operator, another fresh verification/rehearsal, and hash-bound
+authorization. Only then may we initialize exactly one valueless Stock
+Token/WETH market, seed bounded liquidity, register its Panoptic market, and
+reconcile it end-to-end. See the
 [market-genesis plan](../roadmap/2026-09-09-market-genesis.md).
 
 After market genesis:

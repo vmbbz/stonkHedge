@@ -855,17 +855,32 @@ The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 - Broadcast only bounded testnet transactions listed in a reviewed manifest.
 - Never use this EOA as final protocol governance; public alpha uses a Safe with role separation and a guardian runbook.
 
-Before funding is treated as ready or any nonce-derived artifact is regenerated,
-the second contributor must complete
-`docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md`. Core acceptance and
-acceptance of the non-official V4 candidate are separate decisions; both remain
-`NO_GO` until independently reproduced.
+The preferred gate remains a second contributor completing
+`docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md`. On 2026-09-09, while
+that contributor was unavailable, the owner explicitly chose a separate
+owner/Codex clean-room reproduction for the valueless testnet path. The exact
+core and evidence commits, all prescribed tests, strict live verifier, separate
+critical calls, primary-source comparison, residual risks, and waiver boundary
+are recorded in
+`docs/review/2026-09-09-owner-clean-room-reproduction.md`. This permits fresh
+offline nonce-derived artifact regeneration; it is not an independent-human
+audit, mainnet approval, or broadcast authorization. The invited review remains
+defence-in-depth, and its later rejection reopens the gate.
 
 ## 9. Hour-by-hour execution plan: public sandbox by Hour 32, hardened alpha by Hour 80
 
 This is a dependency-ordered plan for one primary builder. “Hour” means one focused engineering hour, not a week estimate. The earliest public sandbox is intentionally targeted for Hour 32; Hours 33–80 deepen safety, strategy coverage, reproducibility, and user experience. If a security, license, chain-identity, or accounting gate fails, record `BLOCKED` and do not hide the failure merely to meet the clock.
 
-Execution position on 2026-09-08: local Checkpoint B is complete at core `cfaf42c...`. Fourteen green lifecycle tests cover no-hook V4 initialization/liquidity/swaps, market wiring, two actors with matched long/short positions, premium accrual, close, withdrawal, multiplier separation, pause/block recovery, paused-liquidation failure/recovery, forced-burn observation, and bounded residual reconciliation. A clean chain-`31337` Anvil replay sent 33 sequential transactions with 33 successful receipts; the independent wrapper derived the final receipt from nonce, verified runtime/wiring/closed-position state, recomputed residuals, rejected non-loopback RPCs, and cleaned its artifacts. Public second-actor funding and both independent reviews remain deployment blockers; no Robinhood deployment is authorized yet.
+Execution position on 2026-09-08: local Checkpoint B is complete at core `cfaf42c...`. Fourteen green lifecycle tests cover no-hook V4 initialization/liquidity/swaps, market wiring, two actors with matched long/short positions, premium accrual, close, withdrawal, multiplier separation, pause/block recovery, paused-liquidation failure/recovery, forced-burn observation, and bounded residual reconciliation. A clean chain-`31337` Anvil replay sent 33 sequential transactions with 33 successful receipts; the independent wrapper derived the final receipt from nonce, verified runtime/wiring/closed-position state, recomputed residuals, rejected non-loopback RPCs, and cleaned its artifacts.
+
+Execution position on 2026-09-09: owner/Codex clean-room reproduction accepted
+exact core `f4abdd7...` and the non-official V4 candidate for valueless testnet
+under an explicit process waiver. Strict verification passed at block
+`115884813`, with deployer nonce `0`, `0.01` ETH, and `5` of each Stock Token.
+Offline artifact regeneration is now authorized. Public broadcast remains
+blocked on a separately controlled/funded second actor, fresh regenerated
+artifacts, fresh fork simulation, and a separate broadcast review. No stonkHedge
+contract has been deployed on Robinhood testnet.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
@@ -1099,15 +1114,16 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-021 | Deploy every nonce-dependent Panoptic CREATE before any pool-initialization transaction from the same EOA. | Pool initialization would consume the deployer nonce and stale a previously generated 16-contract plan; freezing the EOA after regeneration makes the reviewed sequence reproducible. | Panoptic deployment moves to a nonce-independent mechanism or a separate operator performs initialization. |
 | D-022 | Treat issuer pause and administrative burn as distinct solvency/exit hazards, not generic ERC-20 failures. | Local evidence shows owner close may succeed through internal balances during pause while withdrawal, external swaps, and liquidation fail; forced burn from PoolManager can also diverge raw reserves from cached CollateralTracker accounting. | Exact issuer behavior disproves the model or protocol-level reconciliation/guard controls are implemented and independently reviewed. |
 | D-023 | Define local close acceptance as no unexplained residual above `2e12` raw units, rather than literal zero. | The matched Foundry close and clean Anvil replay expose documented rounding/fee effects: at 18 decimals the replay observed `0`/`1` AMM dust, zero credited-asset residual, and `531`/`32` PoolManager-claim deviations, all far below the `0.000002`-token test cap. | Asset decimals change, the residual scales with position size, a production risk limit is designed, or any run breaches the bound. |
+| D-024 | Allow owner/Codex clean-room reproduction to replace the unavailable second-contributor gate only for offline regeneration and a valueless testnet sandbox. | Exact detached checkouts, full prescribed gates, independent live calls, and explicit residual-risk acceptance preserve useful review evidence without pretending two-human independence. | The invited reviewer rejects, any source/artifact/dependency state changes, value or production-like use is proposed, or a fresh gate fails. |
 
 ## 13. Open blockers and questions to resolve during execution
 
 - Can the licensor or qualified counsel confirm that the planned valueless, non-monetized public sandbox remains non-production under BUSL-1.1? The current on-chain audit found no resolvable Additional Use Grant, so any production-like operation remains blocked.
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
-- Will the second contributor approve core candidate `f4abdd7...`, including inherited runtime fix `b0deb9f...`, after reviewing Multicall semantics, release configuration, direct-CREATE nonce handling, loopback guardrails, attribution, and full test/simulation evidence? Until then it is a pushed candidate, not an approved public deployment input.
+- Will the second contributor independently confirm the owner/Codex acceptance of core candidate `f4abdd7...`, including inherited runtime fix `b0deb9f...`? This is now defence-in-depth for the valueless testnet waiver, but remains mandatory for mainnet or real-value use; a rejection immediately reopens the testnet gate.
 - Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should stonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
 - Can a distinct second actor complete Robinhood's address-based faucet flow? The deployer leg is verified: `0.01` test ETH plus `5` each of AMZN, AMD, TSLA, PLTR, and NFLX, with nonce still `0`.
-- Will the second contributor approve reuse of the non-official chain-`46630` v4 candidate after reproducing code hashes, PoolManager controls, PositionManager wiring, and source provenance? Has Uniswap added an official `46630` registry entry since the last check?
+- Will the second contributor independently confirm reuse of the non-official chain-`46630` V4 candidate? Owner/Codex reproduction passed on 2026-09-09 and Uniswap still had no official `46630` registry entry; a later official entry or reviewer mismatch requires re-audit.
 - Which Chainlink feeds, if any, are officially supported on Robinhood testnet for the five faucet Stock Tokens? If none, the monitor uses an explicitly labelled test feed and mainnet feeds only in read-only fork tests.
 - Can Base Sepolia B20 precompiles support the secondary compatibility scenarios, or should that lane remain on the reference mock?
 - What is the safest unwind policy when an issuer freezes transfers while positions are open?

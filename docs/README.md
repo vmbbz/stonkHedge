@@ -119,4 +119,3 @@ are complete and the following are true:
 - secret scanning and link checking pass;
 - testnet/mainnet and deployed/planned labels are unambiguous; and
 - automated manifest-to-reference generation has an owner.
-

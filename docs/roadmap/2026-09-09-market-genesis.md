@@ -1,11 +1,11 @@
 # Robinhood testnet market-genesis plan
 
-**Status:** planning and read-only preparation only  
-**Authorization:** none for pool initialization, approvals, wrapping, liquidity,
-swaps, market deployment, or collateral operations  
-**Target checkpoint:** `robinhood-testnet-sandbox-0`  
-**Estimated focused engineering time:** 6–10 hours, excluding faucet, RPC, or
-review delays
+| Field | Value |
+|---|---|
+| Status | Planning and read-only preparation only |
+| Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
+| Target checkpoint | `robinhood-testnet-sandbox-0` |
+| Estimated focused engineering time | 6–10 hours, excluding faucet, RPC, or review delays |
 
 ## 1. Objective
 
@@ -258,4 +258,3 @@ Do not expand to a second ticker. Build the first-user path:
 Docusaurus should wait until the intended deployment rounds and acceptance
 evidence are complete. The Markdown source should stabilize first; the site can
 then present it without obscuring what is live versus planned.
-

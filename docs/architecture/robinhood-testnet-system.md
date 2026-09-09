@@ -1,13 +1,12 @@
 # stonkHedge Robinhood testnet system architecture
 
-**State date:** 2026-09-09  
-**Network:** Robinhood Chain Testnet, chain ID `46630`  
-**Current state:** shared Panoptic V4 infrastructure deployed; first market not
-yet initialized  
-**Deployment source:** Panoptic core commit
-`f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`  
-**Local issuer-failure evidence:** core commit
-`cfaf42c29b5c59304540e2a31e24daee4d977797`
+| Field | Value |
+|---|---|
+| State date | 2026-09-09 |
+| Network | Robinhood Chain Testnet, chain ID `46630` |
+| Current state | Shared Panoptic V4 infrastructure deployed; first market not yet initialized |
+| Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
+| Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
 ## 1. What exists now
 
@@ -489,4 +488,3 @@ After market genesis:
 - Robinhood testnet faucet: <https://faucet.testnet.chain.robinhood.com/>
 - Uniswap deployment registry: <https://github.com/Uniswap/contracts/tree/main/deployments>
 - Panoptic V2 core: <https://github.com/panoptic-labs/panoptic-v2-core>
-

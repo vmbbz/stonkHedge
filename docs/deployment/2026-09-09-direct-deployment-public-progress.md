@@ -3,7 +3,7 @@
 ## Current state
 
 The authorized Robinhood Chain testnet direct-CREATE sequence is in progress
-and stopped safely after transaction index `10`. Exactly eleven of the 16
+and stopped safely after transaction index `11`. Exactly twelve of the 16
 approved zero-value CREATE transactions have been broadcast.
 
 The machine-readable checkpoint is
@@ -220,19 +220,38 @@ the public RPC and matched the frozen plan exactly.
 The `PanopticGuardian` receipt and runtime were independently re-read from the
 public RPC and matched the frozen plan exactly.
 
+## Transaction 11 evidence
+
+| Item | Verified value |
+|---|---|
+| Plan SHA-256 | `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Label | `BuilderFactory` |
+| Nonce | `11` |
+| Transaction | [`0xe81804ec...9181ac`](https://explorer.testnet.chain.robinhood.com/tx/0xe81804ec951300ab37156f53171ce200b400d4a2fbfc75900e7d60000c9181ac) |
+| Receipt | success (`status = 1`) |
+| Block | `116117316` |
+| Created address | `0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B` |
+| Gas used | `965,893` |
+| Runtime length | `3,744` bytes |
+| Runtime code hash | `0xb0dbf2aa14512a0eb09c512d29f9bc437d78686fa39a5d0220de1edd374a0f43` |
+| External operator evidence SHA-256 | `db4c40d1c004acb0d941baceabe4159ec5470c08c33391afa7bc0a22f6697c34` |
+
+The `BuilderFactory` receipt and runtime were independently re-read from the
+public RPC and matched the frozen plan exactly.
+
 ## Continuation gate
 
-A read-only index-11 operator preflight passed at block `116112475`:
+A fresh read-only index-12 operator preflight passed at block `116316135`:
 
-- deployer pending nonce: `11`;
-- prior deployments verified: `11`;
-- remaining predicted addresses verified empty: `5`;
-- deployer balance: `0.00958121655` test ETH;
-- next deployment: `BuilderFactory` at
-  `0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B`; and
-- next gas estimate: `948,727`, below the plan gas limit of `16,711,680`.
+- deployer pending nonce: `12`;
+- prior deployments verified: `12`;
+- remaining predicted addresses verified empty: `4`;
+- deployer balance: `0.00957155762` test ETH;
+- next deployment: `RiskEngine` at
+  `0x3Ad134ff173dFA0a892B4116A65B76B818218585`; and
+- next gas estimate: `5,808,599`, below the plan gas limit of `16,711,680`.
 
-No index-11 transaction was signed or broadcast during that preflight. The
+No index-12 transaction was signed or broadcast during that preflight. The
 sequence remains governed by the approved one-transaction/wait/verify/stop
 policy. Pool initialization, liquidity provision, and market registration are
 still outside this authorization.

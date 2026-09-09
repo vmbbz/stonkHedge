@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "status": "READ_ONLY_QUALIFICATION_PASS_PLTR_RECOMMENDED_OWNER_ACCEPTANCE_REQUIRED",
+  "qualificationMode": "READ_ONLY_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "recordedAt": "2026-09-09T19:13:50Z",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+    "snapshotBlock": 116408992,
+    "snapshotBlockHash": "0xb05154dfa6056ce7ece725db0b007b919a84ae023a0c56346b4d982312e80c1c",
+    "snapshotBlockTimestamp": "2026-09-09T19:13:50Z"
+  },
+  "sourceBindings": {
+    "qualifier": "../../scripts/qualify_robinhood_market.py",
+    "qualifierSha256": "71a1f9d995a4c11efd98cfb4fcc58af7a4eca3837b51276f3e9f0d10b475e228",
+    "chainManifest": "../chains/robinhood-testnet-46630.json",
+    "chainManifestSha256": "4399d03e83a5bbea47287cfbbf81e21ff23256d904180e2535ff6bbcf0e4dd29",
+    "deploymentManifest": "../deployments/robinhood-testnet-direct-public-progress-2026-09-09.json",
+    "deploymentManifestSha256": "7da2a7df20b22247e4a3600cea8e18e540bcdee05a032007740f0bfcb934ef08",
+    "actorManifest": "../deployments/robinhood-testnet-second-actor-2026-09-09.json",
+    "actorManifestSha256": "66da6f25f60c6f1ccfc5c05a6289ddded3d6282327e3944b08afb00394048a22"
+  },
+  "verification": {
+    "command": "python .\\scripts\\qualify_robinhood_market.py --transport cast --block 116408992",
+    "exitCode": 0,
+    "passedChecks": 79,
+    "failedChecks": 0,
+    "externalRuntimeIdentities": "PASS_6_OF_6",
+    "stockRegistryImplementationAndWethIdentities": "PASS_3_OF_3",
+    "panopticRuntimeIdentities": "PASS_16_OF_16",
+    "v4OwnerFeeControllerAndPositionManagerWiring": "PASS_4_OF_4",
+    "wethMetadata": "PASS",
+    "stockTokenMetadata": "PASS_5_OF_5",
+    "candidateEligibility": "PASS_5_OF_5",
+    "rpcTransport": "FOUNDRY_CAST_READ_ONLY_ALLOWLIST_NO_INSECURE_FLAG"
+  },
+  "configuration": {
+    "weth": "0x33e4191705c386532ba27cBF171Db86919200B94",
+    "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+    "positionManager": "0x58daec3116aae6D93017bAAea7749052E8a04fA7",
+    "stateView": "0xF3334192D15450CdD385c8B70e03f9A6bD9E673b",
+    "panopticFactoryV4": "0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c",
+    "riskEngine": "0x3Ad134ff173dFA0a892B4116A65B76B818218585",
+    "candidateFee": 3000,
+    "candidateTickSpacing": 60,
+    "hooks": "0x0000000000000000000000000000000000000000"
+  },
+  "accounts": {
+    "deployer": {
+      "address": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+      "roleBoundary": "SHARED_STACK_DEPLOYER_GUARDIAN_ADMIN_AND_TREASURER_NOT_DEFAULT_LP",
+      "nativeBalanceWei": "9286001030000000",
+      "confirmedNonce": 16,
+      "wethBalance": "0",
+      "eachStockTokenBalance": "5000000000000000000",
+      "blockedByStockRegistry": false
+    },
+    "secondActor": {
+      "address": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+      "roleBoundary": "DEFAULT_TEST_USER_AND_LP_CANDIDATE_NOT_PROTOCOL_ADMIN",
+      "nativeBalanceWei": "10000000000000000",
+      "confirmedNonce": 0,
+      "wethBalance": "0",
+      "eachStockTokenBalance": "5000000000000000000",
+      "blockedByStockRegistry": false
+    }
+  },
+  "candidateRule": {
+    "required": [
+      "exact runtime identity",
+      "registry wiring unchanged",
+      "global and token pause false",
+      "current and pending UI multiplier both 1e18 with effectiveAt zero",
+      "both actors unblocked and holding positive Stock Token balances",
+      "exact fee-3000 tick-spacing-60 no-hook PoolId uninitialized",
+      "PanopticFactoryV4 mapping for the exact PoolKey and RiskEngine empty"
+    ],
+    "selectionPreference": "Prefer an eligible Stock Token that sorts as currency0 against WETH to preserve stock/WETH orientation.",
+    "notUsed": [
+      "ticker popularity",
+      "market capitalization",
+      "investment merit",
+      "an unstated real-world price"
+    ]
+  },
+  "candidates": [
+    {
+      "name": "Amazon",
+      "symbol": "AMZN",
+      "stockToken": "0x5884aD2f920c162CFBbACc88C9C51AA75eC09E02",
+      "poolKey": {
+        "currency0": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "currency1": "0x5884ad2f920c162cfbbacc88c9c51aa75ec09e02",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x0000000000000000000000000000000000000000"
+      },
+      "poolId": "0xe9f5eb0ccbf0dcf8feb022afd0ffc5688af4cc55e8ca7e644fe5e9b7c50887b8",
+      "stockIsCurrency0": false,
+      "observedStockState": {
+        "runtimeIdentityMatches": true,
+        "registryWiringMatches": true,
+        "symbol": "AMZN",
+        "name": "Amazon",
+        "decimals": 18,
+        "paused": false,
+        "tokenPaused": false,
+        "uiMultiplier": "1000000000000000000",
+        "newUIMultiplier": "1000000000000000000",
+        "effectiveAt": "0"
+      },
+      "balances": {
+        "deployer": "5000000000000000000",
+        "secondActor": "5000000000000000000"
+      },
+      "poolInitialized": false,
+      "slot0": {
+        "sqrtPriceX96": "0",
+        "tick": 0,
+        "protocolFee": 0,
+        "lpFee": 0
+      },
+      "existingPanopticPool": "0x0000000000000000000000000000000000000000",
+      "eligible": true,
+      "blockers": []
+    },
+    {
+      "name": "AMD",
+      "symbol": "AMD",
+      "stockToken": "0x71178BAc73cBeb415514eB542a8995b82669778d",
+      "poolKey": {
+        "currency0": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "currency1": "0x71178bac73cbeb415514eb542a8995b82669778d",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x0000000000000000000000000000000000000000"
+      },
+      "poolId": "0x5164b26ecf3d2c0c769f56a800376a365f99e8dae41f4969952d20cbad32fe8a",
+      "stockIsCurrency0": false,
+      "observedStockState": {
+        "runtimeIdentityMatches": true,
+        "registryWiringMatches": true,
+        "symbol": "AMD",
+        "name": "AMD",
+        "decimals": 18,
+        "paused": false,
+        "tokenPaused": false,
+        "uiMultiplier": "1000000000000000000",
+        "newUIMultiplier": "1000000000000000000",
+        "effectiveAt": "0"
+      },
+      "balances": {
+        "deployer": "5000000000000000000",
+        "secondActor": "5000000000000000000"
+      },
+      "poolInitialized": false,
+      "slot0": {
+        "sqrtPriceX96": "0",
+        "tick": 0,
+        "protocolFee": 0,
+        "lpFee": 0
+      },
+      "existingPanopticPool": "0x0000000000000000000000000000000000000000",
+      "eligible": true,
+      "blockers": []
+    },
+    {
+      "name": "Tesla",
+      "symbol": "TSLA",
+      "stockToken": "0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E",
+      "poolKey": {
+        "currency0": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "currency1": "0xc9f9c86933092bbbfff3ccb4b105a4a94bf3bd4e",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x0000000000000000000000000000000000000000"
+      },
+      "poolId": "0x199971df12db0d0e0630d753780bd7d4e4bd21f3727b1a4d3873c49f88cbfa8e",
+      "stockIsCurrency0": false,
+      "observedStockState": {
+        "runtimeIdentityMatches": true,
+        "registryWiringMatches": true,
+        "symbol": "TSLA",
+        "name": "Tesla",
+        "decimals": 18,
+        "paused": false,
+        "tokenPaused": false,
+        "uiMultiplier": "1000000000000000000",
+        "newUIMultiplier": "1000000000000000000",
+        "effectiveAt": "0"
+      },
+      "balances": {
+        "deployer": "5000000000000000000",
+        "secondActor": "5000000000000000000"
+      },
+      "poolInitialized": false,
+      "slot0": {
+        "sqrtPriceX96": "0",
+        "tick": 0,
+        "protocolFee": 0,
+        "lpFee": 0
+      },
+      "existingPanopticPool": "0x0000000000000000000000000000000000000000",
+      "eligible": true,
+      "blockers": []
+    },
+    {
+      "name": "Palantir Technologies",
+      "symbol": "PLTR",
+      "stockToken": "0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0",
+      "poolKey": {
+        "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x0000000000000000000000000000000000000000"
+      },
+      "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+      "stockIsCurrency0": true,
+      "observedStockState": {
+        "runtimeIdentityMatches": true,
+        "registryWiringMatches": true,
+        "symbol": "PLTR",
+        "name": "Palantir Technologies",
+        "decimals": 18,
+        "paused": false,
+        "tokenPaused": false,
+        "uiMultiplier": "1000000000000000000",
+        "newUIMultiplier": "1000000000000000000",
+        "effectiveAt": "0"
+      },
+      "balances": {
+        "deployer": "5000000000000000000",
+        "secondActor": "5000000000000000000"
+      },
+      "poolInitialized": false,
+      "slot0": {
+        "sqrtPriceX96": "0",
+        "tick": 0,
+        "protocolFee": 0,
+        "lpFee": 0
+      },
+      "existingPanopticPool": "0x0000000000000000000000000000000000000000",
+      "eligible": true,
+      "blockers": []
+    },
+    {
+      "name": "Netflix",
+      "symbol": "NFLX",
+      "stockToken": "0x3b8262A63d25f0477c4DDE23F83cfe22Cb768C93",
+      "poolKey": {
+        "currency0": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "currency1": "0x3b8262a63d25f0477c4dde23f83cfe22cb768c93",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x0000000000000000000000000000000000000000"
+      },
+      "poolId": "0x0d5f0b76d3e4c767eda91346e4a84725f4532188ba6b5d35ff4acc227988095f",
+      "stockIsCurrency0": false,
+      "observedStockState": {
+        "runtimeIdentityMatches": true,
+        "registryWiringMatches": true,
+        "symbol": "NFLX",
+        "name": "Netflix",
+        "decimals": 18,
+        "paused": false,
+        "tokenPaused": false,
+        "uiMultiplier": "1000000000000000000",
+        "newUIMultiplier": "1000000000000000000",
+        "effectiveAt": "0"
+      },
+      "balances": {
+        "deployer": "5000000000000000000",
+        "secondActor": "5000000000000000000"
+      },
+      "poolInitialized": false,
+      "slot0": {
+        "sqrtPriceX96": "0",
+        "tick": 0,
+        "protocolFee": 0,
+        "lpFee": 0
+      },
+      "existingPanopticPool": "0x0000000000000000000000000000000000000000",
+      "eligible": true,
+      "blockers": []
+    }
+  ],
+  "recommendation": {
+    "symbol": "PLTR",
+    "stockToken": "0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0",
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "status": "RECOMMENDED_OWNER_ACCEPTANCE_REQUIRED",
+    "accepted": false,
+    "basis": "PLTR is the only currently eligible faucet Stock Token that sorts below WETH, so the exact PoolKey keeps Stock Token as currency0 and WETH as currency1. This reduces UI, SDK, pricing, and collateral-orientation mistakes without claiming investment superiority."
+  },
+  "unresolvedOwnerDecisions": {
+    "assetSelection": "OWNER_ACCEPTANCE_REQUIRED",
+    "initialPrice": "UNDECIDED_DO_NOT_COPY_LOCAL_ONE_TO_ONE",
+    "initialLiquidityAndExposure": "UNDECIDED",
+    "transactionRolesAndFactoryNftRecipient": "UNDECIDED"
+  },
+  "authorization": {
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "poolInitialization": false,
+    "liquidity": false,
+    "swaps": false,
+    "panopticMarketRegistration": false,
+    "collateralOrTrading": false
+  },
+  "nextGate": "OWNER_ACCEPT_ONE_CANDIDATE_AND_SEPARATELY_APPROVE_A_TEST_ONLY_PRICE_POLICY_AND_MAXIMUM_EXPOSURE_BEFORE_UNSIGNED_MARKET_PLAN_GENERATION"
+}

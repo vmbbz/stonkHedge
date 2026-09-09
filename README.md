@@ -13,6 +13,10 @@ The current repository is the product and delivery control plane. It contains th
   for the exact live/planned boundary and the
   [market-genesis plan](./docs/roadmap/2026-09-09-market-genesis.md) for the next
   gated phase.
+- Review the [first-market selection record](./docs/markets/2026-09-09-first-market-selection.md):
+  a pinned-block read-only qualification passed `79/79`, all five faucet Stock
+  Tokens are eligible, and PLTR/WETH is technically recommended but not yet
+  owner-accepted or authorized for any transaction.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.

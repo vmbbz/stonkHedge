@@ -467,9 +467,13 @@ an independent audit, or transaction authorization.
 
 ## 13. What is next
 
-The next checkpoint is **market genesis**, not Docusaurus. We must select and
-initialize exactly one valueless Stock Token/WETH market, seed bounded
-liquidity, register its Panoptic market, and reconcile it end-to-end. See the
+The next checkpoint is **market genesis**, not Docusaurus. The first read-only
+selection gate passed at block `116408992`: all five candidates were eligible,
+and [PLTR/WETH is technically recommended](../markets/2026-09-09-first-market-selection.md)
+because it preserves Stock Token as `currency0`. Owner acceptance, initial
+price, exposure, and transaction roles remain open. We must then initialize
+exactly one valueless Stock Token/WETH market, seed bounded liquidity, register
+its Panoptic market, and reconcile it end-to-end. See the
 [market-genesis plan](../roadmap/2026-09-09-market-genesis.md).
 
 After market genesis:

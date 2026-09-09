@@ -21,6 +21,12 @@ Start with:
 3. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
+The first live, read-only market qualification passed at block `116408992`.
+Read the [first-market selection record](./markets/2026-09-09-first-market-selection.md)
+for the five exact PoolIds, PLTR/WETH recommendation, architecture, PAIRS
+memory aid, and unresolved owner decisions. No market transaction is yet
+authorized.
+
 ## Documentation by audience
 
 | Audience | Read first | Then use |
@@ -39,6 +45,7 @@ Start with:
 | `baseline/` | Immutable build, test, licensing, and release-size checkpoints |
 | `chain/` | External chain, token, and infrastructure qualification |
 | `deployment/` | Simulations, approvals, operator design, receipts, and reconciliation |
+| `markets/` | Asset selection, exact PoolKeys, price policy, market genesis, and lifecycle evidence |
 | `review/` | Human or explicitly labelled owner-reproduced review evidence |
 | `roadmap/` | Forward-looking checkpoint plans that do not themselves authorize transactions |
 | `specs/` | Behavioral requirements and acceptance matrices |

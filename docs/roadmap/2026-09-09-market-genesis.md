@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Planning and read-only preparation only |
+| Status | Read-only candidate qualification complete; owner selection required |
 | Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated focused engineering time | 6–10 hours, excluding faucet, RPC, or review delays |
@@ -24,6 +24,17 @@ one qualified Stock Token
 This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
+
+### Current progress: first read-only gate complete
+
+At block `116408992`, the repository qualifier passed `79/79` checks across
+chain identity, external and Panoptic runtimes, Stock Token controls, both
+accounts, five candidate PoolIds, and factory mappings. All five candidates are
+eligible. PLTR/WETH is recommended because PLTR is the only eligible Stock
+Token that sorts as `currency0` against WETH. Owner acceptance, price policy,
+exposure, and roles remain unresolved, and no transaction is authorized. See
+the [selection record](../markets/2026-09-09-first-market-selection.md) and
+[machine-readable manifest](../../manifests/markets/robinhood-testnet-market-selection-2026-09-09.json).
 
 ## 2. Entry gates already complete
 
@@ -51,6 +62,9 @@ only after recording:
 
 The result should be a small machine-readable asset-selection manifest. Every
 other Stock Token remains out of scope for Checkpoint C.
+
+Current result: all five pass; PLTR is technically recommended but has not been
+accepted by the owner.
 
 ### 3.2 Freeze the complete PoolKey
 

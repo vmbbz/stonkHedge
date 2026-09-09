@@ -2,9 +2,10 @@
 
 ## Current state
 
-The authorized Robinhood Chain testnet direct-CREATE sequence is in progress
-and stopped safely after transaction index `14`. Exactly fifteen of the 16
-approved zero-value CREATE transactions have been broadcast.
+The authorized Robinhood Chain testnet direct-CREATE sequence is complete and
+stopped safely after transaction index `15`. All 16 approved zero-value CREATE
+transactions succeeded, and the full deployment was reconciled against the
+frozen plan, runtime manifest, and constructor/wiring expectations.
 
 The machine-readable checkpoint is
 [`../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json`](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json).
@@ -309,7 +310,61 @@ A read-only final index-15 operator preflight passed at block `116334800`:
 - final gas estimate: `11,401,633`, below the plan gas limit of `16,711,680`.
 
 No index-15 transaction was signed or broadcast during that preflight. The
-final transaction remains governed by the approved
-one-transaction/wait/verify/stop policy and requires full post-deployment
-reconciliation. Pool initialization, liquidity provision, and market
-registration are still outside this authorization.
+later index-15 invocation remained governed by the approved
+one-transaction/wait/verify/stop policy.
+
+## Transaction 15 evidence
+
+| Item | Verified value |
+|---|---|
+| Plan SHA-256 | `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Label | `PanopticFactoryV4` |
+| Nonce | `15` |
+| Transaction | [`0xdd57acfa...bd3150`](https://explorer.testnet.chain.robinhood.com/tx/0xdd57acfa50ea1a9f5e06ca0825add442286f2457ea7d5a697c8cf505d7bd3150) |
+| Receipt | success (`status = 1`) |
+| Block | `116340671` at `2026-09-09T16:39:04Z` |
+| Created address | `0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c` |
+| Gas used | `11,312,920` |
+| Runtime length | `20,702` bytes |
+| Runtime code hash | `0xc6d872bf804fec1320328e54a1f246896744c880e1167fc9763fadf5e3a94f68` |
+| External operator evidence SHA-256 | `c8a7316b687b26ab1c051bd56c79bbb94e5dec04a51f5820b3379f5806b00c13` |
+
+The canonical transaction was fetched independently after the operator
+stopped. Its sender, nonce, zero value, CREATE form, gas limit, all `40,654`
+initcode bytes, and initcode hash
+`0xc12cbfe402ceedb04712240e5f42c25a36fa018a609d7da1a5c75fff5268812d`
+match transaction index 15 in the frozen plan byte-for-byte.
+
+An earlier transient RPC observation at transaction hash
+`0x96ef530efb35788f05cafb236c3508424481d206088550ff257a651d3256a1a9`
+was absent during final reconciliation. It is excluded from deployment
+evidence; only the canonical transaction above is used for completion.
+
+## Full post-deployment reconciliation
+
+At head block `116351866`, all 16 predicted addresses contained runtime code
+whose byte length and hash matched the frozen operator manifest. The deployer
+pending nonce was `16`.
+
+All 11 constructor and wiring assertions passed:
+
+- `PanopticGuardian.GUARDIAN_ADMIN()` and `TREASURER()` both return the
+  temporary testnet deployer;
+- `BuilderFactory.OWNER()` returns `PanopticGuardian`;
+- `RiskEngine` returns the planned guardian and BuilderFactory, both cross
+  buffers return `10,000,000`, and `vegoid()` returns `8`;
+- `PanopticPoolV2.SFPM()` returns the deployed V4 SFPM; and
+- `PanopticFactoryV4` returns NFT name `Panoptic V2 Factory Deployer NFTs` and
+  symbol `PANOPTIC-NFT`.
+
+The strict Robinhood chain, dependency, Stock Token, and deployer verifier also
+exited successfully at head block `116348166`. It confirmed deployer nonce
+`16`, native balance `0.00928600103` test ETH, and positive balances of all
+five Stock Tokens.
+
+## Completion boundary
+
+This completes only the authorized 16-transaction protocol deployment. It does
+not initialize a Stock/WETH Uniswap V4 pool, provide liquidity, deploy a
+Panoptic pool clone, or register a user-facing market. Those state changes need
+a fresh transaction plan, simulation, review, and explicit authorization.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "IN_PROGRESS_STOPPED_AFTER_INDEX_14",
-  "recordedAt": "2026-09-09T16:26:01Z",
+  "status": "COMPLETE_RECONCILED_STOPPED_BEFORE_INITIALIZATION",
+  "recordedAt": "2026-09-09T17:03:08Z",
   "testnetOnly": true,
   "chainId": 46630,
   "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
@@ -9,9 +9,9 @@
   "planSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
   "operatorSha256": "556e0751d787df3149412bc2dd417f57d7c10e7481878a9acf35853709e4db25",
   "authorizationManifestSha256": "d24e0caa019c14c845dc00ca04836ee4207e0976d4aa312c8d8109635d091374",
-  "completedTransactionCount": 15,
-  "lastCompletedTransactionIndex": 14,
-  "nextTransactionIndex": 15,
+  "completedTransactionCount": 16,
+  "lastCompletedTransactionIndex": 15,
+  "nextTransactionIndex": null,
   "transactions": [
     {
       "transactionIndex": 0,
@@ -327,6 +327,28 @@
         "outsideRepositoryPath": "C:\\dev-shared\\stonkHedge-review\\artifacts\\robinhood-46630-20260909-public\\nonce-14-a6704349.json",
         "sha256": "4293f7ef6ba09625b15a5d584713f52e07f56534ef21b6c11c76459d6f87a0a9"
       }
+    },
+    {
+      "transactionIndex": 15,
+      "label": "PanopticFactoryV4",
+      "nonce": 15,
+      "transactionHash": "0xdd57acfa50ea1a9f5e06ca0825add442286f2457ea7d5a697c8cf505d7bd3150",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/tx/0xdd57acfa50ea1a9f5e06ca0825add442286f2457ea7d5a697c8cf505d7bd3150",
+      "receiptStatus": 1,
+      "blockNumber": 116340671,
+      "blockHash": "0xd5b92dde8120f122ac3eb679b84e59e7bb39d9c9e50057ec1f4bab2321c59b0a",
+      "blockTimestamp": "2026-09-09T16:39:04Z",
+      "transactionPosition": 1,
+      "createdAddress": "0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c",
+      "gasUsed": 11312920,
+      "effectiveGasPriceWei": 10000000,
+      "runtimeBytes": 20702,
+      "runtimeCodeHash": "0xc6d872bf804fec1320328e54a1f246896744c880e1167fc9763fadf5e3a94f68",
+      "postTransactionPendingNonce": 16,
+      "operatorEvidence": {
+        "outsideRepositoryPath": "C:\\dev-shared\\stonkHedge-review\\artifacts\\robinhood-46630-20260909-public\\nonce-15-dd57acfa.json",
+        "sha256": "c8a7316b687b26ab1c051bd56c79bbb94e5dec04a51f5820b3379f5806b00c13"
+      }
     }
   ],
   "independentContinuationPreflight": {
@@ -344,5 +366,62 @@
     "nextGasLimit": 16711680,
     "broadcastAttempted": false
   },
-  "continuationPolicy": "STOPPED; final index 15 requires a separate explicit local operator invocation and full post-deployment reconciliation"
+  "finalReconciliation": {
+    "checkedAt": "2026-09-09T17:03:08Z",
+    "headBlockNumber": 116351866,
+    "headBlockHash": "0xb4994ee2df3f08111b9b53fb5af164ce02bc4cfadb5e5ddc015faf58283b60b4",
+    "canonicalTransaction": {
+      "transactionHash": "0xdd57acfa50ea1a9f5e06ca0825add442286f2457ea7d5a697c8cf505d7bd3150",
+      "senderMatches": true,
+      "nonceMatches": true,
+      "createTransaction": true,
+      "zeroValue": true,
+      "gasLimit": 16711680,
+      "gasLimitMatches": true,
+      "initcodeBytes": 40654,
+      "initcodeHash": "0xc12cbfe402ceedb04712240e5f42c25a36fa018a609d7da1a5c75fff5268812d",
+      "initcodeMatchesPlanByteForByte": true,
+      "createdAddressMatches": true,
+      "receiptStatus": 1
+    },
+    "nonCanonicalObservation": {
+      "transactionHash": "0x96ef530efb35788f05cafb236c3508424481d206088550ff257a651d3256a1a9",
+      "receiptPresentAtFinalCheck": false,
+      "excludedFromDeploymentEvidence": true,
+      "note": "A transient earlier RPC observation was absent during final canonical reconciliation. Completion is bound only to the canonical transaction and runtime recorded above."
+    },
+    "runtimeSweep": {
+      "status": "PASS",
+      "expectedDeployments": 16,
+      "matchingDeployments": 16,
+      "operatorManifestSha256": "98c36a8063afd97580ec23ce86018982ecc37d3f4e2101a96351d10ff1bc5b83"
+    },
+    "wiringAssertions": {
+      "status": "PASS",
+      "passed": 11,
+      "failed": 0,
+      "assertions": [
+        "PanopticGuardian.GUARDIAN_ADMIN equals the temporary testnet deployer",
+        "PanopticGuardian.TREASURER equals the temporary testnet deployer",
+        "BuilderFactory.OWNER equals PanopticGuardian",
+        "RiskEngine.GUARDIAN equals PanopticGuardian",
+        "RiskEngine.BUILDER_FACTORY equals BuilderFactory",
+        "RiskEngine.CROSS_BUFFER_0 equals 10000000",
+        "RiskEngine.CROSS_BUFFER_1 equals 10000000",
+        "RiskEngine.vegoid equals 8",
+        "PanopticPoolV2.SFPM equals SemiFungiblePositionManagerV4",
+        "PanopticFactoryV4.name equals Panoptic V2 Factory Deployer NFTs",
+        "PanopticFactoryV4.symbol equals PANOPTIC-NFT"
+      ]
+    },
+    "strictVerifier": {
+      "status": "PASS",
+      "command": "pwsh -NoProfile -File .\\scripts\\verify-robinhood-testnet.ps1",
+      "headBlockNumber": 116348166,
+      "deployerNonce": 16,
+      "deployerNativeBalanceWei": "9286001030000000",
+      "positiveStockTokenBalance": true
+    }
+  },
+  "continuationPolicy": "DEPLOYMENT COMPLETE; STOPPED. Pool initialization, liquidity provision, and Panoptic market registration require a new reviewed plan and separate explicit authorization."
 }

@@ -26,8 +26,10 @@ Read the [first-market selection record](./markets/2026-09-09-first-market-selec
 for the five exact PoolIds and the
 [offline PLTR/WETH genesis design](./markets/2026-09-09-pltr-weth-offline-genesis-design.md)
 for the accepted planning boundary, synthetic price, proposed exposure,
-architecture, transaction sequence, and ZERO memory aid. No market transaction
-is yet authorized.
+architecture, transaction sequence, and ZERO memory aid. The subsequent
+[strict initial preflight](./markets/2026-09-09-pltr-weth-initial-preflight.md)
+passed `79/79` shared checks and `17/17` exact-plan checks at block `116478616`.
+No market transaction is yet authorized.
 
 ## Documentation by audience
 

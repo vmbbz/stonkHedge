@@ -18,7 +18,9 @@ The current repository is the product and delivery control plane. It contains th
   Stock Tokens are eligible. PLTR/WETH was subsequently accepted for offline
   planning only. The [offline genesis design](./docs/markets/2026-09-09-pltr-weth-offline-genesis-design.md)
   records the synthetic price, exposure proposal, exact unsigned sequence, and
-  remaining gates; no market transaction is authorized.
+  remaining gates. Its [strict initial preflight](./docs/markets/2026-09-09-pltr-weth-initial-preflight.md)
+  passed `79/79` shared checks plus `17/17` exact-plan checks at a pinned live
+  head; this is read-only rehearsal readiness, not transaction authorization.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.

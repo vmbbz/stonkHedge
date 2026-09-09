@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Status | Offline design and unsigned rehearsal plan complete; exposure review and fork rehearsal required |
+| Status | Offline design and unsigned rehearsal plan complete; strict initial preflight passed; exposure review and fork rehearsal required |
 | Public chain state | Pool and Panoptic market were still absent at the accepted qualification snapshot |
 | PoolKey | PLTR/WETH, fee `3000`, tick spacing `60`, hooks zero |
 | PoolId | `0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae` |
 | Actor | `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f` |
-| Plan body SHA-256 | `795d8ebe412a5cecbdff2e9599bc508345931ab5dfa825451bad67409b014ed4` |
+| Plan body SHA-256 | `6df5e96164de65659a75ad4204a8635c49c1c7c56fba73f1bcb81ec5019f8719` |
 | Transactions authorized | None |
 
 ## 1. What this round achieved
@@ -51,9 +51,11 @@ Panoptic market registered                 NO
 collateral deposited or options traded     NO
 ```
 
-That snapshot is historical. A fresh read-only qualifier must prove the same
-pre-state at one canonical head before a fork rehearsal or execution candidate
-may consume it.
+That snapshot is historical. The strict initial verifier subsequently proved
+the same required pre-state at block `116478616`, where the full qualification
+passed `79/79` and the plan-specific checks passed `17/17`. See the
+[initial preflight record](./2026-09-09-pltr-weth-initial-preflight.md). A fork
+or execution candidate must still consume a fresh, explicitly pinned head.
 
 ## 3. Architecture of the planned market
 
@@ -275,9 +277,9 @@ this document intentionally avoids duplicating them.
 
 ## 10. What remains before any public transaction
 
-The next work is a strict read-only market verifier and an exact-head local
-fork rehearsal. Before either can mature into execution, all of these gates
-must pass:
+The strict read-only market verifier is now implemented and has passed against
+a pinned live head. The next work is an exact-head local fork rehearsal. Before
+that rehearsal can mature into execution, all of these gates must pass:
 
 1. owner accepts the exact `0.004 ETH`, `2 PLTR`, `0.002 WETH`, tick range,
    liquidity, and salt proposal;

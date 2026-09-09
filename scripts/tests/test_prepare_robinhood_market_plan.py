@@ -141,6 +141,8 @@ class MarketPlanTests(unittest.TestCase):
 
     def test_committed_plan_is_exact_generator_output(self):
         self.assertEqual(json.loads(PLAN.read_text(encoding="utf-8")), self.build())
+        self.assertNotIn(b"\r\n", PLAN.read_bytes())
+        self.assertTrue(PLAN.read_bytes().endswith(b"\n"))
 
     def test_transaction_order_uses_direct_pool_initialization_and_cleans_allowances(
         self,

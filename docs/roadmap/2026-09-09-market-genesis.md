@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | PLTR/WETH accepted for offline planning; unsigned rehearsal plan complete; exposure review and fork rehearsal required |
+| Status | PLTR/WETH offline plan and strict initial preflight complete; exposure review and fork rehearsal required |
 | Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated focused engineering time | 6–10 hours, excluding faucet, RPC, or review delays |
@@ -25,7 +25,7 @@ This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
 
-### Current progress: offline design gate complete
+### Current progress: offline design and initial preflight complete
 
 At block `116408992`, the repository qualifier passed `79/79` checks across
 chain identity, external and Panoptic runtimes, Stock Token controls, both
@@ -34,10 +34,13 @@ eligible. PLTR/WETH was recommended because PLTR is the only eligible Stock
 Token that sorts as `currency0` against WETH. The owner has now accepted that
 exact PoolKey, a synthetic mechanism-test price class, and the second actor's
 roles for offline planning only. The repository has generated the unsigned
-design; its bounded exposure is still a proposal and no transaction is
+design and its strict initial preflight passed at block `116478616`: the full
+qualification passed `79/79` and all `17/17` plan-specific starting-state
+checks passed. Its bounded exposure is still a proposal and no transaction is
 authorized. See the
 [selection record](../markets/2026-09-09-first-market-selection.md),
 [offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
+the [initial preflight record](../markets/2026-09-09-pltr-weth-initial-preflight.md),
 and [machine-readable plan](../../manifests/markets/robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json).
 
 ## 2. Entry gates already complete

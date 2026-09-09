@@ -1117,7 +1117,9 @@ def main() -> int:
         script_path,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
+    args.output.write_text(
+        json.dumps(plan, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     print(f"Wrote offline rehearsal plan: {args.output}")
     print(f"Plan body SHA-256: {plan['planBodySha256']}")
     print(f"Transactions: {plan['transactionCount']} (all unauthorized; nonces unset)")

@@ -15,6 +15,10 @@ Thumbs.db
 *.log
 tmp/
 
+# Python interpreter caches
+__pycache__/
+*.py[cod]
+
 # JavaScript/build outputs for the future product app
 node_modules/
 dist/

@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** The deployment-preparation slice is reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Fresh nonce-0 artifacts were rebuilt twice deterministically; the exact 16-contract plan passed a Robinhood-testnet Anvil-fork simulation with 16 successful receipts, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Robinhood faucet transactions funded both the deployer and separately controlled test actor with `0.01` test ETH and five units of each reviewed test Stock Token while both nonces remained `0`; the strict verifier passed afterward. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on encrypted deployer-keystore setup, separate review of the exact artifact hashes and operator procedure, and an immediate live state recheck.
+**Status:** The deployment-preparation slice is reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Fresh nonce-0 artifacts were rebuilt twice deterministically; the exact 16-contract plan passed a Robinhood-testnet Anvil-fork simulation with 16 successful receipts, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Robinhood faucet transactions funded both the deployer and separately controlled test actor with `0.01` test ETH and five units of each reviewed test Stock Token while both nonces remained `0`; the strict verifier passed afterward. Both actors now use separate encrypted Foundry keystores, and a file-based one-transaction operator passed unit, supplemental runtime-hash replay, negative authorization, and live read-only preflight gates. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on owner review of the exact operator/artifact hashes and creation of a bound authorization manifest; execute-time strict and state checks remain automatic.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -855,6 +855,13 @@ The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
 - Broadcast only bounded testnet transactions listed in a reviewed manifest.
 - Never use this EOA as final protocol governance; public alpha uses a Safe with role separation and a guardian runbook.
 
+The same public deployer has now been imported into the separate encrypted
+Foundry keystore `stonkhedge-robinhood-deployer`; Foundry reported the exact
+expected address. The distinct test actor remains in
+`stonkhedge-robinhood-test-actor`. Only file existence and public account
+metadata were inspected. The deployment operator must use the deployer
+keystore; the actor keystore can never substitute for the nonce-bound sender.
+
 The preferred gate remains a second contributor completing
 `docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md`. On 2026-09-09, while
 that contributor was unavailable, the owner explicitly chose a separate
@@ -882,10 +889,14 @@ Fresh nonce-0 artifacts were then rebuilt twice deterministically and plan
 The separately controlled actor `0x04D5...6d6f` was subsequently created in an
 external encrypted Foundry keystore and funded with `0.01` test ETH plus `5` of
 each reviewed Stock Token; its receipt and live balances passed. Public
-broadcast remains blocked on encrypted deployer-keystore setup, a separate
-review of the exact artifact hashes and operator procedure, and an immediate
-live state recheck. No stonkHedge contract has been deployed on Robinhood
-testnet.
+broadcast remains blocked on owner approval of the exact artifact/operator
+hashes and creation of a bound authorization manifest. The operator candidate
+passed 12 unit tests, a second 16-receipt runtime-hash fork replay, a
+missing-authorization negative path, and a manifest-bound live index-0 dry-run.
+It automatically repeats the strict verifier and state gates before signing,
+sends at most one CREATE, verifies its receipt/address/runtime hash/next nonce,
+and stops. No stonkHedge contract has been deployed on Robinhood testnet. See
+`docs/deployment/2026-09-09-direct-deployment-operator-candidate.md`.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
@@ -1120,6 +1131,7 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-022 | Treat issuer pause and administrative burn as distinct solvency/exit hazards, not generic ERC-20 failures. | Local evidence shows owner close may succeed through internal balances during pause while withdrawal, external swaps, and liquidation fail; forced burn from PoolManager can also diverge raw reserves from cached CollateralTracker accounting. | Exact issuer behavior disproves the model or protocol-level reconciliation/guard controls are implemented and independently reviewed. |
 | D-023 | Define local close acceptance as no unexplained residual above `2e12` raw units, rather than literal zero. | The matched Foundry close and clean Anvil replay expose documented rounding/fee effects: at 18 decimals the replay observed `0`/`1` AMM dust, zero credited-asset residual, and `531`/`32` PoolManager-claim deviations, all far below the `0.000002`-token test cap. | Asset decimals change, the residual scales with position size, a production risk limit is designed, or any run breaches the bound. |
 | D-024 | Allow owner/Codex clean-room reproduction to replace the unavailable second-contributor gate only for offline regeneration and a valueless testnet sandbox. | Exact detached checkouts, full prescribed gates, independent live calls, and explicit residual-risk acceptance preserve useful review evidence without pretending two-human independence. | The invited reviewer rejects, any source/artifact/dependency state changes, value or production-like use is proposed, or a fresh gate fails. |
+| D-025 | Use a file-based, keystore-backed operator that signs and submits exactly one nonce-bound CREATE per invocation. | Large initcode exceeds Windows command-line limits; full hash binding, exact prior runtime hashes, automatic strict/state checks, nonce-specific confirmation, and receipt reconciliation prevent an unsafe bulk or raw-key path. | Any artifact/operator hash changes, sender or nonce drifts, a runtime mismatch occurs, the RPC becomes untrusted, or a safer reviewed deployment mechanism becomes available. |
 
 ## 13. Open blockers and questions to resolve during execution
 

@@ -126,10 +126,14 @@ Live acceptance matters. For an end-to-end flow, capture public chain ID, actors
 
 When the friend's GitHub handle is known, add branch protection and required review rules in GitHub. Do not add a guessed `CODEOWNERS` identity.
 
-For the current Robinhood testnet deployment gate, the second contributor must
-follow [`docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md`](./docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md).
-It separates core approval from non-official V4 infrastructure approval and
-keeps nonce regeneration, signing, and broadcast outside the review step.
+For the current Robinhood testnet deployment gate, the preferred second-person
+review remains
+[`docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md`](./docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md).
+The owner/Codex clean-room waiver recorded in `plan.md` permits the valueless
+testnet path without pretending that it is an independent-human audit. It does
+not authorize signing by itself. The exact operator, artifact hashes, role
+assignments, and one-transaction stop policy still require a separate owner
+broadcast review and bound authorization manifest.
 
 ## 8. Commit conventions
 

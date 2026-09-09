@@ -10,6 +10,7 @@ The current repository is the product and delivery control plane. It contains th
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
+- Review the [file-based, one-transaction direct-deployment operator candidate](./docs/deployment/2026-09-09-direct-deployment-operator-candidate.md) and reproduce its read-only preflight before any signing. Its executable path remains blocked until an exact authorization manifest is committed.
 - See the [verified faucet and mainnet Safe-readiness evidence](./docs/deployment/2026-09-08-faucet-and-mainnet-safe-readiness.md) for the current funding state and the distinction between on-chain Safe support and Panoptic's salt-bound Safe.
 - Complete the [independent core and candidate-V4 review gate](./docs/review/2026-09-08-core-f4abdd7-and-v4-candidate.md) before any public transaction trusts the candidate or any nonce-derived artifact is regenerated for broadcast.
 - Use the [controllable Stock Token specification](./docs/specs/controllable-stock-token.md) for local issuer-failure testing; never present that test double as issuer code or deploy it as a public Robinhood Stock Token.

@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "status": "OPERATOR_RUNTIME_HASH_REPLAY_PASS_AUTHORIZATION_REQUIRED",
+  "capturedAt": "2026-09-09T05:38:56Z",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpcUrl": "https://rpc.testnet.chain.robinhood.com"
+  },
+  "artifactBindings": {
+    "operatorSha256": "556e0751d787df3149412bc2dd417f57d7c10e7481878a9acf35853709e4db25",
+    "operatorTestsSha256": "caf22226bebc45e4e8df57a55e60b660e5668e32deab9bafa74efceacf77cfd9",
+    "transactionPlanSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
+    "simulationReportSha256": "8964382c7049999de814d286f229cf55f2a1d087b1b34b8443f82a11354b9910",
+    "deploymentManifestSha256": "7887e802f2240542b550cd1aecbd76381e0933461743f2833ed822e65cdaa7bf",
+    "fundingManifestSha256": "66da6f25f60c6f1ccfc5c05a6289ddded3d6282327e3944b08afb00394048a22"
+  },
+  "runtimeHashReplay": {
+    "status": "PASS",
+    "mode": "LATEST_HEAD_LOCAL_ANVIL_FORK_ONLY",
+    "forkBlock": 116040196,
+    "forkBlockHash": "0x12a994298982c53950d4292eb177d65d1464e6ac7824cd58821af866228772b0",
+    "forkBlockTimestamp": "2026-09-09T05:34:03Z",
+    "successfulReceipts": 16,
+    "finalLocalNonce": 16,
+    "anvilStoppedAfterReplay": true,
+    "note": "The official RPC no longer served all historical state required for a second replay at block 115890338, so this supplemental runtime-hash replay used the then-current head. The original pinned simulation remains the plan and wiring evidence."
+  },
+  "operatorPolicy": {
+    "defaultMode": "READ_ONLY",
+    "rawPrivateKeyArgumentSupported": false,
+    "passwordArgumentSupported": false,
+    "signer": "FOUNDRY_PASSWORD_PROTECTED_KEYSTORE",
+    "signingInput": "32_BYTE_EIP155_TRANSACTION_DIGEST",
+    "largeInitcodeTransport": "FILE_TO_PROCESS_MEMORY_NOT_COMMAND_LINE",
+    "maximumTransactionsPerInvocation": 1,
+    "strictVerifierBeforeSigning": true,
+    "postReceiptRuntimeHashRequired": true,
+    "stopAfterSuccess": true,
+    "stopOnFirstMismatch": true,
+    "authorizationManifestRequired": true,
+    "nonceSpecificConfirmationRequired": true,
+    "receiptOutputMustBeOutsideRepository": true
+  },
+  "expectedDeployments": [
+    {
+      "ordinal": 0,
+      "label": "dataContracts[0]",
+      "address": "0x05449292522e3FCCD58dB4f947A94BD083d5e13d",
+      "runtimeBytes": 24439,
+      "runtimeCodeHash": "0xdd0ec57b873af7e553fbd9404281da95203e426929ecb3dfb419bbcbcd87aa7f"
+    },
+    {
+      "ordinal": 1,
+      "label": "dataContracts[1]",
+      "address": "0xb1820CEE1BE8b9eDdC382eE83304efBe5ceD0019",
+      "runtimeBytes": 20669,
+      "runtimeCodeHash": "0x97d0d1afc82d4dba1ebaabd94ef9cdc7e38789cf81a410565d2502634c446615"
+    },
+    {
+      "ordinal": 2,
+      "label": "dataContracts[2]",
+      "address": "0xa318218fEA30EA64c223A1c8E96551c68B007656",
+      "runtimeBytes": 20141,
+      "runtimeCodeHash": "0x3027b6042e96eabda4468d04a6366f717c3546f2e106b51b5b490574529e7097"
+    },
+    {
+      "ordinal": 3,
+      "label": "dataContracts[3]",
+      "address": "0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d",
+      "runtimeBytes": 17266,
+      "runtimeCodeHash": "0xa6b6c4a12dfb4616558a30a3596c6739691e37385e69f8a366f7a43abb98d3e9"
+    },
+    {
+      "ordinal": 4,
+      "label": "dataContracts[4]",
+      "address": "0x1F6f1daab8b0d9605D7A880bD738aEe6Fd764107",
+      "runtimeBytes": 23768,
+      "runtimeCodeHash": "0xabdee20968abd3e6dddcd1ba58d0f5c7890a14122a01cefa0db86278acf43e32"
+    },
+    {
+      "ordinal": 5,
+      "label": "dataContracts[5]",
+      "address": "0xB1D560De10Fb3733d7A5dFefED0388A2435fdaBA",
+      "runtimeBytes": 24482,
+      "runtimeCodeHash": "0xd2bff9530ad0696f844e93d21e22e09572653ab5b07d7571a6c7d6829ea54552"
+    },
+    {
+      "ordinal": 6,
+      "label": "dataContracts[6]",
+      "address": "0x19E58B3113579A02c2C266e1be0049766F333338",
+      "runtimeBytes": 5602,
+      "runtimeCodeHash": "0x01a10a5c6d647a90937bd3e5ca3cfc9d7ee260feff04d4dc0a27a72461b21a4c"
+    },
+    {
+      "ordinal": 7,
+      "label": "PanopticMath",
+      "address": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7",
+      "runtimeBytes": 3217,
+      "runtimeCodeHash": "0x3ac5052d577e4eab2a5d19f2f6fa439ef8a566842b27fcc00cd6316ecc1a563a"
+    },
+    {
+      "ordinal": 8,
+      "label": "InteractionHelper",
+      "address": "0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A",
+      "runtimeBytes": 7020,
+      "runtimeCodeHash": "0x400dce9bcf7100fffe197f589166b3fb9ca221d834c44834dc9fdd120a1aa1cf"
+    },
+    {
+      "ordinal": 9,
+      "label": "CollateralTrackerV2",
+      "address": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+      "runtimeBytes": 21338,
+      "runtimeCodeHash": "0x62777e330adfa9346f10108b958b4a903c8f4b53f3d33588dc9dbe8917d22e35"
+    },
+    {
+      "ordinal": 10,
+      "label": "PanopticGuardian",
+      "address": "0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e",
+      "runtimeBytes": 5562,
+      "runtimeCodeHash": "0xe62ac18a0713d7683a572bf73fc70666164e13a265d16c37d820ae11df24bc2c"
+    },
+    {
+      "ordinal": 11,
+      "label": "BuilderFactory",
+      "address": "0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B",
+      "runtimeBytes": 3744,
+      "runtimeCodeHash": "0xb0dbf2aa14512a0eb09c512d29f9bc437d78686fa39a5d0220de1edd374a0f43"
+    },
+    {
+      "ordinal": 12,
+      "label": "RiskEngine",
+      "address": "0x3Ad134ff173dFA0a892B4116A65B76B818218585",
+      "runtimeBytes": 22483,
+      "runtimeCodeHash": "0x9d2b3919d62b6b52830b67984b00e43ef68838dffd7f7124b31a61f5bb7269c4"
+    },
+    {
+      "ordinal": 13,
+      "label": "SemiFungiblePositionManagerV4",
+      "address": "0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1",
+      "runtimeBytes": 23608,
+      "runtimeCodeHash": "0x67e289f02cd60fecc4266bdf7c52a3cd4bdbb326d386a7d11cc2c1edbc14a40e"
+    },
+    {
+      "ordinal": 14,
+      "label": "PanopticPoolV2",
+      "address": "0xfBA5b34cb1471605d82BBF395F244Fa41148b155",
+      "runtimeBytes": 24275,
+      "runtimeCodeHash": "0x76ecb9111c9f663d094375b19b772228094b2c9bafde434717e5c5d01db260da"
+    },
+    {
+      "ordinal": 15,
+      "label": "PanopticFactoryV4",
+      "address": "0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c",
+      "runtimeBytes": 20702,
+      "runtimeCodeHash": "0xc6d872bf804fec1320328e54a1f246896744c880e1167fc9763fadf5e3a94f68"
+    }
+  ],
+  "verification": {
+    "operatorUnitTests": "12_PASS_0_FAIL",
+    "legacyTransactionEncodingCrossCheck": "PASS_BYTE_FOR_BYTE_AND_SIGNER_RECOVERY_WITH_EPHEMERAL_KEY",
+    "liveReadOnlyIndexZeroPreflight": {
+      "status": "PASS",
+      "blockNumber": 116042198,
+      "blockHash": "0x7ca8b2644608e2da370476cda516d1d63b1133efa7cb6fa6e949a1bf0e782c89",
+      "blockTimestamp": "2026-09-09T05:38:56Z",
+      "senderPendingNonce": 0,
+      "senderNativeBalanceWei": "10000000000000000",
+      "transactionIndex": 0,
+      "expectedCreatedAddress": "0x05449292522e3FCCD58dB4f947A94BD083d5e13d",
+      "emptyAddressesVerified": 16,
+      "gasPriceWei": "10000000",
+      "gasLimit": 16711680,
+      "gasEstimate": 5983057,
+      "broadcastAttempted": false
+    },
+    "publicTransactionSigned": false,
+    "publicTransactionBroadcast": false
+  },
+  "broadcastGates": {
+    "encryptedDeployerKeystore": "PASS_PUBLIC_METADATA_ONLY",
+    "operatorAndRuntimeEvidence": "PASS_CANDIDATE",
+    "ownerBroadcastReview": "REQUIRED",
+    "authorizationManifest": "MISSING_BY_DESIGN",
+    "immediateExecuteTimeStrictVerifier": "REQUIRED_AND_AUTOMATIC",
+    "publicBroadcast": "NOT_AUTHORIZED"
+  }
+}

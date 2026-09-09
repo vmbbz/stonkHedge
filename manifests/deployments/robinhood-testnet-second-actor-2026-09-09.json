@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "status": "SECOND_ACTOR_FUNDED_STRICT_PREFLIGHT_PASS_BROADCAST_BLOCKED",
+  "capturedAt": "2026-09-09T05:01:27Z",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+    "snapshotBlock": 116025579,
+    "snapshotBlockHash": "0xdcab383d68dcae824666aff3e3396206317620d54fad6c8883d3cdac17bcf550",
+    "snapshotBlockTimestamp": "2026-09-09T05:01:27Z"
+  },
+  "actor": {
+    "address": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+    "role": "SEPARATE_TEST_USER_AND_LP_NOT_DEPLOYER_OR_PROTOCOL_ADMIN",
+    "keystore": {
+      "path": "C:\\Users\\cosyc\\.foundry\\keystores\\stonkhedge-robinhood-test-actor",
+      "storage": "OUTSIDE_REPOSITORY",
+      "reportedType": "PASSWORD_PROTECTED_FOUNDRY_KEYSTORE",
+      "fileExists": true,
+      "fileBytes": 436,
+      "credentialMaterialInspected": false
+    },
+    "snapshot": {
+      "nativeBalanceWei": "10000000000000000",
+      "nonce": 0,
+      "runtimeCode": "0x"
+    }
+  },
+  "faucetReceipt": {
+    "transactionHash": "0xc9a5d901ddb0bd2d109fda652029550ec96b280433e9fb18e385da7c18a169b9",
+    "explorerUrl": "https://explorer.testnet.chain.robinhood.com/tx/0xc9a5d901ddb0bd2d109fda652029550ec96b280433e9fb18e385da7c18a169b9",
+    "status": "SUCCESS",
+    "blockNumber": 116017132,
+    "blockHash": "0x8997f2dfdc485e03874383afe656aaff7911796dcfcf85c600317f0c46e69d1b",
+    "blockTimestamp": "2026-09-09T04:44:24Z",
+    "from": "0xF691446e9386DEDF7364340fE35B09E8fE884d81",
+    "to": "0x8762F93772c663c6a88Ba50900bd5381df2717Be",
+    "recipient": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+    "nativeTransferWei": "10000000000000000",
+    "tokenMintCount": 5,
+    "actorNonceConsumed": false
+  },
+  "stockTokenBalances": [
+    {
+      "symbol": "AMZN",
+      "address": "0x5884aD2f920c162CFBbACc88C9C51AA75eC09E02",
+      "actorBalance": "5000000000000000000",
+      "deployerBalance": "5000000000000000000"
+    },
+    {
+      "symbol": "AMD",
+      "address": "0x71178BAc73cBeb415514eB542a8995b82669778d",
+      "actorBalance": "5000000000000000000",
+      "deployerBalance": "5000000000000000000"
+    },
+    {
+      "symbol": "TSLA",
+      "address": "0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E",
+      "actorBalance": "5000000000000000000",
+      "deployerBalance": "5000000000000000000"
+    },
+    {
+      "symbol": "PLTR",
+      "address": "0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0",
+      "actorBalance": "5000000000000000000",
+      "deployerBalance": "5000000000000000000"
+    },
+    {
+      "symbol": "NFLX",
+      "address": "0x3b8262A63d25f0477c4DDE23F83cfe22Cb768C93",
+      "actorBalance": "5000000000000000000",
+      "deployerBalance": "5000000000000000000"
+    }
+  ],
+  "deployerRecheck": {
+    "address": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+    "nativeBalanceWei": "10000000000000000",
+    "pendingNonce": 0,
+    "runtimeCode": "0x"
+  },
+  "deploymentPlan": {
+    "sha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
+    "sender": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+    "startNonce": 0,
+    "transactionCount": 16,
+    "predictedAddressesChecked": 16,
+    "occupiedPredictedAddresses": 0,
+    "actorMaySubstituteAsSender": false
+  },
+  "verification": {
+    "strictVerifier": "PASS_AT_RPC_HEAD_116022906",
+    "initialTimedRun": "NOT_COUNTED_LOCAL_TIMEOUT_AFTER_PARTIAL_PASS_OUTPUT",
+    "completedRetry": "PASS",
+    "faucetReceipt": "PASS",
+    "actorBalances": "PASS",
+    "deployerNonceAndFunding": "PASS",
+    "predictedAddressEmptiness": "PASS"
+  },
+  "broadcastGates": {
+    "secondActorKeystoreAndFunding": "PASS",
+    "encryptedDeployerKeystore": "REQUIRED",
+    "freshArtifactHashAndOperatorReview": "REQUIRED",
+    "immediatePreBroadcastStateCheck": "REQUIRED",
+    "publicBroadcast": "NOT_AUTHORIZED"
+  }
+}

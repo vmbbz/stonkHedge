@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** The first deployment-preparation slice is complete and reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Its exact 16-contract plan for the public deployer passed a fresh Robinhood-testnet Anvil-fork simulation, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Faucet transaction `0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98` subsequently funded the deployer with `0.01` test ETH and five units of each reviewed test Stock Token while its pending nonce remained `0`; the strict verifier passed afterward. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on second-actor funding, second-person core/infrastructure review, and fresh exact-artifact regeneration.
+**Status:** The deployment-preparation slice is reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Fresh nonce-0 artifacts were rebuilt twice deterministically; the exact 16-contract plan passed a Robinhood-testnet Anvil-fork simulation with 16 successful receipts, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Robinhood faucet transactions funded both the deployer and separately controlled test actor with `0.01` test ETH and five units of each reviewed test Stock Token while both nonces remained `0`; the strict verifier passed afterward. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on encrypted deployer-keystore setup, separate review of the exact artifact hashes and operator procedure, and an immediate live state recheck.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -828,11 +828,11 @@ Every live acceptance report must distinguish:
 
 ## 8. Deployment and key-safety policy
 
-The authorized testnet-only deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`; the same address is derived on every EVM chain. Robinhood's official faucet successfully sent the address `0.01` test ETH and `5` each of AMZN, AMD, TSLA, PLTR, and NFLX in transaction `0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98`. Strict read-only verification passed afterward and pending nonce remained `0`. The deployer funding gate is complete; a separately controlled second actor is still required. Never import the deployer key into an uncontrolled browser wallet.
+The authorized testnet-only deployer is `0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`; the same address is derived on every EVM chain. Robinhood's official faucet successfully sent the address `0.01` test ETH and `5` each of AMZN, AMD, TSLA, PLTR, and NFLX in transaction `0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98`. Strict read-only verification passed afterward and pending nonce remained `0`. A separately controlled second actor, `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f`, received the same bounded faucet allocation in transaction `0xc9a5d901ddb0bd2d109fda652029550ec96b280433e9fb18e385da7c18a169b9`; its nonce also remained `0`. The deployer and second-actor funding gates are complete. Never import the deployer key into an uncontrolled browser wallet, and never substitute the actor as sender for the nonce-bound deployment plan. See `docs/deployment/2026-09-09-second-actor-funding.md`.
 
 The same address remains funded on Base Sepolia for the secondary B20 lane. Re-check chain ID, native balance, token addresses, token balances, code hashes, and nonce immediately before every broadcast because chain state can change.
 
-On Robinhood testnet the upstream sub-zero CREATE3 deployer is absent, so the reviewed candidate uses 16 ordinary CREATE transactions from nonce `0` through `15`. The exact plan has passed a fresh exact-sender fork simulation and post-deployment wiring checks. At public block `115718190` (`0xbfdbef350a9ac84b34817197eec0f0d2535beb895b97e406d735760769402fff`, `2026-09-08T18:01:02Z`), the live deployer nonce remained `0`, all 16 predicted addresses were empty, and the CREATE3 deployer still had no code. Faucet receipt did not consume the deployer nonce. These facts must still be re-read immediately before any broadcast.
+On Robinhood testnet the upstream sub-zero CREATE3 deployer is absent, so the reviewed candidate uses 16 ordinary CREATE transactions from nonce `0` through `15`. The exact plan has passed a fresh exact-sender fork simulation and post-deployment wiring checks. At public block `116025579` (`0xdcab383d68dcae824666aff3e3396206317620d54fad6c8883d3cdac17bcf550`, `2026-09-09T05:01:27Z`), the live deployer nonce remained `0`, all 16 predicted addresses were empty, and the current transaction-plan SHA-256 remained `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820`. Faucet receipts did not consume either account's nonce. These facts must still be re-read immediately before any broadcast.
 
 This testnet fallback does not constrain mainnet. Robinhood mainnet `4663` has
 the canonical Panoptic CREATE3 deployer plus canonical Safe v1.4.1 singleton,
@@ -879,9 +879,13 @@ under an explicit process waiver. Strict verification passed at block
 `115884813`, with deployer nonce `0`, `0.01` ETH, and `5` of each Stock Token.
 Fresh nonce-0 artifacts were then rebuilt twice deterministically and plan
 `8b138a56...` passed a 16-receipt fork simulation plus 11 wiring assertions.
-Public broadcast remains blocked on a separately controlled/funded second
-actor, a separate review of the fresh artifact hashes, and an immediate live
-state recheck. No stonkHedge contract has been deployed on Robinhood testnet.
+The separately controlled actor `0x04D5...6d6f` was subsequently created in an
+external encrypted Foundry keystore and funded with `0.01` test ETH plus `5` of
+each reviewed Stock Token; its receipt and live balances passed. Public
+broadcast remains blocked on encrypted deployer-keystore setup, a separate
+review of the exact artifact hashes and operator procedure, and an immediate
+live state recheck. No stonkHedge contract has been deployed on Robinhood
+testnet.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 
@@ -1123,7 +1127,6 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
 - Will the second contributor independently confirm the owner/Codex acceptance of core candidate `f4abdd7...`, including inherited runtime fix `b0deb9f...`? This is now defence-in-depth for the valueless testnet waiver, but remains mandatory for mainnet or real-value use; a rejection immediately reopens the testnet gate.
 - Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should stonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
-- Can a distinct second actor complete Robinhood's address-based faucet flow? The deployer leg is verified: `0.01` test ETH plus `5` each of AMZN, AMD, TSLA, PLTR, and NFLX, with nonce still `0`.
 - Will the second contributor independently confirm reuse of the non-official chain-`46630` V4 candidate? Owner/Codex reproduction passed on 2026-09-09 and Uniswap still had no official `46630` registry entry; a later official entry or reviewer mismatch requires re-audit.
 - Which Chainlink feeds, if any, are officially supported on Robinhood testnet for the five faucet Stock Tokens? If none, the monitor uses an explicitly labelled test feed and mainnet feeds only in read-only fork tests.
 - Can Base Sepolia B20 precompiles support the secondary compatibility scenarios, or should that lane remain on the reference mock?

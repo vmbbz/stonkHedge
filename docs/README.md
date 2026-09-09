@@ -1,0 +1,122 @@
+# stonkHedge documentation map
+
+This directory is the source-of-truth documentation set for the stonkHedge
+testnet project. The Markdown is intentionally organized so it can later move
+into Docusaurus without rewriting the technical content. Docusaurus is a
+publishing layer, not a substitute for accurate manifests and runbooks.
+
+## Current milestone
+
+The 16-contract shared Panoptic V4 stack is deployed and reconciled on
+Robinhood Chain testnet. A Stock Token/WETH Uniswap V4 pool, its per-market
+Panoptic contracts, collateral deposits, option positions, and the user
+application are not live yet.
+
+Start with:
+
+1. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+   for the system, component, trust-boundary, and evidence overview;
+2. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+   for the public transaction record; and
+3. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+   for the next gated implementation phase.
+
+## Documentation by audience
+
+| Audience | Read first | Then use |
+|---|---|---|
+| New contributor | Architecture overview and repository `CONTRIBUTING.md` | Baselines, test evidence, and the relevant roadmap checkpoint |
+| Protocol reviewer | Core/candidate review record | Runtime-headroom evidence, deployment simulation, and final public manifest |
+| Chain operator | Final public progress record | Strict verifier, authorization manifest, and the next-phase runbook |
+| Product/SDK developer | Architecture overview | Controllable-token specification and local lifecycle evidence |
+| Security/legal reviewer | Architecture trust boundaries | License record, issuer-control findings, open blockers, and decision log in `plan.md` |
+
+## Directory responsibilities
+
+| Directory | Responsibility |
+|---|---|
+| `architecture/` | Evergreen component, data-flow, ownership, and trust-boundary explanations |
+| `baseline/` | Immutable build, test, licensing, and release-size checkpoints |
+| `chain/` | External chain, token, and infrastructure qualification |
+| `deployment/` | Simulations, approvals, operator design, receipts, and reconciliation |
+| `review/` | Human or explicitly labelled owner-reproduced review evidence |
+| `roadmap/` | Forward-looking checkpoint plans that do not themselves authorize transactions |
+| `specs/` | Behavioral requirements and acceptance matrices |
+| `testing/` | Reproduction commands and observed test evidence |
+
+Machine-readable facts belong in `../manifests/`. Narrative documents should
+link to those manifests rather than silently duplicating mutable values.
+
+## Source-of-truth order
+
+When records disagree, use this order and investigate the drift:
+
+1. canonical on-chain state at an explicitly recorded block;
+2. the reconciled public deployment manifest;
+3. hash-bound simulation, operator, and authorization artifacts;
+4. chain-qualification and test manifests;
+5. narrative documentation and `plan.md`;
+6. chat transcripts or screenshots.
+
+A receipt proves only that a transaction executed. Deployment acceptance also
+requires expected sender/nonce/input, created address, runtime identity,
+constructor wiring, and post-state.
+
+## Future Docusaurus information architecture
+
+Do not scaffold Docusaurus during the market-deployment work. After deployment
+and acceptance documents stabilize, migrate this source material into:
+
+```text
+docs site
+├── start-here
+│   ├── project status
+│   ├── testnet quickstart
+│   └── limitations and terminology
+├── concepts
+│   ├── Stock Tokens and issuer controls
+│   ├── Uniswap V4 PoolKey
+│   ├── Panoptic perpetual options
+│   └── collateral, premium, and solvency
+├── architecture
+│   ├── system overview
+│   ├── contracts and data flow
+│   ├── trust boundaries
+│   └── repository topology
+├── developers
+│   ├── local environment
+│   ├── SDK adapters and golden vectors
+│   ├── tests and fork simulation
+│   └── contributing
+├── operators
+│   ├── chain manifests
+│   ├── deployment and verification
+│   ├── monitoring and safe mode
+│   └── incident and unwind runbooks
+├── security-and-risk
+│   ├── threat model
+│   ├── issuer and oracle failure modes
+│   ├── audit status
+│   └── licensing and legal boundaries
+└── reference
+    ├── addresses and releases
+    ├── transaction history
+    ├── decisions
+    └── glossary
+```
+
+The eventual site should generate address and transaction tables from validated
+manifests. Hand-copied deployment facts should fail CI if they drift.
+
+## Publishing gate
+
+Build the documentation site only after all intended testnet deployment rounds
+are complete and the following are true:
+
+- public manifests and contract addresses are stable;
+- the first market has a clean-checkout reproduction and first-user run;
+- navigation and terminology have been reviewed;
+- secret scanning and link checking pass;
+- testnet/mainnet and deployed/planned labels are unambiguous; and
+- automated manifest-to-reference generation has an owner.
+

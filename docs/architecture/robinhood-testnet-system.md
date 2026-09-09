@@ -1,0 +1,492 @@
+# stonkHedge Robinhood testnet system architecture
+
+**State date:** 2026-09-09  
+**Network:** Robinhood Chain Testnet, chain ID `46630`  
+**Current state:** shared Panoptic V4 infrastructure deployed; first market not
+yet initialized  
+**Deployment source:** Panoptic core commit
+`f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d`  
+**Local issuer-failure evidence:** core commit
+`cfaf42c29b5c59304540e2a31e24daee4d977797`
+
+## 1. What exists now
+
+stonkHedge now has a verified public-chain foundation for a valueless options
+sandbox:
+
+- Robinhood's five faucet-distributed test Stock Token proxies and their shared
+  registry/beacon and implementation have been qualified;
+- an existing, non-official Uniswap V4 testnet stack has been accepted for this
+  bounded sandbox through exact runtime, control-state, wiring, and provenance
+  checks;
+- nine Panoptic logic/reference contracts and seven FactoryNFT metadata data
+  slices have been deployed through an approved 16-transaction direct-CREATE
+  sequence;
+- every transaction, address, runtime byte length, and runtime hash has been
+  reconciled with the frozen plan;
+- all 11 externally observable constructor/wiring assertions pass; and
+- the chain/dependency/token/deployer verifier passes with deployer nonce `16`.
+
+This is meaningful infrastructure, but it is not yet a functioning market.
+There is no selected public Stock Token/WETH PoolKey, no initialized Uniswap V4
+pool, no seeded liquidity, no per-market PanopticPool clone, no initialized
+CollateralTracker pair, no public collateral deposit, and no live option
+position.
+
+### Milestone memory aid
+
+```mermaid
+flowchart LR
+    A[Qualified external assets] --> B[Local full lifecycle proof]
+    B --> C[Reviewed and simulated release]
+    C --> D[16 shared contracts deployed]
+    D --> E[Next: initialize one V4 market]
+    E --> F[Then: SDK and first-user sandbox]
+
+    classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
+    classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
+    class A,B,C,D done;
+    class E,F next;
+```
+
+## 2. System boundaries
+
+The system has five layers. Keeping them separate prevents a local test double,
+third-party infrastructure, or future UI from being mistaken for issuer or
+protocol authority.
+
+```mermaid
+flowchart TB
+    subgraph Users[User and operator accounts]
+        DEP[Temporary deployer, guardian admin, treasurer]
+        ACT[Test actor and future LP/user]
+    end
+
+    subgraph Product[stonkHedge product layer - mostly next phase]
+        UI[Developer dashboard]
+        ADP[SDK adapters and strategy encoders]
+        MON[Independent health monitor]
+        REG[Curated market registry]
+    end
+
+    subgraph Panoptic[stonkHedge-deployed shared Panoptic V4 layer]
+        FAC[PanopticFactoryV4]
+        SFPM[SemiFungiblePositionManagerV4]
+        RISK[RiskEngine]
+        GUARD[PanopticGuardian]
+        BF[BuilderFactory]
+        PREF[PanopticPoolV2 reference]
+        CREF[CollateralTrackerV2 reference]
+        LIBS[PanopticMath and InteractionHelper]
+        META[Seven metadata data slices]
+    end
+
+    subgraph Market[Per-market layer - not deployed yet]
+        V4POOL[Stock Token/WETH V4 PoolKey]
+        PPOOL[PanopticPool clone]
+        CT0[CollateralTracker clone for currency0]
+        CT1[CollateralTracker clone for currency1]
+    end
+
+    subgraph External[Externally controlled Robinhood testnet dependencies]
+        STOCK[Robinhood test Stock Token proxy]
+        ISSUER[Stock registry/beacon and implementation]
+        WETH[Testnet WETH]
+        PM[Candidate Uniswap V4 PoolManager]
+        PERI[PositionManager, Quoter, StateView, Router, Permit2]
+    end
+
+    DEP --> FAC
+    DEP --> GUARD
+    ACT --> UI
+    UI --> ADP
+    ADP -. future transactions .-> PPOOL
+    MON -. independent reads .-> STOCK
+    MON -. independent reads .-> PM
+    MON -. recommendations .-> GUARD
+    STOCK --> ISSUER
+    FAC --> META
+    FAC --> PREF
+    FAC --> CREF
+    FAC -. future clone deployment .-> PPOOL
+    PPOOL --> CT0
+    PPOOL --> CT1
+    PPOOL --> RISK
+    PPOOL --> SFPM
+    SFPM --> PM
+    V4POOL --> PM
+    V4POOL --> STOCK
+    V4POOL --> WETH
+    PERI --> PM
+    GUARD --> RISK
+    BF --> GUARD
+    LIBS --> FAC
+    LIBS --> PREF
+    REG -. curated view only .-> PPOOL
+```
+
+Solid arrows represent deployed or protocol-defined relationships. Dotted
+arrows mark the next product/market work. The UI and registry will curate what
+stonkHedge presents, but the underlying Panoptic factory remains permissionless.
+
+## 3. Repository architecture
+
+| Repository | Current role | Important boundary |
+|---|---|---|
+| `vmbbz/stonkHedge` | Product control plane: plans, manifests, verification, evidence, and future app | Contains no secrets and does not silently mutate core contracts |
+| `vmbbz/panoptic-v2-core` | Auditable Panoptic protocol fork and local lifecycle harness | Public deployment is tied to exact commit `f4abdd7...`; later local harness commits are not implied to be deployed |
+| `vmbbz/panoptic-sdk` | Future SDK contribution lane | Standalone source build is blocked by an unpublished workspace package; the first sandbox uses exact public package `@panoptic-eng/sdk@1.0.49` with product-local adapters |
+
+The deployed source and the later local proof form one ancestry chain:
+
+```mermaid
+flowchart LR
+    U[upstream d65310d] --> H[runtime headroom b0deb9f]
+    H --> D[direct deployment f4abdd7]
+    D --> T[controllable-token tests 159dabd]
+    T --> L[lifecycle and verifier cfaf42c]
+
+    classDef deployed fill:#d7f7df,stroke:#176b2c,color:#111;
+    classDef test fill:#dcecff,stroke:#245a9a,color:#111;
+    class D deployed;
+    class T,L test;
+```
+
+`f4abdd7...` is the release source used to build the public deployment.
+`cfaf42c...` proves additional behavior locally and is not a claim that the
+test-only controllable token was deployed publicly.
+
+## 4. External Robinhood testnet dependencies
+
+### 4.1 Stock Token infrastructure
+
+The five Stock Tokens are normal transferable ERC-20-shaped test assets while
+the relevant token and registry policies permit an operation. They share one
+registry/beacon and one implementation.
+
+| Component | Address |
+|---|---|
+| Registry and beacon | `0x1dF3cA0fD30ED5eeb09eB01938f4E9c5196E6Ca5` |
+| Shared Stock implementation | `0xBd14156E05c6AF28ad39aA53a2AB8eB9CDf657DA` |
+| AMZN | `0x5884aD2f920c162CFBbACc88C9C51AA75eC09E02` |
+| AMD | `0x71178BAc73cBeb415514eB542a8995b82669778d` |
+| TSLA | `0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E` |
+| PLTR | `0x1FBE1a0e43594b3455993B5dE5Fd0A7A266298d0` |
+| NFLX | `0x3b8262A63d25f0477c4DDE23F83cfe22Cb768C93` |
+
+All five were observed with 18 decimals, no global or token pause, current and
+pending UI multiplier `1e18`, no scheduled multiplier activation, and positive
+deployer/test-actor balances. These are time-sensitive health facts, so the
+verifier must re-read them before every new public action.
+
+Important behavior:
+
+- raw ERC-20 balances do not automatically rebase when the UI multiplier
+  changes;
+- issuer pause or address blocking can stop approvals, transfers, deposits,
+  withdrawals, swaps, or liquidations;
+- administrative burn can reduce raw reserves held by PoolManager without
+  automatically updating Panoptic's cached accounting; and
+- transferability does not grant stonkHedge minting, redemption, pause, or
+  compliance authority.
+
+The controllable Stock Token under the core fork's test directory exists only
+to reproduce those hazards deterministically. It is not Robinhood code and is
+forbidden from chain-`46630` manifests.
+
+### 4.2 Quote assets
+
+| Asset | Address | Use |
+|---|---|---|
+| Testnet WETH | `0x33e4191705c386532ba27cBF171Db86919200B94` | Planned quote side for the first public pool |
+| Faucet-style test USDC | `0xbf4479C07Dc6fdc6dAa764A0ccA06969e894275F` | Qualified test asset, but not Circle USDC and not the first-pool choice |
+
+### 4.3 Candidate Uniswap V4 stack
+
+Robinhood chain `46630` has no entry in Uniswap's official deployment registry.
+The project therefore classifies this stack as reusable candidate
+infrastructure, not an official Uniswap testnet deployment.
+
+| Component | Address |
+|---|---|
+| PoolManager | `0x8366a39CC670B4001A1121B8F6A443A643e40951` |
+| PositionManager | `0x58daec3116aae6D93017bAAea7749052E8a04fA7` |
+| Quoter | `0x8Dc178eFB8111BB0973Dd9d722ebeFF267c98F94` |
+| StateView | `0xF3334192D15450CdD385c8B70e03f9A6bD9E673b` |
+| UniversalRouter | `0x8876789976dEcBfCbBbe364623C63652db8C0904` |
+| Permit2 | `0x000000000022D473030F116dDEE9F6B43aC78BA3` |
+
+The verifier pins exact runtime hashes, confirms that PositionManager points to
+the expected PoolManager, checks the PoolManager owner, and requires a zero
+protocol-fee controller. Any drift blocks the next phase.
+
+## 5. Deployed Panoptic shared stack
+
+### 5.1 Logic and reference contracts
+
+| Index | Contract | Address | Runtime bytes | Purpose |
+|---:|---|---|---:|---|
+| 7 | `PanopticMath` | `0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7` | 3,217 | Shared option, tick, and accounting mathematics linked into other contracts |
+| 8 | `InteractionHelper` | `0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A` | 7,020 | Shared token approval and interaction routines |
+| 9 | `CollateralTrackerV2` | `0x41119aAd1c69dba3934D0A061d312A52B06B27DF` | 21,338 | Reference implementation cloned twice for each future market |
+| 10 | `PanopticGuardian` | `0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e` | 5,562 | Emergency lock/unlock coordination and builder/treasurer authority |
+| 11 | `BuilderFactory` | `0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B` | 3,744 | Deterministic builder-wallet deployment owned by the guardian |
+| 12 | `RiskEngine` | `0x3Ad134ff173dFA0a892B4116A65B76B818218585` | 22,483 | Solvency, collateral, premium, interest, liquidation, and safe-mode calculations |
+| 13 | `SemiFungiblePositionManagerV4` | `0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1` | 23,608 | Registers V4 pools and represents multi-leg liquidity positions as ERC-1155 IDs |
+| 14 | `PanopticPoolV2` | `0xfBA5b34cb1471605d82BBF395F244Fa41148b155` | 24,275 | Reference implementation for per-market PanopticPool clones |
+| 15 | `PanopticFactoryV4` | `0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c` | 20,702 | Registers initialized V4 PoolKeys and deploys each market's pool/tracker clones |
+
+`PanopticPoolV2` has 301 bytes of raw EIP-170 headroom. The release gate
+requires at least 256 bytes, leaving 45 bytes above the project margin. This was
+the release-blocking issue fixed before deployment.
+
+### 5.2 Metadata data slices
+
+FactoryNFT metadata is too large to embed conveniently in the factory. The
+release compiler packages it into seven immutable data contracts and passes
+pointers to the factory constructor.
+
+| Index | Address | Runtime bytes |
+|---:|---|---:|
+| 0 | `0x05449292522e3FCCD58dB4f947A94BD083d5e13d` | 24,439 |
+| 1 | `0xb1820CEE1BE8b9eDdC382eE83304efBe5ceD0019` | 20,669 |
+| 2 | `0xa318218fEA30EA64c223A1c8E96551c68B007656` | 20,141 |
+| 3 | `0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d` | 17,266 |
+| 4 | `0x1F6f1daab8b0d9605D7A880bD738aEe6Fd764107` | 23,768 |
+| 5 | `0xB1D560De10Fb3733d7A5dFefED0388A2435fdaBA` | 24,482 |
+| 6 | `0x19E58B3113579A02c2C266e1be0049766F333338` | 5,602 |
+
+The exact runtime hashes for all 16 deployments live in the
+[public deployment manifest](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json).
+
+## 6. Constructor wiring and authority
+
+The final public reconciliation proved:
+
+| Assertion | Live value |
+|---|---|
+| Guardian admin | temporary testnet deployer |
+| Guardian treasurer | temporary testnet deployer |
+| BuilderFactory owner | `PanopticGuardian` |
+| RiskEngine guardian | `PanopticGuardian` |
+| RiskEngine builder factory | `BuilderFactory` |
+| RiskEngine cross buffers | `10,000,000` and `10,000,000` |
+| RiskEngine vegoid | `8` |
+| PanopticPool reference SFPM | deployed V4 SFPM |
+| Factory NFT name | `Panoptic V2 Factory Deployer NFTs` |
+| Factory NFT symbol | `PANOPTIC-NFT` |
+
+The temporary deployer is
+`0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD`. It deployed the shared
+stack and currently holds both immutable guardian-admin and treasurer roles.
+That concentration is explicitly accepted only for the valueless sandbox. A
+mainnet or production-like system needs separate reviewed Safe/timelock roles
+and a migration/unwind design.
+
+The second actor is
+`0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f`. It is a separate test user
+and future liquidity-provider account, not the deployer, protocol administrator,
+issuer, or independent reviewer.
+
+## 7. Why deployment used direct CREATE
+
+Panoptic's preferred release process uses the singleton CREATE3 deployer at
+`0x000000000000b361194cfe6312EE3210d53C15AA`. That contract was absent on
+Robinhood testnet. The upstream salts are also tied to Panoptic's Safe, so a
+copied upstream batch would not authorize this project.
+
+The bounded testnet fallback was ordinary EOA CREATE:
+
+- exact addresses were calculated from the deployer address and nonces `0–15`;
+- configuration and the transaction plan were generated offline;
+- the exact sender and plan were rehearsed on an Anvil fork;
+- the deployer remained frozen while the nonce-bound plan was active;
+- a hash-bound operator signed at most one transaction per invocation;
+- every receipt, created address, runtime, and next nonce was checked before
+  stopping; and
+- a full 16-contract runtime and 11-assertion wiring sweep closed the sequence.
+
+```mermaid
+sequenceDiagram
+    participant Builder as Offline release builder
+    participant Sim as Loopback Anvil fork
+    participant Owner as Owner review and authorization
+    participant Op as Keystore-backed operator
+    participant Chain as Robinhood testnet
+    participant Verify as Read-only verifier
+
+    Builder->>Builder: Build linked initcode and predict nonce addresses
+    Builder->>Sim: Rehearse exact 16-transaction plan
+    Sim-->>Owner: 16 receipts, runtimes, and wiring evidence
+    Owner->>Op: Authorize exact plan and operator hashes
+    loop index 0 through 15
+        Op->>Verify: Recheck chain, nonce, dependencies, prior runtimes
+        Verify-->>Op: Pass or stop
+        Op->>Chain: Sign and send exactly one CREATE
+        Chain-->>Op: Receipt and created address
+        Op->>Verify: Check runtime and next nonce
+        Verify-->>Owner: PASS_STOP_BEFORE_NEXT
+    end
+    Verify->>Chain: Sweep all runtimes and constructor wiring
+    Chain-->>Verify: 16 of 16 and 11 of 11 pass
+```
+
+This changes deployment mechanics, not the deployed Panoptic contract logic.
+Direct CREATE is acceptable for the testnet release only because the sequence
+was small, valueless, deterministic, and stopped on every mismatch.
+
+## 8. Why the first pool has no custom hook
+
+In Uniswap V4, `hooks` is part of the PoolKey. A hook cannot be attached to an
+existing pool later; a different hook address means a different pool ID.
+Panoptic's V4 architecture does not require the SFPM to be the Uniswap hook.
+The first local lifecycle therefore used:
+
+- a normal PoolKey;
+- `hooks = address(0)`;
+- fee `3,000`; and
+- tick spacing `60`.
+
+The public market must independently freeze its own complete PoolKey. The local
+`3,000/60` and 1:1 initialization are tested defaults, not automatic public
+price or liquidity decisions. A custom hook remains a later product with its
+own requirements, mined hook address, pool, liquidity, tests, and threat model.
+
+## 9. How a future market is created
+
+After a selected Stock Token/WETH PoolKey is initialized in PoolManager,
+`PanopticFactoryV4.deployNewPool` will:
+
+1. verify a nonzero RiskEngine and a nonzero initialized-pool price;
+2. register the PoolKey in `SemiFungiblePositionManagerV4` using vegoid `8`;
+3. derive a salt containing parts of the caller, V4 pool ID, RiskEngine, and
+   caller-supplied salt;
+4. clone one CollateralTracker for each PoolKey currency with immutable market
+   references;
+5. clone the PanopticPool reference with both trackers, RiskEngine,
+   PoolManager, pool ID, and PoolKey;
+6. initialize the pool and both trackers;
+7. store the PoolKey/RiskEngine-to-PanopticPool mapping;
+8. mint the factory NFT to the caller; and
+9. emit `PoolDeployed` with the market and both tracker addresses.
+
+```mermaid
+sequenceDiagram
+    participant LP as Selected operator or LP
+    participant PM as V4 PoolManager
+    participant PosM as V4 PositionManager
+    participant F as PanopticFactoryV4
+    participant S as SFPM V4
+    participant P as PanopticPool clone
+    participant C0 as CollateralTracker 0
+    participant C1 as CollateralTracker 1
+
+    LP->>PM: Initialize exact Stock/WETH PoolKey
+    LP->>PosM: Add bounded two-sided liquidity
+    LP->>F: deployNewPool PoolKey, RiskEngine, salt
+    F->>S: initializeAMMPool PoolKey, vegoid 8
+    F->>C0: Deploy currency0 tracker clone
+    F->>C1: Deploy currency1 tracker clone
+    F->>P: Deploy market clone with immutable wiring
+    F->>P: initialize
+    F->>C0: initialize
+    F->>C1: initialize
+    F-->>LP: Mint factory NFT and emit PoolDeployed
+```
+
+None of these market-creation arrows has happened publicly yet.
+
+## 10. Local behavior already proven
+
+The controllable local lane goes further than the current public deployment. It
+has already proven the intended mechanics before public state is created:
+
+- no-hook V4 pool initialization, full-range liquidity, and both swap
+  directions;
+- factory market deployment and immutable wiring;
+- ERC-4626 collateral deposits;
+- single-actor short open, premium accrual, close, and withdrawal;
+- separate writer/buyer matched positions, premium accrual, and clean close;
+- multiplier display changes without raw-balance rebasing;
+- pause, blocklist, transfer-failure, and recovery behavior;
+- paused liquidation failure and recovery; and
+- explicit reserve/accounting divergence after issuer administrative burn.
+
+Post-close acceptance uses a strict `2e12` raw-unit local-test residual budget,
+not literal zero. The clean replay observed only `0/1` AMM dust, zero credited
+asset residual, and `531/32` PoolManager-claim deviations.
+
+## 11. Evidence chain
+
+| Evidence | Result |
+|---|---|
+| Focused inherited V4 tests | 234 executed passes, zero failures; one additional inherited source skip remains visible |
+| Multicall regression | four focused and three inherited range tests pass |
+| Controllable Stock Token | 16 passes, including 30 fuzz runs |
+| Local Stock/Panoptic lifecycle | 14 passes |
+| Clean local replay | 33 submitted transactions and 33 successful receipts |
+| Direct-deployment operator | 12 unit tests pass |
+| Frozen public plan | SHA-256 `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Frozen fork simulation | SHA-256 `8964382c7049999de814d286f229cf55f2a1d087b1b34b8443f82a11354b9910` |
+| Public CREATE sequence | 16 successful canonical transactions |
+| Runtime reconciliation | 16 of 16 exact byte lengths and hashes |
+| Constructor/wiring reconciliation | 11 of 11 pass |
+| Strict public verifier after deployment | pass; deployer nonce `16` |
+
+Primary local records:
+
+- [public deployment and reconciliation](../deployment/2026-09-09-direct-deployment-public-progress.md);
+- [machine-readable public manifest](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json);
+- [owner-regenerated simulation](../deployment/2026-09-09-owner-regenerated-direct-deployment-simulation.md);
+- [authorization boundary](../deployment/2026-09-09-direct-deployment-authorization.md);
+- [chain and external dependency qualification](../chain/2026-09-08-robinhood-testnet-qualification.md);
+- [core/candidate review](../review/2026-09-08-core-f4abdd7-and-v4-candidate.md);
+- [owner clean-room reproduction](../review/2026-09-09-owner-clean-room-reproduction.md); and
+- [local issuer-failure lifecycle](../testing/2026-09-08-controllable-stock-token-harness.md).
+
+Re-run the current external health verifier from the product repository:
+
+```powershell
+pwsh -NoProfile -File .\scripts\verify-robinhood-testnet.ps1
+```
+
+It is read-only. It proves current identity and health, not legal eligibility,
+an independent audit, or transaction authorization.
+
+## 12. Current trust and risk register
+
+| Boundary | Current acceptance | Consequence |
+|---|---|---|
+| Robinhood Stock Token issuer controls | External and unavoidable | Pause, block, upgrade, multiplier, or burn can affect market liveness/accounting |
+| Candidate V4 infrastructure | Exact code and wiring accepted for valueless testnet; not official | Drift or owner action can block the sandbox and must fail closed |
+| Temporary deployer EOA | Holds deployer, guardian-admin, and treasurer roles | Single-key compromise controls emergency and treasury functions; forbidden for production |
+| Panoptic fork | Focused tests and owner reproduction, not an external audit | Unknown inherited/composition defects remain possible |
+| License | Base BUSL non-production use only | Production-like or monetized use remains blocked |
+| Price/reference policy | Not chosen for the public market | Pool initialization and user UI must remain blocked |
+| Liquidity | Only faucet-sized balances exist | This is mechanism testing, not economically meaningful depth |
+| UI/SDK | Not implemented in product repository | No first-user path exists yet |
+
+## 13. What is next
+
+The next checkpoint is **market genesis**, not Docusaurus. We must select and
+initialize exactly one valueless Stock Token/WETH market, seed bounded
+liquidity, register its Panoptic market, and reconcile it end-to-end. See the
+[market-genesis plan](../roadmap/2026-09-09-market-genesis.md).
+
+After market genesis:
+
+1. build the minimal SDK adapter and golden vectors;
+2. expose a developer dashboard for one protective-put flow;
+3. add independent health monitoring and safe-mode guidance;
+4. run two-actor open, premium, close, and adverse-state acceptance; and
+5. only then freeze the documentation hierarchy and build the Docusaurus site.
+
+## 14. External references
+
+- Robinhood network connection: <https://docs.robinhood.com/chain/connecting/>
+- Robinhood Stock Tokens: <https://docs.robinhood.com/chain/stock-tokens/>
+- Building with Stock Tokens: <https://docs.robinhood.com/chain/building-with-stock-tokens/>
+- Robinhood testnet faucet: <https://faucet.testnet.chain.robinhood.com/>
+- Uniswap deployment registry: <https://github.com/Uniswap/contracts/tree/main/deployments>
+- Panoptic V2 core: <https://github.com/panoptic-labs/panoptic-v2-core>
+

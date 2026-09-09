@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "status": "OWNER_REGENERATED_EXACT_SENDER_FORK_SIMULATION_PASS_BROADCAST_BLOCKED",
+  "capturedAt": "2026-09-09T00:23:05Z",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+    "forkBlock": 115890338,
+    "forkBlockHash": "0x9a658071cbb6d9ed54a3a78d82c86c1c72a12afb8b2048360ea16f7fec97f315",
+    "forkBlockTimestamp": "2026-09-09T00:12:17Z"
+  },
+  "source": {
+    "coreCommit": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "runtimeHeadroomCommit": "b0deb9f846dc15d890d96afdfd939c1091faeab9",
+    "upstreamBase": "d65310d6cfbaadb6910fa9446cc59c6541060749",
+    "frozenProductEvidenceCommit": "e177f07e4128dd6dd38ab63775d198458dd76efd",
+    "ownerReviewCommit": "8872b5c",
+    "reviewClassification": "OWNER_CLEAN_ROOM_TESTNET_ONLY_NOT_INDEPENDENT_HUMAN_AUDIT"
+  },
+  "toolchain": {
+    "forge": "1.8.1+982849d3140c01fd3b72905759581a132df7aa98",
+    "cast": "1.8.1+982849d3140c01fd3b72905759581a132df7aa98",
+    "anvil": "1.8.1+982849d3140c01fd3b72905759581a132df7aa98",
+    "bun": "1.4.2",
+    "python": "3.11.9"
+  },
+  "externalDependency": {
+    "classification": "REUSABLE_CANDIDATE_NOT_OFFICIAL",
+    "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+    "owner": "0x9701fb0aDe1E269c8f64Ec0C7b3cfADB31A13A52",
+    "protocolFeeController": "0x0000000000000000000000000000000000000000",
+    "strictVerifier": "PASS_AT_BLOCK_115884813",
+    "independentCriticalCalls": "PASS",
+    "humanIndependentReview": "NOT_SATISFIED_OWNER_TESTNET_WAIVER"
+  },
+  "deploymentMethod": {
+    "value": "EOA_CREATE",
+    "sender": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+    "startNonce": 0,
+    "nextNonce": 16,
+    "transactionCount": 16,
+    "canonicalCreate3Deployer": "0x000000000000b361194cfe6312EE3210d53C15AA",
+    "canonicalCreate3RuntimeBytesObserved": 0,
+    "warning": "Any sender nonce change or mined failed CREATE requires fully regenerated artifacts and simulation."
+  },
+  "constructorRoles": {
+    "guardianAdmin": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+    "treasurer": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+    "temporaryTestnetOnly": true,
+    "replacementRequiredBeforeProductionLikeUse": true
+  },
+  "generationSnapshot": {
+    "blockNumber": 115890338,
+    "blockHash": "0x9a658071cbb6d9ed54a3a78d82c86c1c72a12afb8b2048360ea16f7fec97f315",
+    "blockTimestamp": "2026-09-09T00:12:17Z",
+    "senderPendingNonce": 0,
+    "senderNativeBalanceWei": "10000000000000000"
+  },
+  "postSimulationPublicRecheck": {
+    "blockNumber": 115895680,
+    "blockHash": "0x3e95ca511f7ab706a0ba769c7c105f3a83c1348fd19edf91c7e1448e3ab57fb7",
+    "blockTimestamp": "2026-09-09T00:23:05Z",
+    "senderPendingNonce": 0,
+    "senderNativeBalanceWei": "10000000000000000",
+    "predictedAddressesChecked": 16,
+    "occupiedPredictedAddresses": 0
+  },
+  "artifacts": {
+    "storage": "OUTSIDE_REPOSITORY_NOT_COMMITTED",
+    "directConfig": {
+      "bytes": 9551,
+      "sha256": "728898b3f201e3c4421b00e9fcb2b7587796971e55fef73ac504a081da489cc0"
+    },
+    "releaseBundle": {
+      "bytes": 588811,
+      "sha256": "aec0fa8797c950dbdd80dea7a3737b5cf1fa7b41eef3217ca254238b5aaa372c"
+    },
+    "transactionPlan": {
+      "bytes": 592897,
+      "sha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820"
+    },
+    "simulationReport": {
+      "bytes": 6512,
+      "sha256": "8964382c7049999de814d286f229cf55f2a1d087b1b34b8443f82a11354b9910",
+      "boundPlanSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820"
+    }
+  },
+  "reproducibility": {
+    "sameCheckoutRepeatBundleBuild": "PASS_BYTE_FOR_BYTE",
+    "repeatBundleSha256": "aec0fa8797c950dbdd80dea7a3737b5cf1fa7b41eef3217ca254238b5aaa372c",
+    "historicalBundleSha256": "50a4fe99a0e01f3885f40b811913968394c03d3a129aa743091a9c71d158cbf8",
+    "historicalHashMatch": false,
+    "note": "The current clean checkout rebuilt the same hash twice. The cause of historical environment or artifact drift was not established, so no historical bundle or plan was reused."
+  },
+  "releaseSizeGate": {
+    "status": "PASS",
+    "runtimeLimitBytesWithMargin": 24320,
+    "requiredRuntimeMarginBytes": 256,
+    "initcodeLimitBytes": 49152,
+    "largestLogicRuntime": {
+      "contract": "PanopticPoolV2",
+      "bytes": 24275,
+      "rawEip170HeadroomBytes": 301
+    },
+    "largestLogicInitcode": {
+      "contract": "PanopticFactoryV4",
+      "bytes": 40654,
+      "eip3860HeadroomBytes": 8498
+    }
+  },
+  "simulation": {
+    "status": "PASS",
+    "mode": "LOCAL_ANVIL_FORK_ONLY",
+    "planSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
+    "transactionGasLimit": 16711680,
+    "finalNonce": 16,
+    "successfulDeployments": 16,
+    "postDeploymentWiringAssertions": 11,
+    "postDeploymentWiringStatus": "PASS",
+    "largestDeploymentGas": {
+      "contract": "PanopticFactoryV4",
+      "gasUsed": 10749128
+    }
+  },
+  "deployments": [
+    { "nonce": 0, "label": "dataContracts[0]", "expectedAddress": "0x05449292522e3FCCD58dB4f947A94BD083d5e13d", "runtimeBytes": 24439, "simulatedGasUsed": 5330032 },
+    { "nonce": 1, "label": "dataContracts[1]", "expectedAddress": "0xb1820CEE1BE8b9eDdC382eE83304efBe5ceD0019", "runtimeBytes": 20669, "simulatedGasUsed": 4514095 },
+    { "nonce": 2, "label": "dataContracts[2]", "expectedAddress": "0xa318218fEA30EA64c223A1c8E96551c68B007656", "runtimeBytes": 20141, "simulatedGasUsed": 4399673 },
+    { "nonce": 3, "label": "dataContracts[3]", "expectedAddress": "0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d", "runtimeBytes": 17266, "simulatedGasUsed": 3778311 },
+    { "nonce": 4, "label": "dataContracts[4]", "expectedAddress": "0x1F6f1daab8b0d9605D7A880bD738aEe6Fd764107", "runtimeBytes": 23768, "simulatedGasUsed": 5183030 },
+    { "nonce": 5, "label": "dataContracts[5]", "expectedAddress": "0xB1D560De10Fb3733d7A5dFefED0388A2435fdaBA", "runtimeBytes": 24482, "simulatedGasUsed": 5316036 },
+    { "nonce": 6, "label": "dataContracts[6]", "expectedAddress": "0x19E58B3113579A02c2C266e1be0049766F333338", "runtimeBytes": 5602, "simulatedGasUsed": 1264694 },
+    { "nonce": 7, "label": "PanopticMath", "expectedAddress": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7", "runtimeBytes": 3217, "simulatedGasUsed": 746681 },
+    { "nonce": 8, "label": "InteractionHelper", "expectedAddress": "0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A", "runtimeBytes": 7020, "simulatedGasUsed": 1562038 },
+    { "nonce": 9, "label": "CollateralTrackerV2", "expectedAddress": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF", "runtimeBytes": 21338, "simulatedGasUsed": 4652307 },
+    { "nonce": 10, "label": "PanopticGuardian", "expectedAddress": "0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e", "runtimeBytes": 5562, "simulatedGasUsed": 1252301 },
+    { "nonce": 11, "label": "BuilderFactory", "expectedAddress": "0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B", "runtimeBytes": 3744, "simulatedGasUsed": 864431 },
+    { "nonce": 12, "label": "RiskEngine", "expectedAddress": "0x3Ad134ff173dFA0a892B4116A65B76B818218585", "runtimeBytes": 22483, "simulatedGasUsed": 4962811 },
+    { "nonce": 13, "label": "SemiFungiblePositionManagerV4", "expectedAddress": "0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1", "runtimeBytes": 23608, "simulatedGasUsed": 5132267 },
+    { "nonce": 14, "label": "PanopticPoolV2", "expectedAddress": "0xfBA5b34cb1471605d82BBF395F244Fa41148b155", "runtimeBytes": 24275, "simulatedGasUsed": 5303337 },
+    { "nonce": 15, "label": "PanopticFactoryV4", "expectedAddress": "0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c", "runtimeBytes": 20702, "simulatedGasUsed": 10749128 }
+  ],
+  "broadcastGates": {
+    "ownerCoreReview": "PASS_TESTNET_ONLY",
+    "ownerCandidateInfrastructureReview": "PASS_VALUELESS_TESTNET_ONLY",
+    "nativeAndStockFunding": "PASS_FOR_DEPLOYER",
+    "secondActor": "BLOCKED_ON_PASSWORD_PROTECTED_KEYSTORE_AND_FAUCET",
+    "freshArtifactHashReview": "REQUIRED",
+    "freshImmediatePreBroadcastStateCheck": "REQUIRED",
+    "publicBroadcast": "NOT_AUTHORIZED"
+  }
+}

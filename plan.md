@@ -877,10 +877,11 @@ Execution position on 2026-09-09: owner/Codex clean-room reproduction accepted
 exact core `f4abdd7...` and the non-official V4 candidate for valueless testnet
 under an explicit process waiver. Strict verification passed at block
 `115884813`, with deployer nonce `0`, `0.01` ETH, and `5` of each Stock Token.
-Offline artifact regeneration is now authorized. Public broadcast remains
-blocked on a separately controlled/funded second actor, fresh regenerated
-artifacts, fresh fork simulation, and a separate broadcast review. No stonkHedge
-contract has been deployed on Robinhood testnet.
+Fresh nonce-0 artifacts were then rebuilt twice deterministically and plan
+`8b138a56...` passed a 16-receipt fork simulation plus 11 wiring assertions.
+Public broadcast remains blocked on a separately controlled/funded second
+actor, a separate review of the fresh artifact hashes, and an immediate live
+state recheck. No stonkHedge contract has been deployed on Robinhood testnet.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 

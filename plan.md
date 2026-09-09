@@ -410,7 +410,7 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # stonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-08
-**Status:** The deployment-preparation slice is reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Fresh nonce-0 artifacts were rebuilt twice deterministically; the exact 16-contract plan passed a Robinhood-testnet Anvil-fork simulation with 16 successful receipts, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Robinhood faucet transactions funded both the deployer and separately controlled test actor with `0.01` test ETH and five units of each reviewed test Stock Token while both nonces remained `0`; the strict verifier passed afterward. Both actors now use separate encrypted Foundry keystores, and a file-based one-transaction operator passed unit, supplemental runtime-hash replay, negative authorization, and live read-only preflight gates. No stonkHedge contract has been deployed publicly. Broadcast remains blocked on owner review of the exact operator/artifact hashes and creation of a bound authorization manifest; execute-time strict and state checks remain automatic.
+**Status:** The deployment-preparation slice is reproducible. Repository/toolchain/license baselines, 234 focused V4 tests, Multicall regressions, exact V3/V4 release-size gates, five healthy Stock Token proxies, and a reusable candidate Uniswap v4 testnet stack are captured. Core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` includes the runtime-headroom fix and a guarded EOA direct-CREATE workflow. Fresh nonce-0 artifacts were rebuilt twice deterministically; the exact 16-contract plan passed a Robinhood-testnet Anvil-fork simulation with 16 successful receipts, final nonce `16`, 11 post-deployment wiring assertions, and the exact size gate. Robinhood faucet transactions funded both the deployer and separately controlled test actor with `0.01` test ETH and five units of each reviewed test Stock Token while both nonces remained `0`; the strict verifier passed afterward. Both actors now use separate encrypted Foundry keystores, and a file-based one-transaction operator passed unit, supplemental runtime-hash replay, negative authorization, and live read-only preflight gates. The owner explicitly approved the exact plan/operator hashes through index `15` under the one-transaction/wait/verify/stop policy. No stonkHedge contract has been deployed publicly. Transaction 0 remains conditional on the operator's automatic execute-time strict and live-state gates plus the owner's hidden local password entry.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
 **Primary pair for the vertical slice:** one faucet-distributed Robinhood test Stock Token / testnet WETH, selected after address and liquidity qualification. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
@@ -889,14 +889,15 @@ Fresh nonce-0 artifacts were then rebuilt twice deterministically and plan
 The separately controlled actor `0x04D5...6d6f` was subsequently created in an
 external encrypted Foundry keystore and funded with `0.01` test ETH plus `5` of
 each reviewed Stock Token; its receipt and live balances passed. Public
-broadcast remains blocked on owner approval of the exact artifact/operator
-hashes and creation of a bound authorization manifest. The operator candidate
-passed 12 unit tests, a second 16-receipt runtime-hash fork replay, a
-missing-authorization negative path, and a manifest-bound live index-0 dry-run.
-It automatically repeats the strict verifier and state gates before signing,
-sends at most one CREATE, verifies its receipt/address/runtime hash/next nonce,
-and stops. No stonkHedge contract has been deployed on Robinhood testnet. See
-`docs/deployment/2026-09-09-direct-deployment-operator-candidate.md`.
+the owner approved the exact plan and operator hashes through transaction index
+`15`, and the bound authorization manifest is committed for the valueless
+testnet lane. The operator candidate passed 12 unit tests, a second 16-receipt
+runtime-hash fork replay, a missing-authorization negative path, and a
+manifest-bound live index-0 dry-run. It automatically repeats the strict
+verifier and state gates before signing, sends at most one CREATE, verifies its
+receipt/address/runtime hash/next nonce, and stops. No stonkHedge contract has
+been deployed on Robinhood testnet. See
+`docs/deployment/2026-09-09-direct-deployment-authorization.md`.
 
 ### Preflight and Hours 1–8: baseline, license, and Robinhood test assets
 

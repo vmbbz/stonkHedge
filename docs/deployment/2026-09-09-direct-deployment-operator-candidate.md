@@ -14,9 +14,12 @@ Its tests are
 and its machine-readable runtime/preflight evidence is
 [`../../manifests/deployments/robinhood-testnet-direct-operator-2026-09-09.json`](../../manifests/deployments/robinhood-testnet-direct-operator-2026-09-09.json).
 
-This is an executable candidate, not broadcast authorization. An authorization
-manifest is deliberately absent. `--execute` was tested without that file and
-stopped before signing.
+This file records the pre-approval operator candidate. The project owner later
+approved its exact plan and operator hashes for the bounded valueless testnet
+sequence; see
+[`2026-09-09-direct-deployment-authorization.md`](2026-09-09-direct-deployment-authorization.md).
+The negative `--execute` test without authorization remains evidence that the
+operator stopped before signing.
 
 ## Why a file-based operator is necessary
 
@@ -166,5 +169,7 @@ authorized. A friend review remains valuable defence-in-depth; any later
 rejection stops the testnet sequence and remains mandatory before mainnet or
 real-value use.
 
-Until that explicit approval is recorded and converted into the exact bound
-authorization manifest, public broadcast remains `NO_GO`.
+The exact approval is now recorded in a bound authorization manifest. Execution
+still remains conditional on every automatic strict/state check and the local
+nonce-specific confirmation; it does not authorize any action outside the 16
+zero-value CREATEs.

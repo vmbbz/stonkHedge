@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHORIZED_ONE_TRANSACTION_AT_A_TIME",
+  "approvedAt": "2026-09-09T05:48:11Z",
+  "approvedBy": "PROJECT_OWNER",
+  "approvalSource": "EXPLICIT_CODEX_CONVERSATION_INSTRUCTION",
+  "testnetOnly": true,
+  "chainId": 46630,
+  "sender": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+  "planSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
+  "operatorSha256": "556e0751d787df3149412bc2dd417f57d7c10e7481878a9acf35853709e4db25",
+  "simulationReportSha256": "8964382c7049999de814d286f229cf55f2a1d087b1b34b8443f82a11354b9910",
+  "deploymentManifestSha256": "7887e802f2240542b550cd1aecbd76381e0933461743f2833ed822e65cdaa7bf",
+  "fundingManifestSha256": "66da6f25f60c6f1ccfc5c05a6289ddded3d6282327e3944b08afb00394048a22",
+  "operatorManifestSha256": "98c36a8063afd97580ec23ce86018982ecc37d3f4e2101a96351d10ff1bc5b83",
+  "operatorCommit": "5edba99",
+  "startTransactionIndex": 0,
+  "maximumTransactionIndex": 15,
+  "executionPolicy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+  "authorizationScope": {
+    "network": "Robinhood Chain Testnet only",
+    "purpose": "Valueless non-monetized stonkHedge sandbox",
+    "transactions": "The 16 exact zero-value CREATE transactions in the bound plan",
+    "automaticContinuation": false,
+    "poolInitialization": false,
+    "liquidityProvision": false,
+    "marketRegistration": false,
+    "mainnet": false,
+    "realValue": false
+  },
+  "ownerApprovalStatement": "I approve testnet-only one-transaction-at-a-time broadcast for plan 8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820 using operator 556e0751d787df3149412bc2dd417f57d7c10e7481878a9acf35853709e4db25 through maximum transaction index 15.",
+  "revocationConditions": [
+    "Any bound file hash changes",
+    "Chain ID or exact RPC identity changes",
+    "Deployer pending nonce differs from the selected transaction nonce",
+    "Any selected or future CREATE address is occupied",
+    "Any prior deployment runtime length or hash differs",
+    "Strict verifier, gas, receipt, created-address, runtime, or next-nonce check fails",
+    "The invited reviewer rejects the core or candidate infrastructure",
+    "The deployment becomes production-like, monetized, mainnet, or real-value"
+  ],
+  "publicBroadcast": "AUTHORIZED_ONLY_THROUGH_BOUND_OPERATOR_AND_POLICY"
+}

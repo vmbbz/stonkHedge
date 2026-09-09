@@ -3,7 +3,7 @@
 ## Current state
 
 The authorized Robinhood Chain testnet direct-CREATE sequence is in progress
-and stopped safely after transaction index `12`. Exactly thirteen of the 16
+and stopped safely after transaction index `13`. Exactly fourteen of the 16
 approved zero-value CREATE transactions have been broadcast.
 
 The machine-readable checkpoint is
@@ -258,19 +258,38 @@ public RPC and matched the frozen plan exactly.
 The `RiskEngine` receipt and runtime were independently re-read from the public
 RPC and matched the frozen plan exactly.
 
+## Transaction 13 evidence
+
+| Item | Verified value |
+|---|---|
+| Plan SHA-256 | `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Label | `SemiFungiblePositionManagerV4` |
+| Nonce | `13` |
+| Transaction | [`0x45051fe9...1758a71`](https://explorer.testnet.chain.robinhood.com/tx/0x45051fe95a982aecd8a463a4a06ceb5b0a226a4c7a88540fa7745706c1758a71) |
+| Receipt | success (`status = 1`) |
+| Block | `116323275` |
+| Created address | `0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1` |
+| Gas used | `5,657,239` |
+| Runtime length | `23,608` bytes |
+| Runtime code hash | `0x67e289f02cd60fecc4266bdf7c52a3cd4bdbb326d386a7d11cc2c1edbc14a40e` |
+| External operator evidence SHA-256 | `eacf73c41c62917445b742ecf74bd413a4ec63fdfa35ccad72f3880200d1f971` |
+
+The `SemiFungiblePositionManagerV4` receipt and runtime were independently
+re-read from the public RPC and matched the frozen plan exactly.
+
 ## Continuation gate
 
-A read-only index-13 operator preflight passed at block `116320509`:
+A read-only index-14 operator preflight passed at block `116323895`:
 
-- deployer pending nonce: `13`;
-- prior deployments verified: `13`;
-- remaining predicted addresses verified empty: `3`;
-- deployer balance: `0.00951417250` test ETH;
-- next deployment: `SemiFungiblePositionManagerV4` at
-  `0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1`; and
-- next gas estimate: `5,819,691`, below the plan gas limit of `16,711,680`.
+- deployer pending nonce: `14`;
+- prior deployments verified: `14`;
+- remaining predicted addresses verified empty: `2`;
+- deployer balance: `0.00945760011` test ETH;
+- next deployment: `PanopticPoolV2` at
+  `0xfBA5b34cb1471605d82BBF395F244Fa41148b155`; and
+- next gas estimate: `6,088,445`, below the plan gas limit of `16,711,680`.
 
-No index-13 transaction was signed or broadcast during that preflight. The
+No index-14 transaction was signed or broadcast during that preflight. The
 sequence remains governed by the approved one-transaction/wait/verify/stop
 policy. Pool initialization, liquidity provision, and market registration are
 still outside this authorization.

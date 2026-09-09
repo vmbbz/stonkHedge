@@ -3,8 +3,8 @@
 ## Current state
 
 The authorized Robinhood Chain testnet direct-CREATE sequence is in progress
-and stopped safely after transaction index `2`. Exactly three of the 16
-approved zero-value CREATE transactions have been broadcast.
+and stopped safely after transaction index `3`. Exactly four of the 16 approved
+zero-value CREATE transactions have been broadcast.
 
 The machine-readable checkpoint is
 [`../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json`](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json).
@@ -68,18 +68,37 @@ plan and simulation evidence.
 The transaction-2 receipt and runtime were independently re-read from the
 public RPC and matched the frozen plan exactly.
 
+## Transaction 3 evidence
+
+| Item | Verified value |
+|---|---|
+| Plan SHA-256 | `8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820` |
+| Label | `dataContracts[3]` |
+| Nonce | `3` |
+| Transaction | [`0x5a97890e...05d977`](https://explorer.testnet.chain.robinhood.com/tx/0x5a97890ee1c6262d39d8808cfa7f15e67d1e6e513b15d0f1af3498ecc905d977) |
+| Receipt | success (`status = 1`) |
+| Block | `116075738` |
+| Created address | `0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d` |
+| Gas used | `4,319,052` |
+| Runtime length | `17,266` bytes |
+| Runtime code hash | `0xa6b6c4a12dfb4616558a30a3596c6739691e37385e69f8a366f7a43abb98d3e9` |
+| External operator evidence SHA-256 | `9078163fab18e22e0ec41ce7cc06df0630d41051b5db0ba0d5f3e0803b8e4f54` |
+
+The transaction-3 receipt and runtime were independently re-read from the
+public RPC and matched the frozen plan exactly.
+
 ## Continuation gate
 
-A read-only index-3 operator preflight passed at block `116072305`:
+A read-only index-4 operator preflight passed at block `116076591`:
 
-- deployer pending nonce: `3`;
-- prior deployments verified: `3`;
-- remaining predicted addresses verified empty: `13`;
-- deployer balance: `0.00984167274` test ETH;
-- next expected address: `0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d`; and
-- next gas estimate: `4,423,644`, below the plan gas limit of `16,711,680`.
+- deployer pending nonce: `4`;
+- prior deployments verified: `4`;
+- remaining predicted addresses verified empty: `12`;
+- deployer balance: `0.00979848222` test ETH;
+- next expected address: `0x1F6f1daab8b0d9605D7A880bD738aEe6Fd764107`; and
+- next gas estimate: `5,871,320`, below the plan gas limit of `16,711,680`.
 
-No index-3 transaction was signed or broadcast during that preflight. The
+No index-4 transaction was signed or broadcast during that preflight. The
 sequence remains governed by the approved one-transaction/wait/verify/stop
 policy. Pool initialization, liquidity provision, and market registration are
 still outside this authorization.

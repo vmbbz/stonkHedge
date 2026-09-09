@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "status": "IN_PROGRESS_STOPPED_AFTER_INDEX_0",
+  "recordedAt": "2026-09-09T06:27:36Z",
+  "testnetOnly": true,
+  "chainId": 46630,
+  "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+  "sender": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+  "planSha256": "8b138a56a2b284a61994b1ec60206b246a3a8e17cc56f0ec38b95590e3ed0820",
+  "operatorSha256": "556e0751d787df3149412bc2dd417f57d7c10e7481878a9acf35853709e4db25",
+  "authorizationManifestSha256": "d24e0caa019c14c845dc00ca04836ee4207e0976d4aa312c8d8109635d091374",
+  "completedTransactionCount": 1,
+  "lastCompletedTransactionIndex": 0,
+  "nextTransactionIndex": 1,
+  "transactions": [
+    {
+      "transactionIndex": 0,
+      "label": "dataContracts[0]",
+      "nonce": 0,
+      "transactionHash": "0xbf6ad4ddcf9a22f584f53de5053186a2d9e5ab93eecbfb0847633ab1ac4fda9e",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/tx/0xbf6ad4ddcf9a22f584f53de5053186a2d9e5ab93eecbfb0847633ab1ac4fda9e",
+      "receiptStatus": 1,
+      "blockNumber": 116058458,
+      "blockHash": "0xf2b47a3579a5715c37c2c4456e46039c406a19356b90d0f6eb31dc15224904bc",
+      "transactionPosition": 1,
+      "createdAddress": "0x05449292522e3FCCD58dB4f947A94BD083d5e13d",
+      "gasUsed": 5781743,
+      "effectiveGasPriceWei": 10000000,
+      "runtimeBytes": 24439,
+      "runtimeCodeHash": "0xdd0ec57b873af7e553fbd9404281da95203e426929ecb3dfb419bbcbcd87aa7f",
+      "postTransactionPendingNonce": 1,
+      "operatorEvidence": {
+        "outsideRepositoryPath": "C:\\dev-shared\\stonkHedge-review\\artifacts\\robinhood-46630-20260909-public\\nonce-00-bf6ad4dd.json",
+        "sha256": "21996edbaa19301942a8738f92ad141cb9927ec96590c5ef8f67f95977a09201"
+      }
+    }
+  ],
+  "independentContinuationPreflight": {
+    "checkedAt": "2026-09-09T06:27:36Z",
+    "blockNumber": 116062791,
+    "blockHash": "0x73376938d325b2a7397eb58a6bad0d1fccc7efdcc862938709e584e8b604cea8",
+    "status": "READ_ONLY_PREFLIGHT_PASS",
+    "pendingNonce": 1,
+    "balanceWei": "9942182570000000",
+    "priorAddressesVerified": 1,
+    "emptyFutureAddressesVerified": 15,
+    "nextExpectedCreatedAddress": "0xb1820CEE1BE8b9eDdC382eE83304efBe5ceD0019",
+    "nextGasEstimate": 5127186,
+    "nextGasLimit": 16711680,
+    "broadcastAttempted": false
+  },
+  "continuationPolicy": "STOPPED; index 1 requires a separate explicit local operator invocation and post-transaction reconciliation"
+}

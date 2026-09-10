@@ -4,7 +4,7 @@
 |---|---|
 | State date | 2026-09-10 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure deployed; first market genesis passes exact-head local rehearsal but is not public |
+| Current state | Shared Panoptic V4 infrastructure deployed; first-market genesis and its one-step execution operator pass exact-head local rehearsal but are not public |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -27,13 +27,17 @@ sandbox:
 - the chain/dependency/token/deployer verifier passes with deployer nonce `16`;
 - PLTR/WETH has a deterministic, unsigned, bounded genesis design; and
 - its exact-head fork rehearsal passed twelve positive transitions and four
-  isolated negative cases without keys, signing, or public mutation.
+  isolated negative cases without keys, signing, or public mutation;
+- the owner accepted its exact synthetic exposure for execution planning only;
+  and
+- a fresh nonce/deadline-bound candidate passed twelve ordered calls through
+  the finalized one-step operator at canonical block `116853237`.
 
 This is meaningful infrastructure, but it is not yet a functioning market.
-PLTR/WETH is selected only for the offline test mechanism. There is still no
-owner-accepted public exposure, initialized Uniswap V4 pool, seeded public
-liquidity, per-market PanopticPool clone, initialized CollateralTracker pair,
-public collateral deposit, or live option position.
+PLTR/WETH's exposure is accepted only for planning and simulation. There is
+still no broadcast authorization, initialized public Uniswap V4 pool, seeded
+public liquidity, per-market PanopticPool clone, initialized CollateralTracker
+pair, public collateral deposit, or live option position.
 
 ### Milestone memory aid
 
@@ -43,13 +47,14 @@ flowchart LR
     B --> C[Reviewed and simulated release]
     C --> D[16 shared contracts deployed]
     D --> E[Genesis exact-head fork rehearsal]
-    E --> F[Next: exposure decision and public genesis]
-    F --> G[Then: lifecycle, SDK, and first-user sandbox]
+    E --> F[Nonce-bound operator rehearsal]
+    F --> H[Next: regenerate, authorize, public genesis]
+    H --> G[Then: lifecycle, SDK, and first-user sandbox]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D,E done;
-    class F,G next;
+    class A,B,C,D,E,F done;
+    class H,G next;
 ```
 
 ## 2. System boundaries
@@ -437,6 +442,8 @@ asset residual, and `531/32` PoolManager-claim deviations.
 | Strict public verifier after deployment | pass; deployer nonce `16` |
 | PLTR/WETH fresh strict preflight | `79/79` shared and `17/17` exact-plan checks at block `116510322` |
 | PLTR/WETH exact-head genesis rehearsal | `12/12` positive transitions and `4/4` expected reverts |
+| PLTR/WETH execution candidate | Nonces `0..11`, LP NFT `3854`, synthetic exposure, and deadlines bound at block `116853237` |
+| Market one-step operator rehearsal | `12/12` ordered invocations pass; plan/operator/report hashes bound; zero public sends |
 
 Primary local records:
 
@@ -449,7 +456,8 @@ Primary local records:
 - [owner clean-room reproduction](../review/2026-09-09-owner-clean-room-reproduction.md); and
 - [local issuer-failure lifecycle](../testing/2026-09-08-controllable-stock-token-harness.md);
 - [PLTR/WETH offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md); and
-- [PLTR/WETH exact-head fork rehearsal](../markets/2026-09-10-pltr-weth-fork-rehearsal.md).
+- [PLTR/WETH exact-head fork rehearsal](../markets/2026-09-10-pltr-weth-fork-rehearsal.md); and
+- [PLTR/WETH execution candidate and one-step operator](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md).
 
 Re-run the current external health verifier from the product repository:
 
@@ -469,22 +477,23 @@ an independent audit, or transaction authorization.
 | Temporary deployer EOA | Holds deployer, guardian-admin, and treasurer roles | Single-key compromise controls emergency and treasury functions; forbidden for production |
 | Panoptic fork | Focused tests and owner reproduction, not an external audit | Unknown inherited/composition defects remain possible |
 | License | Base BUSL non-production use only | Production-like or monetized use remains blocked |
-| Price/reference policy | Synthetic `0.001` test-WETH-per-PLTR mechanism price rehearsed locally; not accepted for public execution | Never display it as a market quote; initialization remains blocked pending exact exposure acceptance |
+| Price/reference policy | Synthetic `0.001` test-WETH-per-PLTR mechanism price accepted for planning and rehearsed locally; not authorized for public execution | Never display it as a market quote; initialization remains blocked pending fresh hash-bound authorization |
 | Liquidity | Only faucet-sized balances exist | This is mechanism testing, not economically meaningful depth |
 | UI/SDK | Not implemented in product repository | No first-user path exists yet |
 
 ## 13. What is next
 
 The next checkpoint is still **public market genesis**, not Docusaurus. The
-PLTR/WETH design now has a green exact-head local rehearsal. The initial price,
-range, amounts, salt, and second-actor roles are fully specified, but were
-accepted only for offline planning. The next gate is an owner decision on that
-exact exposure, followed by a fresh nonce/time-bound execution plan, a separate
-one-step operator, another fresh verification/rehearsal, and hash-bound
-authorization. Only then may we initialize exactly one valueless Stock
-Token/WETH market, seed bounded liquidity, register its Panoptic market, and
-reconcile it end-to-end. See the
-[market-genesis plan](../roadmap/2026-09-09-market-genesis.md).
+PLTR/WETH design and its one-step operator now have green exact-head local
+rehearsals. The initial price, range, amounts, salt, and second-actor roles are
+accepted for execution planning only. Because the candidate is nonce- and
+time-bound, the next gate is review followed by one final fresh regeneration,
+repeat verification/rehearsal, and a separate authorization binding the new
+plan, operator, report, actor, and maximum index. Only then may we initialize
+exactly one valueless Stock Token/WETH market, seed bounded liquidity, register
+its Panoptic market, and reconcile it end-to-end. See the
+[execution/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md)
+and [market-genesis plan](../roadmap/2026-09-09-market-genesis.md).
 
 After market genesis:
 

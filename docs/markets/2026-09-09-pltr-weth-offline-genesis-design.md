@@ -299,6 +299,12 @@ all of these gates must pass:
 7. execution proceeds one transaction at a time with receipt and post-state
    reconciliation, stopping on any mismatch.
 
+Later progress: gates 1–5 were completed for execution planning on 2026-09-10,
+including a `12/12` exact-fork rehearsal through the finalized one-step
+operator. Gate 6 remains absent, and the time-bound candidate must be freshly
+regenerated and replayed after review before authorization is considered. See
+the [execution-candidate/operator record](./2026-09-10-pltr-weth-execution-candidate-and-operator.md).
+
 Swaps, collateral deposits, option positions, premium observation, closing,
 and withdrawals are later lifecycle steps. They are not part of this unsigned
 genesis plan and remain unauthorized.

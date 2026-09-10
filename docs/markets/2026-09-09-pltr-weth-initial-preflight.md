@@ -77,12 +77,18 @@ proposal—wrapping `0.004 ETH`, permitting at most `2 PLTR` and `0.002 WETH`,
 minting `138450781996976174` liquidity between ticks `-81120` and `-57060`,
 and using Panoptic factory salt `0`—has not been accepted for public execution.
 
-The current blockers are therefore independent of the green preflight:
+At the time of this preflight, the blockers were independent of its green
+result:
 
 1. no accepted exact exposure;
 2. no fresh execution timestamps or nonce-bound execution plan;
 3. no market-specific one-step operator; and
 4. no hash-bound signing or broadcast authorization.
+
+Later on 2026-09-10, the owner accepted the exact exposure for execution
+planning only, and a fresh nonce/deadline-bound candidate plus one-step
+operator replay completed. Public authorization remains absent. See the
+[execution-candidate/operator record](./2026-09-10-pltr-weth-execution-candidate-and-operator.md).
 
 ## Fork-rehearsal follow-on
 
@@ -96,9 +102,9 @@ That exact-head rehearsal has now passed all twelve positive transitions and
 four snapshot-isolated negative cases. Read the
 [full fork-rehearsal record](./2026-09-10-pltr-weth-fork-rehearsal.md). Its
 Anvil state was discarded, so this preflight remains a public pre-state
-snapshot rather than evidence of a public pool. The next decision is whether
-the owner accepts the exact exposure for a separately generated
-public-execution candidate.
+snapshot rather than evidence of a public pool. The later planning acceptance
+and operator rehearsal do not retroactively authorize this historical plan or
+any public transaction.
 
 ## Memory aid: READ
 

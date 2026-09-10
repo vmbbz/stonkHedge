@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | PLTR/WETH offline plan, strict preflight, and exact-head genesis fork rehearsal complete; exact exposure decision and public operator required |
+| Status | Exact exposure accepted for planning; fresh execution candidate and one-step operator replay complete; separate public authorization required |
 | Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated remaining focused engineering time | 3–6 hours to public genesis, excluding faucet, RPC, or review delays |
@@ -25,7 +25,7 @@ This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
 
-### Current progress: genesis mechanism proven locally
+### Current progress: genesis mechanism and execution operator proven locally
 
 At block `116408992`, the repository qualifier passed `79/79` checks across
 chain identity, external and Panoptic runtimes, Stock Token controls, both
@@ -38,13 +38,20 @@ design and its fresh strict initial preflight passed at block `116510322`: the f
 qualification passed `79/79` and all `17/17` plan-specific starting-state
 checks passed. A loopback-only fork of that exact head then passed all twelve
 genesis transitions and four snapshot-isolated negative cases. The Anvil state
-was discarded. Its bounded exposure is still a proposal and no public
-transaction is authorized. See the
+was discarded. The owner subsequently accepted the exact synthetic price,
+range, liquidity, wrap, token caps, salt, and second-actor roles for execution
+planning only. A fresh canonical snapshot at block `116853237` passed `79/79`
+plus `17/17`; the offline generator bound nonce `0`, LP token ID `3854`, and
+new deadlines into a twelve-transaction candidate. The finalized one-step
+operator then passed all `12/12` ordered invocations on the exact fork. No
+credential, signature, or public send was used, and no public transaction is
+authorized. See the
 [selection record](../markets/2026-09-09-first-market-selection.md),
 [offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
 the [initial preflight record](../markets/2026-09-09-pltr-weth-initial-preflight.md),
 the [fork-rehearsal record](../markets/2026-09-10-pltr-weth-fork-rehearsal.md),
-and [machine-readable plan](../../manifests/markets/robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json).
+the [execution-candidate/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md),
+and [machine-readable candidate](../../manifests/markets/robinhood-testnet-pltr-weth-execution-candidate-2026-09-10.json).
 
 ## 2. Entry gates already complete
 
@@ -56,9 +63,13 @@ and [machine-readable plan](../../manifests/markets/robinhood-testnet-pltr-weth-
 - both public accounts received bounded faucet ETH and all five Stock Tokens;
 - local pool/liquidity/market/position lifecycle: pass at `cfaf42c...`;
 - deterministic twelve-step unsigned market-genesis plan: complete;
-- fresh public preflight: `79/79` shared plus `17/17` exact-plan checks; and
+- fresh public preflight: `79/79` shared plus `17/17` exact-plan checks;
 - exact-head genesis rehearsal: `12/12` transitions plus `4/4` required
-  reverts.
+  reverts;
+- exact owner exposure acceptance for execution planning only;
+- fresh nonce/deadline-bound execution candidate: complete; and
+- finalized one-step operator replay: `12/12` ordered calls with full state
+  reconciliation and no public send.
 
 ## 3. Decisions and calculations for the transaction plan
 
@@ -125,7 +136,11 @@ The second actor should be the default LP/user. Using the deployer for market
 deployment or a second trading role requires an explicit rationale because it
 also holds guardian and treasurer authority.
 
-## 4. Build the next tooling before broadcasting
+## 4. Tooling built before broadcasting
+
+All three genesis-tooling items below are now implemented and tested. They
+remain documented as requirements because any replacement must preserve these
+boundaries.
 
 ### 4.1 Offline market-plan generator
 
@@ -165,9 +180,10 @@ RPC failure, stale state, or an undecodable response is `BLOCKED`, never pass.
 
 ### 4.3 Separate one-step operator
 
-Extend or build a new operator for this phase. Do not reuse the CREATE operator
-without a fresh specification because market actions have different calldata,
-allowances, values, deadlines, and postconditions.
+The market-specific operator is complete and passed twelve ordered invocations
+on an exact fork. It deliberately does not reuse the CREATE transaction model:
+market actions have recipients, values, allowances, deadlines, and richer
+postconditions.
 
 The operator must:
 
@@ -186,7 +202,9 @@ The operator must:
 ### 5.1 Completed genesis subset
 
 The exact-head rehearsal at block `116510322` completed the state-creation
-subset needed before asking the owner for public exposure acceptance:
+subset needed before the owner accepted the exact exposure for execution
+planning. The later operator rehearsal at block `116853237` repeated the full
+positive sequence through the actual one-step interface:
 
 1. bounded ETH wrapping;
 2. exact two-layer PLTR/WETH permissions;
@@ -264,6 +282,10 @@ The previous authorization ended at shared-deployment transaction index `15`.
 It explicitly excluded every action in this plan. No wording in this roadmap is
 authorization to broadcast.
 
+Current position in the diagram: gate `H` passes for the recorded candidate,
+but that candidate is time-bound. Review must be followed by a final fresh
+`G -> H` regeneration/replay before anyone can request gate `I` authorization.
+
 ## 7. Checkpoint C acceptance
 
 Checkpoint C passes only when the committed public manifest contains:
@@ -285,6 +307,10 @@ Checkpoint C passes only when the committed public manifest contains:
 Only then may the repository tag `robinhood-testnet-sandbox-0`.
 
 ## 8. Suggested focused-hour order
+
+Hours `0–5` are evidenced by the current artifacts. The project is at the
+review/final-regeneration boundary; elapsed clock time may be dominated by the
+testnet RPC's short state-retention window rather than implementation work.
 
 | Hours | Work | Exit gate |
 |---:|---|---|

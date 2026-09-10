@@ -261,17 +261,16 @@ the local base fee and records final native accounting.
 
 This pass retires the exact-head genesis-rehearsal gate. It does not grant
 authority for a public transaction and does not complete the broader two-actor
-options lifecycle. Before public genesis:
+options lifecycle. Later on 2026-09-10, gates 1–4 below were completed for
+execution planning: the exact exposure was accepted, a fresh candidate was
+generated, and the finalized market operator passed `12/12` ordered calls at
+block `116853237`. See the
+[execution-candidate/operator record](./2026-09-10-pltr-weth-execution-candidate-and-operator.md).
 
-1. the owner must accept the exact exposure, ticks, liquidity, price warning,
-   and salt for public testnet execution;
-2. a separate execution planner must use fresh deadlines and bind the actor's
-   current pending nonce without changing the reviewed intent;
-3. a market-specific one-step operator must be reviewed and tested;
-4. another fresh read-only preflight and exact-head rehearsal must pass for the
-   execution candidate; and
-5. the owner must give separate hash-bound signing and one-transaction-at-a-time
-   broadcast authorization.
+Before public genesis, the time-bound candidate must be freshly regenerated
+and replayed after review, then the owner must give separate hash-bound signing
+and one-transaction-at-a-time broadcast authorization. No such authorization
+exists in this record.
 
 Swaps, collateral deposits, option positions, premium observation, close, and
 withdrawal remain a later lifecycle phase and remain unauthorized.
@@ -301,10 +300,9 @@ The current handoff is:
 
 ```text
 genesis mechanism proven locally
-    -> owner exposure decision
-    -> fresh execution plan
-    -> operator review
-    -> fresh verification and simulation
+    -> exposure accepted for planning
+    -> execution plan and operator replay completed
+    -> review and final fresh regeneration
     -> separate authorization
     -> one public step, reconcile, stop
 ```

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "status": "OWNER_ACCEPTED_EXECUTION_PLANNING_ONLY_NO_SIGNING_NO_BROADCAST",
+  "recordedAt": "2026-09-09T23:18:54Z",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630
+  },
+  "actor": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+  "market": {
+    "symbol": "PLTR",
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "poolKey": {
+      "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "fee": 3000,
+      "tickSpacing": 60,
+      "hooks": "0x0000000000000000000000000000000000000000"
+    }
+  },
+  "acceptedExecutionPlanningExposure": {
+    "classification": "SYNTHETIC_MECHANISM_TEST_ONLY_NOT_A_MARKET_QUOTE",
+    "testWethPerPltr": "0.001",
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "wrapNativeWei": "4000000000000000",
+    "maximumPltrTransfer": "2000000000000000000",
+    "maximumWethTransfer": "2000000000000000",
+    "tickLower": -81120,
+    "tickUpper": -57060,
+    "liquidity": "138450781996976174",
+    "factorySalt": "0",
+    "permit2AllowanceLifetimeSeconds": 7200,
+    "liquidityDeadlineSeconds": 3600,
+    "allowanceCleanupRequired": true,
+    "warning": "Never label or display the synthetic ratio as a live PLTR, equity, issuer, or oracle price."
+  },
+  "evidenceBindings": {
+    "baseOfflinePlan": {
+      "path": "robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json",
+      "sha256": "889eb501f7b20c4ae2f352ce878c76c4f18bbf1b2438027c5c9a7b876e006417",
+      "planBodySha256": "6df5e96164de65659a75ad4204a8635c49c1c7c56fba73f1bcb81ec5019f8719"
+    },
+    "successfulForkRehearsal": {
+      "path": "robinhood-testnet-pltr-weth-fork-rehearsal-2026-09-09.json",
+      "sha256": "ae7592000663490a81d1d72e357dbb0a79c498aefc884892d8ffb4a80c0dfc0e",
+      "status": "PASS_LOCAL_FORK_MARKET_GENESIS_REHEARSAL"
+    }
+  },
+  "authorizedWork": {
+    "prepareFreshNonceAndTimeBoundExecutionCandidate": true,
+    "implementOneStepOperator": true,
+    "simulateExecutionCandidateOnLoopbackAnvil": true
+  },
+  "authorization": {
+    "keystoreAccess": false,
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "poolInitialization": false,
+    "liquidity": false,
+    "swaps": false,
+    "panopticMarketRegistration": false,
+    "collateralOrTrading": false
+  },
+  "nextGate": "FRESH_EXECUTION_CANDIDATE_AND_ONE_STEP_OPERATOR_SIMULATION"
+}

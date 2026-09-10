@@ -1,0 +1,564 @@
+{
+  "schemaVersion": 1,
+  "status": "EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION",
+  "mode": "UNSIGNED_NONCE_AND_TIME_BOUND_NO_SIGNING_NO_BROADCAST",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 116853237,
+    "referenceBlockHash": "0x0358a86fa2e014193359c22d37a5b0464448b542e389735836e098c1f68e3155",
+    "referenceBlockTimestamp": "2026-09-10T11:18:29Z"
+  },
+  "sourceBindings": {
+    "basePlan": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json",
+      "sha256": "889eb501f7b20c4ae2f352ce878c76c4f18bbf1b2438027c5c9a7b876e006417",
+      "planBodySha256": "6df5e96164de65659a75ad4204a8635c49c1c7c56fba73f1bcb81ec5019f8719"
+    },
+    "freshPreflight": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-execution-preflight-2026-09-10.json",
+      "sha256": "1157f25b96e5d5ac49051bde33c4b008878b2314891a6be068bbf85d70d94874",
+      "verifierSha256": "30200c330a7f42209073cbbabe481cf6f8321c1745813b8689c8280f4a65157d"
+    },
+    "executionPlanningAcceptance": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-execution-planning-acceptance-2026-09-10.json",
+      "sha256": "1aed902e4ff62ab7dc05c427c250925eafbc5e6e09a6bc0fa1cc889c49edf5f0"
+    },
+    "generator": {
+      "path": "scripts/prepare_robinhood_market_execution_plan.py",
+      "sha256": "b53bf4c9d0db2059a89a2d1837331d2676d2f42744a5b0fb048b5b9960892d72"
+    }
+  },
+  "market": {
+    "symbol": "PLTR",
+    "stockToken": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+    "poolKey": {
+      "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "fee": 3000,
+      "tickSpacing": 60,
+      "hooks": "0x0000000000000000000000000000000000000000"
+    },
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "historicalEligibility": true,
+    "historicalPoolInitialized": false,
+    "historicalPanopticPool": "0x0000000000000000000000000000000000000000"
+  },
+  "actor": {
+    "address": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+    "roles": [
+      "POOL_INITIALIZER",
+      "V4_LIQUIDITY_PROVIDER",
+      "V4_LIQUIDITY_NFT_RECIPIENT",
+      "PANOPTIC_MARKET_DEPLOYER",
+      "PANOPTIC_FACTORY_NFT_RECIPIENT"
+    ],
+    "administrativeDeployerExcluded": "0xca60c8ef6934f8a97c6a503c4e3a46e87f5b08bd",
+    "independentReviewClaim": false
+  },
+  "contracts": {
+    "pltr": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+    "weth": "0x33e4191705c386532ba27cbf171db86919200b94",
+    "permit2": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+    "poolManager": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+    "positionManager": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+    "stateView": "0xf3334192d15450cdd385c8b70e03f9a6bd9e673b",
+    "riskEngine": "0x3ad134ff173dfa0a892b4116a65b76b818218585",
+    "sfpmV4": "0x86ef420fd3e27c3ac896c479b19b6a840b97bee1",
+    "collateralTrackerReference": "0x41119aad1c69dba3934d0a061d312a52b06b27df",
+    "panopticPoolReference": "0xfba5b34cb1471605d82bbf395f244fa41148b155",
+    "panopticFactoryV4": "0x96c3291c9b0c34b007893326ee9dca534bfcfa0c"
+  },
+  "priceAndLiquidity": {
+    "classification": "SYNTHETIC_MECHANISM_TEST_ONLY_NOT_A_MARKET_QUOTE",
+    "warning": "Never label or display this synthetic ratio as a live PLTR, equity, or issuer price.",
+    "currency0": "PLTR",
+    "currency1": "test WETH",
+    "currency1PerCurrency0Target": {
+      "numerator": "1",
+      "denominator": "1000"
+    },
+    "currency0PerCurrency1Target": {
+      "numerator": "1000",
+      "denominator": "1"
+    },
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "sqrtPriceRounding": "FLOOR_INTEGER_SQRT_OF_RATIO_TIMES_2_POW_192",
+    "realizedRawRatioNumerator": "6277101735386680763835789419719812615958949838968140225",
+    "realizedRawRatioDenominator": "6277101735386680763835789423207666416102355444464034512896",
+    "initialTick": -69082,
+    "initialTickPolicy": "GREATEST_TICK_WITH_SQRT_PRICE_NOT_ABOVE_SYNTHETIC_SQRT_PRICE",
+    "tickLower": -81120,
+    "tickUpper": -57060,
+    "rangePolicy": "INITIAL_TICK_PLUS_OR_MINUS_12000_THEN_ROUND_OUTWARD_TO_TICK_SPACING_60",
+    "approximatePriceCoverageRelativeToInitial": "about 0.30x through 3.33x",
+    "sqrtPriceLowerX96": "1372363738095106011408719178",
+    "sqrtPriceUpperX96": "4569822954775051489799353164",
+    "liquidity": "138450781996976174",
+    "maximumLiquidityAtBudgets": "139849274744420378",
+    "liquidityBudgetUtilizationBps": 9900,
+    "amount0Max": "2000000000000000000",
+    "amount1Max": "2000000000000000",
+    "expectedAmount0AtSyntheticPriceRoundedUp": "1977842344644879789",
+    "expectedAmount1AtSyntheticPriceRoundedUp": "1980000000000000",
+    "amountMath": "PINNED_V4_TICKMATH_AND_SQRTPRICEMATH_ROUND_UP_EQUIVALENT",
+    "preMintPriceDeviationPolicy": "ZERO_EXACT_SQRT_PRICE_AND_TICK_REQUIRED"
+  },
+  "maximumExposure": {
+    "status": "OWNER_ACCEPTED_FOR_EXECUTION_PLANNING_ONLY",
+    "wrapNativeWei": "4000000000000000",
+    "maximumPltrTransfer": "2000000000000000000",
+    "maximumWethTransfer": "2000000000000000",
+    "minimumNativeReserveBeforeGasWei": "6000000000000000",
+    "minimumPltrReserveAfterLiquidity": "3000000000000000000",
+    "minimumWethReserveAfterLiquidity": "2000000000000000",
+    "approvalPolicy": "EXACT_BOUNDED_APPROVALS_THEN_EXPLICIT_ZERO_ALLOWANCE_CLEANUP"
+  },
+  "executionClock": {
+    "referenceTimestampUnix": 1789039109,
+    "liquidityDeadlineUnix": 1789042709,
+    "permit2ExpirationUnix": 1789046309,
+    "minimumSecondsRemainingAtTransactionZero": 1800,
+    "classification": "TIME_BOUND_EXECUTION_CANDIDATE_NOT_AUTHORIZATION"
+  },
+  "initialState": {
+    "nativeBalanceWei": "10000000000000000",
+    "pltrBalance": "5000000000000000000",
+    "wethBalance": "0",
+    "positionManagerNextTokenId": "3854",
+    "activeLiquidity": "0"
+  },
+  "predictedMarketContracts": {
+    "factorySalt": "0",
+    "derivedSalt32": "0x04d5a0f57cb2e110fac9d3c6d31d443ad134ff17000000000000000000000000",
+    "panopticPool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+    "collateralTracker0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+    "collateralTracker1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+    "collateralTracker0InitcodeHash": "0x378bbbd61c59468ba5e675361ca283dd98ed14c850094bb8d29a0a3e387a5473",
+    "collateralTracker1InitcodeHash": "0x37d4d30da2dcac9f4958f6442b3a7a4a1ec7a66fb0574d01c5a84f41ac9293be",
+    "derivation": "PANOPTIC_FACTORY_SOURCE_CREATE3_AND_CLONE2_FORMULAS",
+    "create3Proxy": "0xa7b2ac1231363a675d987c9bc326417d9fc50409"
+  },
+  "gasPolicy": {
+    "maximumGasPriceWei": "100000000",
+    "maximumGasLimitPerTransaction": 16711680,
+    "estimateMultiplierBps": 12500,
+    "estimateAdditiveBuffer": 50000,
+    "operatorMustRecheckAfterSigning": true
+  },
+  "startNonce": 0,
+  "nextNonce": 12,
+  "transactionCount": 12,
+  "transactions": [
+    {
+      "ordinal": 0,
+      "label": "wrap bounded native ETH into WETH",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "nonce": 0,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "4000000000000000",
+      "calldataBytes": 4,
+      "calldataKeccak256": "0xa1548b79599a5ef2fd6de226ea5131c228954c4bf788eb3e4386a2728abe3e8d",
+      "calldata": "0xd0e30db0",
+      "decodedIntent": {
+        "function": "deposit()",
+        "wrapNativeWei": "4000000000000000"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor native balance covers wrap value plus reviewed gas reserve"
+      ],
+      "expectedPostState": [
+        "actor WETH balance increases by 4000000000000000",
+        "actor native principal decreases by wrap value"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 1,
+      "label": "approve bounded PLTR to Permit2",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "nonce": 1,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 68,
+      "calldataKeccak256": "0xb635b8e155db946759b08ae348d550c829b3ab7d59e386c98a128a4e854c6a30",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000001bc16d674ec80000",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "2000000000000000000"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor PLTR ERC20 allowance to Permit2 is zero"
+      ],
+      "expectedPostState": [
+        "actor PLTR ERC20 allowance to Permit2 equals 2000000000000000000"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 2,
+      "label": "approve bounded WETH to Permit2",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "nonce": 2,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 68,
+      "calldataKeccak256": "0x47fbd985dcf19569a968157b54acdb7b7d8f18aa8e69b987b8ee920068e1360b",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba300000000000000000000000000000000000000000000000000071afd498d0000",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "2000000000000000"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor WETH ERC20 allowance to Permit2 is zero"
+      ],
+      "expectedPostState": [
+        "actor WETH ERC20 allowance to Permit2 equals 2000000000000000"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 3,
+      "label": "approve bounded PLTR from Permit2 to PositionManager",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "nonce": 3,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 132,
+      "calldataKeccak256": "0x58e6faf36afab12b0d202dee90b98d1e72e738a64aa52cdb8bfa5eae44983a4b",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000058daec3116aae6d93017baaea7749052e8a04fa70000000000000000000000000000000000000000000000001bc16d674ec80000000000000000000000000000000000000000000000000000000000006aa2ae25",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+        "amount": "2000000000000000000",
+        "expiration": 1789046309,
+        "clockClassification": "EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor PLTR Permit2 allowance to PositionManager is zero"
+      ],
+      "expectedPostState": [
+        "bounded PLTR Permit2 allowance and execution-candidate expiration are set"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 4,
+      "label": "approve bounded WETH from Permit2 to PositionManager",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "nonce": 4,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 132,
+      "calldataKeccak256": "0x6adad3de8ef305c8d034803c11f979a2a88a065a2ea92bfd1ac61305b29dce9a",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b9400000000000000000000000058daec3116aae6d93017baaea7749052e8a04fa700000000000000000000000000000000000000000000000000071afd498d0000000000000000000000000000000000000000000000000000000000006aa2ae25",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+        "amount": "2000000000000000",
+        "expiration": 1789046309,
+        "clockClassification": "EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor WETH Permit2 allowance to PositionManager is zero"
+      ],
+      "expectedPostState": [
+        "bounded WETH Permit2 allowance and execution-candidate expiration are set"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 5,
+      "label": "initialize exact PLTR/WETH pool directly through PoolManager",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "nonce": 5,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 196,
+      "calldataKeccak256": "0x5106649f72bb5ab4ae9ef0a02683f9f3adf2589dba3b1d19447725a3c1a49f94",
+      "calldata": "0x6276cbbe0000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008186e27501d39247c5d091f",
+      "decodedIntent": {
+        "function": "initialize(PoolKey,uint160)",
+        "poolKey": {
+          "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+          "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0x0000000000000000000000000000000000000000"
+        },
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "sqrtPriceX96": "2505414483750479311864138015",
+        "syntheticInitialTick": -69082
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "exact PoolId sqrtPriceX96 is zero",
+        "exact PoolKey/RiskEngine factory mapping is zero"
+      ],
+      "expectedPostState": [
+        "exact PoolId sqrtPriceX96 equals 2505414483750479311864138015",
+        "exact PoolId tick equals -69082"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 6,
+      "label": "mint bounded two-sided V4 liquidity position",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+      "nonce": 6,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 932,
+      "calldataKeccak256": "0xdb59973cb64d5ce33a25a697a5181b7757d498708b1a64fae90af7be25eb0a79",
+      "calldata": "0xdd46508f0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000006aa2a01500000000000000000000000000000000000000000000000000000000000003400000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000030212120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000220000000000000000000000000000000000000000000000000000000000000026000000000000000000000000000000000000000000000000000000000000001a00000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffec320ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff211c00000000000000000000000000000000000000000000000001ebe040afce082e0000000000000000000000000000000000000000000000001bc16d674ec8000000000000000000000000000000000000000000000000000000071afd498d000000000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f0000000000000000000000000000000000000000000000000000000000000180000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000033e4191705c386532ba27cbf171db86919200b94",
+      "decodedIntent": {
+        "function": "modifyLiquidities(bytes,uint256)",
+        "actions": "0x021212",
+        "actionNames": [
+          "MINT_POSITION",
+          "CLOSE_CURRENCY",
+          "CLOSE_CURRENCY"
+        ],
+        "tickLower": -81120,
+        "tickUpper": -57060,
+        "liquidity": "138450781996976174",
+        "amount0Max": "2000000000000000000",
+        "amount1Max": "2000000000000000",
+        "expectedAmount0AtSyntheticPrice": "1977842344644879789",
+        "expectedAmount1AtSyntheticPrice": "1980000000000000",
+        "owner": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "deadline": 1789042709,
+        "clockClassification": "EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "exact PoolId sqrtPriceX96 still equals 2505414483750479311864138015",
+        "exact PoolId active liquidity is zero",
+        "PositionManager nextTokenId is freshly recorded for post-state reconciliation",
+        "both ERC20 and Permit2 allowances are positive and no greater than plan maxima",
+        "execution block timestamp is not past the fork-only liquidity deadline"
+      ],
+      "expectedPostState": [
+        "PositionManager nextTokenId increments by one",
+        "the preflight nextTokenId is owned by the second actor",
+        "position liquidity equals 138450781996976174",
+        "actual PLTR and WETH deltas do not exceed plan maxima",
+        "pool active liquidity becomes positive"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 7,
+      "label": "revoke PLTR Permit2-to-PositionManager allowance",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "nonce": 7,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 132,
+      "calldataKeccak256": "0xc72eddfcd31bb809b46f43fe2a362a2fab3721029c7d3ce5543d49b45d306d7e",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000058daec3116aae6d93017baaea7749052e8a04fa700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+        "amount": "0",
+        "expiration": 0
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "liquidity mint receipt and post-state are reconciled"
+      ],
+      "expectedPostState": [
+        "actor PLTR Permit2 allowance to PositionManager equals zero"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 8,
+      "label": "revoke WETH Permit2-to-PositionManager allowance",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "nonce": 8,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 132,
+      "calldataKeccak256": "0x94188956a7b02e04145c0b703b6f8645148c32940ec69b2af551ae23a42cfbbc",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b9400000000000000000000000058daec3116aae6d93017baaea7749052e8a04fa700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+        "amount": "0",
+        "expiration": 0
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "liquidity mint receipt and post-state are reconciled"
+      ],
+      "expectedPostState": [
+        "actor WETH Permit2 allowance to PositionManager equals zero"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 9,
+      "label": "revoke PLTR ERC20-to-Permit2 allowance",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "nonce": 9,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 68,
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000000000000000000000",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "0"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor PLTR Permit2 allowance to PositionManager equals zero"
+      ],
+      "expectedPostState": [
+        "actor PLTR ERC20 allowance to Permit2 equals zero"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 10,
+      "label": "revoke WETH ERC20-to-Permit2 allowance",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "nonce": 10,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 68,
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000000000000000000000",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "0"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "actor WETH Permit2 allowance to PositionManager equals zero"
+      ],
+      "expectedPostState": [
+        "actor WETH ERC20 allowance to Permit2 equals zero"
+      ],
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 11,
+      "label": "deploy and register Panoptic market; mint factory NFT to actor",
+      "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "to": "0x96c3291c9b0c34b007893326ee9dca534bfcfa0c",
+      "nonce": 11,
+      "noncePolicy": "FRESH_PENDING_NONCE_REQUIRED_IN_LATER_EXECUTION_PLAN",
+      "valueWei": "0",
+      "calldataBytes": 228,
+      "calldataKeccak256": "0xf6c86c26c5db882cd78bfcab82d9388420506d23627a656b94bca96747701c5e",
+      "calldata": "0x937eae660000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000003ad134ff173dfa0a892b4116a65b76b8182185850000000000000000000000000000000000000000000000000000000000000000",
+      "decodedIntent": {
+        "function": "deployNewPool(PoolKey,address,uint96)",
+        "poolKey": {
+          "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+          "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0x0000000000000000000000000000000000000000"
+        },
+        "riskEngine": "0x3ad134ff173dfa0a892b4116a65b76b818218585",
+        "salt": "0",
+        "derivedSalt32": "0x04d5a0f57cb2e110fac9d3c6d31d443ad134ff17000000000000000000000000",
+        "predictedPanopticPool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "predictedCollateralTracker0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "predictedCollateralTracker1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "factoryNftRecipient": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "factoryNftTokenIdPolicy": "uint256(uint160(predictedPanopticPool))"
+      },
+      "requiredPreState": [
+        "chainId == 46630 and canonical head is freshly pinned",
+        "actor pending nonce equals the later execution plan nonce",
+        "all qualified runtime identities and Stock Token controls still pass",
+        "exact PoolId remains initialized and has positive liquidity",
+        "exact PoolKey/RiskEngine factory mapping is zero",
+        "predicted PanopticPool and both predicted tracker addresses have empty code",
+        "all token allowances from the actor are zero"
+      ],
+      "expectedPostState": [
+        "PoolDeployed event fields exactly match all three predicted addresses, PoolId, and RiskEngine",
+        "factory mapping equals predicted PanopticPool",
+        "SFPM mapping is initialized for the PoolKey and RiskEngine vegoid",
+        "PanopticPool and both trackers have non-empty expected proxy runtime",
+        "factory NFT tokenId is owned by the second actor",
+        "PanopticPool, tracker assets, PoolManager, SFPM poolId, and RiskEngine wiring reconcile"
+      ],
+      "authorizedForBroadcast": false
+    }
+  ],
+  "authorization": {
+    "keystoreAccess": false,
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "poolInitialization": false,
+    "liquidity": false,
+    "swaps": false,
+    "panopticMarketRegistration": false,
+    "collateralOrTrading": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "blockingReasons": [
+      "the one-step operator candidate has not yet passed exact-plan simulation",
+      "this candidate becomes stale if nonce, deadlines, or required state changes",
+      "no hash-bound signing or public broadcast authorization exists"
+    ]
+  },
+  "nextGate": "ONE_STEP_OPERATOR_EXACT_PLAN_LOOPBACK_SIMULATION",
+  "executionPlanBodySha256": "123b566236f2e4ea50305716fdc7fc40835ee27f61c93a520da92cc1f40cf88d"
+}

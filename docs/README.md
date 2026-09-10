@@ -9,8 +9,10 @@ publishing layer, not a substitute for accurate manifests and runbooks.
 
 The 16-contract shared Panoptic V4 stack is deployed and reconciled on
 Robinhood Chain testnet. PLTR/WETH genesis has passed an exact-head local fork
-rehearsal, but its Uniswap V4 pool, per-market Panoptic contracts, collateral
-deposits, option positions, and the user application are not live yet.
+rehearsal and its nonce-bound one-step operator has passed a fresh 12-call
+execution-candidate replay, but its Uniswap V4 pool, per-market Panoptic
+contracts, collateral deposits, option positions, and user application are not
+live yet.
 
 Start with:
 
@@ -31,7 +33,10 @@ architecture, transaction sequence, and ZERO memory aid. The subsequent
 passed `79/79` shared checks and `17/17` exact-plan checks at block `116510322`.
 The [exact-head fork rehearsal](./markets/2026-09-10-pltr-weth-fork-rehearsal.md)
 then passed `12/12` local transitions and `4/4` expected reverts. Its local
-state was discarded. No market transaction is yet authorized.
+state was discarded. The [execution candidate and one-step operator record](./markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md)
+documents the later `12/12` operator replay at canonical block `116853237`,
+including nonce/deadline binding and the public non-mutation proof. No market
+transaction is yet authorized.
 
 ## Documentation by audience
 

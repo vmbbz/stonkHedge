@@ -23,7 +23,10 @@ The current repository is the product and delivery control plane. It contains th
   head. The subsequent [exact-head fork rehearsal](./docs/markets/2026-09-10-pltr-weth-fork-rehearsal.md)
   passed all 12 genesis transitions and four required failure cases on
   loopback Anvil. That state was discarded; neither result authorizes a public
-  transaction.
+  transaction. The subsequent [nonce-bound execution candidate and one-step
+  operator rehearsal](./docs/markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md)
+  passed `12/12` isolated operator calls at canonical block `116853237`; every
+  transaction is still unauthorized and public PLTR/WETH state remains empty.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -38,9 +41,9 @@ The current repository is the product and delivery control plane. It contains th
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
   Robinhood Chain testnet. The first Stock Token/WETH pool, liquidity,
   per-market Panoptic contracts, and user application remain undeployed even
-  though their genesis mechanism now passes an exact-head local fork rehearsal;
-  no new public transaction is authorized by the completed shared-stack
-  approval or the rehearsal.
+  though both its genesis mechanism and guarded one-step operator now pass
+  exact-head local fork rehearsals; no new public transaction is authorized by
+  the completed shared-stack approval or either rehearsal.
 
 ## Repository map
 

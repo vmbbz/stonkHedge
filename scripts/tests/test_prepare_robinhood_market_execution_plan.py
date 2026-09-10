@@ -8,8 +8,7 @@ from pathlib import Path
 
 
 SCRIPT = (
-    Path(__file__).resolve().parents[1]
-    / "prepare_robinhood_market_execution_plan.py"
+    Path(__file__).resolve().parents[1] / "prepare_robinhood_market_execution_plan.py"
 )
 REPOSITORY = Path(__file__).resolve().parents[2]
 BASE_PLAN = (
@@ -53,11 +52,22 @@ class MarketExecutionPlanTests(unittest.TestCase):
         self.assertEqual(
             plan["status"], "EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION"
         )
-        self.assertEqual(plan["network"]["referenceBlock"], preflight["network"]["blockNumber"])
+        self.assertEqual(
+            plan["network"]["referenceBlock"], preflight["network"]["blockNumber"]
+        )
         self.assertEqual(plan["startNonce"], nonce)
         self.assertEqual(plan["nextNonce"], nonce + 12)
-        self.assertEqual(plan["executionClock"]["liquidityDeadlineUnix"], timestamp + 3600)
-        self.assertEqual(plan["executionClock"]["permit2ExpirationUnix"], timestamp + 7200)
+        self.assertEqual(
+            plan["executionClock"]["liquidityDeadlineUnix"], timestamp + 3600
+        )
+        self.assertEqual(
+            plan["executionClock"]["permit2ExpirationUnix"], timestamp + 7200
+        )
+        self.assertEqual(
+            plan["initialState"]["positionManagerNextTokenIdFloor"],
+            preflight["observations"]["positionManagerNextTokenId"],
+        )
+        self.assertEqual(plan["initialState"]["actorPositionManagerNftBalance"], "0")
         self.assertFalse(plan["publicExecution"]["ready"])
         self.assertTrue(all(value is False for value in plan["authorization"].values()))
         for ordinal, transaction in enumerate(plan["transactions"]):
@@ -99,13 +109,17 @@ class MarketExecutionPlanTests(unittest.TestCase):
             changed["acceptedExecutionPlanningExposure"]["maximumPltrTransfer"] = "1"
             path.write_text(json.dumps(changed), encoding="utf-8", newline="\n")
             with self.assertRaisesRegex(ValueError, "acceptance"):
-                execution_planner.build_execution_plan(BASE_PLAN, PREFLIGHT, path, SCRIPT)
+                execution_planner.build_execution_plan(
+                    BASE_PLAN, PREFLIGHT, path, SCRIPT
+                )
 
             changed = copy.deepcopy(preflight)
             changed["authorization"]["signing"] = True
             path.write_text(json.dumps(changed), encoding="utf-8", newline="\n")
             with self.assertRaisesRegex(ValueError, "authorization"):
-                execution_planner.build_execution_plan(BASE_PLAN, path, ACCEPTANCE, SCRIPT)
+                execution_planner.build_execution_plan(
+                    BASE_PLAN, path, ACCEPTANCE, SCRIPT
+                )
 
     def test_generator_has_no_rpc_key_signing_or_broadcast_capability(self):
         source = SCRIPT.read_text(encoding="utf-8")

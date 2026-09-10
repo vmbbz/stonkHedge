@@ -36,9 +36,7 @@ verifier = fork_planner.verifier
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 MARKETS = REPOSITORY / "manifests" / "markets"
-DEFAULT_BASE_PLAN = (
-    MARKETS / "robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json"
-)
+DEFAULT_BASE_PLAN = MARKETS / "robinhood-testnet-pltr-weth-offline-plan-2026-09-09.json"
 DEFAULT_PREFLIGHT = (
     MARKETS / "robinhood-testnet-pltr-weth-execution-preflight-2026-09-10.json"
 )
@@ -125,9 +123,9 @@ def _validate_acceptance(
         raise ValueError("execution-planning acceptance status is invalid")
     if acceptance.get("network", {}).get("chainId") != CHAIN_ID:
         raise ValueError("execution-planning acceptance chain is invalid")
-    if planner.normalize_address(acceptance.get("actor", "")) != planner.normalize_address(
-        base_plan["actor"]["address"]
-    ):
+    if planner.normalize_address(
+        acceptance.get("actor", "")
+    ) != planner.normalize_address(base_plan["actor"]["address"]):
         raise ValueError("execution-planning acceptance actor drifted")
     if acceptance.get("market") != {
         "symbol": base_plan["market"]["symbol"],
@@ -230,9 +228,7 @@ def build_execution_plan(
         exposure_acceptance["permit2AllowanceLifetimeSeconds"]
     )
     transactions = copy.deepcopy(base_plan["transactions"])
-    fork_planner._refresh_deadlines(
-        transactions, permit_expiration, liquidity_deadline
-    )
+    fork_planner._refresh_deadlines(transactions, permit_expiration, liquidity_deadline)
     start_nonce = int(preflight["observations"]["actorPendingNonce"])
     if int(preflight["observations"]["actorConfirmedNonce"]) != start_nonce:
         raise ValueError("preflight nonce gap prevents execution planning")
@@ -322,9 +318,10 @@ def build_execution_plan(
                     "actor starts with zero WETH for deterministic wrap accounting",
                 )
             ),
-            "positionManagerNextTokenId": preflight["observations"][
+            "positionManagerNextTokenIdFloor": preflight["observations"][
                 "positionManagerNextTokenId"
             ],
+            "actorPositionManagerNftBalance": "0",
             "activeLiquidity": preflight["observations"]["activeLiquidity"],
         },
         "predictedMarketContracts": predicted,

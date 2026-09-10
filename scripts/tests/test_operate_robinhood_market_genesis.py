@@ -92,9 +92,7 @@ class MarketOperatorTests(unittest.TestCase):
                 ),
             ),
         )
-        self.assertEqual(
-            operator.expected_allowances(self.plan, 12), (0, 0, 0, 0)
-        )
+        self.assertEqual(operator.expected_allowances(self.plan, 12), (0, 0, 0, 0))
 
     def test_step_result_is_sanitized(self):
         receipt = {
@@ -122,7 +120,7 @@ class MarketOperatorTests(unittest.TestCase):
             "executionPolicy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
             "testnetOnly": True,
             "approvedBy": "owner",
-            "approvedAt": "2026-09-10T00:00:00Z",
+            "approvedAt": self.plan["network"]["referenceBlockTimestamp"],
         }
         operator.validate_authorization(
             authorization,
@@ -155,12 +153,58 @@ class MarketOperatorTests(unittest.TestCase):
                 simulation_report_hash="33" * 32,
             )
 
+        changed = copy.deepcopy(authorization)
+        changed["approvedAt"] = "not-a-timestampZ"
+        with self.assertRaisesRegex(ValueError, "ISO-8601"):
+            operator.validate_authorization(
+                changed,
+                self.plan,
+                index=4,
+                plan_file_hash="11" * 32,
+                operator_hash="22" * 32,
+                simulation_report_hash="33" * 32,
+            )
+
     def test_confirmation_binds_plan_index_and_nonce(self):
         phrase = operator.confirmation_phrase("11" * 32, 3, 3)
         self.assertEqual(
             phrase,
             "BROADCAST_ROBINHOOD_46630_MARKET_PLAN_11111111_INDEX_3_NONCE_3",
         )
+
+    def test_liquidity_token_id_is_required_only_after_the_mint_step(self):
+        operator.validate_liquidity_token_argument(6, None)
+        operator.validate_liquidity_token_argument(7, 4000)
+        with self.assertRaisesRegex(ValueError, "required"):
+            operator.validate_liquidity_token_argument(7, None)
+        with self.assertRaisesRegex(ValueError, "only"):
+            operator.validate_liquidity_token_argument(6, 4000)
+
+    def test_liquidity_nft_id_comes_from_exact_position_manager_mint_event(self):
+        actor_topic = (
+            "0x" + "00" * 12 + self.plan["actor"]["address"].lower().removeprefix("0x")
+        )
+        mint_log = {
+            "address": self.plan["contracts"]["positionManager"],
+            "topics": [
+                "0x" + operator.ERC721_TRANSFER_TOPIC,
+                "0x" + operator.ZERO_TOPIC,
+                actor_topic,
+                "0x" + (4000).to_bytes(32, "big").hex(),
+            ],
+            "logIndex": "0x3",
+            "data": "0x",
+        }
+        event = operator.verify_liquidity_nft_mint_event(
+            {"logs": [mint_log]}, self.plan
+        )
+        self.assertEqual(event["tokenId"], 4000)
+        self.assertEqual(event["to"], self.plan["actor"]["address"].lower())
+
+        with self.assertRaisesRegex(RuntimeError, "exactly one"):
+            operator.verify_liquidity_nft_mint_event(
+                {"logs": [mint_log, copy.deepcopy(mint_log)]}, self.plan
+            )
 
     def test_legacy_encoding_commits_recipient_value_and_chain(self):
         unsigned = operator.unsigned_legacy_transaction(
@@ -276,6 +320,44 @@ class MarketOperatorTests(unittest.TestCase):
                 operator_hash=operator.file_sha256(SCRIPT),
             )
 
+    def test_simulation_report_revalidates_each_step_lineage_and_terminal_state(self):
+        report_path = (
+            REPOSITORY
+            / "manifests"
+            / "markets"
+            / "robinhood-testnet-pltr-weth-execution-operator-simulation-2026-09-10.json"
+        )
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        kwargs = {
+            "plan_file_hash": operator.file_sha256(PLAN_PATH),
+            "operator_hash": report["sourceBindings"]["operatorSha256"],
+        }
+        operator.validate_simulation_report(report, self.plan, **kwargs)
+
+        mutations = (
+            ("step 6 status", ("steps", 6, "status"), "REVERT"),
+            (
+                "step 6 calldata",
+                ("steps", 6, "calldataKeccak256"),
+                "0x" + "00" * 32,
+            ),
+            (
+                "reference block hash",
+                ("lineage", "referenceBlockHash"),
+                "0x" + "00" * 32,
+            ),
+            ("final state", ("finalState", "activeLiquidity"), "0"),
+        )
+        for expected_error, path, replacement in mutations:
+            with self.subTest(expected_error=expected_error):
+                changed = copy.deepcopy(report)
+                target = changed
+                for component in path[:-1]:
+                    target = target[component]
+                target[path[-1]] = replacement
+                with self.assertRaisesRegex(ValueError, expected_error):
+                    operator.validate_simulation_report(changed, self.plan, **kwargs)
+
     def test_market_aware_qualification_allows_only_planned_initialization(self):
         preflight_path = (
             REPOSITORY
@@ -292,6 +374,12 @@ class MarketOperatorTests(unittest.TestCase):
         }
         operator.validate_market_aware_qualification(qualification, self.plan, 5)
 
+        changed_counts = copy.deepcopy(qualification)
+        changed_counts["checks"]["passed"] = 78
+        changed_counts["checks"]["failed"] = 1
+        with self.assertRaisesRegex(RuntimeError, "counters"):
+            operator.validate_market_aware_qualification(changed_counts, self.plan, 5)
+
         initialized = copy.deepcopy(qualification)
         initialized["status"] = "BLOCKED_READ_ONLY_QUALIFICATION_FAILED"
         target = next(
@@ -304,6 +392,8 @@ class MarketOperatorTests(unittest.TestCase):
             "poolId": self.plan["market"]["poolId"],
             "sqrtPriceX96": self.plan["priceAndLiquidity"]["sqrtPriceX96"],
         }
+        initialized["checks"]["passed"] = 78
+        initialized["checks"]["failed"] = 1
         operator.validate_market_aware_qualification(initialized, self.plan, 6)
         target["actual"]["sqrtPriceX96"] = "1"
         with self.assertRaisesRegex(RuntimeError, "differs"):

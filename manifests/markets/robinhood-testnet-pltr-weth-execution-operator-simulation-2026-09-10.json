@@ -3,18 +3,18 @@
   "status": "PASS_EXECUTION_CANDIDATE_ONE_STEP_OPERATOR_REHEARSAL",
   "mode": "LOOPBACK_ANVIL_ONLY_NO_CREDENTIALS_NO_SIGNING_NO_PUBLIC_BROADCAST",
   "sourceBindings": {
-    "executionPlanBodySha256": "123b566236f2e4ea50305716fdc7fc40835ee27f61c93a520da92cc1f40cf88d",
-    "executionPlanFileSha256": "eb6dbaea2f7c549958335f27a70d829a280f31cb81f7da771fabf7c2a18687e6",
-    "operatorSha256": "ac26aa1f9cc8f5496780c05e7373b437a89247b1f48b0b36894fc585ad10cfb4",
+    "executionPlanBodySha256": "28f56ec95fe4d225a91444ad9aaec4417115ff62cd002d65a9ee53ca77b3d87b",
+    "executionPlanFileSha256": "c40bb2420d7cfa5b40241830f385b4ec93ce192e1fb6a216372301095549f442",
+    "operatorSha256": "12afc611e2c992487a1d7571a3903b055356a72943ab58ce57436c72616e2cfc",
     "runnerSha256": "3185057421ed7cdc06777b29522b9c3924551d50b93dcb642d9f52ca419b75db"
   },
   "lineage": {
     "clientVersion": "anvil/v1.8.1",
     "chainId": 46630,
-    "referenceBlock": 116853237,
-    "referenceBlockHash": "0x0358a86fa2e014193359c22d37a5b0464448b542e389735836e098c1f68e3155",
-    "compatibilityBlock": 116853238,
-    "latestLocalBlock": 116853238
+    "referenceBlock": 116870911,
+    "referenceBlockHash": "0xd9bce422dedeb4eb92b790e7479cc468c58f4a2b5c7f580f2ace159d0f06e4bb",
+    "compatibilityBlock": 116870912,
+    "latestLocalBlock": 116870912
   },
   "stepCount": 12,
   "steps": [
@@ -26,10 +26,11 @@
       "valueWei": "4000000000000000",
       "calldataKeccak256": "0xa1548b79599a5ef2fd6de226ea5131c228954c4bf788eb3e4386a2728abe3e8d",
       "transactionHash": "0x24213b74028c419616a025efe4d3dc46c44bc360268dc05e634547510133d2ef",
-      "blockNumber": 116853239,
+      "blockNumber": 116870913,
       "gasUsed": 45066,
       "effectiveGasPriceWei": "7656251",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": null
     },
     {
       "ordinal": 1,
@@ -39,10 +40,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0xb635b8e155db946759b08ae348d550c829b3ab7d59e386c98a128a4e854c6a30",
       "transactionHash": "0x6abc2865924750ca84ce9ab23f027107e59d6737c103300de4b3a4f990d244dc",
-      "blockNumber": 116853240,
+      "blockNumber": 116870914,
       "gasUsed": 60528,
       "effectiveGasPriceWei": "6699220",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": null
     },
     {
       "ordinal": 2,
@@ -52,10 +54,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0x47fbd985dcf19569a968157b54acdb7b7d8f18aa8e69b987b8ee920068e1360b",
       "transactionHash": "0x335879d6751f0091c031df6ad900dd903973a991ccf2afa761649ba8f469d946",
-      "blockNumber": 116853241,
+      "blockNumber": 116870915,
       "gasUsed": 46015,
       "effectiveGasPriceWei": "5861818",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": null
     },
     {
       "ordinal": 3,
@@ -63,12 +66,13 @@
       "nonce": 3,
       "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
       "valueWei": "0",
-      "calldataKeccak256": "0x58e6faf36afab12b0d202dee90b98d1e72e738a64aa52cdb8bfa5eae44983a4b",
-      "transactionHash": "0x339c6809dd9e1b7a2533bc81f2b61fa79bf3648a9f6805db91d89764173c73ab",
-      "blockNumber": 116853242,
+      "calldataKeccak256": "0x8e4a932857da8138f78eede5f9d6a62468b179bb4005f294546d5b1f07307c26",
+      "transactionHash": "0xb84c36a520aa0b0714f6345d105a99f0e3142367ddd7b5a1d87e6bba693b56c5",
+      "blockNumber": 116870916,
       "gasUsed": 47626,
       "effectiveGasPriceWei": "5129091",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": null
     },
     {
       "ordinal": 4,
@@ -76,12 +80,13 @@
       "nonce": 4,
       "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
       "valueWei": "0",
-      "calldataKeccak256": "0x6adad3de8ef305c8d034803c11f979a2a88a065a2ea92bfd1ac61305b29dce9a",
-      "transactionHash": "0xd5fe2da2b905681f04118eafefd0694f9966582ce53f3f2c25416137e92ac6a0",
-      "blockNumber": 116853243,
+      "calldataKeccak256": "0x851c23aad4679d22cd5fc66f8dd0e1523fb9ea302b13bb1437511ad79922be9d",
+      "transactionHash": "0x661f129acb312b4fefe5e616dce3e6a28c67eb974475b0f432246a88f8bfbf7e",
+      "blockNumber": 116870917,
       "gasUsed": 47614,
       "effectiveGasPriceWei": "4487955",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": null
     },
     {
       "ordinal": 5,
@@ -91,10 +96,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0x5106649f72bb5ab4ae9ef0a02683f9f3adf2589dba3b1d19447725a3c1a49f94",
       "transactionHash": "0xff40e8199218bf2a54f16f01c1783c4038226cf116dd9966c5b215f00d1be94c",
-      "blockNumber": 116853244,
+      "blockNumber": 116870918,
       "gasUsed": 51939,
       "effectiveGasPriceWei": "3926961",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": null
     },
     {
       "ordinal": 6,
@@ -102,12 +108,13 @@
       "nonce": 6,
       "to": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
       "valueWei": "0",
-      "calldataKeccak256": "0xdb59973cb64d5ce33a25a697a5181b7757d498708b1a64fae90af7be25eb0a79",
-      "transactionHash": "0x3dc9b606a48f65bc8669d80ed7866976e479645f8ac5262ed73bda56e28bbbe5",
-      "blockNumber": 116853245,
+      "calldataKeccak256": "0xe344c7f328e988cb9d457957bb2383670b0536d9bc22f5d406908b6fe0bb5fe6",
+      "transactionHash": "0x7ea4a2dd24717db0d2c133f8aeec7193f8db433c54e124aaf669ff8a4145a985",
+      "blockNumber": 116870919,
       "gasUsed": 432548,
       "effectiveGasPriceWei": "3436091",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": 3865
     },
     {
       "ordinal": 7,
@@ -117,10 +124,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0xc72eddfcd31bb809b46f43fe2a362a2fab3721029c7d3ce5543d49b45d306d7e",
       "transactionHash": "0xa2ac314ba0c3a22a17ba943e1229ddfac869ecbea567e929b1c79c079ac33ab7",
-      "blockNumber": 116853246,
+      "blockNumber": 116870920,
       "gasUsed": 30396,
       "effectiveGasPriceWei": "3006580",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": 3865
     },
     {
       "ordinal": 8,
@@ -130,10 +138,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0x94188956a7b02e04145c0b703b6f8645148c32940ec69b2af551ae23a42cfbbc",
       "transactionHash": "0x352de0326e50696c583879a964a92aeba6cc84c05aba646ac75011c121a78372",
-      "blockNumber": 116853247,
+      "blockNumber": 116870921,
       "gasUsed": 30396,
       "effectiveGasPriceWei": "2630758",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": 3865
     },
     {
       "ordinal": 9,
@@ -143,10 +152,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
       "transactionHash": "0x6d372a344405ac969cae48d8b12493777b8804f6c91dfb897161ea79a97f1bb9",
-      "blockNumber": 116853248,
+      "blockNumber": 116870922,
       "gasUsed": 38556,
       "effectiveGasPriceWei": "2301914",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": 3865
     },
     {
       "ordinal": 10,
@@ -156,10 +166,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
       "transactionHash": "0x0c1fa1a0899867ce23a4589ac701fe3b286605b1ae40d5fb2cae249af0affb77",
-      "blockNumber": 116853249,
+      "blockNumber": 116870923,
       "gasUsed": 24055,
       "effectiveGasPriceWei": "2014175",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": 3865
     },
     {
       "ordinal": 11,
@@ -169,10 +180,11 @@
       "valueWei": "0",
       "calldataKeccak256": "0xf6c86c26c5db882cd78bfcab82d9388420506d23627a656b94bca96747701c5e",
       "transactionHash": "0xad6d0b83c8ee90900555195d360f926d112fd6cab9d9a6e15b1d4979aedf461f",
-      "blockNumber": 116853250,
+      "blockNumber": 116870924,
       "gasUsed": 771124,
       "effectiveGasPriceWei": "1762404",
-      "status": "PASS"
+      "status": "PASS",
+      "liquidityPositionTokenId": 3865
     }
   ],
   "initialState": {
@@ -192,7 +204,9 @@
     "sqrtPriceX96": "0",
     "tick": 0,
     "activeLiquidity": "0",
-    "positionManagerNextTokenId": "3854",
+    "positionManagerNextTokenId": "3865",
+    "positionManagerActorNftBalance": "0",
+    "liquidityPositionTokenId": null,
     "sfpmPoolId": "0"
   },
   "finalState": {
@@ -212,7 +226,9 @@
     "sqrtPriceX96": "2505414483750479311864138015",
     "tick": -69082,
     "activeLiquidity": "138450781996976174",
-    "positionManagerNextTokenId": "3855",
+    "positionManagerNextTokenId": "3866",
+    "positionManagerActorNftBalance": "1",
+    "liquidityPositionTokenId": 3865,
     "sfpmPoolId": "16897827167146926"
   },
   "authorization": {

@@ -264,13 +264,13 @@ authority for a public transaction and does not complete the broader two-actor
 options lifecycle. Later on 2026-09-10, gates 1–4 below were completed for
 execution planning: the exact exposure was accepted, a fresh candidate was
 generated, and the finalized market operator passed `12/12` ordered calls at
-block `116853237`. See the
+block `116870911`. See the
 [execution-candidate/operator record](./2026-09-10-pltr-weth-execution-candidate-and-operator.md).
 
-Before public genesis, the time-bound candidate must be freshly regenerated
-and replayed after review, then the owner must give separate hash-bound signing
-and one-transaction-at-a-time broadcast authorization. No such authorization
-exists in this record.
+That later round completed the final regeneration, replay, and shared-counter
+hardening. Before public genesis, the owner must still give separate hash-bound
+signing and one-transaction-at-a-time broadcast authorization. No such
+authorization exists in this record.
 
 Swaps, collateral deposits, option positions, premium observation, close, and
 withdrawal remain a later lifecycle phase and remain unauthorized.

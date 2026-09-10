@@ -34,7 +34,7 @@ passed `79/79` shared checks and `17/17` exact-plan checks at block `116510322`.
 The [exact-head fork rehearsal](./markets/2026-09-10-pltr-weth-fork-rehearsal.md)
 then passed `12/12` local transitions and `4/4` expected reverts. Its local
 state was discarded. The [execution candidate and one-step operator record](./markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md)
-   documents the final `12/12` operator replay at canonical block `116870911`,
+   documents the final `12/12` operator replay at canonical block `116968208`,
    including nonce/deadline binding, receipt-derived LP NFT identity, full
    evidence validation, and the public non-mutation proof. No market transaction
    is yet authorized.

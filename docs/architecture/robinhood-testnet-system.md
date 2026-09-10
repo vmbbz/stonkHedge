@@ -31,7 +31,7 @@ sandbox:
 - the owner accepted its exact synthetic exposure for execution planning only;
   and
 - a fresh nonce/deadline-bound candidate passed twelve ordered calls through
-  the finalized one-step operator at canonical block `116870911`; and
+  the finalized one-step operator at canonical block `116968208`; and
 - the operator now treats Uniswap's shared `nextTokenId` as a monotonic floor,
   derives the actual LP NFT ID from the canonical mint receipt, and rechecks
   that exact NFT through the remaining steps.
@@ -445,7 +445,7 @@ asset residual, and `531/32` PoolManager-claim deviations.
 | Strict public verifier after deployment | pass; deployer nonce `16` |
 | PLTR/WETH fresh strict preflight | `79/79` shared and `17/17` exact-plan checks at block `116510322` |
 | PLTR/WETH exact-head genesis rehearsal | `12/12` positive transitions and `4/4` expected reverts |
-| PLTR/WETH execution candidate | Nonces `0..11`, shared NFT counter floor `3865`, synthetic exposure, and deadlines bound at block `116870911` |
+| PLTR/WETH execution candidate | Nonces `0..11`, shared NFT counter floor `3893`, synthetic exposure, and deadlines bound at block `116968208` |
 | Market one-step operator rehearsal | `12/12` ordered invocations pass; all step, lineage, state, plan, operator, and report evidence is validated; zero public sends |
 
 Primary local records:

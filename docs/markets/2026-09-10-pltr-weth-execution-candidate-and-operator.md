@@ -4,7 +4,7 @@
 
 The accepted PLTR/test-WETH genesis exposure now has a generated,
 nonce-and-time-bound execution candidate and a finalized one-step operator. A
-fork of canonical Robinhood testnet block `116870911` passed all twelve
+fork of canonical Robinhood testnet block `116968208` passed all twelve
 operator invocations in order. The rehearsal opened no keystore, created no
 signature, and submitted no public transaction.
 
@@ -21,7 +21,8 @@ Public readback after Anvil was stopped showed:
 - PLTR/WETH `sqrtPriceX96 = 0`, tick `0`, and active liquidity `0`;
 - PanopticFactoryV4 mapping equal to the zero address; and
 - second-actor PositionManager NFT balance `0`; and
-- shared PositionManager next-token counter `3865`.
+- shared PositionManager next-token counter `3893` at the final public
+  readback, equal to the candidate's pinned floor.
 
 Therefore no PLTR/WETH pool, liquidity position, or Panoptic market was created
 on Robinhood testnet in this round.
@@ -68,20 +69,20 @@ flowchart LR
 | Artifact | SHA-256 |
 |---|---|
 | Execution-planning acceptance | `1aed902e4ff62ab7dc05c427c250925eafbc5e6e09a6bc0fa1cc889c49edf5f0` |
-| Execution preflight | `4ed37d1cacc7d39dc6d5597433eea79d40dbb23f2aa7417263f77582fc805783` |
+| Execution preflight | `daf9de3261f3e725fe8047d38a0b905cbe049b7da008cf93244b28ae91703c38` |
 | Execution-plan generator | `5f0ec26a33572ea54fb95e9b6eb92a80338d7c3bee44b0483a250734ece160fd` |
-| Execution-plan body | `28f56ec95fe4d225a91444ad9aaec4417115ff62cd002d65a9ee53ca77b3d87b` |
-| Execution-plan file | `c40bb2420d7cfa5b40241830f385b4ec93ce192e1fb6a216372301095549f442` |
+| Execution-plan body | `3ced9f289a107387948d8315407218ff66ff5c274e7ec60ac7faaecc05231807` |
+| Execution-plan file | `5d1a8179fd5737fd424dee9555246309d663f2c4534a36fac6854dd091fa6cad` |
 | One-step operator | `12afc611e2c992487a1d7571a3903b055356a72943ab58ce57436c72616e2cfc` |
 | Twelve-step simulation runner | `3185057421ed7cdc06777b29522b9c3924551d50b93dcb642d9f52ca419b75db` |
-| Aggregate simulation report | `9d02f8634d85971b0caf87b3bf0206803688d52c722bdbd532cd88967bdcc3e1` |
+| Aggregate simulation report | `3cd02b7f25864b39d7235a4af83c086bbf7b1daacc711d35fd5a61de7871d4a7` |
 
 The execution snapshot binds canonical block hash
-`0xd9bce422dedeb4eb92b790e7479cc468c58f4a2b5c7f580f2ace159d0f06e4bb`
-at timestamp `2026-09-10T12:10:03Z`. Its header was independently read back
+`0xbbeb3f3b3aa07fec923ec6d5a5440e465e6259de92c7713eef27639bf192a452`
+at timestamp `2026-09-10T16:19:01Z`. Its header was independently read back
 from the public RPC after the rehearsal. The candidate binds actor nonces `0`
-through `11`, a PositionManager next-token floor of `3865`, liquidity deadline
-`1789045803`, and Permit2 expiration `1789049403`. The floor is not a reserved
+through `11`, a PositionManager next-token floor of `3893`, liquidity deadline
+`1789060741`, and Permit2 expiration `1789064341`. The floor is not a reserved
 NFT ID; the actual LP NFT ID is learned from the mint receipt.
 
 ## Why the execution candidate is separate
@@ -242,8 +243,8 @@ one-step operator. The fork ended with:
 - both ERC-20 allowances zero;
 - both Permit2 allowances zero;
 - active liquidity `138450781996976174`;
-- PositionManager next token ID `3866` in the isolated replay;
-- actor ownership of locally minted LP NFT `3865` in that replay, derived from
+- PositionManager next token ID `3894` in the isolated replay;
+- actor ownership of locally minted LP NFT `3893` in that replay, derived from
   its exact receipt event rather than assumed from the public counter;
 - predicted PanopticPool and both CollateralTrackers deployed and wired;
 - nonzero SFPM pool ID `16897827167146926`; and
@@ -290,6 +291,12 @@ Use **ZERO** for the approval and market boundary:
 - **O**ne transaction per invocation, then stop.
 
 ## Next gate
+
+The owner supplied an exact authorization for the preceding candidate only
+after its index-`0` lead-time gate and liquidity deadline had expired. The
+operator rejected that stale state before an authorization manifest, keystore
+access, signature, or public send. That authorization does not transfer to the
+refreshed hashes recorded above.
 
 Do not authorize the hashes in this record after they become stale. The next
 safe round is:

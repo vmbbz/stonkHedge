@@ -25,7 +25,7 @@ The current repository is the product and delivery control plane. It contains th
   loopback Anvil. That state was discarded; neither result authorizes a public
   transaction. The subsequent [nonce-bound execution candidate and one-step
   operator rehearsal](./docs/markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md)
-  passed `12/12` isolated operator calls at canonical block `116870911`. The
+  passed `12/12` isolated operator calls at canonical block `116968208`. The
   operator derives the LP NFT ID from the canonical mint receipt instead of
   assuming Uniswap's shared global counter reserves it; every transaction is
   still unauthorized and public PLTR/WETH state remains empty.

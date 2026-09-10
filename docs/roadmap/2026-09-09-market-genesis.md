@@ -40,9 +40,9 @@ checks passed. A loopback-only fork of that exact head then passed all twelve
 genesis transitions and four snapshot-isolated negative cases. The Anvil state
 was discarded. The owner subsequently accepted the exact synthetic price,
 range, liquidity, wrap, token caps, salt, and second-actor roles for execution
-planning only. A final canonical snapshot at block `116870911` passed `79/79`
+planning only. A final canonical snapshot at block `116968208` passed `79/79`
 plus `17/17`; the offline generator bound nonce `0`, a shared PositionManager
-counter floor of `3865`, and new deadlines into a twelve-transaction candidate.
+counter floor of `3893`, and new deadlines into a twelve-transaction candidate.
 The hardened one-step operator then passed all `12/12` ordered invocations on
 the exact fork. The actual LP NFT ID is derived from the mint receipt and must
 be supplied for every later step; it is never assumed to be reserved by the
@@ -205,7 +205,7 @@ The operator must:
 
 The exact-head rehearsal at block `116510322` completed the state-creation
 subset needed before the owner accepted the exact exposure for execution
-planning. The final operator rehearsal at block `116870911` repeated the full
+planning. The final operator rehearsal at block `116968208` repeated the full
 positive sequence through the actual one-step interface:
 
 1. bounded ETH wrapping;

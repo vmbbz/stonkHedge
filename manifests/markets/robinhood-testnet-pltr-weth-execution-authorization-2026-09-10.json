@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHORIZED_MARKET_GENESIS_ONE_TRANSACTION_AT_A_TIME",
+  "approvedBy": "repository owner via current Codex session",
+  "approvedAt": "2026-09-10T17:00:53Z",
+  "chainId": 46630,
+  "actor": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+  "executionPlanBodySha256": "d42fcb1ede1f864a83151a12c0b4c9b6b1ea1efd6e01e965ffd5b4e063d13510",
+  "executionPlanFileSha256": "7ae23edc65fb7c54f43c8eb7c6bb30ca1c5c62ead4791c5114dccdbe39e03094",
+  "operatorSha256": "12afc611e2c992487a1d7571a3903b055356a72943ab58ce57436c72616e2cfc",
+  "operatorSimulationReportSha256": "9c128018ca74f4635afdd68bbe80e5ae1d6e296e65dac3b066bda8ffa64565c7",
+  "maximumTransactionIndex": 11,
+  "executionPolicy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+  "testnetOnly": true,
+  "scope": {
+    "allowed": [
+      "the twelve plan-bound PLTR/WETH market-genesis transactions"
+    ],
+    "excluded": [
+      "swaps",
+      "collateral deposits",
+      "option positions",
+      "every other market",
+      "all mainnet activity"
+    ]
+  }
+}

@@ -9,7 +9,7 @@
 
 The release-size blocker recorded at Checkpoint A is resolved in the pushed core-fork candidate `b0deb9f846dc15d890d96afdfd939c1091faeab9` on `fix/pool-runtime-headroom`. Exact V3 and V4 release configurations now enforce a 256-byte EIP-170 margin and pass. The largest contract, `PanopticPoolV2`, is 24,275 runtime bytes, leaving 301 bytes of raw headroom and passing the project margin by 45 bytes.
 
-This is a review candidate, not permission to deploy. No private key was read or printed, no transaction was broadcast, and no stonkHedge contract has been deployed. Independent review, Robinhood chain/address qualification, an exact-sender simulation, and faucet funding remain required.
+This is a review candidate, not permission to deploy. No private key was read or printed, no transaction was broadcast, and no StonkHedge contract has been deployed. Independent review, Robinhood chain/address qualification, an exact-sender simulation, and faucet funding remain required.
 
 The machine-readable source of truth is [`../../manifests/baseline/2026-09-08.json`](../../manifests/baseline/2026-09-08.json). Checkpoint A remains as the immutable red-baseline narrative in [`2026-09-08-checkpoint-a.md`](./2026-09-08-checkpoint-a.md).
 
@@ -76,7 +76,7 @@ Inherited compiler/deprecation warnings and missing `foundry.lock` dependency wa
 
 ## SDK lane disposition
 
-The SDK source fork still cannot install standalone because its synced package refers to unpublished `@panoptic-eng/deployments@workspace:*`. That remains a future source-contribution gate. It does not block the first sandbox, which is pinned to self-contained public package `@panoptic-eng/sdk@1.0.49` and registry integrity `sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg==`; stonkHedge-specific adapters belong in the product repository until the source lane is reproducible.
+The SDK source fork still cannot install standalone because its synced package refers to unpublished `@panoptic-eng/deployments@workspace:*`. That remains a future source-contribution gate. It does not block the first sandbox, which is pinned to self-contained public package `@panoptic-eng/sdk@1.0.49` and registry integrity `sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg==`; StonkHedge-specific adapters belong in the product repository until the source lane is reproducible.
 
 ## Next gates
 

@@ -407,12 +407,12 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 
 
 
-# stonkHedge build and Robinhood Chain testnet launch plan
+# StonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-09
-**Status:** The shared 16-contract Panoptic V4 stack is deployed and reconciled on Robinhood Chain testnet. The PLTR/WETH genesis mechanism, exact `0.001` synthetic test-WETH-per-PLTR price, maximum `2 PLTR` and `0.002 WETH` exposure, ticks `-81120..-57060`, liquidity `138450781996976174`, no-hook PoolKey, salt `0`, and second-actor roles passed the complete local planning and exact-fork gates. The actor then executed and reconciled original genesis indexes `0–3`: wrapping `0.004` test ETH, approving exactly `2 PLTR` and `0.002 WETH` from the tokens to Permit2, and approving exactly `2 PLTR` from Permit2 to PositionManager. Execution deliberately stopped before WETH's Permit2 approval and pool initialization when the original one-hour liquidity deadline no longer had safe review headroom. A fresh, separately authorized nine-step continuation for nonces `4..12` refreshes the bounded permissions, completes the remaining intents, derives the LP NFT ID from the canonical mint receipt, revokes all allowances, and registers the market. Continuation indexes `0–3` are now canonical: the exact PoolKey is initialized at tick `-69082`, active liquidity is `138450781996976174`, and receipt-derived NFT `3903` belongs to the second actor. Public nonce is `8`; the planned residual `0.022157655355120211 PLTR` and `0.00002 WETH` permissions remain at both allowance layers pending continuation indexes `4–7`. The Panoptic factory mapping is still empty, so no per-market PanopticPool or CollateralTracker pair exists yet; collateral deposits, option positions, swaps, every other market, and mainnet remain out of scope. See `docs/architecture/robinhood-testnet-system.md`, `docs/markets/2026-09-10-pltr-weth-public-continuation.md`, the market manifests, and `docs/roadmap/2026-09-09-market-genesis.md`.
+**Status:** The shared 16-contract Panoptic V4 stack is deployed and reconciled on Robinhood Chain Testnet. PLTR/WETH public genesis is also complete: the exact no-hook PoolKey is initialized at the synthetic mechanism-test policy of `0.001` test WETH per PLTR, V4 liquidity NFT `3903` holds bounded two-sided liquidity `138450781996976174`, all four ERC-20 and Permit2 allowances are zero, and PanopticPool `0x042c0d9c497d62a85b3410f2773cfa748d18e586` plus both CollateralTrackers are registered and fully wired. Across both milestones, 29 StonkHedge-signed public transactions succeeded and created 19 StonkHedge addresses; two external faucet distributions are tracked separately. Final reconciliation passed at block `117093052`, the actor ended at nonce `13`, and every deployment/genesis authorization is consumed and closed. No public swap, collateral deposit, option position, premium/solvency lifecycle, close, liquidation, withdrawal, second market, or mainnet activity is authorized or claimed. See `docs/progress/2026-09-11-public-genesis-milestone.md`, `docs/architecture/robinhood-testnet-system.md`, the final genesis manifest, and `docs/roadmap/2026-09-09-market-genesis.md`.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
-**Primary pair for the vertical slice:** PLTR/testnet WETH with fee `3000`, tick spacing `60`, and no hook, accepted for execution planning and exact-fork rehearsal only after address, eligibility, and bounded-exposure qualification. Public execution still requires the separate hash-bound gate. The deterministic local failure lane still uses a controllable ERC-8056 mock.
+**Primary pair for the vertical slice:** PLTR/testnet WETH with fee `3000`, tick spacing `60`, and no hook. Its bounded public genesis is complete and reconciled; any swap, collateral, option, premium/solvency, close, withdrawal, or cleanup lifecycle action still requires a fresh two-actor plan, exact-head simulation, review, and separate hash-bound authorization. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
 **Mainnet:** Explicitly out of scope until the licensing, issuer, legal, audit, economic-risk, and operational gates below are all cleared.
 
@@ -434,7 +434,7 @@ Robinhood Chain testnet is live at chain ID `46630` with public RPC `https://rpc
 
 The same testnet currently exposes test WETH at `0x33e4191705c386532ba27cBF171Db86919200B94` and a faucet-style 18-decimal test USDC at `0xbf4479C07Dc6fdc6dAa764A0ccA06969e894275F`. This USDC is **not** Circle's official Base Sepolia test USDC and must never be represented as such.
 
-The verified test Stock implementation has the behavior stonkHedge needs to qualify: normal ERC-20 transfer/approval, ERC-8056-style current and scheduled multipliers, global/token pause, address blocking, role-gated mint/burn, and administrative burn. Testnet users obtain valueless assets through Robinhood's testnet faucet; faucet receipt addresses must be compared with the pinned table before the UI accepts them.
+The verified test Stock implementation has the behavior StonkHedge needs to qualify: normal ERC-20 transfer/approval, ERC-8056-style current and scheduled multipliers, global/token pause, address blocking, role-gated mint/burn, and administrative burn. Testnet users obtain valueless assets through Robinhood's testnet faucet; faucet receipt addresses must be compared with the pinned table before the UI accepts them.
 
 Sources:
 
@@ -457,7 +457,7 @@ Robinhood's canonical mainnet asset registry and `https://api.robinhood.com/rhj/
 
 At the 2026-09-08 planning audit, Robinhood's `/rhj/assets` API returned `194` active Stock Token/ETF deployments, all on chain `4663`. This is broad instrument issuance by RHJ, not evidence of 194 issuers. Vimen and ATLAS illustrate the application layer: they mint redeemable index/basket ERC-20s backed by deposits of existing RHJ Stock Tokens. HoodFactory illustrates another category: it launches ordinary community ERC-20s and can pair them with a Stock Token as the quote asset. Those projects issue their own basket/community tokens, not the underlying RHJ instrument.
 
-Robinhood's current external-brand rules also require us to call its products “Stock Tokens” rather than “tokenized stocks” or “tokenized equities,” keep stonkHedge branding more prominent, and explicitly avoid suggesting endorsement. Generic architecture discussions may still describe the broader tokenized-asset category, but all public product copy must use Robinhood's approved terminology.
+Robinhood's current external-brand rules also require us to call its products “Stock Tokens” rather than “tokenized stocks” or “tokenized equities,” keep StonkHedge branding more prominent, and explicitly avoid suggesting endorsement. Generic architecture discussions may still describe the broader tokenized-asset category, but all public product copy must use Robinhood's approved terminology.
 
 Sources:
 
@@ -479,7 +479,7 @@ Uniswap's official repository records a complete v4 deployment on Robinhood Chai
 
 The 2026-09-08 read-only qualification found an existing testnet v4 stack suitable for reuse. At block `115636679`, PoolManager `0x8366a39CC670B4001A1121B8F6A443A643e40951` had 24,009 bytes of runtime code with hash `0xbd3881180b547f5fe817545743cfb4343e96b1bc6640dcd70c106b0066e95626`—the exact runtime hash independently observed at Uniswap's official Robinhood mainnet PoolManager. Its owner is a testnet EOA, not the mainnet owner, and its protocol-fee controller is zero. The existing testnet PositionManager is immutably wired to that PoolManager, and the observed PositionManager, Quoter, StateView, UniversalRouter, Permit2, and WETH hashes match a public third-party reproducibility manifest pinned to Uniswap source commits.
 
-This is **qualified candidate infrastructure**, not an official Uniswap testnet deployment or an endorsement of the third-party project. Reuse it for the first sandbox only while the checked-in verifier confirms chain ID, every runtime hash, PoolManager owner/fee-controller state, PositionManager wiring, and token health. A second contributor must review its provenance and manifest. If any check drifts or review rejects it, fall back to simulating and deploying stonkHedge-labelled test infrastructure. Reuse removes several deployment transactions and advances the sandbox clock without weakening fail-closed identity checks.
+This is **qualified candidate infrastructure**, not an official Uniswap testnet deployment or an endorsement of the third-party project. Reuse it for the first sandbox only while the checked-in verifier confirms chain ID, every runtime hash, PoolManager owner/fee-controller state, PositionManager wiring, and token health. A second contributor must review its provenance and manifest. If any check drifts or review rejects it, fall back to simulating and deploying StonkHedge-labelled test infrastructure. Reuse removes several deployment transactions and advances the sandbox clock without weakening fail-closed identity checks.
 
 Base Sepolia still has official Uniswap v4 contracts and official Circle test USDC, so it remains a valuable second integration lane after the Robinhood Stock Token slice.
 
@@ -500,7 +500,7 @@ This is simulation evidence, not permission to broadcast. Direct CREATE makes no
 
 ### 1.4 A Uniswap v4 hook cannot be attached after pool creation
 
-The earlier statement that we can deploy a hook and attach it to an already-existing pool is wrong. A v4 pool is identified by its full `PoolKey`: `currency0`, `currency1`, `fee`, `tickSpacing`, and `hooks`. Changing the hook changes the pool ID. If a custom stonkHedge hook becomes necessary, we must initialize a new pool whose key contains the mined hook address and seed liquidity into that new pool.
+The earlier statement that we can deploy a hook and attach it to an already-existing pool is wrong. A v4 pool is identified by its full `PoolKey`: `currency0`, `currency1`, `fee`, `tickSpacing`, and `hooks`. Changing the hook changes the pool ID. If a custom StonkHedge hook becomes necessary, we must initialize a new pool whose key contains the mined hook address and seed liquidity into that new pool.
 
 Panoptic v2's current V4 architecture does **not** require its SFPM to be the pool's hook. `PanopticFactoryV4.deployNewPool` accepts an existing initialized `PoolKey`, checks it in PoolManager, and registers that pool with `SemiFungiblePositionManagerV4`. The upstream tests use `hooks = address(0)`. Therefore the cheapest Phase 1 route is:
 
@@ -533,7 +533,7 @@ Testnet feed addresses must be independently verified; the mainnet guarantee mus
 
 Robinhood Stock Tokens implement the same central accounting property we planned to test for B20: raw `balanceOf`, transfers, and AMM inventory remain unchanged while `uiMultiplier()` changes the share-equivalent display amount. The verified testnet implementation exposes `newUIMultiplier()` and `effectiveAt()` for scheduled changes. Base B20 remains a secondary compatibility target using related ERC-8056 semantics.
 
-That means stonkHedge must model a dangerous transition window: the claim represented by one raw token can change at the effective timestamp, while the AMM's raw balances remain unchanged and its price moves only through trading/arbitrage. Phase 1 therefore needs:
+That means StonkHedge must model a dangerous transition window: the claim represented by one raw token can change at the effective timestamp, while the AMM's raw balances remain unchanged and its price moves only through trading/arbitrage. Phase 1 therefore needs:
 
 - Robinhood test Stock Tokens for real public integration plus a controllable local mock for deterministic multiplier/admin scenarios;
 - monitoring of `UIMultiplierUpdated`, pending/effective-time changes, pause, blocklist, administrative-burn, and other issuer-policy events;
@@ -589,7 +589,7 @@ Branch model:
 - SDK fork: the already-created `feature/equity-options-base` from the pinned upstream `main` SHA, with chain/address data supplied by explicit deployment manifests.
 - Never develop directly on fork `main`; keep it fast-forwardable from upstream.
 
-Checkpoint A found that the public SDK repository is a source sync from Panoptic's private monorepo, not a self-contained development checkout: it declares the internal unpublished `@panoptic-eng/deployments@workspace:*`, but neither that package nor the workspace lockfile is public. Until an authorized complete workspace is available or the standalone source is repaired with parity tests, do not modify and publish an unbuildable fork. The Hour-32 product lane may consume exact public package `@panoptic-eng/sdk@1.0.49`—whose registry artifact is self-contained—and place stonkHedge-specific adapters in the product repo. Pin its registry integrity and lockfile; do not claim those adapters are upstream SDK changes.
+Checkpoint A found that the public SDK repository is a source sync from Panoptic's private monorepo, not a self-contained development checkout: it declares the internal unpublished `@panoptic-eng/deployments@workspace:*`, but neither that package nor the workspace lockfile is public. Until an authorized complete workspace is available or the standalone source is repaired with parity tests, do not modify and publish an unbuildable fork. The Hour-32 product lane may consume exact public package `@panoptic-eng/sdk@1.0.49`—whose registry artifact is self-contained—and place StonkHedge-specific adapters in the product repo. Pin its registry integrity and lockfile; do not claim those adapters are upstream SDK changes.
 
 Planning/implementation checkpoint rule:
 
@@ -609,7 +609,7 @@ Planning/implementation checkpoint rule:
 - Deployment scripts run once in simulation mode and show the expected deployer.
 - The chosen faucet-distributed Robinhood test Stock Token matches the pinned address, shared beacon/implementation, 18 decimals, multiplier interface, pause state, and expected symbol.
 - A controllable local test token separately covers scheduled multiplier, pause, blocked-address, mint/burn, and administrative-burn failure paths; it is never presented as an issuer token.
-- A test Stock Token / test WETH Uniswap v4 pool is initialized on the reviewed stonkHedge test PoolManager and seeded with bounded valueless liquidity.
+- A test Stock Token / test WETH Uniswap v4 pool is initialized on the reviewed StonkHedge test PoolManager and seeded with bounded valueless liquidity.
 - The unmodified or minimally changed Panoptic V4 shared stack is deployed and verified where possible.
 - A Panoptic pool is registered over the exact pool key and its two CollateralTrackers are initialized.
 - Two distinct test actors can deposit collateral.
@@ -621,7 +621,7 @@ Planning/implementation checkpoint rule:
 - Every address and transaction hash is stored in a chain-specific manifest; no private key or secret is stored with it.
 - A fresh machine can replay the read-only verification script against the manifest.
 
-The first live UI may be a developer dashboard. It must label assets as valueless Robinhood Chain testnet tokens, show chain ID `46630`, link to the testnet explorer, distinguish stonkHedge-deployed Uniswap test infrastructure from official deployments, and never imply that the product is audited, issuer-endorsed, or production-ready.
+The first live UI may be a developer dashboard. It must label assets as valueless Robinhood Chain testnet tokens, show chain ID `46630`, link to the testnet explorer, distinguish StonkHedge-deployed Uniswap test infrastructure from official deployments, and never imply that the product is audited, issuer-endorsed, or production-ready.
 
 ## 4. Product scope
 
@@ -662,7 +662,7 @@ The first live UI may be a developer dashboard. It must label assets as valueles
 User / developer dashboard
           |
           v
-stonkHedge SDK adapters -----> strategy encoder / transaction simulation
+StonkHedge SDK adapters -----> strategy encoder / transaction simulation
           |                                  |
           v                                  v
 PanopticPoolV2 <----> RiskEngine <----> guardian safe-mode controls
@@ -707,7 +707,7 @@ Checkpoint B resolves that measured blocker in pushed candidate `b0deb9f846dc15d
 Use two assets for two different jobs:
 
 1. The public Robinhood testnet market uses an existing faucet-distributed Stock Token so the real proxy, access-control, ERC-8056, and wallet integration surfaces are exercised.
-2. Local and controlled testnet failure harnesses use a stonkHedge-owned token outside the inherited Panoptic core so tests can trigger states that Robinhood's roles do not let us mutate on demand.
+2. Local and controlled testnet failure harnesses use a StonkHedge-owned token outside the inherited Panoptic core so tests can trigger states that Robinhood's roles do not let us mutate on demand.
 
 The controllable test asset must:
 
@@ -723,7 +723,7 @@ Prefer the verified Robinhood test implementation's interfaces for the primary l
 
 ### 6.3 Market registry and asset qualification
 
-Avoid modifying `PanopticFactoryV4` merely to add a token whitelist. Put product curation in a separate stonkHedge registry/periphery contract unless the core itself needs an invariant. Each market record should include:
+Avoid modifying `PanopticFactoryV4` merely to add a token whitelist. Put product curation in a separate StonkHedge registry/periphery contract unless the core itself needs an invariant. Each market record should include:
 
 - chain ID and PoolId;
 - full PoolKey, including hook address;
@@ -736,7 +736,7 @@ Avoid modifying `PanopticFactoryV4` merely to add a token whitelist. Put product
 - risk-engine address and parameter-set hash; and
 - evidence URI/manifest hash.
 
-The underlying Panoptic factory can remain permissionless while the stonkHedge UI shows only qualified markets.
+The underlying Panoptic factory can remain permissionless while the StonkHedge UI shows only qualified markets.
 
 ### 6.4 Equity risk controls
 
@@ -839,9 +839,9 @@ the canonical Panoptic CREATE3 deployer plus canonical Safe v1.4.1 singleton,
 proxy-factory, and MultiSend runtimes. On-chain Safe batching is therefore
 supported. However, Panoptic's current salts embed its Ethereum 3-of-5 Safe
 `0x82bf455e9ebd6a541ef10b683de1edcaf05ce7a1`, which is absent on Robinhood;
-stonkHedge cannot reuse that authorization. Any future mainnet release needs
+StonkHedge cannot reuse that authorization. Any future mainnet release needs
 Panoptic's participation or newly mined salts bound to a separately audited
-stonkHedge Safe. See
+StonkHedge Safe. See
 `docs/deployment/2026-09-08-faucet-and-mainnet-safe-readiness.md`.
 
 The existing secret remains only in `C:\Users\cosyc\ClawStreet\.env`. Rules:
@@ -931,7 +931,7 @@ public progress record, and market-genesis roadmap.
 |---:|---|---|
 | 17 | Define chain-`46630` manifest schema and hard chain/address/code-hash gates. | Manifest includes sources, compiler, sender, external contracts, txs, and zero secrets. |
 | 18 | Verify the existing candidate V4 stack against exact runtime hashes, PoolManager control state, PositionManager wiring, and source provenance; independently review the reuse decision. | Reuse is approved with explicit non-official status, or rejected with an exact mismatch. |
-| 19 | If reuse is approved, skip infrastructure broadcast. If rejected, simulate and deploy only the pinned unmodified PoolManager/minimum periphery with the exact sender. | Zero transactions for approved reuse, or predicted addresses, nonce, gas budget, and reviewed stonkHedge test-infrastructure receipts. |
+| 19 | If reuse is approved, skip infrastructure broadcast. If rejected, simulate and deploy only the pinned unmodified PoolManager/minimum periphery with the exact sender. | Zero transactions for approved reuse, or predicted addresses, nonce, gas budget, and reviewed StonkHedge test-infrastructure receipts. |
 | 20 | Re-run the independent read-only verifier and compare runtime code, immutable wiring, constructor/control values, and ownership. | Verifier passes; explorer/provenance gaps are explicit and UI never says the candidate is official. |
 | 21 | Select one faucet Stock Token based on balances and health; validate it and test WETH immediately before use. | Exact pair, token order, decimals, pause state, multiplier, and provenance pinned. |
 | 22 | Freeze deployer activity; pass the strict verifier; read the live pending nonce; regenerate the Panoptic shared-stack addresses/artifacts; rerun the exact-sender fork simulation; and obtain separate broadcast approval. | Every predicted address is empty, artifacts are tied to the current nonce, and no intervening deployer transaction is permitted. |
@@ -1072,7 +1072,7 @@ The initial architecture is a hypothesis to test, not a commitment to preserve P
 - **User evidence:** instrument the sandbox for privacy-respecting funnel metrics such as faucet completion, simulation rejection, strategy completion, close/unwind success, time-to-hedge, comprehension failures, and support incidents. Define go/no-go thresholds before adding leverage, vault custody, more chains, or autonomous actions.
 - **Economic viability:** estimate deployment and verification cost, liquidity subsidies, monitoring/keeper expense, audit and legal cost, support load, fee revenue, adverse-selection loss, and tail-loss reserves. A technically working market is not automatically a sustainable product.
 - **Governance and escape:** specify upgrade boundaries, immutable components, role separation, timelocks, emergency powers, public change notices, market deprecation, and user exits. A public alpha must not depend indefinitely on one deployer EOA or an undocumented manual operator.
-- **Assurance depth:** add differential tests against the pinned upstream behavior, formal properties for stonkHedge-specific registry/guardian logic, independent economic review, and an external audit scope based on the actual final diff. Reusing audited dependencies does not audit their composition or our deployment.
+- **Assurance depth:** add differential tests against the pinned upstream behavior, formal properties for StonkHedge-specific registry/guardian logic, independent economic review, and an external audit scope based on the actual final diff. Reusing audited dependencies does not audit their composition or our deployment.
 - **Distribution and jurisdiction:** obtain qualified analysis of product classification, eligible users, interface restrictions, disclosures, sanctions/privacy obligations, issuer branding terms, and incident communications before any real-value access. Do not rely on wallet permissionlessness as a distribution policy.
 - **Scope discipline:** keep the single-chain, one-market proof until reliability and user evidence justify expansion. Treat cross-chain messaging, new issuance, custom hooks, portfolio margin, automated vaults, and agent trading as separate products with their own threat models and stop/go decisions.
 
@@ -1138,7 +1138,7 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 - Can the licensor or qualified counsel confirm that the planned valueless, non-monetized public sandbox remains non-production under BUSL-1.1? The current on-chain audit found no resolvable Additional Use Grant, so any production-like operation remains blocked.
 - Which upstream security-analysis findings are actually fixed in `d65310d...`, and which remain design risks?
 - Will the second contributor independently confirm the owner/Codex acceptance of core candidate `f4abdd7...`, including inherited runtime fix `b0deb9f...`? This is now defence-in-depth for the valueless testnet waiver, but remains mandatory for mainnet or real-value use; a rejection immediately reopens the testnet gate.
-- Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should stonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
+- Can the SDK source sync be made reproducible without access to Panoptic's private deployments workspace, or should StonkHedge keep all first-sandbox adapters in the product repo against pinned public SDK `1.0.49`?
 - Will the second contributor independently confirm reuse of the non-official chain-`46630` V4 candidate? Owner/Codex reproduction passed on 2026-09-09 and Uniswap still had no official `46630` registry entry; a later official entry or reviewer mismatch requires re-audit.
 - Which Chainlink feeds, if any, are officially supported on Robinhood testnet for the five faucet Stock Tokens? If none, the monitor uses an explicitly labelled test feed and mainnet feeds only in read-only fork tests.
 - Will the owner accept the exact offline exposure proposal of `0.004 ETH` wrapped, maximum `2 PLTR` and `0.002 WETH` for the initial range, 99% liquidity-budget use, ticks `-81120` to `-57060`, and Panoptic factory salt `0`? Until accepted, the plan is rehearsal input only.

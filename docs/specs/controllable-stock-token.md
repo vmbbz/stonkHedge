@@ -3,7 +3,7 @@
 ## Scope
 
 This is the Hour 9 specification for a local-only test double that exercises
-the issuer-controlled behaviors stonkHedge must survive before using a Robinhood
+the issuer-controlled behaviors StonkHedge must survive before using a Robinhood
 faucet Stock Token publicly. It is not issuer code, a synthetic equity, a faucet,
 or a production token. It must never be deployed or presented as a Robinhood
 Stock Token.

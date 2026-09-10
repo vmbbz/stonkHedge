@@ -1,4 +1,4 @@
-# stonkHedge Robinhood testnet system architecture
+# StonkHedge Robinhood testnet system architecture
 
 | Field | Value |
 |---|---|
@@ -10,7 +10,7 @@
 
 ## 1. What exists now
 
-stonkHedge now has a verified public-chain foundation for a valueless options
+StonkHedge now has a verified public-chain foundation for a valueless options
 sandbox:
 
 - Robinhood's five faucet-distributed test Stock Token proxies and their shared
@@ -87,14 +87,14 @@ flowchart TB
         ACT[Test actor and future LP/user]
     end
 
-    subgraph Product[stonkHedge product layer - mostly next phase]
+    subgraph Product[StonkHedge product layer - mostly next phase]
         UI[Developer dashboard]
         ADP[SDK adapters and strategy encoders]
         MON[Independent health monitor]
         REG[Curated market registry]
     end
 
-    subgraph Panoptic[stonkHedge-deployed shared Panoptic V4 layer]
+    subgraph Panoptic[StonkHedge-deployed shared Panoptic V4 layer]
         FAC[PanopticFactoryV4]
         SFPM[SemiFungiblePositionManagerV4]
         RISK[RiskEngine]
@@ -152,7 +152,7 @@ flowchart TB
 
 Solid arrows represent deployed or protocol-defined relationships. Dotted
 arrows mark the next product/market work. The UI and registry will curate what
-stonkHedge presents, but the underlying Panoptic factory remains permissionless.
+StonkHedge presents, but the underlying Panoptic factory remains permissionless.
 
 ## 3. Repository architecture
 
@@ -212,7 +212,7 @@ Important behavior:
   withdrawals, swaps, or liquidations;
 - administrative burn can reduce raw reserves held by PoolManager without
   automatically updating Panoptic's cached accounting; and
-- transferability does not grant stonkHedge minting, redemption, pause, or
+- transferability does not grant StonkHedge minting, redemption, pause, or
   compliance authority.
 
 The controllable Stock Token under the core fork's test directory exists only
@@ -519,6 +519,10 @@ is closed and permits no further transaction. See the [canonical continuation
 record](../markets/2026-09-10-pltr-weth-public-continuation.md), [final
 machine-readable manifest](../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json),
 and [market-genesis roadmap](../roadmap/2026-09-09-market-genesis.md).
+
+For a complete address-by-address and transaction-by-transaction explanation,
+including why direct-CREATE and market-genesis ordering mattered, use the
+[public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
 The next checkpoint is the **public two-actor lifecycle**, still before
 Docusaurus:

@@ -1,12 +1,17 @@
-# Contributing to stonkHedge
+# Contributing to StonkHedge
 
-Thank you for helping build stonkHedge. This project combines inherited smart-contract code, chain integrations, an SDK, and a user-facing product. Small, evidence-backed changes are easier to review and materially safer than broad cross-repository rewrites.
+Thank you for helping build StonkHedge. This project combines inherited smart-contract code, chain integrations, an SDK, and a user-facing product. Small, evidence-backed changes are easier to review and materially safer than broad cross-repository rewrites.
+
+Build-in-public updates follow the same rule. Add editorial entries to
+`content/progress.json`; keep contract and transaction facts in canonical
+manifests; and run `npm run check` so unknown references, duplicate IDs, and
+broken document links fail before review.
 
 This guide is the working agreement for the project owner, collaborators, and external contributors. It applies even when only two people are coding.
 
 ## 1. Read before changing code
 
-1. Read the approved section of [`plan.md`](./plan.md), beginning at **stonkHedge build and Robinhood Chain testnet launch plan**.
+1. Read the approved section of [`plan.md`](./plan.md), beginning at **StonkHedge build and Robinhood Chain testnet launch plan**.
 2. Read the nearest repository `README`, license, build configuration, and relevant tests before editing inherited logic.
 3. Run the product repository's baseline verifier and record any existing failure before introducing a new one:
 

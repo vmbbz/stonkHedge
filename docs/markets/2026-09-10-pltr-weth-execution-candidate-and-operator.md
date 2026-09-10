@@ -146,7 +146,7 @@ The final adversarial review found that PositionManager's `nextTokenId` is a
 global counter shared with unrelated Robinhood testnet users. During review it
 advanced from `3854` to `3859` while the actor nonce, balances, allowances,
 PLTR/WETH PoolId, active liquidity, and Panoptic factory mapping all remained
-unchanged. That was outside activity, not a stonkHedge public transaction.
+unchanged. That was outside activity, not a StonkHedge public transaction.
 
 The counter is therefore treated only as a monotonic floor. At index `6`, the
 operator requires exactly one PositionManager ERC-721 `Transfer` mint from the

@@ -62,7 +62,7 @@ execution candidate must still consume a fresh, explicitly pinned head.
 
 ## 3. Architecture of the planned market
 
-The Robinhood faucet already issued the PLTR test Stock Token. stonkHedge does
+The Robinhood faucet already issued the PLTR test Stock Token. StonkHedge does
 not mint, upgrade, pause, unblock, or administer that token. The plan connects
 the issuer-controlled test asset to the deployed V4 and Panoptic systems.
 

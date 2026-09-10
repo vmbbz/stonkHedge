@@ -4,7 +4,7 @@
 
 Pinned Panoptic V2 core commit `d65310d6cfbaadb6910fa9446cc59c6541060749` is primarily licensed under Business Source License 1.1. Its base text permits copying, modification, derivative works, redistribution, and **non-production** use, requires the license to remain conspicuously displayed, and changes to GPL-2.0-or-later on the earlier of `2028-03-01` or an alternative date named through ENS.
 
-At Ethereum block `25932700`, neither ENS child name referenced by the license existed as a configured ENS node, and the parent resolver did not support wildcard resolution. No Additional Use Grant and no earlier change date could therefore be retrieved. stonkHedge must not infer production rights from a blank record.
+At Ethereum block `25932700`, neither ENS child name referenced by the license existed as a configured ENS node, and the parent resolver did not support wildcard resolution. No Additional Use Grant and no earlier change date could therefore be retrieved. StonkHedge must not infer production rights from a blank record.
 
 Project policy for the current milestone:
 

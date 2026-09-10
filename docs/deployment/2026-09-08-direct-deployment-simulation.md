@@ -9,7 +9,7 @@ all deployed runtimes were non-empty, final nonce was `16`, and 11
 post-deployment constructor/wiring assertions passed.
 
 No private key was read, no deployer transaction was signed or broadcast, and no
-stonkHedge contract exists on the public testnet. The official faucet later
+StonkHedge contract exists on the public testnet. The official faucet later
 funded the deployer without consuming its nonce, as documented in
 [`2026-09-08-faucet-and-mainnet-safe-readiness.md`](./2026-09-08-faucet-and-mainnet-safe-readiness.md).
 Public broadcast remains blocked on a second actor, independent core and

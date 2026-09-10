@@ -4,7 +4,7 @@
 
 This runbook gives the second contributor an independent, reproducible review
 of the exact Panoptic core candidate and the external Uniswap V4 infrastructure
-proposed for the first valueless stonkHedge sandbox on Robinhood Chain testnet.
+proposed for the first valueless StonkHedge sandbox on Robinhood Chain testnet.
 
 Completing this review does **not** authorize a deployment. During this gate:
 
@@ -21,11 +21,11 @@ one lane cannot compensate for a failure or blocker in the other.
 ## What the obstacles mean
 
 There is no evidence that the deployer key, Robinhood testnet, or any public
-stonkHedge deployment has been compromised. No stonkHedge contract has been
+StonkHedge deployment has been compromised. No StonkHedge contract has been
 deployed and the preparation and simulation tools do not read keys or broadcast.
 The word "unsupported" must be split into three different facts:
 
-| Boundary | Current meaning | Effect on stonkHedge |
+| Boundary | Current meaning | Effect on StonkHedge |
 |---|---|---|
 | Robinhood Chain EVM support | Robinhood documents chain `46630` as EVM-compatible, with standard JSON-RPC and ETH for gas. | Solidity, Foundry, ordinary CREATE, calls, and receipts use normal Ethereum tooling. Individual token pause/blocklist rules still apply. |
 | Panoptic release infrastructure | Panoptic's canonical sub-zero CREATE3 singleton has no runtime on chain `46630`; upstream release salts and Safe batches cannot be replayed there as-is. | We lose the upstream vanity/stable-address and Safe-batch path. We do not lose Panoptic bytecode compatibility. |

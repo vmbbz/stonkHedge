@@ -73,6 +73,6 @@ Passing either command validates current public chain state only. Core review, i
 - Robinhood's official network documentation establishes chain identity and RPC/explorer endpoints.
 - Robinhood's testnet announcement establishes the purpose of the test Stock Tokens.
 - Uniswap's official Robinhood mainnet deployment record establishes the mainnet PoolManager address and provenance.
-- EqualFiLabs' public testnet manifest supplies a reproducibility lead for the non-official testnet stack and pins Uniswap source commits; stonkHedge independently re-read every consumed runtime hash and critical control value.
+- EqualFiLabs' public testnet manifest supplies a reproducibility lead for the non-official testnet stack and pins Uniswap source commits; StonkHedge independently re-read every consumed runtime hash and critical control value.
 
 This evidence supports reuse for a valueless sandbox after review. It does not establish issuer partnership, Uniswap endorsement, audit coverage, mainnet rights, or safe handling of real value.

@@ -1,12 +1,18 @@
-# stonkHedge
+# StonkHedge
 
-stonkHedge is an early-stage project exploring Panoptic-native perpetual options and risk-management workflows for Robinhood Stock Tokens. The first public integration lane targets Robinhood Chain testnet; Base Sepolia remains a secondary ERC-8056 compatibility lane.
+StonkHedge is an early-stage project exploring Panoptic-native perpetual options and risk-management workflows for Robinhood Stock Tokens. The first public integration lane targets Robinhood Chain testnet; Base Sepolia remains a secondary ERC-8056 compatibility lane.
 
 The current repository is the product and delivery control plane. It contains the researched execution plan and will later hold chain manifests, deployment verification, monitoring, and the developer-facing application. Protocol and SDK changes remain isolated in auditable upstream forks.
 
 ## Start here
 
-- Read [`plan.md`](./plan.md), beginning with **stonkHedge build and Robinhood Chain testnet launch plan**.
+- Explore the data-driven build-in-public dashboard locally with `npm install`
+  and `npm run dev`. Its timeline entries live in `content/progress.json`, while
+  contract and transaction facts are generated from the canonical manifests.
+- Use the [public-genesis milestone ledger](./docs/progress/2026-09-11-public-genesis-milestone.md)
+  for the complete 19-deployment, 29-transaction architecture and
+  communications record.
+- Read [`plan.md`](./plan.md), beginning with **StonkHedge build and Robinhood Chain testnet launch plan**.
 - Use the [`docs` index](./docs/README.md) to navigate architecture, evidence,
   deployment, review, testing, and roadmap records.
 - Read the [Robinhood testnet system architecture](./docs/architecture/robinhood-testnet-system.md)
@@ -65,6 +71,23 @@ The current repository is the product and delivery control plane. It contains th
 | [`vmbbz/panoptic-sdk`](https://github.com/vmbbz/panoptic-sdk) | SDK fork; upstream is `panoptic-labs/panoptic-sdk` |
 
 The repositories are intentionally separate. Contract changes belong in the core fork, transaction construction and decoding belong in the SDK fork, and chain manifests, public evidence, monitoring, and the application belong here.
+
+## Build-in-public site
+
+The root Vite/TypeScript application is a static, host-agnostic publishing
+layer for verified progress. Three.js renders the interactive protocol
+constellation; semantic HTML provides the complete timeline, contract atlas,
+and transaction trail when WebGL or animation is unavailable.
+
+```powershell
+npm install
+npm run check
+npm run dev
+```
+
+Read [`content/README.md`](./content/README.md) before adding a milestone. The
+content tests reject unknown evidence references, malformed on-chain
+identities, duplicate IDs, and missing repository documents.
 
 ## Safety and licensing
 

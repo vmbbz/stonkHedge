@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "project": "StonkHedge",
+  "network": "Robinhood Chain Testnet",
+  "chainId": 46630,
+  "updatedAt": "2026-09-11",
+  "entries": [
+    {
+      "id": "foundation-and-research",
+      "date": "2026-09-08",
+      "eyebrow": "Foundation",
+      "title": "The mechanism survived the lab",
+      "target": "Qualify the chain, tokens, protocol fork, and controllable issuer-failure lifecycle before touching public state.",
+      "status": "complete",
+      "summary": "Pinned baselines, licensing boundaries, token controls, runtime headroom, and a full local Stock Token/Panoptic lifecycle were recorded.",
+      "outcomes": [
+        "Local controllable-token lifecycle reached the accepted residual-accounting bound",
+        "Five Robinhood faucet Stock Tokens and candidate V4 dependencies were qualified read-only",
+        "Public deployment remained explicitly gated"
+      ],
+      "commits": ["f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d", "cfaf42c29b5c59304540e2a31e24daee4d977797"],
+      "contractRefs": ["stock-registry", "stock-pltr", "v4-pool-manager"],
+      "transactionRefs": [],
+      "evidence": ["83 local tests in the final public-genesis checkpoint"],
+      "media": ["/media/stonkhedge-park.jpg"],
+      "docs": [
+        {"label": "Checkpoint B", "path": "docs/baseline/2026-09-08-checkpoint-b.md"},
+        {"label": "Chain qualification", "path": "docs/chain/2026-09-08-robinhood-testnet-qualification.md"}
+      ]
+    },
+    {
+      "id": "deployment-safety-lane",
+      "date": "2026-09-09",
+      "eyebrow": "Deployment design",
+      "title": "A missing singleton became an explicit safety model",
+      "target": "Adapt Panoptic's release process to Robinhood testnet without pretending its absent CREATE3 singleton or Safe-bound salts existed.",
+      "status": "complete",
+      "summary": "A deterministic direct-CREATE plan bound every predicted address to the deployer and exact nonce sequence, with offline preparation and one-step execution.",
+      "outcomes": [
+        "16-address sender-and-nonce plan simulated on a fresh fork",
+        "Hash-bound authorization and stop-on-mismatch operator created",
+        "CREATE3/Safe limitation isolated to deployment operations, not contract behavior"
+      ],
+      "commits": ["f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d"],
+      "contractRefs": ["panoptic-math", "interaction-helper", "panoptic-factory"],
+      "transactionRefs": [],
+      "evidence": ["16/16 predicted deployments replayed", "11/11 constructor and wiring assertions"],
+      "media": [],
+      "docs": [
+        {"label": "Deployment simulation", "path": "docs/deployment/2026-09-08-direct-deployment-simulation.md"},
+        {"label": "Operator design", "path": "docs/deployment/2026-09-09-direct-deployment-operator-candidate.md"}
+      ]
+    },
+    {
+      "id": "shared-stack-public",
+      "date": "2026-09-09",
+      "eyebrow": "Public milestone 01",
+      "title": "Sixteen shared deployments landed cleanly",
+      "target": "Deploy the shared Panoptic V4 graph one transaction at a time and reconcile every runtime and constructor relationship.",
+      "status": "complete",
+      "summary": "Seven metadata data slices and nine protocol contracts were deployed from the pinned core release. Every canonical receipt and runtime matched the frozen plan.",
+      "outcomes": [
+        "16 successful StonkHedge-signed deployment transactions",
+        "16/16 runtime identities reconciled",
+        "Factory, SFPM, RiskEngine, Guardian, references, libraries, and metadata available for markets"
+      ],
+      "commits": ["c867f891b7c2b447da65b313ab29782b89871da7"],
+      "contractRefs": ["metadata-0", "panoptic-guardian", "risk-engine", "sfpm-v4", "panoptic-factory"],
+      "transactionRefs": ["shared-0", "shared-15"],
+      "evidence": ["Deployer terminal nonce 16", "11/11 public wiring assertions"],
+      "media": ["/media/stonkhedge-testnet-hero.jpg"],
+      "docs": [
+        {"label": "Public deployment record", "path": "docs/deployment/2026-09-09-direct-deployment-public-progress.md"},
+        {"label": "Shared deployment manifest", "path": "manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json"}
+      ]
+    },
+    {
+      "id": "market-planning",
+      "date": "2026-09-10",
+      "eyebrow": "Market design",
+      "title": "A faucet-scale PLTR/WETH genesis was rehearsed",
+      "target": "Turn the first market choice into a bounded, synthetic, receipt-aware execution plan without public mutation.",
+      "status": "complete",
+      "summary": "The PoolKey, synthetic mechanism-test price, liquidity range, maximum token exposure, deadlines, cleanup, and receipt-derived NFT policy were replayed end to end.",
+      "outcomes": [
+        "Synthetic 0.001 test WETH/PLTR policy labelled as non-market data",
+        "Twelve transitions and four expected failures passed on a fork",
+        "LP identity changed from prediction to canonical receipt derivation"
+      ],
+      "commits": ["93d295b", "1625c8e"],
+      "contractRefs": ["stock-pltr", "testnet-weth", "v4-position-manager", "permit2"],
+      "transactionRefs": [],
+      "evidence": ["12/12 positive replay transitions", "4/4 required failure cases"],
+      "media": [],
+      "docs": [
+        {"label": "Genesis design", "path": "docs/markets/2026-09-09-pltr-weth-offline-genesis-design.md"},
+        {"label": "Fork rehearsal", "path": "docs/markets/2026-09-10-pltr-weth-fork-rehearsal.md"}
+      ]
+    },
+    {
+      "id": "public-genesis",
+      "date": "2026-09-11",
+      "eyebrow": "Public milestone 02",
+      "title": "The first Panoptic market is registered",
+      "target": "Initialize PLTR/WETH, mint bounded V4 liquidity, clear temporary permissions, and register the per-market Panoptic graph.",
+      "status": "complete",
+      "summary": "Thirteen actor transactions completed across a safely stopped original run and a freshly simulated continuation. The final factory call created the PanopticPool and both CollateralTrackers.",
+      "outcomes": [
+        "Uniswap V4 LP NFT 3903 minted with bounded two-sided liquidity",
+        "PanopticPool plus PLTR and WETH CollateralTrackers deployed and wired",
+        "All four ERC-20 and Permit2 allowances verified as zero"
+      ],
+      "commits": ["731df08", "c867f891b7c2b447da65b313ab29782b89871da7"],
+      "contractRefs": ["market-panoptic-pool", "market-tracker-pltr", "market-tracker-weth"],
+      "transactionRefs": ["genesis-0", "genesis-6", "genesis-7", "genesis-12"],
+      "evidence": ["13/13 canonical genesis receipts", "Final reconciliation at block 117093052", "SFPM pool ID 16897827167146926"],
+      "media": ["/media/stonkhedge-progress.mp4", "/media/stonkhedge-crystal.png"],
+      "docs": [
+        {"label": "Full milestone ledger", "path": "docs/progress/2026-09-11-public-genesis-milestone.md"},
+        {"label": "Final genesis manifest", "path": "manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json"}
+      ]
+    },
+    {
+      "id": "two-actor-lifecycle",
+      "date": "Next",
+      "eyebrow": "Next gate",
+      "title": "Prove the options lifecycle with two actors",
+      "target": "Open, observe, close, and clean up one bounded test position with independent roles and fresh authorization.",
+      "status": "next",
+      "summary": "SDK adapters, golden vectors, monitoring, controlled price transition, collateral, premium, solvency, close, withdrawal, and adverse-state evidence remain ahead.",
+      "outcomes": [
+        "No transaction is currently authorized",
+        "Public options, collateral, swaps, and user application are not yet live",
+        "Independent human review remains defence in depth and mandatory before real value"
+      ],
+      "commits": [],
+      "contractRefs": ["market-panoptic-pool", "market-tracker-pltr", "market-tracker-weth"],
+      "transactionRefs": [],
+      "evidence": [],
+      "media": [],
+      "docs": [
+        {"label": "Roadmap", "path": "docs/roadmap/2026-09-09-market-genesis.md"},
+        {"label": "Architecture", "path": "docs/architecture/robinhood-testnet-system.md"}
+      ]
+    }
+  ]
+}

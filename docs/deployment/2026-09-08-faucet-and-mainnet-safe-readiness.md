@@ -3,7 +3,7 @@
 ## Outcome
 
 The official Robinhood Chain testnet faucet successfully funded the public
-stonkHedge deployer without requiring its private key in a browser. Transaction
+StonkHedge deployer without requiring its private key in a browser. Transaction
 [`0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98`](https://explorer.testnet.chain.robinhood.com/tx/0x4ad5005f8f19e454a2a4b0bbe111f3f5ead57a15b146023f87000b3c18e47d98)
 succeeded at block `115750101`, timestamp `2026-09-08T19:07:49Z`.
 
@@ -15,7 +15,7 @@ timestamp `2026-09-08T19:22:39Z`.
 
 This clears the deployer's funding gate. It does not clear the second-actor,
 independent-review, exact-artifact regeneration, or broadcast gates. No private
-key was read, no deployer-signed transaction was made, and no stonkHedge
+key was read, no deployer-signed transaction was made, and no StonkHedge
 contract was deployed.
 
 ## Receipt and resulting balances
@@ -87,14 +87,14 @@ One Panoptic-specific mainnet prerequisite remains. The current upstream salts
 embed Panoptic's Ethereum Safe address
 `0x82bf455e9ebd6a541ef10b683de1edcaf05ce7a1` as the CREATE3 mint recipient. That
 3-of-5 Safe exists on Ethereum but is currently absent on both Robinhood chains.
-Having Safe and CREATE3 contracts available does not let stonkHedge impersonate
+Having Safe and CREATE3 contracts available does not let StonkHedge impersonate
 Panoptic's owners or reuse their release authorization.
 
 A future Robinhood mainnet plan must choose one explicitly reviewed route:
 
 1. Panoptic deploys/controls its corresponding Safe and performs an official
    release on chain `4663`.
-2. stonkHedge creates its own reviewed multisig, mines fresh salts bound to that
+2. StonkHedge creates its own reviewed multisig, mines fresh salts bound to that
    Safe, rebuilds and audits every address/artifact, then uses CREATE3 and Safe
    batches.
 3. A separate mainnet deployment method is designed and audited.

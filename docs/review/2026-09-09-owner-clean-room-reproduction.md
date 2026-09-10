@@ -148,7 +148,7 @@ it is not upgraded here into Uniswap authority or endorsement.
 2. **Upgradeable Stock Tokens — accepted only for valueless testnet.** The five
    assets share an externally controlled registry/beacon and implementation.
    Pause, block, multiplier, implementation, or administrative behavior can
-   change independently of stonkHedge.
+   change independently of StonkHedge.
 3. **Tight bytecode margin — accepted for this exact build.** `PanopticPoolV2`
    has 301 bytes of raw headroom. Any code/config/toolchain change invalidates
    this measurement and requires a fresh exact size gate.

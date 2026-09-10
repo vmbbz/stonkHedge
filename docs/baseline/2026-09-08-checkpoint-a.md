@@ -10,7 +10,7 @@ The machine-readable source of truth for this snapshot is [`../../manifests/base
 
 ## Feedback attachment reconciliation
 
-The supplied `pasted-text.txt` contains an earlier 634-line copy of the stonkHedge build plan. It does not contain a separately labeled Grok critique or attributable feedback passages. It was therefore not used to overwrite the newer approved plan or to invent quotations.
+The supplied `pasted-text.txt` contains an earlier 634-line copy of the StonkHedge build plan. It does not contain a separately labeled Grok critique or attributable feedback passages. It was therefore not used to overwrite the newer approved plan or to invent quotations.
 
 The durable, non-duplicative challenge points that a critical long-term review should retain are now explicit in `plan.md` Section 10.2: architecture alternatives, liquidity ownership, issuer/infrastructure dependency, user evidence, economic viability, governance/escape, assurance depth, distribution/jurisdiction, and scope discipline. If the actual Grok response is supplied later, each point should be mapped to that section with its source and disposition.
 
@@ -117,7 +117,7 @@ All suites used `FOUNDRY_PROFILE=ci_test`, which pins the inherited fork block a
 | `test/foundry/core/SemiFungiblePositionManager.t.sol` | `PASS`: 37 passed, 0 failed, 1 skipped |
 | `test/foundry/core/RiskEngine/*.t.sol` | `PASS`: 117 passed, 0 failed, 0 skipped across 10 suites |
 
-The combined focused baseline is 233 passed, 0 failed, and 1 skipped. The SFPM skip is inherited `test_removedLiquidityOverflow`; it remains visible and needs an upstream rationale before stonkHedge relies on that edge case. The suites also emit inherited compiler and deprecated-cheatcode warnings. Passing baseline tests prove reproducibility at the pinned commit, not Stock Token compatibility or stonkHedge safety.
+The combined focused baseline is 233 passed, 0 failed, and 1 skipped. The SFPM skip is inherited `test_removedLiquidityOverflow`; it remains visible and needs an upstream rationale before StonkHedge relies on that edge case. The suites also emit inherited compiler and deprecated-cheatcode warnings. Passing baseline tests prove reproducibility at the pinned commit, not Stock Token compatibility or StonkHedge safety.
 
 ### SDK install preflight
 
@@ -136,11 +136,11 @@ Do not work around this with an unpinned ad hoc package. First inspect the sourc
 
 Do not fabricate chain deployments or silently drop the affected HypoVault exports merely to make installation green.
 
-The public registry does contain a self-contained `@panoptic-eng/sdk@1.0.49` artifact matching the source checkout's package version. Its registry integrity is `sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg==`, and its public dependency list does not include the private deployments workspace. The first sandbox will pin that exact package and put stonkHedge-specific adapters in the product repo; source-fork publication remains blocked until parity is reproducible.
+The public registry does contain a self-contained `@panoptic-eng/sdk@1.0.49` artifact matching the source checkout's package version. Its registry integrity is `sha512-JRx+t3NPVwp70XwdtUto6I11Eq5NI61VVyWEmXXnEnUURXi64VxVJIL0oj4rICdq3I4tZFhkcAWm3P2WWdLbvg==`, and its public dependency list does not include the private deployments workspace. The first sandbox will pin that exact package and put StonkHedge-specific adapters in the product repo; source-fork publication remains blocked until parity is reproducible.
 
 ### License record audit
 
-Result: `PASS` for evidence collection and `BLOCKED` for production permission. At Ethereum block `25932700`, both ENS child names referenced by the pinned BUSL license had zero owner and resolver, and the parent resolver did not support wildcard resolution. No Additional Use Grant or alternative change date is available. See [`panoptic-license-2026-09-08.md`](./panoptic-license-2026-09-08.md). stonkHedge proceeds only as a bounded, valueless, non-monetized non-production testnet project; production and mainnet remain separately blocked.
+Result: `PASS` for evidence collection and `BLOCKED` for production permission. At Ethereum block `25932700`, both ENS child names referenced by the pinned BUSL license had zero owner and resolver, and the parent resolver did not support wildcard resolution. No Additional Use Grant or alternative change date is available. See [`panoptic-license-2026-09-08.md`](./panoptic-license-2026-09-08.md). StonkHedge proceeds only as a bounded, valueless, non-monetized non-production testnet project; production and mainnet remain separately blocked.
 
 ### Baseline verifier
 

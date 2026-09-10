@@ -1,6 +1,6 @@
-# stonkHedge documentation map
+# StonkHedge documentation map
 
-This directory is the source-of-truth documentation set for the stonkHedge
+This directory is the source-of-truth documentation set for the StonkHedge
 testnet project. The Markdown is intentionally organized so it can later move
 into Docusaurus without rewriting the technical content. Docusaurus is a
 publishing layer, not a substitute for accurate manifests and runbooks.
@@ -20,11 +20,14 @@ collateral, options, and the application are not live yet.
 
 Start with:
 
-1. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+1. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
+   for the complete public achievement, contract and transaction ledgers,
+   ordering rationale, communications facts, and next boundary;
+2. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
    for the system, component, trust-boundary, and evidence overview;
-2. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+3. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
    for the public transaction record; and
-3. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+4. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
 The first live, read-only market qualification passed at block `116408992`.
@@ -66,6 +69,7 @@ state was discarded. The [execution candidate and one-step operator record](./ma
 | `chain/` | External chain, token, and infrastructure qualification |
 | `deployment/` | Simulations, approvals, operator design, receipts, and reconciliation |
 | `markets/` | Asset selection, exact PoolKeys, price policy, market genesis, and lifecycle evidence |
+| `progress/` | Public milestone ledgers, communications facts, and proof-backed build-in-public records |
 | `review/` | Human or explicitly labelled owner-reproduced review evidence |
 | `roadmap/` | Forward-looking checkpoint plans that do not themselves authorize transactions |
 | `specs/` | Behavioral requirements and acceptance matrices |
@@ -73,6 +77,10 @@ state was discarded. The [execution candidate and one-step operator record](./ma
 
 Machine-readable facts belong in `../manifests/`. Narrative documents should
 link to those manifests rather than silently duplicating mutable values.
+
+The [build-in-public site architecture](./architecture/build-in-public-site.md)
+explains how the visual dashboard imports those manifests, validates editorial
+entries, degrades without WebGL, and publishes after a main-branch merge.
 
 ## Source-of-truth order
 

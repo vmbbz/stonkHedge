@@ -34,6 +34,10 @@ execution_planner = _load_sibling(
     "stonkhedge_market_execution_planner",
     "prepare_robinhood_market_execution_plan.py",
 )
+continuation_planner = _load_sibling(
+    "stonkhedge_market_continuation_planner",
+    "prepare_robinhood_market_continuation_plan.py",
+)
 fork_simulator = _load_sibling(
     "stonkhedge_market_fork_simulator", "simulate_robinhood_market_fork.py"
 )
@@ -62,6 +66,9 @@ SIMULATION_RUNNER = (
     .resolve()
     .with_name("simulate_robinhood_market_execution_operator.py")
 )
+LEGACY_INITIAL_SIMULATION_RUNNER_SHA256 = (
+    "3185057421ed7cdc06777b29522b9c3924551d50b93dcb642d9f52ca419b75db"
+)
 ERC721_TRANSFER_TOPIC = (
     "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 )
@@ -79,6 +86,26 @@ ACTOR_MANIFEST = (
     / "deployments"
     / "robinhood-testnet-second-actor-2026-09-09.json"
 )
+
+
+def _is_continuation(plan: dict[str, Any]) -> bool:
+    return plan.get("status") == (
+        "CONTINUATION_EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION"
+    )
+
+
+def _source_ordinal(plan: dict[str, Any], index: int) -> int:
+    transaction = plan["transactions"][index]
+    return int(transaction.get("sourceOrdinal", transaction["ordinal"]))
+
+
+def _original_completed_steps(plan: dict[str, Any], completed: int) -> int:
+    if not _is_continuation(plan):
+        return completed
+    schedule = plan.get("stateSchedule")
+    if not isinstance(schedule, list) or not 0 <= completed < len(schedule):
+        raise ValueError("continuation state schedule is incomplete")
+    return int(schedule[completed]["originalCompletedSteps"])
 
 
 def file_sha256(path: Path) -> str:
@@ -100,6 +127,9 @@ def validate_local_rpc_url(rpc_url: str) -> None:
 
 
 def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
+    if _is_continuation(plan):
+        validate_continuation_execution_plan(plan, plan_path)
+        return
     if plan.get("status") != "EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION":
         raise ValueError("execution-plan status is invalid")
     if plan.get("mode") != "UNSIGNED_NONCE_AND_TIME_BOUND_NO_SIGNING_NO_BROADCAST":
@@ -161,6 +191,82 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
         raise ValueError("execution plan is not the exact output of its bound inputs")
 
 
+def validate_continuation_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
+    if plan.get("mode") != (
+        "UNSIGNED_PARTIAL_STATE_NONCE_AND_TIME_BOUND_NO_SIGNING_NO_BROADCAST"
+    ):
+        raise ValueError("continuation execution-plan mode is invalid")
+    if plan.get("network", {}).get("chainId") != execution_planner.CHAIN_ID:
+        raise ValueError("continuation execution-plan chain is invalid")
+    if plan.get("network", {}).get("rpc") != execution_planner.OFFICIAL_RPC_URL:
+        raise ValueError("continuation execution-plan public RPC binding drifted")
+    if not execution_planner._all_false(plan.get("authorization")):
+        raise ValueError("continuation execution-plan authorization must stay false")
+    if plan.get("publicExecution", {}).get("ready") is not False:
+        raise ValueError("continuation public execution must remain disabled")
+    transactions = plan.get("transactions")
+    expected_ordinals = list(continuation_planner.SOURCE_ORDINALS)
+    if not isinstance(transactions, list) or len(transactions) != len(
+        expected_ordinals
+    ):
+        raise ValueError("continuation execution plan transaction count drifted")
+    if plan.get("transactionCount") != len(transactions):
+        raise ValueError("continuation transaction count drifted")
+    start_nonce = plan.get("startNonce")
+    if not isinstance(start_nonce, int) or start_nonce < 0:
+        raise ValueError("continuation start nonce is invalid")
+    if plan.get("nextNonce") != start_nonce + len(transactions):
+        raise ValueError("continuation next nonce drifted")
+    actor = qualifier.normalize_address(plan.get("actor", {}).get("address", ""))
+    for ordinal, (transaction, source_ordinal) in enumerate(
+        zip(transactions, expected_ordinals)
+    ):
+        if transaction.get("ordinal") != ordinal:
+            raise ValueError(f"continuation transaction {ordinal} ordinal drifted")
+        if transaction.get("sourceOrdinal") != source_ordinal:
+            raise ValueError(
+                f"continuation transaction {ordinal} source ordinal drifted"
+            )
+        if transaction.get("nonce") != start_nonce + ordinal:
+            raise ValueError(f"continuation transaction {ordinal} nonce drifted")
+        if qualifier.normalize_address(transaction.get("from", "")) != actor:
+            raise ValueError(f"continuation transaction {ordinal} actor drifted")
+        if transaction.get("authorizedForBroadcast") is not False:
+            raise ValueError(f"continuation transaction {ordinal} became authorized")
+    if plan.get("executionPlanBodySha256") != (
+        continuation_planner.execution_plan_body_sha256(plan)
+    ):
+        raise ValueError("continuation plan body SHA-256 drifted")
+    schedule = plan.get("stateSchedule")
+    if not isinstance(schedule, list) or len(schedule) != len(transactions) + 1:
+        raise ValueError("continuation state schedule length drifted")
+
+    repository = Path(plan_path).resolve().parents[2]
+    bindings = plan.get("sourceBindings", {})
+    paths: dict[str, Path] = {}
+    for name in (
+        "previousExecutionPlan",
+        "publicProgress",
+        "executionPlanningAcceptance",
+        "generator",
+        "qualificationPreflight",
+    ):
+        binding = bindings.get(name, {})
+        source = repository / binding.get("path", "")
+        if not source.is_file() or file_sha256(source) != binding.get("sha256"):
+            raise ValueError(f"continuation source binding {name} drifted")
+        paths[name] = source
+    regenerated = continuation_planner.build_continuation_plan(
+        paths["previousExecutionPlan"],
+        paths["publicProgress"],
+        paths["executionPlanningAcceptance"],
+        continuation_planner.DEFAULT_AUTHORIZATION,
+        paths["generator"],
+    )
+    if plan != regenerated:
+        raise ValueError("continuation plan is not the exact output of its inputs")
+
+
 def _normalized_hash(value: str, name: str) -> str:
     return direct_operator._normalize_hash(value, name)
 
@@ -198,7 +304,11 @@ def validate_simulation_report(
         "executionPlanBodySha256": plan["executionPlanBodySha256"],
         "executionPlanFileSha256": plan_file_hash,
         "operatorSha256": operator_hash,
-        "runnerSha256": file_sha256(SIMULATION_RUNNER),
+        "runnerSha256": (
+            file_sha256(SIMULATION_RUNNER)
+            if _is_continuation(plan)
+            else LEGACY_INITIAL_SIMULATION_RUNNER_SHA256
+        ),
     }
     for field, digest in expected.items():
         if _normalized_hash(
@@ -262,7 +372,7 @@ def validate_simulation_report(
             )
         expected_position_token_id = (
             int(plan["initialState"]["positionManagerNextTokenIdFloor"])
-            if index >= 6
+            if _source_ordinal(plan, index) >= 6
             else None
         )
         if step.get("liquidityPositionTokenId") != expected_position_token_id:
@@ -302,14 +412,21 @@ def validate_simulation_report(
             )
 
     initial = plan["initialState"]
+    initial_allowances = expected_allowances(plan, 0)
     expected_initial = {
         "completedSteps": 0,
         "pendingNonce": plan["startNonce"],
         "nativeBalanceWei": initial["nativeBalanceWei"],
         "pltrBalance": initial["pltrBalance"],
         "wethBalance": initial["wethBalance"],
-        "erc20Allowances": {"PLTR": "0", "WETH": "0"},
-        "permit2Allowances": {"PLTR": "0", "WETH": "0"},
+        "erc20Allowances": {
+            "PLTR": str(initial_allowances[0]),
+            "WETH": str(initial_allowances[1]),
+        },
+        "permit2Allowances": {
+            "PLTR": str(initial_allowances[2]),
+            "WETH": str(initial_allowances[3]),
+        },
         "sqrtPriceX96": "0",
         "tick": 0,
         "activeLiquidity": "0",
@@ -323,8 +440,10 @@ def validate_simulation_report(
 
     exposure = plan["maximumExposure"]
     price = plan["priceAndLiquidity"]
+    final_completed = len(plan["transactions"])
+    final_allowances = expected_allowances(plan, final_completed)
     expected_final = {
-        "completedSteps": 12,
+        "completedSteps": final_completed,
         "pendingNonce": plan["nextNonce"],
         "pltrBalance": str(
             int(initial["pltrBalance"])
@@ -332,11 +451,17 @@ def validate_simulation_report(
         ),
         "wethBalance": str(
             int(initial["wethBalance"])
-            + int(exposure["wrapNativeWei"])
+            + (0 if _is_continuation(plan) else int(exposure["wrapNativeWei"]))
             - int(price["expectedAmount1AtSyntheticPriceRoundedUp"])
         ),
-        "erc20Allowances": {"PLTR": "0", "WETH": "0"},
-        "permit2Allowances": {"PLTR": "0", "WETH": "0"},
+        "erc20Allowances": {
+            "PLTR": str(final_allowances[0]),
+            "WETH": str(final_allowances[1]),
+        },
+        "permit2Allowances": {
+            "PLTR": str(final_allowances[2]),
+            "WETH": str(final_allowances[3]),
+        },
         "sqrtPriceX96": price["sqrtPriceX96"],
         "tick": price["initialTick"],
         "activeLiquidity": price["liquidity"],
@@ -359,11 +484,10 @@ def validate_simulation_report(
         sfpm_pool_id = int(final.get("sfpmPoolId"))
     except (TypeError, ValueError) as exc:
         raise ValueError("operator simulation report final state is malformed") from exc
-    if (
-        not 0
-        < final_native
-        <= int(initial["nativeBalanceWei"]) - int(exposure["wrapNativeWei"])
-    ):
+    maximum_final_native = int(initial["nativeBalanceWei"])
+    if not _is_continuation(plan):
+        maximum_final_native -= int(exposure["wrapNativeWei"])
+    if not 0 < final_native <= maximum_final_native:
         raise ValueError(
             "operator simulation report final state native balance is invalid"
         )
@@ -408,6 +532,25 @@ def validate_authorization(
             authorization.get(field), f"authorization {field}"
         ) != _normalized_hash(expected, field):
             raise ValueError(f"authorization {field} mismatch")
+    if _is_continuation(plan):
+        clock = plan["executionClock"]
+        policy = plan["continuation"]["operationalClockPolicy"]
+        expected_clock_acceptance = {
+            "accepted": True,
+            "liquidityDeadlineSeconds": policy["continuationLiquidityDeadlineSeconds"],
+            "permit2AllowanceLifetimeSeconds": policy[
+                "continuationPermit2AllowanceLifetimeSeconds"
+            ],
+            "liquidityDeadlineUnix": clock["liquidityDeadlineUnix"],
+            "permit2ExpirationUnix": clock["permit2ExpirationUnix"],
+        }
+        if (
+            authorization.get("continuationClockPolicyAcceptance")
+            != expected_clock_acceptance
+        ):
+            raise ValueError(
+                "authorization continuation clock policy acceptance mismatch"
+            )
     maximum_index = authorization.get("maximumTransactionIndex")
     if (
         not isinstance(maximum_index, int)
@@ -475,7 +618,7 @@ def validate_market_aware_qualification(
     passed = len(results) - len(failures)
     if checks.get("passed") != passed or checks.get("failed") != len(failures):
         raise RuntimeError("strict market qualification counters are inconsistent")
-    if index < 6:
+    if _original_completed_steps(plan, index) < 6:
         if failures or not qualification.get("status", "").startswith(
             "READ_ONLY_QUALIFICATION_PASS_"
         ):
@@ -502,7 +645,10 @@ def validate_market_aware_qualification(
 def run_market_aware_strict_verifier(
     plan: dict[str, Any], plan_path: Path, index: int
 ) -> dict[str, Any]:
-    preflight_binding = plan["sourceBindings"]["freshPreflight"]
+    binding_name = (
+        "qualificationPreflight" if _is_continuation(plan) else "freshPreflight"
+    )
+    preflight_binding = plan["sourceBindings"][binding_name]
     preflight_path = Path(plan_path).resolve().parents[2] / preflight_binding["path"]
     preflight = load_json(preflight_path)
     bindings = preflight.get("sourceBindings", {})
@@ -529,7 +675,9 @@ def run_market_aware_strict_verifier(
         "blockNumber": qualification["snapshot"]["blockNumber"],
         "blockHash": qualification["snapshot"]["blockHash"],
         "checksPassed": qualification["checks"]["passed"],
-        "plannedCheckReplacements": 0 if index < 6 else 1,
+        "plannedCheckReplacements": (
+            0 if _original_completed_steps(plan, index) < 6 else 1
+        ),
     }
 
 
@@ -590,6 +738,17 @@ def ensure_anvil_lineage(plan: dict[str, Any], client: Any) -> dict[str, Any]:
 def expected_allowances(
     plan: dict[str, Any], completed: int
 ) -> tuple[int, int, int, int]:
+    if _is_continuation(plan):
+        schedule = plan.get("stateSchedule")
+        if not isinstance(schedule, list) or not 0 <= completed < len(schedule):
+            raise ValueError("continuation completed step is outside the schedule")
+        state = schedule[completed]
+        return (
+            int(state["erc20"]["PLTR"]),
+            int(state["erc20"]["WETH"]),
+            int(state["permit2"]["PLTR"]["amount"]),
+            int(state["permit2"]["WETH"]["amount"]),
+        )
     if not 0 <= completed <= 12:
         raise ValueError("completed step count must be between zero and twelve")
     exposure = plan["maximumExposure"]
@@ -613,14 +772,17 @@ def expected_allowances(
     return pltr_erc20, weth_erc20, pltr_permit2, weth_permit2
 
 
-def validate_liquidity_token_argument(index: int, token_id: int | None) -> None:
-    if index >= 7 and token_id is None:
+def validate_liquidity_token_argument(
+    index: int, token_id: int | None, plan: dict[str, Any] | None = None
+) -> None:
+    source_ordinal = index if plan is None else _source_ordinal(plan, index)
+    if source_ordinal >= 7 and token_id is None:
         raise ValueError(
             "--liquidity-token-id from the passing transaction-6 receipt evidence "
-            "is required for indices 7 through 11"
+            "is required after the liquidity mint"
         )
-    if index < 7 and token_id is not None:
-        raise ValueError("--liquidity-token-id is valid only for indices 7 through 11")
+    if source_ordinal < 7 and token_id is not None:
+        raise ValueError("--liquidity-token-id is valid only after the liquidity mint")
     if token_id is not None and token_id < 0:
         raise ValueError("liquidity token ID cannot be negative")
 
@@ -713,8 +875,10 @@ def verify_state(
     *,
     position_token_id: int | None = None,
 ) -> dict[str, Any]:
-    if not 0 <= completed <= 12:
-        raise ValueError("completed step count must be between zero and twelve")
+    maximum_completed = len(plan["transactions"])
+    if not 0 <= completed <= maximum_completed:
+        raise ValueError("completed step count is outside the execution plan")
+    original_completed = _original_completed_steps(plan, completed)
     actor = qualifier.normalize_address(plan["actor"]["address"])
     contracts = plan["contracts"]
     price = plan["priceAndLiquidity"]
@@ -726,9 +890,13 @@ def verify_state(
     wrap = int(exposure["wrapNativeWei"])
     amount0 = int(price["expectedAmount0AtSyntheticPriceRoundedUp"])
     amount1 = int(price["expectedAmount1AtSyntheticPriceRoundedUp"])
-    expected_pltr = int(initial["pltrBalance"]) - (amount0 if completed >= 7 else 0)
-    expected_weth = int(initial["wethBalance"]) + (wrap if completed >= 1 else 0)
-    if completed >= 7:
+    expected_pltr = int(initial["pltrBalance"]) - (
+        amount0 if original_completed >= 7 else 0
+    )
+    expected_weth = int(initial["wethBalance"])
+    if not _is_continuation(plan) and original_completed >= 1:
+        expected_weth += wrap
+    if original_completed >= 7:
         expected_weth -= amount1
     pltr = fork_simulator._balance(client, contracts["pltr"], actor)
     weth = fork_simulator._balance(client, contracts["weth"], actor)
@@ -739,8 +907,10 @@ def verify_state(
     initial_native = int(initial["nativeBalanceWei"])
     if completed == 0:
         _assert_equal("actor initial native balance", native, initial_native)
-    elif not 0 < native <= initial_native - wrap:
-        raise RuntimeError("actor native balance is outside the post-wrap gas range")
+    else:
+        maximum_native = initial_native - (0 if _is_continuation(plan) else wrap)
+        if not 0 < native <= maximum_native:
+            raise RuntimeError("actor native balance is outside the post-gas range")
 
     expected = expected_allowances(plan, completed)
     actual = (
@@ -766,6 +936,9 @@ def verify_state(
         )[0],
     )
     _assert_equal("permission ladder", actual, expected)
+    schedule_state = (
+        plan["stateSchedule"][completed] if _is_continuation(plan) else None
+    )
     if expected[2] != 0:
         expiration = fork_simulator._permit2_allowance(
             client,
@@ -777,7 +950,11 @@ def verify_state(
         _assert_equal(
             "PLTR Permit2 expiration",
             expiration,
-            plan["executionClock"]["permit2ExpirationUnix"],
+            (
+                int(schedule_state["permit2"]["PLTR"]["expiration"])
+                if schedule_state is not None
+                else plan["executionClock"]["permit2ExpirationUnix"]
+            ),
         )
     if expected[3] != 0:
         expiration = fork_simulator._permit2_allowance(
@@ -790,12 +967,16 @@ def verify_state(
         _assert_equal(
             "WETH Permit2 expiration",
             expiration,
-            plan["executionClock"]["permit2ExpirationUnix"],
+            (
+                int(schedule_state["permit2"]["WETH"]["expiration"])
+                if schedule_state is not None
+                else plan["executionClock"]["permit2ExpirationUnix"]
+            ),
         )
 
     sqrt_price, tick, _, _ = fork_simulator._slot0(client, plan)
     liquidity = fork_simulator._active_liquidity(client, plan)
-    if completed < 6:
+    if original_completed < 6:
         _assert_equal("uninitialized sqrtPriceX96", sqrt_price, 0)
         _assert_equal("pre-initialization active liquidity", liquidity, 0)
     else:
@@ -806,7 +987,7 @@ def verify_state(
         _assert_equal(
             "active liquidity",
             liquidity,
-            int(price["liquidity"]) if completed >= 7 else 0,
+            int(price["liquidity"]) if original_completed >= 7 else 0,
         )
 
     token_id_floor = int(initial["positionManagerNextTokenIdFloor"])
@@ -815,7 +996,7 @@ def verify_state(
             client, contracts["positionManager"], "nextTokenId()", ["uint256"]
         )
     )
-    minimum_next_token_id = token_id_floor + (1 if completed >= 7 else 0)
+    minimum_next_token_id = token_id_floor + (1 if original_completed >= 7 else 0)
     if next_token_id < minimum_next_token_id:
         raise RuntimeError(
             "PositionManager nextTokenId moved below the execution-plan floor"
@@ -833,9 +1014,10 @@ def verify_state(
     _assert_equal(
         "PositionManager actor NFT balance",
         actor_nft_balance,
-        int(initial["actorPositionManagerNftBalance"]) + (1 if completed >= 7 else 0),
+        int(initial["actorPositionManagerNftBalance"])
+        + (1 if original_completed >= 7 else 0),
     )
-    if completed >= 7:
+    if original_completed >= 7:
         if position_token_id is None:
             raise RuntimeError(
                 "the receipt-derived liquidity token ID is required after mint"
@@ -869,7 +1051,7 @@ def verify_state(
 
     predicted = plan["predictedMarketContracts"]
     sfpm_pool_id = 0
-    if completed < 12:
+    if original_completed < 12:
         _assert_equal(
             "factory mapping before registration",
             fork_simulator._factory_pool(client, plan),
@@ -914,9 +1096,10 @@ def _assert_time_window(client: Any, plan: dict[str, Any], index: int) -> None:
         raise RuntimeError(
             "execution candidate lacks the required initial deadline lead"
         )
-    if index <= 6 and now >= clock["liquidityDeadlineUnix"]:
+    source_ordinal = _source_ordinal(plan, index)
+    if source_ordinal <= 6 and now >= clock["liquidityDeadlineUnix"]:
         raise RuntimeError("execution candidate liquidity deadline has expired")
-    if 3 <= index <= 6 and now >= clock["permit2ExpirationUnix"]:
+    if 3 <= source_ordinal <= 6 and now >= clock["permit2ExpirationUnix"]:
         raise RuntimeError("execution candidate Permit2 expiration has passed")
 
 
@@ -1312,7 +1495,7 @@ def execute_one_step(
     position_token_id: int | None = None,
 ) -> dict[str, Any]:
     validate_execution_plan(plan, plan_path)
-    validate_liquidity_token_argument(index, position_token_id)
+    validate_liquidity_token_argument(index, position_token_id, plan)
     plan_hash = file_sha256(plan_path)
     operator_hash = file_sha256(Path(__file__))
     simulation_hash = file_sha256(simulation_report_path)
@@ -1485,7 +1668,9 @@ def execute_one_step(
             signing_preflight["gasLimit"],
         )
         liquidity_position_mint = (
-            verify_liquidity_nft_mint_event(receipt, plan) if index == 6 else None
+            verify_liquidity_nft_mint_event(receipt, plan)
+            if _source_ordinal(plan, index) == 6
+            else None
         )
         reconciled_position_token_id = (
             liquidity_position_mint["tokenId"]
@@ -1493,7 +1678,9 @@ def execute_one_step(
             else position_token_id
         )
         pool_deployed = (
-            verify_pool_deployed_event(receipt, plan) if index == 11 else None
+            verify_pool_deployed_event(receipt, plan)
+            if _source_ordinal(plan, index) == 11
+            else None
         )
         after = verify_state(
             client,
@@ -1540,7 +1727,7 @@ def simulate_one_step(
     lineage = ensure_anvil_lineage(plan, client)
     position_token_id = (
         int(plan["initialState"]["positionManagerNextTokenIdFloor"])
-        if index >= 7
+        if _original_completed_steps(plan, index) >= 7
         else None
     )
     before = verify_state(client, plan, index, position_token_id=position_token_id)
@@ -1562,7 +1749,9 @@ def simulate_one_step(
     if receipt.get("status") != "0x1":
         raise RuntimeError(f"simulated execution transaction {index} reverted")
     liquidity_position_mint = (
-        verify_liquidity_nft_mint_event(receipt, plan) if index == 6 else None
+        verify_liquidity_nft_mint_event(receipt, plan)
+        if _source_ordinal(plan, index) == 6
+        else None
     )
     reconciled_position_token_id = (
         liquidity_position_mint["tokenId"]
@@ -1617,7 +1806,7 @@ def parse_args() -> argparse.Namespace:
         type=int,
         help=(
             "receipt-derived PositionManager NFT token ID; required for public "
-            "indices 7 through 11"
+            "steps after the liquidity-mint transaction"
         ),
     )
     return parser.parse_args()

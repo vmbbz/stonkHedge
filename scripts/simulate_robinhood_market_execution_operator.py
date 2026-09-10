@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rehearse all 12 execution-candidate steps through the one-step operator.
+"""Rehearse every execution-candidate step through the one-step operator.
 
 The runner is loopback-Anvil only. It calls the operator once per consecutive
 index, requiring full state reconciliation each time, and writes a sanitized
@@ -46,7 +46,7 @@ def build_summary(
     plan: dict[str, Any], plan_path: Path, step_reports: list[dict[str, Any]]
 ) -> dict[str, Any]:
     if len(step_reports) != len(plan["transactions"]):
-        raise ValueError("operator simulation did not produce twelve step reports")
+        raise ValueError("operator simulation did not produce every step report")
     for index, report in enumerate(step_reports):
         if report.get("status") != "PASS_ONE_STEP_LOOPBACK_SIMULATION_STOP":
             raise ValueError(f"operator step {index} did not pass")
@@ -115,7 +115,8 @@ def main() -> int:
         json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     print(
-        f"{args.report}: {report['status']}; 12 isolated operator steps reconciled"
+        f"{args.report}: {report['status']}; "
+        f"{report['stepCount']} isolated operator steps reconciled"
     )
     print("LOOPBACK ONLY; NO CREDENTIALS, SIGNING, OR PUBLIC BROADCAST")
     return 0

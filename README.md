@@ -28,7 +28,11 @@ The current repository is the product and delivery control plane. It contains th
   passed `12/12` isolated operator calls at canonical block `116968208`. The
   operator derives the LP NFT ID from the canonical mint receipt instead of
   assuming Uniswap's shared global counter reserves it; every transaction is
-  still unauthorized and public PLTR/WETH state remains empty.
+  still individually gated. The subsequent [partial public-genesis and
+  continuation record](./docs/markets/2026-09-10-pltr-weth-public-continuation.md)
+  records four successful public steps, the deliberate deadline stop before
+  pool initialization, and a new nine-step continuation that passed exact-head
+  replay but remains unauthorized.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -41,11 +45,10 @@ The current repository is the product and delivery control plane. It contains th
 - Run `pwsh -File .\scripts\verify-robinhood-testnet.ps1` before any chain-specific simulation or broadcast. Use `-SkipFundingGate` only for read-only infrastructure qualification.
 - Treat all material before that section as background research, not an approved specification.
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
-  Robinhood Chain testnet. The first Stock Token/WETH pool, liquidity,
-  per-market Panoptic contracts, and user application remain undeployed even
-  though both its genesis mechanism and guarded one-step operator now pass
-  exact-head local fork rehearsals; no new public transaction is authorized by
-  the completed shared-stack approval or either rehearsal.
+  Robinhood Chain testnet. Market-genesis indexes `0–3` wrapped bounded test
+  ETH and staged bounded approvals; the pool, liquidity, per-market Panoptic
+  contracts, and application remain undeployed. The fresh partial-state
+  continuation is locally proven but separately unauthorized.
 
 ## Repository map
 

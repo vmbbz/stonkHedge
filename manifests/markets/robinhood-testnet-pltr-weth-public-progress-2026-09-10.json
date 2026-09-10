@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_STOPPED_AFTER_INDEX_3_FOR_DEADLINE_REFRESH",
+  "mode": "PUBLIC_READBACK_AND_CANONICAL_RECEIPT_EVIDENCE",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 117008274,
+    "referenceBlockHash": "0x1e8264e9ef88dacb64827c9f85100ac2586fb80d8aeaff4aa4ad789f55d4bb28",
+    "referenceBlockTimestamp": "2026-09-10T18:13:23Z",
+    "referenceTimestampUnix": 1789064003
+  },
+  "actor": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+  "sourceBindings": {
+    "executionPlanBodySha256": "d42fcb1ede1f864a83151a12c0b4c9b6b1ea1efd6e01e965ffd5b4e063d13510",
+    "executionPlanFileSha256": "7ae23edc65fb7c54f43c8eb7c6bb30ca1c5c62ead4791c5114dccdbe39e03094",
+    "authorizationManifestSha256": "2805e21b80a8fc47d926e72659f14c841b252582973c1f4b393a464fb43dbfcb",
+    "operatorSha256AtExecution": "12afc611e2c992487a1d7571a3903b055356a72943ab58ce57436c72616e2cfc",
+    "operatorSimulationReportSha256": "9c128018ca74f4635afdd68bbe80e5ae1d6e296e65dac3b066bda8ffa64565c7"
+  },
+  "completedThroughTransactionIndex": 3,
+  "stopReason": "Insufficient remaining time to safely execute indexes 4 through 6 and reconcile the liquidity mint before the bound deadline.",
+  "completedTransactions": [
+    {
+      "index": 0,
+      "nonce": 0,
+      "transactionHash": "0x87ad860e64bd75e9af7a55f638ad8523dcd7fc53a3147df4b85aa1753924584f",
+      "blockNumber": 116988374,
+      "blockHash": "0x41f45053a135c2d691a6bdb6ad4f7b6cc1f95738af0a25ce05877eccfb036c2f",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "4000000000000000",
+      "calldataKeccak256": "0xa1548b79599a5ef2fd6de226ea5131c228954c4bf788eb3e4386a2728abe3e8d",
+      "status": "PASS",
+      "externalEvidenceSha256": "5980c808d52e61543c2d6b8b3e3902ab061a3121e63e7089552757689faf7e66"
+    },
+    {
+      "index": 1,
+      "nonce": 1,
+      "transactionHash": "0xfc94846786de4214c015ae2c5c482b6bfe6c4d28f980c6964b7bb19f8e1202b8",
+      "blockNumber": 116993087,
+      "blockHash": "0x10c20044731f02a4576618f26e24efaa19040e6756e57b06765692f68b551455",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldataKeccak256": "0xb635b8e155db946759b08ae348d550c829b3ab7d59e386c98a128a4e854c6a30",
+      "status": "PASS",
+      "externalEvidenceSha256": "6042081b24114495dd7194c2936629b4ea2b60c7fccbfcc5a786b6b6bf374103"
+    },
+    {
+      "index": 2,
+      "nonce": 2,
+      "transactionHash": "0xa9c377c2362df4d23524a1302420c824941424632da9c374cc0b5e226b106946",
+      "blockNumber": 116996104,
+      "blockHash": "0xd6d1045fe689b5f3e5e11bced1398c3a2657f6c92470fbd2edc37da451dc884b",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldataKeccak256": "0x47fbd985dcf19569a968157b54acdb7b7d8f18aa8e69b987b8ee920068e1360b",
+      "status": "PASS",
+      "externalEvidenceSha256": "5f532c5f435d8c566bb0cf457121121e6474c8e5556c918a23263b499b4918c0"
+    },
+    {
+      "index": 3,
+      "nonce": 3,
+      "transactionHash": "0x4cb6f3c64ca7d873b2a02af93b0e571dcfa55b17dbee22cc58c7422333e4843a",
+      "blockNumber": 116999668,
+      "blockHash": "0xb2da502687d159b18d4732211cc64d8204d7160eceb01859083b5d2f9aca115b",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0x6278f8809cf91983d8aa41eb316a6707935b3b3bc53dc99c55b55a842870d1cb",
+      "status": "PASS",
+      "externalEvidenceSha256": "78631981e20a356b2776a9e908a989641ec2b6fbadf53f58d28a38e98d882aea"
+    }
+  ],
+  "postState": {
+    "pendingNonce": 4,
+    "nativeBalanceWei": "5997789040000000",
+    "pltrBalance": "5000000000000000000",
+    "wethBalance": "4000000000000000",
+    "erc20Allowances": {
+      "PLTR": "2000000000000000000",
+      "WETH": "2000000000000000"
+    },
+    "permit2Allowances": {
+      "PLTR": {
+        "amount": "2000000000000000000",
+        "expiration": 1789066320,
+        "nonce": 0
+      },
+      "WETH": {
+        "amount": "0",
+        "expiration": 0,
+        "nonce": 0
+      }
+    },
+    "sqrtPriceX96": "0",
+    "tick": 0,
+    "activeLiquidity": "0",
+    "positionManagerNextTokenIdFloor": "3896",
+    "positionManagerActorNftBalance": "0",
+    "factoryMapping": "0x0000000000000000000000000000000000000000"
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "poolInitialization": false,
+    "liquidity": false,
+    "panopticMarketRegistration": false,
+    "swaps": false,
+    "collateralOrTrading": false
+  },
+  "nextGate": "FRESH_PARTIAL_STATE_CONTINUATION_PLAN_AND_EXACT_HEAD_REPLAY"
+}

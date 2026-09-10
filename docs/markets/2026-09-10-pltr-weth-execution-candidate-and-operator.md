@@ -27,6 +27,12 @@ Public readback after Anvil was stopped showed:
 Therefore no PLTR/WETH pool, liquidity position, or Panoptic market was created
 on Robinhood testnet in this round.
 
+> Historical-state note: this section records the pre-execution rehearsal.
+> Original indexes `0–3` were later mined and reconciled before execution
+> stopped safely at the deadline gate. The current public state and replacement
+> continuation are recorded in [PLTR/WETH partial public genesis and
+> continuation](./2026-09-10-pltr-weth-public-continuation.md).
+
 ## Accepted exposure
 
 | Item | Accepted mechanism-test value |
@@ -307,5 +313,8 @@ safe round is:
    those hashes; and only
 3. then consider executing index `0` with the actor's encrypted keystore.
 
-Pool initialization, liquidity, market registration, collateral, swaps, and
-options remain publicly unexecuted and unauthorized today.
+The candidate documented here was partially consumed through index `3` and is
+now expired. It must not be resumed. Pool initialization, liquidity, market
+registration, collateral, swaps, and options remain publicly unexecuted; only
+the separately generated partial-state continuation can be considered for a
+new authorization.

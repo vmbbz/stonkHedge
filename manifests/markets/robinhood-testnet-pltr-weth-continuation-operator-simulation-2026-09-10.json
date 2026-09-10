@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_EXECUTION_CANDIDATE_ONE_STEP_OPERATOR_REHEARSAL",
+  "mode": "LOOPBACK_ANVIL_ONLY_NO_CREDENTIALS_NO_SIGNING_NO_PUBLIC_BROADCAST",
+  "sourceBindings": {
+    "executionPlanBodySha256": "27504e1a06b2257fbd16a61c2f68cdfe758b09d2eeb4f417d259e1e8175a5d06",
+    "executionPlanFileSha256": "4eda54e4b3e0d214578cd369f7e36e872acd54d61f9167db26103b138bda48d3",
+    "operatorSha256": "96c0889e0f5130035ad5c047950411d8c51abf639cbeb275cbbcce8111361339",
+    "runnerSha256": "75a0466d40c5c2273ac5ba761ceb53cf8ca911734c3070111ea562da6fead618"
+  },
+  "lineage": {
+    "clientVersion": "anvil/v1.8.1",
+    "chainId": 46630,
+    "referenceBlock": 117008274,
+    "referenceBlockHash": "0x1e8264e9ef88dacb64827c9f85100ac2586fb80d8aeaff4aa4ad789f55d4bb28",
+    "compatibilityBlock": 117008275,
+    "latestLocalBlock": 117008275
+  },
+  "stepCount": 9,
+  "steps": [
+    {
+      "ordinal": 0,
+      "label": "approve bounded PLTR from Permit2 to PositionManager",
+      "nonce": 4,
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xe7dd861d66b1f8dd066e8fb89727604c93112c7aceab81e92f44e6420e4f9d0b",
+      "transactionHash": "0x4bc5992fe38e67211169cc8686eeee991c06b1af97e1159d8b134aa2507eb09c",
+      "blockNumber": 117008276,
+      "gasUsed": 30526,
+      "effectiveGasPriceWei": "7656251",
+      "status": "PASS",
+      "liquidityPositionTokenId": null
+    },
+    {
+      "ordinal": 1,
+      "label": "approve bounded WETH from Permit2 to PositionManager",
+      "nonce": 5,
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xb2ea80da4a1764f0e909bd3f559964804c5aa3f246546f1016875f7ae3aefbd9",
+      "transactionHash": "0x671edf09dca4742df2797689519be3fd04232db72473acd5d90a964d33e82572",
+      "blockNumber": 117008277,
+      "gasUsed": 47614,
+      "effectiveGasPriceWei": "6699220",
+      "status": "PASS",
+      "liquidityPositionTokenId": null
+    },
+    {
+      "ordinal": 2,
+      "label": "initialize exact PLTR/WETH pool directly through PoolManager",
+      "nonce": 6,
+      "to": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "valueWei": "0",
+      "calldataKeccak256": "0x5106649f72bb5ab4ae9ef0a02683f9f3adf2589dba3b1d19447725a3c1a49f94",
+      "transactionHash": "0x32fd68a628c20a7669556501cc1572f6857dbb5bbf1269f6bc1ddca1a92e98f2",
+      "blockNumber": 117008278,
+      "gasUsed": 51939,
+      "effectiveGasPriceWei": "5861818",
+      "status": "PASS",
+      "liquidityPositionTokenId": null
+    },
+    {
+      "ordinal": 3,
+      "label": "mint bounded two-sided V4 liquidity position",
+      "nonce": 7,
+      "to": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+      "valueWei": "0",
+      "calldataKeccak256": "0x5da6827902cc020ae03329d996f904e51d0fcd6889ea72973bcb21d0d7e0bcc0",
+      "transactionHash": "0xef4a289dded1bf0097a74a6b49199c5ac222814c2cd4484c5ba34483906038d4",
+      "blockNumber": 117008279,
+      "gasUsed": 432548,
+      "effectiveGasPriceWei": "5129091",
+      "status": "PASS",
+      "liquidityPositionTokenId": 3896
+    },
+    {
+      "ordinal": 4,
+      "label": "revoke PLTR Permit2-to-PositionManager allowance",
+      "nonce": 8,
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xc72eddfcd31bb809b46f43fe2a362a2fab3721029c7d3ce5543d49b45d306d7e",
+      "transactionHash": "0x2525a9953dcc2c7e41c7c7f51f611995beb62df48629213e21ed44ee16d8913d",
+      "blockNumber": 117008280,
+      "gasUsed": 30396,
+      "effectiveGasPriceWei": "4487955",
+      "status": "PASS",
+      "liquidityPositionTokenId": 3896
+    },
+    {
+      "ordinal": 5,
+      "label": "revoke WETH Permit2-to-PositionManager allowance",
+      "nonce": 9,
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0x94188956a7b02e04145c0b703b6f8645148c32940ec69b2af551ae23a42cfbbc",
+      "transactionHash": "0xcf08bc99ac64c89968ed29a5b7a233bf920f47e6636f1dd0540d1cd8c6205bb7",
+      "blockNumber": 117008281,
+      "gasUsed": 30396,
+      "effectiveGasPriceWei": "3926961",
+      "status": "PASS",
+      "liquidityPositionTokenId": 3896
+    },
+    {
+      "ordinal": 6,
+      "label": "revoke PLTR ERC20-to-Permit2 allowance",
+      "nonce": 10,
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "transactionHash": "0xdc7e0ff1ddc3a9ff7749c08f7776f85212a01131126ab033a0abba88d8585777",
+      "blockNumber": 117008282,
+      "gasUsed": 38556,
+      "effectiveGasPriceWei": "3436091",
+      "status": "PASS",
+      "liquidityPositionTokenId": 3896
+    },
+    {
+      "ordinal": 7,
+      "label": "revoke WETH ERC20-to-Permit2 allowance",
+      "nonce": 11,
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "transactionHash": "0x74eb72f17343e65e293ebf8ec8a1752d834750f6c106e504ec49dbcf8a5559b1",
+      "blockNumber": 117008283,
+      "gasUsed": 24055,
+      "effectiveGasPriceWei": "3006580",
+      "status": "PASS",
+      "liquidityPositionTokenId": 3896
+    },
+    {
+      "ordinal": 8,
+      "label": "deploy and register Panoptic market; mint factory NFT to actor",
+      "nonce": 12,
+      "to": "0x96c3291c9b0c34b007893326ee9dca534bfcfa0c",
+      "valueWei": "0",
+      "calldataKeccak256": "0xf6c86c26c5db882cd78bfcab82d9388420506d23627a656b94bca96747701c5e",
+      "transactionHash": "0x1ff9d14e6033f19881277d9597753a39e556d8a4e145e198a9f873f9c2763b87",
+      "blockNumber": 117008284,
+      "gasUsed": 771124,
+      "effectiveGasPriceWei": "2630758",
+      "status": "PASS",
+      "liquidityPositionTokenId": 3896
+    }
+  ],
+  "initialState": {
+    "completedSteps": 0,
+    "pendingNonce": 4,
+    "nativeBalanceWei": "5997789040000000",
+    "pltrBalance": "5000000000000000000",
+    "wethBalance": "4000000000000000",
+    "erc20Allowances": {
+      "PLTR": "2000000000000000000",
+      "WETH": "2000000000000000"
+    },
+    "permit2Allowances": {
+      "PLTR": "2000000000000000000",
+      "WETH": "0"
+    },
+    "sqrtPriceX96": "0",
+    "tick": 0,
+    "activeLiquidity": "0",
+    "positionManagerNextTokenId": "3896",
+    "positionManagerActorNftBalance": "0",
+    "liquidityPositionTokenId": null,
+    "sfpmPoolId": "0"
+  },
+  "finalState": {
+    "completedSteps": 9,
+    "pendingNonce": 13,
+    "nativeBalanceWei": "5992224087976700",
+    "pltrBalance": "3022157655355120211",
+    "wethBalance": "2020000000000000",
+    "erc20Allowances": {
+      "PLTR": "0",
+      "WETH": "0"
+    },
+    "permit2Allowances": {
+      "PLTR": "0",
+      "WETH": "0"
+    },
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "tick": -69082,
+    "activeLiquidity": "138450781996976174",
+    "positionManagerNextTokenId": "3897",
+    "positionManagerActorNftBalance": "1",
+    "liquidityPositionTokenId": 3896,
+    "sfpmPoolId": "16897827167146926"
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "poolInitialization": false,
+    "liquidity": false,
+    "panopticMarketRegistration": false,
+    "swaps": false,
+    "collateralOrTrading": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "broadcastAttempted": false,
+    "blockingReasons": [
+      "this execution candidate is time-bound and will become stale",
+      "the operator public lane was not invoked during this rehearsal",
+      "no hash-bound signing or public broadcast authorization exists"
+    ]
+  },
+  "nextGate": "REVIEW_THEN_REGENERATE_FINAL_CANDIDATE_BEFORE_ANY_BROADCAST_DECISION"
+}

@@ -8,11 +8,11 @@ publishing layer, not a substitute for accurate manifests and runbooks.
 ## Current milestone
 
 The 16-contract shared Panoptic V4 stack is deployed and reconciled on
-Robinhood Chain testnet. PLTR/WETH genesis has passed an exact-head local fork
-rehearsal and its nonce-bound one-step operator has passed a fresh 12-call
-execution-candidate replay, but its Uniswap V4 pool, per-market Panoptic
-contracts, collateral deposits, option positions, and user application are not
-live yet.
+Robinhood Chain testnet. PLTR/WETH public genesis completed four bounded setup
+transactions and then stopped before pool initialization when the original
+mint deadline became too short. A nonce-`4..12` continuation passed a fresh
+nine-call exact-head replay but remains unauthorized. The V4 pool, per-market
+Panoptic contracts, collateral, options, and application are not live yet.
 
 Start with:
 
@@ -36,8 +36,10 @@ then passed `12/12` local transitions and `4/4` expected reverts. Its local
 state was discarded. The [execution candidate and one-step operator record](./markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md)
    documents the final `12/12` operator replay at canonical block `116968208`,
    including nonce/deadline binding, receipt-derived LP NFT identity, full
-   evidence validation, and the public non-mutation proof. No market transaction
-   is yet authorized.
+   evidence validation, and the original public non-mutation proof. The
+   [partial public-genesis and continuation record](./markets/2026-09-10-pltr-weth-public-continuation.md)
+   then records canonical indexes `0–3`, the safe deadline stop, and the
+   separately gated nine-step continuation.
 
 ## Documentation by audience
 

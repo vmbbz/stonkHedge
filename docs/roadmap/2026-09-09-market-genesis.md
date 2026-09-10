@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | Exact exposure accepted for planning; fresh execution candidate and one-step operator replay complete; separate public authorization required |
-| Authorization | None for pool initialization, approvals, wrapping, liquidity, swaps, market deployment, or collateral operations |
+| Status | Original public setup stopped safely after index `3`; a nonce-`4..12` continuation passed all nine exact-checkpoint calls; separate continuation authorization required |
+| Authorization | Original authorization was consumed only for indexes `0–3`; no continuation, pool initialization, liquidity, market deployment, swap, collateral, or option action is authorized |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated remaining focused engineering time | 3–6 hours to public genesis, excluding faucet, RPC, or review delays |
 
@@ -25,7 +25,7 @@ This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
 
-### Current progress: genesis mechanism and execution operator proven locally
+### Current progress: four setup transactions public, continuation proven locally
 
 At block `116408992`, the repository qualifier passed `79/79` checks across
 chain identity, external and Panoptic runtimes, Stock Token controls, both
@@ -46,14 +46,29 @@ counter floor of `3893`, and new deadlines into a twelve-transaction candidate.
 The hardened one-step operator then passed all `12/12` ordered invocations on
 the exact fork. The actual LP NFT ID is derived from the mint receipt and must
 be supplied for every later step; it is never assumed to be reserved by the
-shared counter. No credential, signature, or public send was used, and no
-public transaction is authorized. See the
+shared counter.
+
+The actor subsequently executed original indexes `0–3`: wrap `0.004` test ETH,
+approve exactly `2 PLTR` and `0.002 WETH` to Permit2 at the ERC-20 layer, and
+approve exactly `2 PLTR` from Permit2 to PositionManager. Each receipt was
+reconciled before proceeding. Execution then stopped before original index `4`
+because the one-hour mint deadline had become operationally unsafe. The actor
+is at nonce `4`; the exact pool remains uninitialized, active liquidity and NFT
+balance remain zero, and the Panoptic factory mapping remains empty.
+
+A new nine-transaction continuation for nonces `4..12` refreshes PLTR's
+time-bound Permit2 permission, completes the remaining intents, and uses a
+four-hour liquidity deadline plus six-hour Permit2 expirations. All nine calls
+passed exact-checkpoint replay and end with zero allowances, the bounded LP
+NFT, and the registered Panoptic market. This continuation has no signing or
+broadcast authorization. See the
 [selection record](../markets/2026-09-09-first-market-selection.md),
 [offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
 the [initial preflight record](../markets/2026-09-09-pltr-weth-initial-preflight.md),
 the [fork-rehearsal record](../markets/2026-09-10-pltr-weth-fork-rehearsal.md),
 the [execution-candidate/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md),
-and [machine-readable candidate](../../manifests/markets/robinhood-testnet-pltr-weth-execution-candidate-2026-09-10.json).
+the [partial public-genesis and continuation record](../markets/2026-09-10-pltr-weth-public-continuation.md),
+and [machine-readable continuation candidate](../../manifests/markets/robinhood-testnet-pltr-weth-continuation-candidate-2026-09-10.json).
 
 ## 2. Entry gates already complete
 
@@ -71,7 +86,13 @@ and [machine-readable candidate](../../manifests/markets/robinhood-testnet-pltr-
 - exact owner exposure acceptance for execution planning only;
 - fresh nonce/deadline-bound execution candidate: complete; and
 - finalized one-step operator replay: `12/12` ordered calls with full state
-  reconciliation and no public send.
+  reconciliation and no public send;
+- original public indexes `0–3`: canonical and independently reconciled;
+- frozen partial state: actor nonce `4`, bounded setup balances/permissions,
+  uninitialized pool, zero liquidity/NFT balance, and empty factory mapping;
+- nonce-`4..12` continuation plan: complete; and
+- continuation operator replay: `9/9` ordered calls from the exact partial
+  state, with full cleanup and no continuation public send.
 
 ## 3. Decisions and calculations for the transaction plan
 
@@ -284,9 +305,11 @@ The previous authorization ended at shared-deployment transaction index `15`.
 It explicitly excluded every action in this plan. No wording in this roadmap is
 authorization to broadcast.
 
-Current position in the diagram: gate `H` passes for the recorded candidate,
-but that candidate is time-bound. Review must be followed by a final fresh
-`G -> H` regeneration/replay before anyone can request gate `I` authorization.
+Current position in the diagram: the original execution loop completed four
+transactions and stopped safely before the deadline became unsafe. A new
+partial-state `G -> H` continuation passes from public nonce `4`; gate `I`
+requires a fresh owner authorization for its exact hashes and longer bounded
+clock policy before any continuation transaction may be signed.
 
 ## 7. Checkpoint C acceptance
 

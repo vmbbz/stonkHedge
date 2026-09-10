@@ -14,7 +14,10 @@ nine-transaction continuation now starts from public nonce `4`, refreshes the
 already bounded PLTR Permit2 approval, completes the remaining original
 intents, and preserves the one-transaction/wait/verify/stop policy. It passed
 an exact-head loopback replay and now has a separate, narrowly hash-bound
-authorization. No continuation transaction has been submitted yet.
+authorization. Continuation indexes `0–3` are now canonical: both bounded
+Permit2 permissions were refreshed, the PoolKey was initialized, and bounded
+liquidity NFT `3903` was minted to the second actor. Execution is stopped
+before the four allowance-cleanup calls.
 
 ## Canonical public transactions
 
@@ -81,6 +84,26 @@ the accepted synthetic `0.001` test-WETH-per-PLTR ratio, ticks
 `-81120..-57060`, liquidity `138450781996976174`, no hook, and factory salt
 `0`. It adds no swap, collateral, option, other-market, or mainnet action.
 
+## Canonical continuation transactions through liquidity
+
+| Continuation index | Transaction | Block | Effect |
+|---:|---|---:|---|
+| 0 | [`0xcf353d13…52e516`](https://explorer.testnet.chain.robinhood.com/tx/0xcf353d13b4ff8886deaf044feabed221200a926737325b24582546258552e516) | `117013304` | Refreshed the exact `2 PLTR` Permit2 permission |
+| 1 | [`0xf4831adb…0ab11c`](https://explorer.testnet.chain.robinhood.com/tx/0xf4831adbcabf22576b78e82f1e7143f395ccc6a300a8621c1983bef8de0ab11c) | `117017451` | Set the exact `0.002 WETH` Permit2 permission |
+| 2 | [`0x77243b77…1c7422`](https://explorer.testnet.chain.robinhood.com/tx/0x77243b77eda84facce380b94f39b24d2c675ea2e0c79dc44719e3724c01c7422) | `117018968` | Initialized the exact no-hook PoolKey at tick `-69082` |
+| 3 | [`0xc5fe4353…b70725`](https://explorer.testnet.chain.robinhood.com/tx/0xc5fe4353812b1b38335e5a76e2c95090e73994196e26b00e7c8b148373b70725) | `117075884` | Minted liquidity `138450781996976174` as NFT `3903` |
+
+The shared PositionManager counter advanced from the planning floor before the
+mint. The operator therefore derived token ID `3903` from the canonical ERC-721
+mint event and reverified its owner, PoolKey, ticks, and liquidity instead of
+assuming the earlier floor was reserved.
+
+At the post-mint checkpoint, public nonce is `8`; balances are
+`3.022157655355120211 PLTR` and `0.00202 WETH`. Both the ERC-20 and Permit2
+layers retain only the planned unused headroom: `0.022157655355120211 PLTR`
+and `0.00002 WETH`. These residual permissions are not needed and must be
+revoked by continuation indexes `4–7` before market registration.
+
 ## Operational clocks
 
 The first public attempt proved that a one-hour mint deadline is incompatible
@@ -114,6 +137,7 @@ liquidity deadline is `2026-09-10T22:13:23Z`, and Permit2 expiration is
 | Simulation runner | `75a0466d40c5c2273ac5ba761ceb53cf8ca911734c3070111ea562da6fead618` |
 | Nine-step simulation report | `0e37ea6a469eef8a6e1db330123f8982c22a506bf11d584b0c9a495939cadbca` |
 | [Continuation authorization](../../manifests/markets/robinhood-testnet-pltr-weth-continuation-authorization-2026-09-10.json) | `c99249cfc151cf90fcbb970dce29ca4ccc33449ae0f5d88ae3191236ec9b2b8b` |
+| [Continuation public progress](../../manifests/markets/robinhood-testnet-pltr-weth-continuation-public-progress-2026-09-10.json) | `f4f07ce0c034eabbd6ff3a886a91e6cfbdfaedee1ae1afdd46273b34cada6525` |
 
 The exact-head replay began from the same nonce, balances, permissions, empty
 pool, zero NFT balance, and empty Panoptic mapping. It ended at nonce `13`
@@ -128,6 +152,9 @@ layers, and the predicted Panoptic contracts registered and wired.
 - nine isolated one-step loopback calls: pass;
 - full report lineage, step, gas, state, and terminal revalidation: pass;
 - public continuation pre-state at nonce `4`: pass;
+- four canonical continuation receipts and mined transactions: pass;
+- live post-mint PoolKey, balances, permissions, liquidity, and NFT `3903`:
+  pass;
 - Python regression suite: `83/83` pass;
 - Ruff check and format on changed Python: pass; and
 - Anvil stopped with port `8547` closed.
@@ -145,6 +172,7 @@ Use **STOP → FREEZE → REFRESH → REPLAY → REAUTHORIZE → ONE**:
 
 The owner supplied that exact authorization at `2026-09-10T18:21:23Z`. It
 binds the four-hour/six-hour operational clock policy, continuation body, file,
-operator, report, actor, maximum index `8`, and unchanged exclusions. The next
-permitted action is continuation index `0` only. After it is mined, the
-operator must reconcile the full post-state and stop before index `1`.
+operator, report, actor, maximum index `8`, and unchanged exclusions.
+Continuation indexes `0–3` have passed. The next permitted action is index `4`
+only: revoke the residual PLTR Permit2 permission, reverify receipt-derived NFT
+`3903` and the complete public state, then stop before index `5`.

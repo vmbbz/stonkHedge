@@ -32,8 +32,9 @@ The current repository is the product and delivery control plane. It contains th
   continuation record](./docs/markets/2026-09-10-pltr-weth-public-continuation.md)
   records four successful public steps, the deliberate deadline stop before
   pool initialization, and a new nine-step continuation that passed exact-head
-  replay and now has a narrowly hash-bound authorization. No continuation
-  transaction has been submitted yet.
+  replay and received a narrowly hash-bound authorization. Continuation
+  indexes `0–3` are now canonical: the PoolKey is initialized and bounded
+  liquidity NFT `3903` exists; allowance cleanup and market registration remain.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -46,11 +47,10 @@ The current repository is the product and delivery control plane. It contains th
 - Run `pwsh -File .\scripts\verify-robinhood-testnet.ps1` before any chain-specific simulation or broadcast. Use `-SkipFundingGate` only for read-only infrastructure qualification.
 - Treat all material before that section as background research, not an approved specification.
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
-  Robinhood Chain testnet. Market-genesis indexes `0–3` wrapped bounded test
-  ETH and staged bounded approvals; the pool, liquidity, per-market Panoptic
-  contracts, and application remain undeployed. The fresh partial-state
-  continuation is locally proven and separately authorized, but execution is
-  still stopped before its first one-transaction invocation.
+  Robinhood Chain testnet. The PLTR/WETH PoolKey is initialized and bounded V4
+  liquidity NFT `3903` is public. Residual allowances still require the four
+  planned cleanup transactions, and the per-market Panoptic contracts,
+  collateral, options, and application remain undeployed.
 
 ## Repository map
 

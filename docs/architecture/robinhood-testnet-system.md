@@ -4,7 +4,7 @@
 |---|---|
 | State date | 2026-09-10 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure deployed; PLTR/WETH setup indexes `0–3` public; pool still uninitialized; nine-step continuation replayed and separately authorized but not started |
+| Current state | Shared Panoptic V4 infrastructure deployed; PLTR/WETH PoolKey and bounded liquidity NFT `3903` public; residual allowance cleanup and Panoptic registration remain |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -38,14 +38,15 @@ sandbox:
 - public market-genesis indexes `0–3` wrapped `0.004` test ETH and established
   bounded ERC-20 plus PLTR Permit2 permissions; and
 - a partial-state continuation from nonce `4` passed all nine exact-fork
-  operator calls with a deliberate PLTR permission refresh and full cleanup.
+  operator calls with a deliberate PLTR permission refresh and full cleanup;
+- continuation indexes `0–3` are now canonical, initializing the exact PoolKey
+  and minting bounded liquidity NFT `3903` to the second actor.
 
-This is meaningful infrastructure, but it is not yet a functioning market.
-The four completed setup transactions do not initialize or register a market.
-A narrow continuation authorization now exists, but it has not yet been used.
-There is still no initialized public Uniswap V4 pool, seeded public liquidity,
-per-market PanopticPool clone, initialized CollateralTracker pair, public
-collateral deposit, or live option position.
+This is now a functioning Uniswap V4 liquidity pool, but not yet a functioning
+Panoptic market. Residual bounded allowances remain until continuation indexes
+`4–7` revoke them. There is still no per-market PanopticPool clone, initialized
+CollateralTracker pair, public collateral deposit, swap evidence, or live
+option position.
 
 ### Milestone memory aid
 
@@ -58,13 +59,14 @@ flowchart LR
     E --> F[Nonce-bound operator rehearsal]
     F --> H[Four bounded setup transactions public]
     H --> I[Nine-step continuation replay]
-    I --> J[Next: authorized one-step continuation]
-    J --> G[Then: lifecycle, SDK, and first-user sandbox]
+    I --> J[Pool initialized and liquidity NFT 3903 minted]
+    J --> K[Next: allowance cleanup and Panoptic registration]
+    K --> G[Then: lifecycle, SDK, and first-user sandbox]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D,E,F,H,I done;
-    class J,G next;
+    class A,B,C,D,E,F,H,I,J done;
+    class K,G next;
 ```
 
 ## 2. System boundaries
@@ -455,7 +457,7 @@ asset residual, and `531/32` PoolManager-claim deviations.
 | PLTR/WETH execution candidate | Nonces `0..11`, shared NFT counter floor `3893`, synthetic exposure, and deadlines bound at block `116968208` |
 | Market one-step operator rehearsal | `12/12` ordered invocations pass; all step, lineage, state, plan, operator, and report evidence is validated; zero public sends |
 | PLTR/WETH public setup | Four canonical transactions through original index `3`; actor nonce `4`; pool and market still empty |
-| Partial-state continuation | Nine remaining calls pass exact-head replay; nonces `4..12`; exact authorization recorded; zero continuation sends |
+| Partial-state continuation | Indexes `0–3` canonical; exact PoolKey initialized; liquidity `138450781996976174`; receipt-derived NFT `3903`; nonce `8` |
 
 Primary local records:
 
@@ -490,7 +492,7 @@ an independent audit, or transaction authorization.
 | Temporary deployer EOA | Holds deployer, guardian-admin, and treasurer roles | Single-key compromise controls emergency and treasury functions; forbidden for production |
 | Panoptic fork | Focused tests and owner reproduction, not an external audit | Unknown inherited/composition defects remain possible |
 | License | Base BUSL non-production use only | Production-like or monetized use remains blocked |
-| Price/reference policy | Synthetic `0.001` test-WETH-per-PLTR mechanism price accepted and unchanged; four setup transactions are public and the bounded continuation is separately authorized | Never display it as a market quote; execute only the exact authorized one-step sequence and stop on mismatch |
+| Price/reference policy | Pool initialized at synthetic `0.001` test-WETH-per-PLTR solely for mechanism testing | Never display it as a market quote or external reference price |
 | Liquidity | Only faucet-sized balances exist | This is mechanism testing, not economically meaningful depth |
 | UI/SDK | Not implemented in product repository | No first-user path exists yet |
 
@@ -502,14 +504,15 @@ liquidity deadline no longer had enough headroom. Public state therefore has
 the bounded wrap and setup approvals, but still has no initialized PoolKey,
 liquidity NFT, or registered Panoptic market. A new nonce-`4..12` continuation
 repeats the expiring PLTR Permit2 permission and preserves the other remaining
-intents. All nine calls passed an exact-checkpoint replay.
+intents. All nine calls passed an exact-checkpoint replay. Its first four calls
+are now canonical, including PoolKey initialization and liquidity NFT `3903`.
 
-The owner has now supplied the separate authorization binding the continuation
-plan, operator, simulation report, actor, four-hour liquidity deadline,
-six-hour Permit2 expirations, and maximum continuation index `8`. The next gate
-is continuation index `0` only: the operator may submit that one transaction,
-wait, verify the complete state, and stop for review. See the [partial
-public-genesis and continuation
+The owner supplied the separate authorization binding the continuation plan,
+operator, simulation report, actor, four-hour liquidity deadline, six-hour
+Permit2 expirations, and maximum continuation index `8`. The next gate is
+continuation index `4` only: revoke the residual PLTR Permit2 permission,
+verify NFT `3903` and the complete post-state, and stop for review. See the
+[partial public-genesis and continuation
 record](../markets/2026-09-10-pltr-weth-public-continuation.md), the historical
 [execution/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md),
 and the [market-genesis plan](../roadmap/2026-09-09-market-genesis.md).

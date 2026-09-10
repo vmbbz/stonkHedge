@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_PUBLIC_CONTINUATION_THROUGH_LIQUIDITY_MINT_STOP_BEFORE_CLEANUP",
+  "mode": "PUBLIC_CANONICAL_RECEIPTS_AND_READ_ONLY_POST_STATE",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 117076471,
+    "referenceBlockHash": "0xabeed2098f565e3e17ff4e122f2bb043a5abba4896829045a3195d558730baf7",
+    "referenceTimestampUnix": 1789075476
+  },
+  "actor": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+  "sourceBindings": {
+    "executionPlanBodySha256": "27504e1a06b2257fbd16a61c2f68cdfe758b09d2eeb4f417d259e1e8175a5d06",
+    "executionPlanFileSha256": "4eda54e4b3e0d214578cd369f7e36e872acd54d61f9167db26103b138bda48d3",
+    "operatorSha256": "96c0889e0f5130035ad5c047950411d8c51abf639cbeb275cbbcce8111361339",
+    "operatorSimulationReportSha256": "0e37ea6a469eef8a6e1db330123f8982c22a506bf11d584b0c9a495939cadbca",
+    "authorizationManifestSha256": "c99249cfc151cf90fcbb970dce29ca4ccc33449ae0f5d88ae3191236ec9b2b8b"
+  },
+  "completedThroughContinuationIndex": 3,
+  "completedTransactions": [
+    {
+      "index": 0,
+      "nonce": 4,
+      "label": "approve bounded PLTR from Permit2 to PositionManager",
+      "transactionHash": "0xcf353d13b4ff8886deaf044feabed221200a926737325b24582546258552e516",
+      "blockNumber": 117013304,
+      "blockHash": "0x94ce02f6ba325ebcd5a59d5759466c57c83ebe8ce6d24929ed910042e966441c",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xe7dd861d66b1f8dd066e8fb89727604c93112c7aceab81e92f44e6420e4f9d0b",
+      "gasUsed": 39689,
+      "status": "PASS",
+      "externalEvidenceSha256": "f6b41f6a39fa6cff6fcf8276db4dc808d55c4a258206a668e2c6eec05a1881e4"
+    },
+    {
+      "index": 1,
+      "nonce": 5,
+      "label": "approve bounded WETH from Permit2 to PositionManager",
+      "transactionHash": "0xf4831adbcabf22576b78e82f1e7143f395ccc6a300a8621c1983bef8de0ab11c",
+      "blockNumber": 117017451,
+      "blockHash": "0x0878c491a56f1a995dfc9f36a7b1033ef0c5bed0c79724819cf6449247a4e023",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xb2ea80da4a1764f0e909bd3f559964804c5aa3f246546f1016875f7ae3aefbd9",
+      "gasUsed": 54191,
+      "status": "PASS",
+      "externalEvidenceSha256": "ee2c83de691b01b3694f9de7e753e16fe391859a33bb86089f3977727720141e"
+    },
+    {
+      "index": 2,
+      "nonce": 6,
+      "label": "initialize exact PLTR/WETH pool directly through PoolManager",
+      "transactionHash": "0x77243b77eda84facce380b94f39b24d2c675ea2e0c79dc44719e3724c01c7422",
+      "blockNumber": 117018968,
+      "blockHash": "0x7acc1a41173bbab8cf7c048f41034d7ebd4eddf84a46d80802c33b0aacd78c5e",
+      "to": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "valueWei": "0",
+      "calldataKeccak256": "0x5106649f72bb5ab4ae9ef0a02683f9f3adf2589dba3b1d19447725a3c1a49f94",
+      "gasUsed": 61581,
+      "status": "PASS",
+      "externalEvidenceSha256": "b9a72ae5cc7c4a44a794982051285c092d648b7620538dbdfff24d9cbbe67fd2"
+    },
+    {
+      "index": 3,
+      "nonce": 7,
+      "label": "mint bounded two-sided V4 liquidity position",
+      "transactionHash": "0xc5fe4353812b1b38335e5a76e2c95090e73994196e26b00e7c8b148373b70725",
+      "blockNumber": 117075884,
+      "blockHash": "0xc980a6f8d6eb0e991b961adbb592988ae9f7ef397c5fef5f7fdcd7154a5ff900",
+      "to": "0x58daec3116aae6d93017baaea7749052e8a04fa7",
+      "valueWei": "0",
+      "calldataKeccak256": "0x5da6827902cc020ae03329d996f904e51d0fcd6889ea72973bcb21d0d7e0bcc0",
+      "gasUsed": 449358,
+      "status": "PASS",
+      "externalEvidenceSha256": "eddae0e56afa56fd7f7b8adf19e968dd685e60c6b4988b5ab83236852c44f650"
+    }
+  ],
+  "liquidityPosition": {
+    "tokenId": "3903",
+    "owner": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+    "tickLower": -81120,
+    "tickUpper": -57060,
+    "liquidity": "138450781996976174",
+    "pltrPaid": "1977842344644879789",
+    "wethPaid": "1980000000000000"
+  },
+  "postState": {
+    "pendingNonce": 8,
+    "nativeBalanceWei": "5991740850000000",
+    "pltrBalance": "3022157655355120211",
+    "wethBalance": "2020000000000000",
+    "erc20Allowances": {
+      "PLTR": "22157655355120211",
+      "WETH": "20000000000000"
+    },
+    "permit2Allowances": {
+      "PLTR": "22157655355120211",
+      "WETH": "20000000000000"
+    },
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "tick": -69082,
+    "activeLiquidity": "138450781996976174",
+    "positionManagerNextTokenId": "3904",
+    "positionManagerActorNftBalance": "1",
+    "liquidityPositionTokenId": "3903",
+    "sfpmPoolId": "0",
+    "factoryMapping": "0x0000000000000000000000000000000000000000"
+  },
+  "nextAuthorizedIndex": 4,
+  "nextRequiredAction": "Revoke the residual PLTR Permit2 allowance, verify the full post-state, and stop."
+}

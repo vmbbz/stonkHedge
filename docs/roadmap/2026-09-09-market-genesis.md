@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Original public setup stopped safely after index `3`; the nonce-`4..12` continuation passed all nine exact-checkpoint calls and is separately authorized; execution has not started |
+| Status | Continuation indexes `0–3` canonical; exact PoolKey initialized and bounded liquidity NFT `3903` minted; cleanup and Panoptic registration remain |
 | Authorization | Exact continuation indexes `0..8` only, one transaction per invocation; swaps, collateral, options, every other market, and mainnet remain excluded |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated remaining focused engineering time | 3–6 hours to public genesis, excluding faucet, RPC, or review delays |
@@ -60,9 +60,12 @@ A new nine-transaction continuation for nonces `4..12` refreshes PLTR's
 time-bound Permit2 permission, completes the remaining intents, and uses a
 four-hour liquidity deadline plus six-hour Permit2 expirations. All nine calls
 passed exact-checkpoint replay and end with zero allowances, the bounded LP
-NFT, and the registered Panoptic market. This continuation has no public send
-yet. Its separately recorded authorization binds the exact plan, operator,
-replay report, actor, maximum index, clock policy, and exclusions. See the
+NFT, and the registered Panoptic market. Its separately recorded authorization
+binds the exact plan, operator, replay report, actor, maximum index, clock
+policy, and exclusions. Public continuation indexes `0–3` then refreshed both
+bounded Permit2 permissions, initialized the exact PoolKey, and minted
+liquidity NFT `3903`. The next action is the four-step allowance cleanup; the
+Panoptic market remains unregistered. See the
 [selection record](../markets/2026-09-09-first-market-selection.md),
 [offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
 the [initial preflight record](../markets/2026-09-09-pltr-weth-initial-preflight.md),
@@ -95,7 +98,11 @@ and [machine-readable continuation candidate](../../manifests/markets/robinhood-
 - continuation operator replay: `9/9` ordered calls from the exact partial
   state, with full cleanup and no continuation public send; and
 - continuation authorization: exact hashes, actor, indexes `0..8`, four-hour
-  liquidity deadline, six-hour Permit2 expiry, and unchanged exclusions bound.
+  liquidity deadline, six-hour Permit2 expiry, and unchanged exclusions bound;
+- continuation indexes `0–3`: canonical public receipts, exact initialized
+  pool state, active liquidity, and receipt-derived NFT `3903`; and
+- current stop: public nonce `8`, residual allowances bounded exactly as
+  planned, factory mapping still empty.
 
 ## 3. Decisions and calculations for the transaction plan
 
@@ -309,10 +316,10 @@ It explicitly excluded every action in this plan. No wording in this roadmap is
 authorization to broadcast.
 
 Current position in the diagram: the original execution loop completed four
-transactions and stopped safely before the deadline became unsafe. A new
-partial-state `G -> H` continuation passes from public nonce `4`, and gate `I`
-is now satisfied by an exact owner authorization. The next action is only
-continuation index `0`, followed by full reconciliation and another stop.
+transactions and stopped safely before the deadline became unsafe. The
+partial-state continuation then completed indexes `0–3`; the exact PoolKey and
+liquidity NFT `3903` are public. The next action is only continuation index `4`
+to begin allowance cleanup, followed by full reconciliation and another stop.
 
 ## 7. Checkpoint C acceptance
 

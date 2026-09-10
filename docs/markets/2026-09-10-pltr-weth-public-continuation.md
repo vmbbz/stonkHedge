@@ -13,7 +13,8 @@ without enough time to mint would have created a worse partial state. A fresh
 nine-transaction continuation now starts from public nonce `4`, refreshes the
 already bounded PLTR Permit2 approval, completes the remaining original
 intents, and preserves the one-transaction/wait/verify/stop policy. It passed
-an exact-head loopback replay but has no signing or broadcast authorization.
+an exact-head loopback replay and now has a separate, narrowly hash-bound
+authorization. No continuation transaction has been submitted yet.
 
 ## Canonical public transactions
 
@@ -112,6 +113,7 @@ liquidity deadline is `2026-09-10T22:13:23Z`, and Permit2 expiration is
 | One-step operator | `96c0889e0f5130035ad5c047950411d8c51abf639cbeb275cbbcce8111361339` |
 | Simulation runner | `75a0466d40c5c2273ac5ba761ceb53cf8ca911734c3070111ea562da6fead618` |
 | Nine-step simulation report | `0e37ea6a469eef8a6e1db330123f8982c22a506bf11d584b0c9a495939cadbca` |
+| [Continuation authorization](../../manifests/markets/robinhood-testnet-pltr-weth-continuation-authorization-2026-09-10.json) | `c99249cfc151cf90fcbb970dce29ca4ccc33449ae0f5d88ae3191236ec9b2b8b` |
 
 The exact-head replay began from the same nonce, balances, permissions, empty
 pool, zero NFT balance, and empty Panoptic mapping. It ended at nonce `13`
@@ -126,7 +128,7 @@ layers, and the predicted Panoptic contracts registered and wired.
 - nine isolated one-step loopback calls: pass;
 - full report lineage, step, gas, state, and terminal revalidation: pass;
 - public continuation pre-state at nonce `4`: pass;
-- Python regression suite: `82/82` pass;
+- Python regression suite: `83/83` pass;
 - Ruff check and format on changed Python: pass; and
 - Anvil stopped with port `8547` closed.
 
@@ -141,7 +143,8 @@ Use **STOP → FREEZE → REFRESH → REPLAY → REAUTHORIZE → ONE**:
 5. **REAUTHORIZE** the new plan, operator, and report hashes.
 6. **ONE** transaction, full verification, then stop again.
 
-No continuation transaction is currently authorized. A new owner statement
-must explicitly accept the four-hour/six-hour operational clock policy and
-bind the continuation body, file, operator, report, actor, maximum index `8`,
-and unchanged exclusions.
+The owner supplied that exact authorization at `2026-09-10T18:21:23Z`. It
+binds the four-hour/six-hour operational clock policy, continuation body, file,
+operator, report, actor, maximum index `8`, and unchanged exclusions. The next
+permitted action is continuation index `0` only. After it is mined, the
+operator must reconcile the full post-state and stop before index `1`.

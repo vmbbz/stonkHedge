@@ -4,7 +4,7 @@
 |---|---|
 | State date | 2026-09-10 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure deployed; PLTR/WETH setup indexes `0–3` public; pool still uninitialized; nine-step continuation replayed but unauthorized |
+| Current state | Shared Panoptic V4 infrastructure deployed; PLTR/WETH setup indexes `0–3` public; pool still uninitialized; nine-step continuation replayed and separately authorized but not started |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -42,10 +42,10 @@ sandbox:
 
 This is meaningful infrastructure, but it is not yet a functioning market.
 The four completed setup transactions do not initialize or register a market.
-There is still no continuation broadcast authorization, initialized public
-Uniswap V4 pool, seeded public liquidity, per-market PanopticPool clone,
-initialized CollateralTracker pair, public collateral deposit, or live option
-position.
+A narrow continuation authorization now exists, but it has not yet been used.
+There is still no initialized public Uniswap V4 pool, seeded public liquidity,
+per-market PanopticPool clone, initialized CollateralTracker pair, public
+collateral deposit, or live option position.
 
 ### Milestone memory aid
 
@@ -58,7 +58,7 @@ flowchart LR
     E --> F[Nonce-bound operator rehearsal]
     F --> H[Four bounded setup transactions public]
     H --> I[Nine-step continuation replay]
-    I --> J[Next: new authorization and one-step continuation]
+    I --> J[Next: authorized one-step continuation]
     J --> G[Then: lifecycle, SDK, and first-user sandbox]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
@@ -455,7 +455,7 @@ asset residual, and `531/32` PoolManager-claim deviations.
 | PLTR/WETH execution candidate | Nonces `0..11`, shared NFT counter floor `3893`, synthetic exposure, and deadlines bound at block `116968208` |
 | Market one-step operator rehearsal | `12/12` ordered invocations pass; all step, lineage, state, plan, operator, and report evidence is validated; zero public sends |
 | PLTR/WETH public setup | Four canonical transactions through original index `3`; actor nonce `4`; pool and market still empty |
-| Partial-state continuation | Nine remaining calls pass exact-head replay; nonces `4..12`; no continuation sends authorized |
+| Partial-state continuation | Nine remaining calls pass exact-head replay; nonces `4..12`; exact authorization recorded; zero continuation sends |
 
 Primary local records:
 
@@ -490,7 +490,7 @@ an independent audit, or transaction authorization.
 | Temporary deployer EOA | Holds deployer, guardian-admin, and treasurer roles | Single-key compromise controls emergency and treasury functions; forbidden for production |
 | Panoptic fork | Focused tests and owner reproduction, not an external audit | Unknown inherited/composition defects remain possible |
 | License | Base BUSL non-production use only | Production-like or monetized use remains blocked |
-| Price/reference policy | Synthetic `0.001` test-WETH-per-PLTR mechanism price accepted and unchanged; four setup transactions are public but initialization remains unauthorized | Never display it as a market quote; continuation remains blocked pending fresh hash-bound authorization |
+| Price/reference policy | Synthetic `0.001` test-WETH-per-PLTR mechanism price accepted and unchanged; four setup transactions are public and the bounded continuation is separately authorized | Never display it as a market quote; execute only the exact authorized one-step sequence and stop on mismatch |
 | Liquidity | Only faucet-sized balances exist | This is mechanism testing, not economically meaningful depth |
 | UI/SDK | Not implemented in product repository | No first-user path exists yet |
 
@@ -504,11 +504,12 @@ liquidity NFT, or registered Panoptic market. A new nonce-`4..12` continuation
 repeats the expiring PLTR Permit2 permission and preserves the other remaining
 intents. All nine calls passed an exact-checkpoint replay.
 
-The next gate is a separate owner authorization binding the continuation plan,
-operator, simulation report, actor, four-hour liquidity deadline, six-hour
-Permit2 expirations, and maximum continuation index `8`. Only then may the
-operator submit one continuation transaction, wait, verify the complete state,
-and stop for review. See the [partial public-genesis and continuation
+The owner has now supplied the separate authorization binding the continuation
+plan, operator, simulation report, actor, four-hour liquidity deadline,
+six-hour Permit2 expirations, and maximum continuation index `8`. The next gate
+is continuation index `0` only: the operator may submit that one transaction,
+wait, verify the complete state, and stop for review. See the [partial
+public-genesis and continuation
 record](../markets/2026-09-10-pltr-weth-public-continuation.md), the historical
 [execution/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md),
 and the [market-genesis plan](../roadmap/2026-09-09-market-genesis.md).

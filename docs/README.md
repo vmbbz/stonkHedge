@@ -11,8 +11,9 @@ The 16-contract shared Panoptic V4 stack is deployed and reconciled on
 Robinhood Chain testnet. PLTR/WETH public genesis completed four bounded setup
 transactions and then stopped before pool initialization when the original
 mint deadline became too short. A nonce-`4..12` continuation passed a fresh
-nine-call exact-head replay but remains unauthorized. The V4 pool, per-market
-Panoptic contracts, collateral, options, and application are not live yet.
+nine-call exact-head replay and has a separate hash-bound authorization, but no
+continuation transaction has been sent. The V4 pool, per-market Panoptic
+contracts, collateral, options, and application are not live yet.
 
 Start with:
 

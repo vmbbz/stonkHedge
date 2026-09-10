@@ -32,7 +32,8 @@ The current repository is the product and delivery control plane. It contains th
   continuation record](./docs/markets/2026-09-10-pltr-weth-public-continuation.md)
   records four successful public steps, the deliberate deadline stop before
   pool initialization, and a new nine-step continuation that passed exact-head
-  replay but remains unauthorized.
+  replay and now has a narrowly hash-bound authorization. No continuation
+  transaction has been submitted yet.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -48,7 +49,8 @@ The current repository is the product and delivery control plane. It contains th
   Robinhood Chain testnet. Market-genesis indexes `0–3` wrapped bounded test
   ETH and staged bounded approvals; the pool, liquidity, per-market Panoptic
   contracts, and application remain undeployed. The fresh partial-state
-  continuation is locally proven but separately unauthorized.
+  continuation is locally proven and separately authorized, but execution is
+  still stopped before its first one-transaction invocation.
 
 ## Repository map
 

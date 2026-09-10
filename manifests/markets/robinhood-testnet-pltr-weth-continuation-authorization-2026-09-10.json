@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHORIZED_MARKET_GENESIS_ONE_TRANSACTION_AT_A_TIME",
+  "approvedBy": "repository owner via current Codex session",
+  "approvedAt": "2026-09-10T18:21:23Z",
+  "chainId": 46630,
+  "actor": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+  "executionPlanBodySha256": "27504e1a06b2257fbd16a61c2f68cdfe758b09d2eeb4f417d259e1e8175a5d06",
+  "executionPlanFileSha256": "4eda54e4b3e0d214578cd369f7e36e872acd54d61f9167db26103b138bda48d3",
+  "operatorSha256": "96c0889e0f5130035ad5c047950411d8c51abf639cbeb275cbbcce8111361339",
+  "operatorSimulationReportSha256": "0e37ea6a469eef8a6e1db330123f8982c22a506bf11d584b0c9a495939cadbca",
+  "maximumTransactionIndex": 8,
+  "executionPolicy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+  "testnetOnly": true,
+  "continuationClockPolicyAcceptance": {
+    "accepted": true,
+    "liquidityDeadlineSeconds": 14400,
+    "permit2AllowanceLifetimeSeconds": 21600,
+    "liquidityDeadlineUnix": 1789078403,
+    "permit2ExpirationUnix": 1789085603
+  },
+  "scope": {
+    "allowed": [
+      "the nine plan-bound PLTR/WETH partial-state continuation transactions from public nonce 4"
+    ],
+    "excluded": [
+      "swaps",
+      "collateral deposits",
+      "option positions",
+      "every other market",
+      "all mainnet activity"
+    ]
+  }
+}

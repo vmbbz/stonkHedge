@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-10 |
+| State date | 2026-09-11 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure deployed; PLTR/WETH PoolKey and bounded liquidity NFT `3903` public; residual allowance cleanup and Panoptic registration remain |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; public trading lifecycle remains untested |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -39,14 +39,19 @@ sandbox:
   bounded ERC-20 plus PLTR Permit2 permissions; and
 - a partial-state continuation from nonce `4` passed all nine exact-fork
   operator calls with a deliberate PLTR permission refresh and full cleanup;
-- continuation indexes `0–3` are now canonical, initializing the exact PoolKey
-  and minting bounded liquidity NFT `3903` to the second actor.
+- all nine continuation transactions are canonical: the exact PoolKey was
+  initialized, bounded liquidity NFT `3903` was minted to the second actor,
+  both permission layers were cleared, and the deterministic PanopticPool and
+  two CollateralTrackers were deployed and registered; and
+- fresh read-only reconciliation at block `117093052` verified the factory
+  mapping, deployed code, factory-NFT ownership, full pool/tracker wiring,
+  nonzero SFPM market ID, unchanged liquidity, and four zero allowances.
 
-This is now a functioning Uniswap V4 liquidity pool, but not yet a functioning
-Panoptic market. Residual bounded allowances remain until continuation indexes
-`4–7` revoke them. There is still no per-market PanopticPool clone, initialized
-CollateralTracker pair, public collateral deposit, swap evidence, or live
-option position.
+This is now a deployed and wired Panoptic market over a functioning Uniswap V4
+liquidity pool. “Deployed market” is intentionally narrower than “validated
+user lifecycle”: there is still no public swap evidence, collateral deposit,
+option position, premium/solvency observation, close, liquidation, or
+withdrawal. Those actions require a new two-actor plan and authorization.
 
 ### Milestone memory aid
 
@@ -60,13 +65,13 @@ flowchart LR
     F --> H[Four bounded setup transactions public]
     H --> I[Nine-step continuation replay]
     I --> J[Pool initialized and liquidity NFT 3903 minted]
-    J --> K[Next: allowance cleanup and Panoptic registration]
-    K --> G[Then: lifecycle, SDK, and first-user sandbox]
+    J --> K[Allowances zeroed and Panoptic market registered]
+    K --> G[Next: lifecycle, SDK, and first-user sandbox]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D,E,F,H,I,J done;
-    class K,G next;
+    class A,B,C,D,E,F,H,I,J,K done;
+    class G next;
 ```
 
 ## 2. System boundaries
@@ -101,7 +106,7 @@ flowchart TB
         META[Seven metadata data slices]
     end
 
-    subgraph Market[Per-market layer - not deployed yet]
+    subgraph Market[First PLTR/WETH per-market layer - deployed]
         V4POOL[Stock Token/WETH V4 PoolKey]
         PPOOL[PanopticPool clone]
         CT0[CollateralTracker clone for currency0]
@@ -372,10 +377,11 @@ The public market must independently freeze its own complete PoolKey. The local
 price or liquidity decisions. A custom hook remains a later product with its
 own requirements, mined hook address, pool, liquidity, tests, and threat model.
 
-## 9. How a future market is created
+## 9. How a per-market graph is created
 
 After a selected Stock Token/WETH PoolKey is initialized in PoolManager,
-`PanopticFactoryV4.deployNewPool` will:
+`PanopticFactoryV4.deployNewPool` performs this sequence. The first public
+PLTR/WETH instance completed it in transaction `0x9081…b05e`:
 
 1. verify a nonzero RiskEngine and a nonzero initialized-pool price;
 2. register the PoolKey in `SemiFungiblePositionManagerV4` using vegoid `8`;
@@ -414,12 +420,17 @@ sequenceDiagram
     F-->>LP: Mint factory NFT and emit PoolDeployed
 ```
 
-None of these market-creation arrows has happened publicly yet.
+Every market-creation arrow above is now canonical for PLTR/WETH. The resulting
+PanopticPool is `0x042c…e586`, its PLTR and WETH trackers are `0x2146…15de`
+and `0x48d0…9867`, and its SFPM market ID is `16897827167146926`. The
+[final manifest](../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json)
+contains the full addresses, runtime hashes, event, mapping, ownership, and
+wiring evidence.
 
 ## 10. Local behavior already proven
 
-The controllable local lane goes further than the current public deployment. It
-has already proven the intended mechanics before public state is created:
+The controllable local lane goes further than the current public genesis. It
+has already proven the intended mechanics that remain gated publicly:
 
 - no-hook V4 pool initialization, full-range liquidity, and both swap
   directions;
@@ -473,6 +484,7 @@ Primary local records:
 - [PLTR/WETH exact-head fork rehearsal](../markets/2026-09-10-pltr-weth-fork-rehearsal.md); and
 - [PLTR/WETH execution candidate and one-step operator](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md).
 - [PLTR/WETH partial public genesis and continuation](../markets/2026-09-10-pltr-weth-public-continuation.md).
+- [final PLTR/WETH public-genesis manifest](../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json).
 
 Re-run the current external health verifier from the product repository:
 
@@ -498,26 +510,18 @@ an independent audit, or transaction authorization.
 
 ## 13. What is next
 
-The next checkpoint is still **public market genesis**, not Docusaurus. The
-original PLTR/WETH execution reached index `3` and then stopped safely when its
-liquidity deadline no longer had enough headroom. Public state therefore has
-the bounded wrap and setup approvals, but still has no initialized PoolKey,
-liquidity NFT, or registered Panoptic market. A new nonce-`4..12` continuation
-repeats the expiring PLTR Permit2 permission and preserves the other remaining
-intents. All nine calls passed an exact-checkpoint replay. Its first four calls
-are now canonical, including PoolKey initialization and liquidity NFT `3903`.
+**Public market genesis is complete.** The actor consumed the separately
+authorized nonce-`4..12` continuation one transaction at a time. It ended at
+nonce `13` with the PoolKey initialized, liquidity NFT `3903` intact, all
+allowances zero, and PanopticPool `0x042c…e586` registered with two wired
+CollateralTrackers and SFPM market ID `16897827167146926`. That authorization
+is closed and permits no further transaction. See the [canonical continuation
+record](../markets/2026-09-10-pltr-weth-public-continuation.md), [final
+machine-readable manifest](../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json),
+and [market-genesis roadmap](../roadmap/2026-09-09-market-genesis.md).
 
-The owner supplied the separate authorization binding the continuation plan,
-operator, simulation report, actor, four-hour liquidity deadline, six-hour
-Permit2 expirations, and maximum continuation index `8`. The next gate is
-continuation index `4` only: revoke the residual PLTR Permit2 permission,
-verify NFT `3903` and the complete post-state, and stop for review. See the
-[partial public-genesis and continuation
-record](../markets/2026-09-10-pltr-weth-public-continuation.md), the historical
-[execution/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md),
-and the [market-genesis plan](../roadmap/2026-09-09-market-genesis.md).
-
-After market genesis:
+The next checkpoint is the **public two-actor lifecycle**, still before
+Docusaurus:
 
 1. build the minimal SDK adapter and golden vectors;
 2. expose a developer dashboard for one protective-put flow;

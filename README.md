@@ -32,9 +32,13 @@ The current repository is the product and delivery control plane. It contains th
   continuation record](./docs/markets/2026-09-10-pltr-weth-public-continuation.md)
   records four successful public steps, the deliberate deadline stop before
   pool initialization, and a new nine-step continuation that passed exact-head
-  replay and received a narrowly hash-bound authorization. Continuation
-  indexes `0–3` are now canonical: the PoolKey is initialized and bounded
-  liquidity NFT `3903` exists; allowance cleanup and market registration remain.
+  replay and received a narrowly hash-bound authorization. All nine
+  continuation calls are now canonical: the PoolKey and liquidity NFT `3903`
+  exist, all genesis allowances are zero, and PanopticPool `0x042c…e586` plus
+  both CollateralTrackers are registered. The [final public-genesis
+  manifest](./manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json)
+  binds all 13 receipts and the terminal wiring. Its authorization is closed;
+  swaps, collateral, options, other markets, and mainnet remain excluded.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -48,9 +52,9 @@ The current repository is the product and delivery control plane. It contains th
 - Treat all material before that section as background research, not an approved specification.
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
   Robinhood Chain testnet. The PLTR/WETH PoolKey is initialized and bounded V4
-  liquidity NFT `3903` is public. Residual allowances still require the four
-  planned cleanup transactions, and the per-market Panoptic contracts,
-  collateral, options, and application remain undeployed.
+  liquidity NFT `3903` is public. The first per-market Panoptic contracts are
+  deployed and wired, and all genesis allowances are zero. Collateral, options,
+  public lifecycle evidence, and the application remain undeployed or untested.
 
 ## Repository map
 

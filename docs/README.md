@@ -12,9 +12,11 @@ Robinhood Chain testnet. PLTR/WETH public genesis completed four bounded setup
 transactions and then stopped before pool initialization when the original
 mint deadline became too short. A nonce-`4..12` continuation passed a fresh
 nine-call exact-head replay and received a separate hash-bound authorization.
-Continuation indexes `0–3` then initialized the PoolKey and minted bounded V4
-liquidity NFT `3903`. Allowance cleanup and Panoptic registration remain; the
-per-market contracts, collateral, options, and application are not live yet.
+All nine continuation calls are now canonical: they initialized the PoolKey,
+minted bounded V4 liquidity NFT `3903`, zeroed both allowance layers, and
+deployed and registered the predicted PanopticPool and two CollateralTrackers.
+Public genesis is complete and its authorization is closed. Public swaps,
+collateral, options, and the application are not live yet.
 
 Start with:
 
@@ -40,8 +42,10 @@ state was discarded. The [execution candidate and one-step operator record](./ma
    including nonce/deadline binding, receipt-derived LP NFT identity, full
    evidence validation, and the original public non-mutation proof. The
    [partial public-genesis and continuation record](./markets/2026-09-10-pltr-weth-public-continuation.md)
-   then records canonical indexes `0–3`, the safe deadline stop, and the
-   separately gated nine-step continuation.
+   records the safe deadline stop and all nine canonical continuation receipts.
+   The [final public-genesis manifest](../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json)
+   consolidates every public genesis transaction, the registered market graph,
+   terminal zero-allowance state, and the still-excluded lifecycle actions.
 
 ## Documentation by audience
 

@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | Continuation indexes `0–3` canonical; exact PoolKey initialized and bounded liquidity NFT `3903` minted; cleanup and Panoptic registration remain |
-| Authorization | Exact continuation indexes `0..8` only, one transaction per invocation; swaps, collateral, options, every other market, and mainnet remain excluded |
+| Status | Public genesis complete: exact PoolKey, bounded liquidity NFT `3903`, zero allowances, and registered Panoptic market canonical; public two-actor lifecycle remains |
+| Authorization | Genesis authorization consumed and closed at continuation index `8`; no swap, collateral, option, other-market, or mainnet transaction is authorized |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
-| Estimated remaining focused engineering time | 3–6 hours to public genesis, excluding faucet, RPC, or review delays |
+| Estimated remaining focused engineering time | 4–8 hours to plan, simulate, and execute the bounded two-actor lifecycle plus checkpoint evidence, excluding faucet, RPC, or review delays |
 
 ## 1. Objective
 
@@ -25,7 +25,7 @@ This phase completes Hour 24 and Checkpoint C in `plan.md`. It does not add
 mainnet support, custom hooks, vaults, multiple markets, autonomous trading, or
 real-value claims.
 
-### Current progress: four setup transactions public, continuation proven locally
+### Current progress: public genesis complete, lifecycle still gated
 
 At block `116408992`, the repository qualifier passed `79/79` checks across
 chain identity, external and Panoptic runtimes, Stock Token controls, both
@@ -53,26 +53,32 @@ approve exactly `2 PLTR` and `0.002 WETH` to Permit2 at the ERC-20 layer, and
 approve exactly `2 PLTR` from Permit2 to PositionManager. Each receipt was
 reconciled before proceeding. Execution then stopped before original index `4`
 because the one-hour mint deadline had become operationally unsafe. The actor
-is at nonce `4`; the exact pool remains uninitialized, active liquidity and NFT
-balance remain zero, and the Panoptic factory mapping remains empty.
+was at nonce `4`; the exact pool remained uninitialized, active liquidity and
+NFT balance remained zero, and the Panoptic factory mapping remained empty.
 
-A new nine-transaction continuation for nonces `4..12` refreshes PLTR's
-time-bound Permit2 permission, completes the remaining intents, and uses a
+A new nine-transaction continuation for nonces `4..12` refreshed PLTR's
+time-bound Permit2 permission, completed the remaining intents, and used a
 four-hour liquidity deadline plus six-hour Permit2 expirations. All nine calls
-passed exact-checkpoint replay and end with zero allowances, the bounded LP
-NFT, and the registered Panoptic market. Its separately recorded authorization
-binds the exact plan, operator, replay report, actor, maximum index, clock
-policy, and exclusions. Public continuation indexes `0–3` then refreshed both
-bounded Permit2 permissions, initialized the exact PoolKey, and minted
-liquidity NFT `3903`. The next action is the four-step allowance cleanup; the
-Panoptic market remains unregistered. See the
+first passed exact-checkpoint replay. Its separate authorization bound the
+exact plan, operator, replay report, actor, maximum index, clock policy, and
+exclusions. Public execution then completed all nine calls one at a time:
+PoolKey initialization, bounded liquidity NFT `3903`, four explicit allowance
+revocations, and deterministic Panoptic market registration.
+
+At final reference block `117093052`, the actor is at nonce `13`; all ERC-20
+and Permit2 allowances are zero; LP NFT `3903` still holds liquidity
+`138450781996976174`; factory mapping points to PanopticPool
+`0x042c0d9c497d62a85b3410f2773cfa748d18e586`; both CollateralTrackers are
+deployed and wired; and SFPM market ID `16897827167146926` is nonzero. The
+genesis authorization is consumed. See the
 [selection record](../markets/2026-09-09-first-market-selection.md),
 [offline genesis design](../markets/2026-09-09-pltr-weth-offline-genesis-design.md),
 the [initial preflight record](../markets/2026-09-09-pltr-weth-initial-preflight.md),
 the [fork-rehearsal record](../markets/2026-09-10-pltr-weth-fork-rehearsal.md),
 the [execution-candidate/operator record](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md),
-the [partial public-genesis and continuation record](../markets/2026-09-10-pltr-weth-public-continuation.md),
-and [machine-readable continuation candidate](../../manifests/markets/robinhood-testnet-pltr-weth-continuation-candidate-2026-09-10.json).
+the [canonical public-genesis and continuation record](../markets/2026-09-10-pltr-weth-public-continuation.md),
+the [machine-readable continuation candidate](../../manifests/markets/robinhood-testnet-pltr-weth-continuation-candidate-2026-09-10.json),
+and the [final public-genesis manifest](../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json).
 
 ## 2. Entry gates already complete
 
@@ -99,10 +105,14 @@ and [machine-readable continuation candidate](../../manifests/markets/robinhood-
   state, with full cleanup and no continuation public send; and
 - continuation authorization: exact hashes, actor, indexes `0..8`, four-hour
   liquidity deadline, six-hour Permit2 expiry, and unchanged exclusions bound;
-- continuation indexes `0–3`: canonical public receipts, exact initialized
-  pool state, active liquidity, and receipt-derived NFT `3903`; and
-- current stop: public nonce `8`, residual allowances bounded exactly as
-  planned, factory mapping still empty.
+- continuation indexes `0–8`: canonical public receipts and exact terminal
+  post-state, including zero allowances and receipt-derived NFT `3903`;
+- predicted PanopticPool and both CollateralTrackers: deployed with non-empty
+  code and exact immutable wiring;
+- `PoolDeployed`, factory mapping, factory NFT ownership, RiskEngine, PoolManager,
+  and nonzero SFPM market ID: reconciled; and
+- current stop: public nonce `13`, genesis authorization consumed, no public
+  swap/collateral/option transaction authorized.
 
 ## 3. Decisions and calculations for the transaction plan
 
@@ -253,29 +263,31 @@ duplicate Panoptic registration all reverted inside restored snapshots. The
 [full evidence record](../markets/2026-09-10-pltr-weth-fork-rehearsal.md)
 explains the loopback-only architecture and why no public state changed.
 
-### 5.2 Broader lifecycle rehearsal still required
+### 5.2 Broader lifecycle rehearsal is now the next gate
 
-Fork a fresh Robinhood testnet head into local Anvil and impersonate only the
-exact planned public accounts. Rehearse the final transaction order, including
-all approvals and deadlines.
+Fork a fresh Robinhood testnet head containing the registered PLTR/WETH market
+into local Anvil and impersonate only the exact planned public accounts. Do not
+recreate genesis. Requalify it, then rehearse a new bounded lifecycle plan with
+its own approvals, deadlines, decoded intents, exposure limits, cleanup, and
+terminal state.
 
 At minimum the rehearsal must cover:
 
-1. wrap only the bounded ETH amount;
-2. grant the exact token/Permit2/PositionManager permissions required by the
-   chosen liquidity path;
-3. initialize the exact no-hook PoolKey;
-4. add bounded two-sided liquidity;
-5. execute a small swap in both directions and reconcile deltas;
-6. call `PanopticFactoryV4.deployNewPool` with the reviewed caller and salt;
-7. reconcile `PoolDeployed`, factory mapping, SFPM pool ID, PanopticPool, and
-   both CollateralTrackers;
-8. approve and deposit tiny collateral from two distinct accounts;
-9. open the minimum matched writer/buyer legs supported by the public balance;
-10. observe premium movement after controlled swaps or time progression;
-11. close positions and withdraw recoverable collateral; and
-12. verify all balances and residuals against a scale-appropriate public-test
-    budget.
+1. reverify Stock Token health, the exact PoolKey, LP NFT `3903`, active
+   liquidity, factory mapping, clone runtimes, ownership, and wiring;
+2. assign distinct writer and buyer/test-user roles and freeze each account's
+   balances and maximum exposure;
+3. execute a very small swap in both directions and reconcile price, tick,
+   token, and PoolManager deltas;
+4. grant only the exact collateral approvals required by each tracker;
+5. deposit tiny, bounded collateral from two distinct accounts and reconcile
+   ERC-4626 shares/assets;
+6. open the minimum matched writer/buyer legs supported by those balances;
+7. observe premium movement after controlled swaps or time progression;
+8. close both positions and withdraw recoverable collateral;
+9. revoke every temporary allowance; and
+10. verify solvency, position IDs, balances, shares/assets, pool state, and all
+    residuals against a scale-appropriate public-test budget.
 
 Across genesis and the later lifecycle, the fork suite must exercise at least
 these negative paths:
@@ -315,13 +327,34 @@ The previous authorization ended at shared-deployment transaction index `15`.
 It explicitly excluded every action in this plan. No wording in this roadmap is
 authorization to broadcast.
 
-Current position in the diagram: the original execution loop completed four
-transactions and stopped safely before the deadline became unsafe. The
-partial-state continuation then completed indexes `0–3`; the exact PoolKey and
-liquidity NFT `3903` are public. The next action is only continuation index `4`
-to begin allowance cleanup, followed by full reconciliation and another stop.
+Current position in the diagram: the original execution loop stopped safely,
+then the exact partial-state continuation completed all nine authorized calls.
+Full market reconciliation and the public-genesis evidence commit are complete.
+The next transaction, if any, belongs to a new two-actor lifecycle plan; none
+is authorized by the genesis artifacts.
+
+```mermaid
+flowchart LR
+    A[Requalify registered market] --> B[Freeze two actor roles and caps]
+    B --> C[Build unsigned lifecycle plan]
+    C --> D[Exact-head fork replay and negative cases]
+    D --> E[Review exact hashes and exposure]
+    E --> F[Separate lifecycle authorization]
+    F --> G[One public transaction]
+    G --> H[Wait and reconcile]
+    H --> I{More authorized steps?}
+    I -- yes --> G
+    I -- no --> J[Close, withdraw, revoke, final replay]
+    J --> K[Checkpoint C evidence]
+```
 
 ## 7. Checkpoint C acceptance
+
+Public genesis satisfies the selected-asset, PoolKey, price, transaction,
+liquidity, `PoolDeployed`, mapping, ownership, runtime, and wiring portions
+below. **Checkpoint C does not yet pass**, because the public two-actor swap,
+collateral, option, premium, solvency, close, withdrawal, residual, and
+fresh-machine replay evidence remains outstanding.
 
 Checkpoint C passes only when the committed public manifest contains:
 
@@ -343,9 +376,10 @@ Only then may the repository tag `robinhood-testnet-sandbox-0`.
 
 ## 8. Suggested focused-hour order
 
-Hours `0–5` are evidenced by the current artifacts. The project is at the
-review/final-regeneration boundary; elapsed clock time may be dominated by the
-testnet RPC's short state-retention window rather than implementation work.
+Hours `0–8` are evidenced by the current artifacts. The project is now at the
+two-actor lifecycle planning boundary; elapsed clock time may still be
+dominated by faucet limits, human authorization, or the testnet RPC's short
+state-retention window rather than implementation work.
 
 | Hours | Work | Exit gate |
 |---:|---|---|

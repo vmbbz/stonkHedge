@@ -142,6 +142,45 @@ app.innerHTML = `
       </div>
     </section>
 
+    <section class="park-section" id="park">
+      <div class="park-intro wrap">
+        <span class="kicker">Protocol Park</span>
+        <h2>Infrastructure should feel alive.</h2>
+        <p>Walk the route from shared foundations to the first market—and see the next gate waiting at the end of the path.</p>
+      </div>
+      <div class="park-scene" id="protocol-park" aria-label="A playful layered park showing StonkHedge's completed and upcoming milestones">
+        <div class="park-sky-fill"></div>
+        <img class="park-layer park-sky" data-depth="0.08" src="${assetUrl("/media/park/sky.png")}" alt="" />
+        <img class="park-layer cloud cloud-left" data-depth="0.22" src="${assetUrl("/media/park/cloud-left.png")}" alt="" />
+        <img class="park-layer cloud cloud-right" data-depth="0.18" src="${assetUrl("/media/park/cloud-right.png")}" alt="" />
+        <img class="park-layer park-skyline" data-depth="0.12" src="${assetUrl("/media/park/skyline.png")}" alt="" />
+        <img class="park-layer tree tree-left" data-depth="0.34" src="${assetUrl("/media/park/tree-left.png")}" alt="" />
+        <img class="park-layer tree tree-center" data-depth="0.26" src="${assetUrl("/media/park/tree-center.png")}" alt="" />
+        <img class="park-layer tree tree-canopy" data-depth="0.3" src="${assetUrl("/media/park/tree-canopy.png")}" alt="" />
+        <img class="park-layer tree tree-small" data-depth="0.2" src="${assetUrl("/media/park/tree-small.png")}" alt="" />
+        <div class="park-ground"></div>
+        <img class="park-layer park-walkway" data-depth="0.18" src="${assetUrl("/media/park/walkway.png")}" alt="" />
+        <img class="park-layer park-grass" data-depth="0.28" src="${assetUrl("/media/park/grass.png")}" alt="" />
+        <img class="park-layer platform" data-depth="0.2" src="${assetUrl("/media/park/platform.png")}" alt="" />
+        <img class="park-layer bench bench-left" data-depth="0.38" src="${assetUrl("/media/park/bench-left.png")}" alt="" />
+        <img class="park-layer bench bench-right" data-depth="0.31" src="${assetUrl("/media/park/bench-right.png")}" alt="" />
+        <img class="park-layer lamp" data-depth="0.42" src="${assetUrl("/media/park/lamp.png")}" alt="" />
+        <img class="park-layer flowers flowers-left" data-depth="0.48" src="${assetUrl("/media/park/flowers-left.png")}" alt="" />
+        <img class="park-layer flowers flowers-right" data-depth="0.43" src="${assetUrl("/media/park/flowers-right.png")}" alt="" />
+        <img class="park-layer park-character" data-depth="0.32" src="${assetUrl("/media/stonkhedge-crystal.png")}" alt="The StonkHedge crystal character standing at the public-genesis milestone" />
+        <a class="park-marker marker-stack" href="#timeline" aria-label="Shared stack milestone complete">
+          <span>01</span><strong>Shared stack</strong><small>16 deployments · complete</small>
+        </a>
+        <a class="park-marker marker-genesis" href="#timeline" aria-label="Market genesis milestone complete">
+          <span>02</span><strong>Market genesis</strong><small>PLTR/WETH · complete</small>
+        </a>
+        <a class="park-marker marker-next" href="#timeline" aria-label="Two-actor lifecycle is the next gate">
+          <span>03</span><strong>Two-actor lifecycle</strong><small>next gate · no authorization</small>
+        </a>
+        <div class="park-caption"><span class="live-dot"></span>Move your pointer to explore the layers</div>
+      </div>
+    </section>
+
     <section class="section timeline-section" id="timeline">
       <div class="wrap section-heading split-heading">
         <div><span class="kicker">Build log</span><h2>Every leap leaves a receipt.</h2></div>
@@ -326,7 +365,8 @@ dialog?.addEventListener("click", (event) => {
 });
 
 const autoVideos = document.querySelectorAll<HTMLVideoElement>("video[autoplay]");
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (reduceMotion) {
   autoVideos.forEach((video) => video.pause());
 } else {
   const mediaObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
@@ -335,4 +375,25 @@ if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     else video.pause();
   }));
   autoVideos.forEach((video) => mediaObserver.observe(video));
+}
+
+const park = document.querySelector<HTMLElement>("#protocol-park");
+if (park && !reduceMotion) {
+  const layers = Array.from(park.querySelectorAll<HTMLElement>("[data-depth]"));
+  park.addEventListener("pointermove", (event) => {
+    const bounds = park.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    layers.forEach((layer) => {
+      const depth = Number(layer.dataset.depth ?? 0);
+      layer.style.setProperty("--parallax-x", `${x * depth * 42}px`);
+      layer.style.setProperty("--parallax-y", `${y * depth * 24}px`);
+    });
+  });
+  park.addEventListener("pointerleave", () => {
+    layers.forEach((layer) => {
+      layer.style.setProperty("--parallax-x", "0px");
+      layer.style.setProperty("--parallax-y", "0px");
+    });
+  });
 }

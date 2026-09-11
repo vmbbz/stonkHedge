@@ -57,6 +57,7 @@ into another mutable source of truth.
 |---|---|---|
 | Hero and metric strip | Brand, testnet status, and provenance-aware totals | Static HTML and supplied character image |
 | Protocol constellation | Spatial relationships between external, shared, market, and next-phase components | Component buttons and explanatory panel remain usable without WebGL |
+| Protocol Park | Layered visual route through shared deployment, market genesis, and the next gate | Three labelled milestone links remain usable with motion disabled |
 | Milestone timeline | Target, outcomes, commits, evidence, media, and documents | Fully semantic articles and links |
 | Contract atlas | Search/filter every deployed and external dependency address | Serverless in-browser filtering; direct explorer links |
 | Transaction trail | Explain each canonical receipt and why order mattered | Serverless in-browser filtering; direct explorer links |
@@ -78,6 +79,9 @@ compressed visualization chunk arrives.
   the viewport.
 - Media is local and checksum-recorded; no media request depends on a local
   download path.
+- Protocol Park uses a reviewed 16-layer subset of the owner-supplied brand
+  pack. Near-duplicates and layers containing visible text-extraction artefacts
+  were excluded rather than inflating the shipped payload.
 - The Three.js visualization is a progressive enhancement, not the only way to
   read the architecture.
 

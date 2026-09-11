@@ -15,6 +15,10 @@ The supplied video is approximately 6.04 seconds, H.264 at 736×400 with an
 AAC audio track. The website deliberately presents it muted and respects the
 user's reduced-motion preference.
 
+The interactive Protocol Park uses a reviewed subset of the owner's larger
+layered brand pack. Its selected source layers, exclusions, and checksums are
+recorded in [`park/README.md`](./park/README.md).
+
 Project inclusion records provenance; it does not independently verify a
 commercial-use licence, third-party marks, or attribution requirements.
 Confirm publication rights before commercial campaigns or third-party press

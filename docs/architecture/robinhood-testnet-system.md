@@ -4,7 +4,7 @@
 |---|---|
 | State date | 2026-09-11 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; public trading lifecycle remains untested |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; the two-actor lifecycle passed `25/25` calls on an exact discarded fork but remains unexecuted publicly |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -244,6 +244,22 @@ infrastructure, not an official Uniswap testnet deployment.
 The verifier pins exact runtime hashes, confirms that PositionManager points to
 the expected PoolManager, checks the PoolManager owner, and requires a zero
 protocol-fee controller. Any drift blocks the next phase.
+
+### 4.4 Robinhood UniversalRouter compatibility boundary
+
+The deployed UniversalRouter's V4 exact-input-single parameters contain the
+additional `minHopPriceX36` field used by its pinned periphery revision. The
+five-field tuple emitted by the published Panoptic SDK `1.0.49` reverts during
+router decoding on this runtime. StonkHedge therefore keeps the SDK for PoolId
+and TokenId construction but uses a small runtime-bound six-field swap adapter.
+The adapter pins the router address, its exact runtime hash, V4 action bytes,
+Universal Router command, and source commit. It has no RPC or execution path.
+
+This distinction was proven operationally: the first exact-fork lifecycle
+attempt reached UniversalRouter but stopped before `PoolManager.swap`; the
+six-field adapter then passed all four bounded swaps in the successful
+`25/25` replay. See the
+[two-actor lifecycle design](../markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md).
 
 ## 5. Deployed Panoptic shared stack
 
@@ -506,7 +522,7 @@ an independent audit, or transaction authorization.
 | License | Base BUSL non-production use only | Production-like or monetized use remains blocked |
 | Price/reference policy | Pool initialized at synthetic `0.001` test-WETH-per-PLTR solely for mechanism testing | Never display it as a market quote or external reference price |
 | Liquidity | Only faucet-sized balances exist | This is mechanism testing, not economically meaningful depth |
-| UI/SDK | Not implemented in product repository | No first-user path exists yet |
+| UI/SDK | Build-in-public dashboard and a minimal runtime-bound swap encoder exist; end-user trading UI does not | No first-user transaction path exists yet |
 
 ## 13. What is next
 
@@ -525,13 +541,17 @@ including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
 The next checkpoint is the **public two-actor lifecycle**, still before
-Docusaurus:
+Docusaurus. Its unsigned 25-call proposal and positive exact-fork replay now
+pass; this is planning evidence rather than public authority:
 
-1. build the minimal SDK adapter and golden vectors;
-2. expose a developer dashboard for one protective-put flow;
+1. retain the four required fork reverts and complete the remaining adverse
+   external-state and withdrawal rehearsals;
+2. resolve or explicitly accept the deployer-as-buyer role overlap;
 3. add independent health monitoring and safe-mode guidance;
-4. run two-actor open, premium, close, and adverse-state acceptance; and
-5. only then freeze the documentation hierarchy and build the Docusaurus site.
+4. construct a fresh nonce/time-bound one-step candidate and separately review
+   it before any public authorization; and
+5. only after the public lifecycle and first-user path pass, freeze the
+   documentation hierarchy and build the Docusaurus site.
 
 ## 14. External references
 

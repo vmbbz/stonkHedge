@@ -122,24 +122,24 @@
     },
     {
       "id": "two-actor-lifecycle",
-      "date": "Next",
-      "eyebrow": "Next gate",
-      "title": "Prove the options lifecycle with two actors",
-      "target": "Open, observe, close, and clean up one bounded test position with independent roles and fresh authorization.",
-      "status": "next",
-      "summary": "SDK adapters, golden vectors, monitoring, controlled price transition, collateral, premium, solvency, close, withdrawal, and adverse-state evidence remain ahead.",
+      "date": "2026-09-11",
+      "eyebrow": "Lifecycle design",
+      "title": "The two-actor lifecycle now passes on a fork",
+      "target": "Open, observe, close, and clean up one bounded test position with distinct roles and fresh authorization.",
+      "status": "in-progress",
+      "summary": "A deterministic 25-call proposal now passes collateral, matched short/long positions, premium observation, ordered close, and allowance cleanup on an exact discarded fork. Adverse external-state cases, withdrawals, role review, and public authorization remain.",
       "outcomes": [
-        "No transaction is currently authorized",
-        "Public options, collateral, swaps, and user application are not yet live",
-        "Independent human review remains defence in depth and mandatory before real value"
+        "25/25 positive lifecycle calls passed with both actors ending at zero open legs",
+        "Robinhood's six-field V4 route encoding is isolated in a runtime-bound adapter",
+        "No transaction is currently authorized; public options, collateral, swaps, and the user application are not live"
       ],
       "commits": [],
       "contractRefs": ["market-panoptic-pool", "market-tracker-pltr", "market-tracker-weth"],
       "transactionRefs": [],
-      "evidence": [],
+      "evidence": ["Exact parent block 117448363", "25/25 positive calls + 4/4 required reverts", "Premium observation changed", "Original active liquidity restored", "All temporary swap allowances zero"],
       "media": [],
       "docs": [
-        {"label": "Roadmap", "path": "docs/roadmap/2026-09-09-market-genesis.md"},
+        {"label": "Lifecycle design", "path": "docs/markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md"},
         {"label": "Architecture", "path": "docs/architecture/robinhood-testnet-system.md"}
       ]
     }

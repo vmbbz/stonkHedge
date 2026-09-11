@@ -15,8 +15,14 @@ nine-call exact-head replay and received a separate hash-bound authorization.
 All nine continuation calls are now canonical: they initialized the PoolKey,
 minted bounded V4 liquidity NFT `3903`, zeroed both allowance layers, and
 deployed and registered the predicted PanopticPool and two CollateralTrackers.
-Public genesis is complete and its authorization is closed. Public swaps,
-collateral, options, and the application are not live yet.
+Public genesis is complete and its authorization is closed. A new unsigned
+two-actor lifecycle proposal has since passed all `25/25` ordered calls on an
+exact loopback fork, including collateral, matched short/long positions,
+premium observation, buyer-first close, and allowance cleanup. This was not a
+public execution: four required transaction-order reverts also pass, while
+withdrawals, adverse external-state cases, role acceptance, fresh nonces, and
+separate authorization remain. Public swaps, collateral, options, and the
+application are not live yet.
 
 Start with:
 
@@ -29,6 +35,9 @@ Start with:
    for the public transaction record; and
 4. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
+
+The current lifecycle design and exact-fork evidence are in
+[`markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md`](./markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md).
 
 The first live, read-only market qualification passed at block `116408992`.
 Read the [first-market selection record](./markets/2026-09-09-first-market-selection.md)

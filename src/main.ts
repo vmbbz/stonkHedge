@@ -146,7 +146,7 @@ app.innerHTML = `
       <div class="park-intro wrap">
         <span class="kicker">Protocol Park</span>
         <h2>Infrastructure should feel alive.</h2>
-        <p>Walk the route from shared foundations to the first market—and see the next gate waiting at the end of the path.</p>
+        <p>Walk the route from shared foundations to the first market—and see the two-actor lifecycle advancing under an explicit no-broadcast boundary.</p>
       </div>
       <div class="park-scene" id="protocol-park" aria-label="A playful layered park showing StonkHedge's completed and upcoming milestones">
         <div class="park-sky-fill"></div>
@@ -174,8 +174,8 @@ app.innerHTML = `
         <a class="park-marker marker-genesis" href="#timeline" aria-label="Market genesis milestone complete">
           <span>02</span><strong>Market genesis</strong><small>PLTR/WETH · complete</small>
         </a>
-        <a class="park-marker marker-next" href="#timeline" aria-label="Two-actor lifecycle is the next gate">
-          <span>03</span><strong>Two-actor lifecycle</strong><small>next gate · no authorization</small>
+        <a class="park-marker marker-next" href="#timeline" aria-label="Two-actor lifecycle planning is in progress">
+          <span>03</span><strong>Two-actor lifecycle</strong><small>fork pass · no authorization</small>
         </a>
         <div class="park-caption"><span class="live-dot"></span>Move your pointer to explore the layers</div>
       </div>

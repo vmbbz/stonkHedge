@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "status": "READ_ONLY_SNAPSHOT_PASS_LIFECYCLE_EXPOSURE_PROPOSAL_NOT_ACCEPTED",
+  "mode": "PINNED_PUBLIC_READS_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "warning": "These are proposed test-only caps, not execution authority, an investment strategy, a live equity quote, or a promise that a transaction will succeed.",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 117448363,
+    "referenceBlockHash": "0x6415b70fdddd83d289e1c10e0b15da1e7fdf79569655e95fcfd832bf38d27eba",
+    "referenceTimestampUnix": 1789130509,
+    "referenceTimestampUtc": "2026-09-11T12:41:49Z"
+  },
+  "marketState": {
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "sfpmPoolId": "16897827167146926",
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "currentTick": -69082,
+    "twapTick": -69082,
+    "activeLiquidity": "138450781996976174",
+    "registryPaused": false,
+    "stockTokenPaused": false,
+    "stockUiMultiplier": "1000000000000000000",
+    "stockMultiplierEffectiveAt": "0"
+  },
+  "actors": {
+    "writer": {
+      "address": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+      "role": "UNPRIVILEGED_SECOND_ACTOR_LP_OWNER_AND_BOUNDED_SHORT_WRITER",
+      "confirmedNonce": 13,
+      "nativeBalanceWei": "5982343270000000",
+      "pltrBalance": "3022157655355120211",
+      "wethBalance": "2020000000000000",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false
+    },
+    "buyer": {
+      "address": "0xCa60c8eF6934f8a97c6a503C4e3a46e87F5b08bD",
+      "role": "PRIVILEGED_DEPLOYER_GUARDIAN_TREASURER_USED_ONLY_AS_TINY_TEST_BUYER",
+      "confirmedNonce": 16,
+      "nativeBalanceWei": "9286001030000000",
+      "pltrBalance": "5000000000000000000",
+      "wethBalance": "0",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false
+    }
+  },
+  "proposedExposure": {
+    "status": "OWNER_ACCEPTANCE_REQUIRED_BEFORE_EXECUTION_PLANNING",
+    "buyerWrapNativeWei": "300000000000000",
+    "writerCollateral": {
+      "pltrAssets": "500000000000000000",
+      "wethAssets": "500000000000000"
+    },
+    "buyerCollateral": {
+      "pltrAssets": "250000000000000000",
+      "wethAssets": "250000000000000"
+    },
+    "writerSwapBudget": {
+      "pltrTotalInput": "2000000000000000",
+      "wethTotalInput": "2000000000000",
+      "perSwapPltrInput": "1000000000000000",
+      "perSwapWethInput": "1000000000000",
+      "minimumWethOutputPerPltrSwap": "800000000000",
+      "minimumPltrOutputPerWethSwap": "800000000000000"
+    },
+    "option": {
+      "strategy": "MATCHED_IN_RANGE_SINGLE_LEG_CALL_MECHANISM_TEST",
+      "asset": 0,
+      "tokenType": 0,
+      "optionRatio": 1,
+      "riskPartner": 0,
+      "strike": -69060,
+      "width": 2,
+      "tickLower": -69120,
+      "tickUpper": -69000,
+      "writerShortSize": "10000000000000000",
+      "buyerLongSize": "1000000000000000",
+      "effectiveLiquidityLimitBps": 2000,
+      "usePremiaAsCollateral": true,
+      "builderCode": "0"
+    },
+    "rehearsalOnlyExpiry": {
+      "unix": 1790000000,
+      "utc": "2026-09-21T14:13:20Z",
+      "rule": "A public candidate must replace this with a fresh, short-lived deadline and Permit2 expiry after exact-head replay."
+    },
+    "nativeReserveFloorsBeforeGas": {
+      "writer": "4000000000000000",
+      "buyerAfterWrap": "7000000000000000"
+    }
+  },
+  "roleRisk": {
+    "accepted": false,
+    "finding": "The buyer address is also the shared-stack deployer, guardian admin, and treasurer.",
+    "containment": [
+      "the plan contains only ordinary WETH, ERC20, Permit2, UniversalRouter, CollateralTracker, and PanopticPool user calls",
+      "no registry, guardian, treasurer, ownership, factory-admin, upgrade, or deployment call is permitted",
+      "a fresh unprivileged third account remains preferable before public execution",
+      "using this buyer publicly requires an explicit owner acceptance that names the role overlap"
+    ]
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  }
+}

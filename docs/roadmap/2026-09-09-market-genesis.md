@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | Public genesis complete: exact PoolKey, bounded liquidity NFT `3903`, zero allowances, and registered Panoptic market canonical; public two-actor lifecycle remains |
+| Status | Public genesis complete; unsigned two-actor lifecycle replay passes `25/25` positive calls plus `4/4` required order/safety reverts; external-state cases, withdrawals, role review, and any public lifecycle remain |
 | Authorization | Genesis authorization consumed and closed at continuation index `8`; no swap, collateral, option, other-market, or mainnet transaction is authorized |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
-| Estimated remaining focused engineering time | 4–8 hours to plan, simulate, and execute the bounded two-actor lifecycle plus checkpoint evidence, excluding faucet, RPC, or review delays |
+| Estimated remaining focused engineering time | 2–5 hours for external-state cases, withdrawal continuation, fresh execution planning, review, and checkpoint evidence, excluding faucet, RPC, or authorization delays |
 
 ## 1. Objective
 

@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | Public genesis complete; unsigned two-actor lifecycle replay passes `25/25` positive calls plus `4/4` required order/safety reverts; external-state cases, withdrawals, role review, and any public lifecycle remain |
+| Status | Public genesis complete; historical lifecycle replay passes `25/25` positive calls plus `4/4` required reverts; fail-closed external-state verification and a state-derived withdrawal preparer are implemented; a third unprivileged buyer, fresh full replay, and any public lifecycle remain |
 | Authorization | Genesis authorization consumed and closed at continuation index `8`; no swap, collateral, option, other-market, or mainnet transaction is authorized |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
-| Estimated remaining focused engineering time | 2–5 hours for external-state cases, withdrawal continuation, fresh execution planning, review, and checkpoint evidence, excluding faucet, RPC, or authorization delays |
+| Estimated remaining focused engineering time | 2–4 hours after the third actor is faucet-funded for fresh snapshotting, full lifecycle-plus-withdrawal replay, review, and execution preparation, excluding faucet, RPC, support, or authorization delays |
 
 ## 1. Objective
 
@@ -388,7 +388,12 @@ state-retention window rather than implementation work.
 | 3–5 | Read-only verifier and exact-head fork lifecycle | Positive and negative rehearsal evidence |
 | 5–6 | Review, artifact freeze, and separate authorization | Exact hashes and maximum exposure approved |
 | 6–8 | One-step-at-a-time public initialization, liquidity, and market registration | Every receipt and post-state reconciled |
-| 8–10 | Two-actor lifecycle, clean replay, docs, and checkpoint commit | Checkpoint C pass or honest blocked report |
+| 8–10 | Lifecycle replay, fail-closed verifier, withdrawal planning, docs, and checkpoint commit | Safety tooling complete; third actor and fresh combined replay required |
+
+The 2026-09-12 safety round completed the verifier and offline withdrawal
+preparer portions of the last row. It also resolved the actor overlap in favor
+of a third unprivileged buyer. See the [lifecycle safety and withdrawal
+boundary](../markets/2026-09-12-lifecycle-safety-and-withdrawal-boundary.md).
 
 ## 9. Work immediately after Checkpoint C
 

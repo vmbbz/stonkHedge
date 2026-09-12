@@ -11,6 +11,7 @@ committed hash.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import ipaddress
@@ -221,6 +222,19 @@ def _assets(client: Any, tracker: str, account: str) -> int:
     )
 
 
+def _max_withdraw(client: Any, tracker: str, account: str) -> int:
+    return int(
+        _contract_call(
+            client,
+            tracker,
+            "maxWithdraw(address)",
+            ["uint256"],
+            ["address"],
+            [account],
+        )
+    )
+
+
 def _erc20_allowance(client: Any, token: str, owner: str, spender: str) -> int:
     return int(
         _contract_call(
@@ -323,8 +337,14 @@ def observe(client: Any, plan: dict[str, Any]) -> dict[str, Any]:
             "wethBalance": str(_balance(client, market["weth"], account)),
             "tracker0Shares": str(_balance(client, market["collateralTracker0"], account)),
             "tracker0Assets": str(_assets(client, market["collateralTracker0"], account)),
+            "tracker0MaxWithdraw": str(
+                _max_withdraw(client, market["collateralTracker0"], account)
+            ),
             "tracker1Shares": str(_balance(client, market["collateralTracker1"], account)),
             "tracker1Assets": str(_assets(client, market["collateralTracker1"], account)),
+            "tracker1MaxWithdraw": str(
+                _max_withdraw(client, market["collateralTracker1"], account)
+            ),
             "openLegs": _number_of_legs(client, market["panopticPool"], account),
             "pltrToPermit2": str(
                 _erc20_allowance(client, market["pltr"], account, market["permit2"])
@@ -376,6 +396,210 @@ def observe(client: Any, plan: dict[str, Any]) -> dict[str, Any]:
         "writer": actor_state(writer, short_id),
         "buyer": actor_state(buyer, long_id),
     }
+
+
+def _runtime_identity(client: Any, address: str) -> dict[str, Any]:
+    code = client.call("eth_getCode", [address, "latest"])
+    if not isinstance(code, str) or not code.startswith("0x"):
+        raise RuntimeError(f"runtime code response is malformed for {address}")
+    return qualifier.code_identity(code)
+
+
+def _computed_pool_id(plan: dict[str, Any]) -> str:
+    key = plan["market"]["poolKey"]
+    encoded = abi_encode(
+        ["address", "address", "uint24", "int24", "address"],
+        [
+            key["currency0"],
+            key["currency1"],
+            int(key["fee"]),
+            int(key["tickSpacing"]),
+            key["hooks"],
+        ],
+    )
+    return "0x" + qualifier.keccak(encoded).hex()
+
+
+def observe_external_state(client: Any, plan: dict[str, Any]) -> dict[str, Any]:
+    """Read the identities and controls that can invalidate a safe replay."""
+
+    market = plan["market"]
+    genesis = load_json(REPOSITORY / plan["sourceBindings"]["genesisManifest"])
+    chain = load_json(REPOSITORY / plan["sourceBindings"]["chainManifest"])
+    registered = genesis["registeredMarket"]
+    registry = market["stockRegistry"]
+    pltr = market["pltr"]
+    writer = qualifier.normalize_address(plan["roles"]["writer"]["address"])
+    buyer = qualifier.normalize_address(plan["roles"]["buyer"]["address"])
+
+    runtime_addresses = {
+        "stockRegistry": registry,
+        "pltr": pltr,
+        "weth": market["weth"],
+        "permit2": market["permit2"],
+        "universalRouter": market["universalRouter"],
+        "stateView": market["stateView"],
+        "panopticPool": market["panopticPool"],
+        "collateralTracker0": market["collateralTracker0"],
+        "collateralTracker1": market["collateralTracker1"],
+    }
+    runtimes = {
+        name: {"address": qualifier.normalize_address(address), **_runtime_identity(client, address)}
+        for name, address in runtime_addresses.items()
+    }
+
+    def call_address(to: str, signature: str) -> str:
+        return qualifier.normalize_address(
+            _contract_call(client, to, signature, ["address"])
+        )
+
+    return {
+        "chainId": int(client.call("eth_chainId", []), 16),
+        "computedPoolId": _computed_pool_id(plan),
+        "runtimes": runtimes,
+        "expectedRuntimes": {
+            "stockRegistry": {
+                "runtimeBytes": chain["sharedStockInfrastructure"]["registryRuntimeBytes"],
+                "runtimeCodeHash": chain["sharedStockInfrastructure"]["registryRuntimeCodeHash"],
+            },
+            "pltr": {
+                "runtimeBytes": chain["sharedStockInfrastructure"]["proxyRuntimeBytes"],
+                "runtimeCodeHash": chain["sharedStockInfrastructure"]["proxyRuntimeCodeHash"],
+            },
+            "weth": {
+                "runtimeBytes": chain["quoteAssets"]["weth"]["runtimeBytes"],
+                "runtimeCodeHash": chain["quoteAssets"]["weth"]["runtimeCodeHash"],
+            },
+            "permit2": {
+                "runtimeBytes": chain["infrastructure"]["permit2"]["runtimeBytes"],
+                "runtimeCodeHash": chain["infrastructure"]["permit2"]["runtimeCodeHash"],
+            },
+            "universalRouter": {
+                "runtimeBytes": chain["infrastructure"]["universalRouter"]["runtimeBytes"],
+                "runtimeCodeHash": chain["infrastructure"]["universalRouter"]["runtimeCodeHash"],
+            },
+            "stateView": {
+                "runtimeBytes": chain["infrastructure"]["stateView"]["runtimeBytes"],
+                "runtimeCodeHash": chain["infrastructure"]["stateView"]["runtimeCodeHash"],
+            },
+            "panopticPool": {
+                "runtimeBytes": registered["panopticPool"]["runtimeBytes"],
+                "runtimeCodeHash": registered["panopticPool"]["runtimeKeccak256"],
+            },
+            "collateralTracker0": {
+                "runtimeBytes": registered["collateralTracker0"]["runtimeBytes"],
+                "runtimeCodeHash": registered["collateralTracker0"]["runtimeKeccak256"],
+            },
+            "collateralTracker1": {
+                "runtimeBytes": registered["collateralTracker1"]["runtimeBytes"],
+                "runtimeCodeHash": registered["collateralTracker1"]["runtimeKeccak256"],
+            },
+        },
+        "stockControls": {
+            "registryPaused": bool(_contract_call(client, registry, "paused()", ["bool"])),
+            "tokenPaused": bool(_contract_call(client, pltr, "tokenPaused()", ["bool"])),
+            "uiMultiplier": str(_contract_call(client, pltr, "uiMultiplier()", ["uint256"])),
+            "newUIMultiplier": str(
+                _contract_call(client, pltr, "newUIMultiplier()", ["uint256"])
+            ),
+            "effectiveAt": str(_contract_call(client, pltr, "effectiveAt()", ["uint256"])),
+            "writerBlocked": bool(
+                _contract_call(
+                    client,
+                    registry,
+                    "isBlocked(address)",
+                    ["bool"],
+                    ["address"],
+                    [writer],
+                )
+            ),
+            "buyerBlocked": bool(
+                _contract_call(
+                    client,
+                    registry,
+                    "isBlocked(address)",
+                    ["bool"],
+                    ["address"],
+                    [buyer],
+                )
+            ),
+        },
+        "wiring": {
+            "pltrRegistry": call_address(pltr, "ACCESS_CONTROLLED_REGISTRY()"),
+            "panopticPoolCollateral0": call_address(
+                market["panopticPool"], "collateralToken0()"
+            ),
+            "panopticPoolCollateral1": call_address(
+                market["panopticPool"], "collateralToken1()"
+            ),
+            "panopticPoolManager": call_address(market["panopticPool"], "poolManager()"),
+            "panopticPoolRiskEngine": call_address(market["panopticPool"], "riskEngine()"),
+            "panopticPoolSfpm": call_address(market["panopticPool"], "SFPM()"),
+            "panopticPoolNumericId": str(
+                _contract_call(client, market["panopticPool"], "poolId()", ["uint64"])
+            ),
+            "tracker0Pool": call_address(market["collateralTracker0"], "panopticPool()"),
+            "tracker0Underlying": call_address(
+                market["collateralTracker0"], "underlyingToken()"
+            ),
+            "tracker1Pool": call_address(market["collateralTracker1"], "panopticPool()"),
+            "tracker1Underlying": call_address(
+                market["collateralTracker1"], "underlyingToken()"
+            ),
+        },
+        "expectedWiring": {
+            "pltrRegistry": qualifier.normalize_address(registry),
+            "panopticPoolCollateral0": qualifier.normalize_address(
+                market["collateralTracker0"]
+            ),
+            "panopticPoolCollateral1": qualifier.normalize_address(
+                market["collateralTracker1"]
+            ),
+            "panopticPoolManager": qualifier.normalize_address(
+                registered["panopticPool"]["poolManager"]
+            ),
+            "panopticPoolRiskEngine": qualifier.normalize_address(
+                registered["panopticPool"]["riskEngine"]
+            ),
+            "panopticPoolSfpm": qualifier.normalize_address(
+                registered["panopticPool"]["sfpmV4"]
+            ),
+            "panopticPoolNumericId": str(market["sfpmPoolId"]),
+            "tracker0Pool": qualifier.normalize_address(market["panopticPool"]),
+            "tracker0Underlying": qualifier.normalize_address(market["pltr"]),
+            "tracker1Pool": qualifier.normalize_address(market["panopticPool"]),
+            "tracker1Underlying": qualifier.normalize_address(market["weth"]),
+        },
+        "requiredStockState": {
+            "registryPaused": False,
+            "tokenPaused": False,
+            "uiMultiplier": str(chain["requiredStockState"]["uiMultiplier"]),
+            "newUIMultiplier": str(chain["requiredStockState"]["newUiMultiplier"]),
+            "effectiveAt": str(chain["requiredStockState"]["effectiveAt"]),
+            "writerBlocked": False,
+            "buyerBlocked": False,
+        },
+    }
+
+
+def _assert_external_state(plan: dict[str, Any], state: dict[str, Any]) -> None:
+    if state["chainId"] != plan["network"]["chainId"]:
+        raise RuntimeError("external chain ID drifted")
+    if state["computedPoolId"].lower() != plan["market"]["poolId"].lower():
+        raise RuntimeError("external PoolId drifted")
+    for name, expected in state["expectedRuntimes"].items():
+        actual = state["runtimes"][name]
+        if (
+            actual["runtimeBytes"] != expected["runtimeBytes"]
+            or actual["runtimeCodeHash"].lower() != expected["runtimeCodeHash"].lower()
+        ):
+            raise RuntimeError(f"external {name} runtime identity drifted")
+    for name, expected in state["expectedWiring"].items():
+        if str(state["wiring"][name]).lower() != str(expected).lower():
+            raise RuntimeError(f"external {name} immutable wiring drifted")
+    for name, expected in state["requiredStockState"].items():
+        if str(state["stockControls"][name]).lower() != str(expected).lower():
+            raise RuntimeError(f"external Stock Token control {name} drifted")
 
 
 def assert_exact_fork(plan: dict[str, Any], client: Any) -> dict[str, Any]:
@@ -567,10 +791,147 @@ def _assert_initial_state(plan: dict[str, Any], state: dict[str, Any]) -> None:
         ):
             if str(actual[name]) != str(expected[expected_name]):
                 raise RuntimeError(f"initial {role} {name} drifted")
+        for name in (
+            "pltrToPermit2",
+            "wethToPermit2",
+            "pltrToTracker0",
+            "wethToTracker1",
+        ):
+            if actual[name] != "0":
+                raise RuntimeError(f"initial {role} {name} allowance is elevated")
+        if actual["pltrPermit2ToRouter"][0] != 0:
+            raise RuntimeError(f"initial {role} PLTR Permit2 allowance is elevated")
+        if actual["wethPermit2ToRouter"][0] != 0:
+            raise RuntimeError(f"initial {role} WETH Permit2 allowance is elevated")
     if state["pool"]["tick"] != plan["market"]["referenceTick"]:
         raise RuntimeError("initial pool tick drifted")
     if state["pool"]["activeLiquidity"] != plan["market"]["referenceActiveLiquidity"]:
         raise RuntimeError("initial active liquidity drifted")
+
+
+def _expect_preflight_rejection(name: str, check: Callable[[], None]) -> dict[str, Any]:
+    try:
+        check()
+    except RuntimeError as exc:
+        return {
+            "name": name,
+            "status": "PASS_REJECTED_BY_FAIL_CLOSED_PREFLIGHT",
+            "reason": str(exc),
+        }
+    raise RuntimeError(f"adverse preflight mutation unexpectedly passed: {name}")
+
+
+def rehearse_adverse_preflight_rejections(
+    plan: dict[str, Any],
+    external: dict[str, Any],
+    initial: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Prove the verifier rejects representative external-state drift.
+
+    These mutations affect only in-memory copies of read-only observations. They
+    do not call an administrator, alter the fork, or broaden transaction scope.
+    """
+
+    cases: list[dict[str, Any]] = []
+
+    def external_case(name: str, mutate: Callable[[dict[str, Any]], None]) -> None:
+        changed = copy.deepcopy(external)
+        mutate(changed)
+        cases.append(
+            _expect_preflight_rejection(
+                name, lambda: _assert_external_state(plan, changed)
+            )
+        )
+
+    def initial_case(name: str, mutate: Callable[[dict[str, Any]], None]) -> None:
+        changed = copy.deepcopy(initial)
+        mutate(changed)
+        cases.append(
+            _expect_preflight_rejection(name, lambda: _assert_initial_state(plan, changed))
+        )
+
+    external_case(
+        "wrong PoolId",
+        lambda state: state.__setitem__("computedPoolId", "0x" + "00" * 32),
+    )
+    external_case(
+        "runtime bytecode drift",
+        lambda state: state["runtimes"]["panopticPool"].__setitem__(
+            "runtimeCodeHash", "0x" + "11" * 32
+        ),
+    )
+    external_case(
+        "immutable wiring drift",
+        lambda state: state["wiring"].__setitem__(
+            "tracker0Underlying", state["expectedWiring"]["tracker1Underlying"]
+        ),
+    )
+    external_case(
+        "Stock registry paused",
+        lambda state: state["stockControls"].__setitem__("registryPaused", True),
+    )
+    external_case(
+        "writer blocked by Stock registry",
+        lambda state: state["stockControls"].__setitem__("writerBlocked", True),
+    )
+    external_case(
+        "Stock Token UI multiplier drift",
+        lambda state: state["stockControls"].__setitem__(
+            "uiMultiplier", str(int(state["requiredStockState"]["uiMultiplier"]) + 1)
+        ),
+    )
+    initial_case(
+        "writer balance below frozen PLTR snapshot",
+        lambda state: state["writer"].__setitem__(
+            "pltrBalance", str(int(plan["roles"]["writer"]["pltrBalance"]) - 1)
+        ),
+    )
+    initial_case(
+        "elevated buyer tracker allowance",
+        lambda state: state["buyer"].__setitem__("pltrToTracker0", "1"),
+    )
+    return cases
+
+
+def assert_swap_postconditions(
+    plan: dict[str, Any],
+    transaction: dict[str, Any],
+    before: dict[str, Any],
+    after: dict[str, Any],
+) -> dict[str, Any]:
+    intent = transaction["decodedIntent"]
+    if intent.get("route") != "UNISWAP_V4_EXACT_INPUT_SINGLE":
+        raise ValueError("transaction is not a bounded Robinhood V4 swap")
+    sender = qualifier.normalize_address(transaction["sender"])
+    role = next(
+        name
+        for name in ("writer", "buyer")
+        if qualifier.normalize_address(plan["roles"][name]["address"]) == sender
+    )
+    amount_in = int(intent["amountIn"])
+    minimum_out = int(intent["amountOutMinimum"])
+    if intent["zeroForOne"]:
+        spent = int(before[role]["pltrBalance"]) - int(after[role]["pltrBalance"])
+        received = int(after[role]["wethBalance"]) - int(before[role]["wethBalance"])
+    else:
+        spent = int(before[role]["wethBalance"]) - int(after[role]["wethBalance"])
+        received = int(after[role]["pltrBalance"]) - int(before[role]["pltrBalance"])
+    if spent != amount_in:
+        raise RuntimeError(
+            f"swap index {transaction['ordinal']} input spend mismatch"
+        )
+    if received < minimum_out:
+        raise RuntimeError(
+            f"swap index {transaction['ordinal']} output below committed minimum"
+        )
+    return {
+        "ordinal": transaction["ordinal"],
+        "status": "PASS_EXACT_INPUT_AND_MINIMUM_OUTPUT",
+        "amountIn": str(amount_in),
+        "actualInputSpent": str(spent),
+        "amountOutMinimum": str(minimum_out),
+        "actualOutputReceived": str(received),
+    }
 
 
 def simulate(
@@ -583,8 +944,13 @@ def simulate(
     validate_plan(plan, plan_path)
     fork = assert_exact_fork(plan, client)
     compatibility = mine_compatibility_block(plan, client)
+    external = observe_external_state(client, plan)
+    _assert_external_state(plan, external)
     before = observe(client, plan)
     _assert_initial_state(plan, before)
+    adverse_preflight = rehearse_adverse_preflight_rejections(
+        plan, external, before
+    )
 
     writer = qualifier.normalize_address(plan["roles"]["writer"]["address"])
     buyer = qualifier.normalize_address(plan["roles"]["buyer"]["address"])
@@ -593,6 +959,7 @@ def simulate(
 
     receipts: list[dict[str, Any]] = []
     negative_cases: list[dict[str, Any]] = []
+    swap_postconditions: list[dict[str, Any]] = []
     milestones: dict[str, Any] = {"initial": before}
     try:
         negative_cases.append(
@@ -604,8 +971,21 @@ def simulate(
             )
         )
         for transaction in plan["transactions"]:
+            swap_before = (
+                observe(client, plan)
+                if transaction["decodedIntent"].get("route")
+                == "UNISWAP_V4_EXACT_INPUT_SINGLE"
+                else None
+            )
             receipt = send_local(client, transaction, transaction_gas)
             receipts.append(receipt_summary(transaction, receipt))
+            if swap_before is not None:
+                swap_after = observe(client, plan)
+                swap_postconditions.append(
+                    assert_swap_postconditions(
+                        plan, transaction, swap_before, swap_after
+                    )
+                )
             ordinal = transaction["ordinal"]
             if ordinal == 4:
                 negative_cases.append(
@@ -681,7 +1061,10 @@ def simulate(
         },
         "fork": fork,
         "localCompatibilityBlock": compatibility,
+        "externalState": external,
+        "adversePreflightRejections": adverse_preflight,
         "transactions": receipts,
+        "swapPostconditions": swap_postconditions,
         "milestones": milestones,
         "premiumObservationChanged": premium_changed,
         "negativeCases": {

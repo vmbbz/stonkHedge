@@ -19,10 +19,13 @@ Public genesis is complete and its authorization is closed. A new unsigned
 two-actor lifecycle proposal has since passed all `25/25` ordered calls on an
 exact loopback fork, including collateral, matched short/long positions,
 premium observation, buyer-first close, and allowance cleanup. This was not a
-public execution: four required transaction-order reverts also pass, while
-withdrawals, adverse external-state cases, role acceptance, fresh nonces, and
-separate authorization remain. Public swaps, collateral, options, and the
-application are not live yet.
+public execution: four required transaction-order reverts also pass. The next
+verifier now fails closed on runtime/wiring drift, issuer controls, stale
+balances, elevated allowances, and swap-output shortfalls, and a separate
+offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
+Execution preparation now requires a third unprivileged buyer; fresh fork
+evidence, nonces, and separate authorization still remain. Public swaps,
+collateral, options, and the application are not live yet.
 
 Start with:
 
@@ -38,6 +41,9 @@ Start with:
 
 The current lifecycle design and exact-fork evidence are in
 [`markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md`](./markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md).
+The follow-on [lifecycle safety and withdrawal boundary](./markets/2026-09-12-lifecycle-safety-and-withdrawal-boundary.md)
+records the hard third-account decision, strengthened fail-closed verifier,
+state-derived four-call withdrawal design, and fresh-head replay gate.
 
 The first live, read-only market qualification passed at block `116408992`.
 Read the [first-market selection record](./markets/2026-09-09-first-market-selection.md)

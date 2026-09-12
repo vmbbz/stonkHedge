@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-11 |
+| State date | 2026-09-12 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; the two-actor lifecycle passed `25/25` calls on an exact discarded fork but remains unexecuted publicly |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; the lifecycle passed `25/25` calls on a discarded fork; fail-closed external-state and withdrawal-continuation tooling now exists, with a third unprivileged buyer and fresh replay still required |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -45,7 +45,11 @@ sandbox:
   two CollateralTrackers were deployed and registered; and
 - fresh read-only reconciliation at block `117093052` verified the factory
   mapping, deployed code, factory-NFT ownership, full pool/tracker wiring,
-  nonzero SFPM market ID, unchanged liquidity, and four zero allowances.
+  nonzero SFPM market ID, unchanged liquidity, and four zero allowances; and
+- lifecycle safety tooling now binds runtime/wiring identity, Stock Token
+  controls, actor balances, zero allowances, swap minimum output, and
+  post-close `maxWithdraw`, while refusing the privileged deployer as buyer for
+  execution preparation.
 
 This is now a deployed and wired Panoptic market over a functioning Uniswap V4
 liquidity pool. “Deployed market” is intentionally narrower than “validated
@@ -66,11 +70,12 @@ flowchart LR
     H --> I[Nine-step continuation replay]
     I --> J[Pool initialized and liquidity NFT 3903 minted]
     J --> K[Allowances zeroed and Panoptic market registered]
-    K --> G[Next: lifecycle, SDK, and first-user sandbox]
+    K --> L[Lifecycle safety and withdrawal tooling]
+    L --> G[Next: third actor and fresh full replay]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D,E,F,H,I,J,K done;
+    class A,B,C,D,E,F,H,I,J,K,L done;
     class G next;
 ```
 
@@ -501,6 +506,7 @@ Primary local records:
 - [PLTR/WETH execution candidate and one-step operator](../markets/2026-09-10-pltr-weth-execution-candidate-and-operator.md).
 - [PLTR/WETH partial public genesis and continuation](../markets/2026-09-10-pltr-weth-public-continuation.md).
 - [final PLTR/WETH public-genesis manifest](../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json).
+- [lifecycle safety and withdrawal boundary](../markets/2026-09-12-lifecycle-safety-and-withdrawal-boundary.md).
 
 Re-run the current external health verifier from the product repository:
 
@@ -540,17 +546,19 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The next checkpoint is the **public two-actor lifecycle**, still before
-Docusaurus. Its unsigned 25-call proposal and positive exact-fork replay now
-pass; this is planning evidence rather than public authority:
+The next checkpoint is the **fresh three-account lifecycle rehearsal**, still
+before Docusaurus and still without public authority. Its predecessor's
+unsigned 25-call proposal and exact-fork replay pass, and the new fail-closed
+verifier plus withdrawal preparer are implemented:
 
-1. retain the four required fork reverts and complete the remaining adverse
-   external-state and withdrawal rehearsals;
-2. resolve or explicitly accept the deployer-as-buyer role overlap;
-3. add independent health monitoring and safe-mode guidance;
-4. construct a fresh nonce/time-bound one-step candidate and separately review
+1. create and faucet-fund a third unprivileged buyer account;
+2. capture a fresh head and regenerate the nonce-free lifecycle proposal;
+3. replay all positive calls, required reverts, fail-closed checks, and the
+   four state-derived withdrawals in exact order;
+4. add independent health monitoring and safe-mode guidance;
+5. construct a fresh nonce/time-bound one-step candidate and separately review
    it before any public authorization; and
-5. only after the public lifecycle and first-user path pass, freeze the
+6. only after the public lifecycle and first-user path pass, freeze the
    documentation hierarchy and build the Docusaurus site.
 
 ## 14. External references

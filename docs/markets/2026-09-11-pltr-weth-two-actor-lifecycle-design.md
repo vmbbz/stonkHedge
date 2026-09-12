@@ -234,21 +234,25 @@ than pretending the deposits are unchanged:
 | `lifecycle-proposal-2026-09-11.json` | Deterministic 25-call body, source hashes, expected states, and exclusions | Null nonces; not executable authority |
 | `simulate_robinhood_two_actor_lifecycle_fork.py` | Loopback-only account impersonation and state reconciliation | Refuses non-loopback and non-Anvil RPCs; no signing path |
 | `lifecycle-fork-rehearsal-2026-09-11.json` | Sanitized local receipts and milestone state | Proves only the discarded fork replay |
+| `prepare_robinhood_withdrawal_continuation.py` | Builds four nonce-free calls from fresh post-close `maxWithdraw` evidence | Offline only; rejects the privileged deployer as buyer |
+
+The 2026-09-12 [safety and withdrawal boundary](./2026-09-12-lifecycle-safety-and-withdrawal-boundary.md)
+documents the strengthened verifier, the new state-derived continuation, the
+hard third-account buyer decision, and the fresh-head replay requirement.
 
 ## 8. What remains before any public lifecycle
 
 This pass starts the lifecycle phase; it does not close it. The next work is:
 
-1. retain the four passing transaction-order reverts and add adverse external
-   state cases for wrong PoolId/runtime, paused or blocked Stock Token state,
-   multiplier drift, insufficient balances, elevated allowances, and minimum
-   output failure;
-2. decide whether to replace the buyer with a third unprivileged account. The
-   current candidate buyer is also deployer, guardian admin, and treasurer;
+1. retain the four passing transaction-order reverts and run the newly added
+   fail-closed external-state and swap-output checks on a fresh exact head;
+2. replace the buyer with a third unprivileged account. The current candidate
+   buyer is also deployer, guardian admin, and treasurer and is now rejected by
+   execution-preparation tooling;
 3. review the exact collateral, sizes, strike, 2,000-bps spread limit, minimum
    outputs, and residual policy;
-4. derive post-close `maxWithdraw` values from a fresh replay and construct a
-   separate bounded withdrawal continuation;
+4. capture post-close `maxWithdraw` values in the fresh replay, generate the
+   four-call bounded withdrawal continuation, and replay its exact sequence;
 5. refresh public state, expiry, nonces, gas limits, and calldata against a new
    exact head;
 6. build and simulate a one-transaction-at-a-time public operator with strict

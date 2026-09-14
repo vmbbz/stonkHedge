@@ -40,6 +40,7 @@ DEFAULT_OUTPUT = (
 )
 DEPLOYER = "0xca60c8ef6934f8a97c6a503c4e3a46e87f5b08bd"
 MAX_RESIDUAL_RAW_UNITS = 2_000_000_000_000
+WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS = 1_000_000_000_000
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -187,7 +188,12 @@ def build_withdrawal_plan(
             raise ValueError(f"{role} {symbol} withdrawal state is not positive")
         if max_withdraw > assets:
             raise ValueError(f"{role} {symbol} maxWithdraw exceeds assetsOf")
-        residual = assets - max_withdraw
+        if max_withdraw <= WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS:
+            raise ValueError(
+                f"{role} {symbol} maxWithdraw cannot absorb the execution buffer"
+            )
+        withdrawal_assets = max_withdraw - WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS
+        residual = assets - withdrawal_assets
         if residual > MAX_RESIDUAL_RAW_UNITS:
             raise ValueError(
                 f"{role} {symbol} residual exceeds {MAX_RESIDUAL_RAW_UNITS} raw units"
@@ -196,7 +202,7 @@ def build_withdrawal_plan(
         tracker = normalize_address(
             lifecycle_plan["market"][f"collateralTracker{tracker_index}"]
         )
-        calldata = _withdraw_calldata(max_withdraw, sender, sender)
+        calldata = _withdraw_calldata(withdrawal_assets, sender, sender)
         transactions.append(
             {
                 "ordinal": ordinal,
@@ -210,12 +216,15 @@ def build_withdrawal_plan(
                 "calldataKeccak256": "0x" + keccak(bytes.fromhex(calldata[2:])).hex(),
                 "decodedIntent": {
                     "function": "withdraw(uint256,address,address)",
-                    "assets": str(max_withdraw),
+                    "assets": str(withdrawal_assets),
                     "receiver": sender,
                     "owner": sender,
                     "sourceMaxWithdraw": str(max_withdraw),
                     "sourceAssetsOf": str(assets),
                     "sourceShares": str(shares),
+                    "executionBufferRawUnits": str(
+                        WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS
+                    ),
                 },
                 "mandatoryPreconditions": [
                     "the public post-close block and all source hashes still match",
@@ -251,6 +260,13 @@ def build_withdrawal_plan(
         },
         "sourcePostCloseBlock": terminal["blockNumber"],
         "maximumResidualRawUnitsPerAsset": str(MAX_RESIDUAL_RAW_UNITS),
+        "withdrawalExecutionBufferRawUnits": str(
+            WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS
+        ),
+        "withdrawalExecutionBufferReason": (
+            "withdraw() accrues interest before re-reading maxWithdraw; the bounded "
+            "buffer prevents a view-to-execution one-unit drift from exceeding the limit"
+        ),
         "derivedResiduals": residuals,
         "transactionCount": len(transactions),
         "transactions": transactions,
@@ -287,7 +303,9 @@ def main() -> int:
         args.rehearsal,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
+    args.output.write_text(
+        json.dumps(plan, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     print(
         json.dumps(
             {

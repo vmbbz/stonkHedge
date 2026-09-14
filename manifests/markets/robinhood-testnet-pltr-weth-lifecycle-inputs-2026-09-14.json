@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "status": "READ_ONLY_PINNED_SNAPSHOT_PASS_THIRD_BUYER_LIFECYCLE_PROPOSAL_NOT_AUTHORIZED",
+  "mode": "PINNED_PUBLIC_READS_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "warning": "These are proposed test-only caps, not execution authority, an investment strategy, a live equity quote, or a promise that a transaction will succeed.",
+  "sourceBindings": {
+    "chainManifestSha256": "4399d03e83a5bbea47287cfbbf81e21ff23256d904180e2535ff6bbcf0e4dd29",
+    "genesisManifestSha256": "93d31a5393f7295a0f560de45351ea72d52e9c62b8b4f6419d56e8c39ea3922b",
+    "exposurePolicySha256": "30e555a2d7aedabc04b630b89427ba9428bcee3926ab87521b34c65d3ce163ae",
+    "snapshotterSha256": "ce0c5d6eafa7effb5e00dd1b7fdfbf53529489fc83a2a0bff68f90973bb5c261"
+  },
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 119052230,
+    "referenceBlockHash": "0x4d3e584cbb313286fde094af25c3107015fe3c35cbf577c63547a8908732e41f",
+    "referenceTimestampUnix": 1789349718,
+    "referenceTimestampUtc": "2026-09-14T01:35:18Z"
+  },
+  "marketState": {
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "sfpmPoolId": "16897827167146926",
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "currentTick": -69082,
+    "twapTick": null,
+    "twapObservation": "NOT_CAPTURED_SPOT_TICK_IS_NOT_LABELLED_AS_TWAP",
+    "activeLiquidity": "138450781996976174",
+    "registryPaused": false,
+    "stockTokenPaused": false,
+    "stockUiMultiplier": "1000000000000000000",
+    "stockPendingMultiplier": "1000000000000000000",
+    "stockMultiplierEffectiveAt": "0"
+  },
+  "actors": {
+    "writer": {
+      "address": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "role": "UNPRIVILEGED_SECOND_ACTOR_LP_OWNER_AND_BOUNDED_SHORT_WRITER",
+      "confirmedNonce": 13,
+      "nativeBalanceWei": "5982343270000000",
+      "pltrBalance": "3022157655355120211",
+      "wethBalance": "2020000000000000",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "buyer": {
+      "address": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "role": "UNPRIVILEGED_THIRD_ACTOR_BOUNDED_TEST_BUYER",
+      "confirmedNonce": 0,
+      "nativeBalanceWei": "10000000000000000",
+      "pltrBalance": "5000000000000000000",
+      "wethBalance": "0",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "proposedExposure": {
+    "status": "OWNER_ACCEPTANCE_REQUIRED_BEFORE_EXECUTION_PLANNING",
+    "buyerWrapNativeWei": "300000000000000",
+    "writerCollateral": {
+      "pltrAssets": "500000000000000000",
+      "wethAssets": "500000000000000"
+    },
+    "buyerCollateral": {
+      "pltrAssets": "250000000000000000",
+      "wethAssets": "250000000000000"
+    },
+    "writerSwapBudget": {
+      "pltrTotalInput": "2000000000000000",
+      "wethTotalInput": "2000000000000",
+      "perSwapPltrInput": "1000000000000000",
+      "perSwapWethInput": "1000000000000",
+      "minimumWethOutputPerPltrSwap": "800000000000",
+      "minimumPltrOutputPerWethSwap": "800000000000000"
+    },
+    "option": {
+      "strategy": "MATCHED_IN_RANGE_SINGLE_LEG_CALL_MECHANISM_TEST",
+      "asset": 0,
+      "tokenType": 0,
+      "optionRatio": 1,
+      "riskPartner": 0,
+      "strike": -69060,
+      "width": 2,
+      "tickLower": -69120,
+      "tickUpper": -69000,
+      "writerShortSize": "10000000000000000",
+      "buyerLongSize": "1000000000000000",
+      "effectiveLiquidityLimitBps": 2000,
+      "usePremiaAsCollateral": true,
+      "builderCode": "0"
+    },
+    "rehearsalOnlyExpiry": {
+      "unix": 1789436118,
+      "utc": "2026-09-15T01:35:18Z",
+      "rule": "A public candidate must replace this with a fresh, short-lived deadline and Permit2 expiry after exact-head replay."
+    },
+    "nativeReserveFloorsBeforeGas": {
+      "writer": "4000000000000000",
+      "buyerAfterWrap": "7000000000000000"
+    }
+  },
+  "roleRisk": {
+    "accepted": false,
+    "finding": "The buyer is a dedicated third unprivileged actor, distinct from the writer and shared deployer/guardian/treasurer.",
+    "containment": [
+      "only ordinary WETH, ERC20, Permit2, UniversalRouter, CollateralTracker, and PanopticPool user calls are proposed",
+      "no registry, guardian, treasurer, ownership, factory-admin, upgrade, or deployment call is permitted",
+      "all public execution fields remain false and every nonce remains null"
+    ]
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  }
+}

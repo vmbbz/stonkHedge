@@ -4,10 +4,10 @@
 |---|---|
 | Date | 2026-09-12 |
 | Network | Robinhood Chain Testnet (`46630`) |
-| Outcome | Safety verifier and withdrawal-continuation preparer implemented locally |
+| Outcome | Safety tooling implemented; fresh third-buyer lifecycle plus withdrawals passed locally on 2026-09-14 |
 | Public transactions | None |
 | Signing or broadcast authority | None |
-| Current blocker | Replace the privileged deployer-buyer with a third unprivileged account, then capture and replay a fresh exact head |
+| Current blocker | Independent review and a separately designed nonce/deadline-bound operator simulation before any authorization request |
 
 ## 1. What this milestone changes
 
@@ -90,14 +90,16 @@ When those checks pass, the preparer emits this bounded order:
 
 | Continuation index | Actor | Call | Reason for order |
 |---:|---|---|---|
-| 0 | Buyer | PLTR tracker `withdraw(maxWithdraw, buyer, buyer)` | Removes the independent test buyer's token0 exposure first |
-| 1 | Buyer | WETH tracker `withdraw(maxWithdraw, buyer, buyer)` | Completes buyer recovery before touching writer claims |
-| 2 | Writer | PLTR tracker `withdraw(maxWithdraw, writer, writer)` | Recovers writer token0 only after buyer state is settled |
-| 3 | Writer | WETH tracker `withdraw(maxWithdraw, writer, writer)` | Leaves one final terminal state to reconcile |
+| 0 | Buyer | PLTR tracker `withdraw(maxWithdraw - buffer, buyer, buyer)` | Removes the independent test buyer's token0 exposure first |
+| 1 | Buyer | WETH tracker `withdraw(maxWithdraw - buffer, buyer, buyer)` | Completes buyer recovery before touching writer claims |
+| 2 | Writer | PLTR tracker `withdraw(maxWithdraw - buffer, writer, writer)` | Recovers writer token0 only after buyer state is settled |
+| 3 | Writer | WETH tracker `withdraw(maxWithdraw - buffer, writer, writer)` | Leaves one final terminal state to reconcile |
 
 Each nonce remains `null`. Every call binds the tracker, owner, receiver,
-assets, calldata hash, source shares, source `assetsOf`, and source
-`maxWithdraw`. Before any later send, the operator must re-read
+assets, calldata hash, source shares, source `assetsOf`, source `maxWithdraw`,
+and a `1e12` raw-unit execution buffer. The buffer is required because
+`withdraw()` accrues interest before recomputing `maxWithdraw`; it remains
+inside the accepted `2e12` residual ceiling. Before any later send, the operator must re-read
 `maxWithdraw >= committed assets`; after each send it must wait for a canonical
 receipt and reconcile the underlying balance and burned shares. Because one
 withdrawal may change a later vault calculation, the exact four-call sequence
@@ -121,31 +123,33 @@ This removes an avoidable provenance ambiguity: a public buyer should prove
 that the ordinary user path works without relying on an address that also owns
 emergency or treasury powers.
 
-## 6. Why there is no new replay artifact yet
+## 6. Fresh replay outcome
 
-The old reference block `117448363` is no longer available as archive state
-from Robinhood's public RPC. Anvil now fails while creating that historical
-fork with missing-trie-node/metadata errors. The already committed 2026-09-11
-report remains evidence of its completed run, but it would be misleading to
-generate a new report hash without a new passing run.
+The dedicated buyer `0x6719...750f` was created and faucet-funded. A fresh
+pinned snapshot at block `119052230` then passed the complete lifecycle and all
+four buffered withdrawals on one discarded Anvil fork. See the
+[2026-09-14 milestone ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+for the exact hashes, calls, failure analysis, residuals, and next boundary.
 
-The next report must therefore use a fresh public head, new balances, a new
-third actor, and new rehearsal-only expiry values. This is also why no
-withdrawal proposal JSON is committed in this milestone: the existing report
-predates `maxWithdraw` capture and its buyer now fails the unprivileged-role
-gate.
+The old reference block `117448363` remains unavailable from the non-archive
+public RPC. The fresh workflow therefore starts Anvil at current head and binds
+the read-only snapshot to that already-running fork's exact block.
 
 ## 7. Verification performed
 
 ```powershell
 python -m unittest `
+  scripts.tests.test_capture_robinhood_lifecycle_inputs `
   scripts.tests.test_simulate_robinhood_two_actor_lifecycle_fork `
-  scripts.tests.test_prepare_robinhood_withdrawal_continuation
+  scripts.tests.test_prepare_robinhood_withdrawal_continuation `
+  scripts.tests.test_simulate_robinhood_withdrawal_continuation_fork
 ```
 
-The focused Python suite passes `10/10`. The existing TypeScript lifecycle
-suite remains green at `7/7`. A direct attempt to prepare withdrawals from the
-historical proposal stops before writing output with:
+The new snapshot, lifecycle, withdrawal-preparer, and withdrawal-simulator
+tests pass. The TypeScript lifecycle suite also proves the shared deployer and
+elevated starting allowances are rejected. A direct attempt to prepare
+withdrawals from the historical proposal still stops before writing output
+with:
 
 ```text
 execution preparation requires a third unprivileged buyer; the shared
@@ -154,23 +158,16 @@ deployer/guardian/treasurer is not accepted
 
 ## 8. Next milestone
 
-The next milestone is **fresh three-account lifecycle rehearsal**, still with
-no public broadcast:
+The next milestone is **execution-preparation review**, still with no public
+broadcast:
 
-1. create a third encrypted keystore locally and record only its public address;
-2. fund that address from the Robinhood testnet faucet with valueless test ETH
-   and Stock Tokens;
-3. capture a fresh read-only snapshot for writer, third-account buyer, market,
-   issuer controls, runtimes, wiring, balances, allowances, nonces, and head;
-4. regenerate the nonce-free 25-call lifecycle proposal with the third buyer;
-5. replay it on the exact fresh fork, including all fail-closed checks and
-   amount-in/minimum-out reconciliation;
-6. capture post-close `assetsOf`, shares, and `maxWithdraw`, generate the four
-   withdrawal calls, and replay them in their exact order;
-7. review the combined evidence and only then design a fresh nonce/time-bound
-   one-step operator; and
-8. request a separate, exact hash-bound public authorization if the owner still
-   wants a public lifecycle.
+1. independently review the complete 2026-09-14 hash ledger, roles, exposure,
+   TokenIds, minimum outputs, withdrawal buffer, and ordering;
+2. design a one-transaction-at-a-time operator that binds both actors' public
+   nonces, short-lived deadlines, calldata hashes, receipts, and post-state;
+3. replay that operator against another fresh exact head; and
+4. request a separate exact hash-bound public authorization only if the owner
+   still wants a public lifecycle.
 
 Nothing in this document authorizes swaps, deposits, option positions,
 withdrawals, another market, or mainnet activity.

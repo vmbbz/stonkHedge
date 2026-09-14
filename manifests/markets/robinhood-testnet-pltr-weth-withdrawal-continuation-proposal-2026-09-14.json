@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "status": "OFFLINE_STATE_DERIVED_WITHDRAWAL_PROPOSAL_REPLAY_REQUIRED_NO_EXECUTION_AUTHORITY",
+  "mode": "POST_CLOSE_REPORT_BOUND_NO_RPC_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 119052230,
+    "referenceBlockHash": "0x4d3e584cbb313286fde094af25c3107015fe3c35cbf577c63547a8908732e41f",
+    "referenceTimestampUnix": 1789349718,
+    "referenceTimestampUtc": "2026-09-14T01:35:18Z"
+  },
+  "sourceBindings": {
+    "lifecyclePlanBodySha256": "a3ffd5a0157d69b6841d72eb914c1c1fd07d4e652c6c5906d55dc862b7476d33",
+    "lifecyclePlanFileSha256": "e2ba5f4f4826d20dcd57e2f31e5877a80e8ef52a2c4b713e765869f7cf6dd6bb",
+    "lifecycleRehearsalFileSha256": "5c30aa9a107b6dbafb49eb5321f05754b47d4ea4cdcb1850a02414671c38429b",
+    "preparerSha256": "63f2d196f58f21b8a3a7d5ada05e8f5777092fad2df667664a8b1abe91b362ed"
+  },
+  "rolePolicy": {
+    "writerAndBuyerDistinct": true,
+    "buyerMustBeThirdUnprivilegedAccount": true,
+    "sharedDeployerGuardianTreasurerForbiddenAsBuyer": true
+  },
+  "sourcePostCloseBlock": 119052256,
+  "maximumResidualRawUnitsPerAsset": "2000000000000",
+  "withdrawalExecutionBufferRawUnits": "1000000000000",
+  "withdrawalExecutionBufferReason": "withdraw() accrues interest before re-reading maxWithdraw; the bounded buffer prevents a view-to-execution one-unit drift from exceeding the limit",
+  "derivedResiduals": {
+    "buyer": {
+      "PLTR": "1000000000000",
+      "WETH": "1000000000000"
+    },
+    "writer": {
+      "PLTR": "1000000000000",
+      "WETH": "1000000000000"
+    }
+  },
+  "transactionCount": 4,
+  "transactions": [
+    {
+      "ordinal": 0,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer withdraws bounded recoverable PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldata": "0xb460af9400000000000000000000000000000000000000000000000003782d6b8799ddf00000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f0000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f",
+      "calldataKeccak256": "0x982762d75bb3be506021f5244803b50b6ed613cf94fdf83384c5ee36b6f7dfc0",
+      "decodedIntent": {
+        "function": "withdraw(uint256,address,address)",
+        "assets": "249999719178821104",
+        "receiver": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "owner": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "sourceMaxWithdraw": "250000719178821104",
+        "sourceAssetsOf": "250000719178821104",
+        "sourceShares": "249999616195534384444185",
+        "executionBufferRawUnits": "1000000000000"
+      },
+      "mandatoryPreconditions": [
+        "the public post-close block and all source hashes still match",
+        "owner has zero open option legs and all temporary allowances remain zero",
+        "a fresh read of maxWithdraw is at least the committed assets amount"
+      ],
+      "mandatoryPostconditions": [
+        "receipt succeeds for this exact owner, receiver, tracker, and assets amount",
+        "underlying balance increases by exactly the withdrawn assets",
+        "tracker shares decrease only by previewWithdraw of the committed assets"
+      ]
+    },
+    {
+      "ordinal": 1,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer withdraws bounded recoverable WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldata": "0xb460af940000000000000000000000000000000000000000000000000000e276cf74e61b0000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f0000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f",
+      "calldataKeccak256": "0x9c4bbbe449c8f2c09b7e53b7813d2f4aef3badf59dccbc14ef22dd7c1f6e4a6d",
+      "decodedIntent": {
+        "function": "withdraw(uint256,address,address)",
+        "assets": "248999914563099",
+        "receiver": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "owner": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "sourceMaxWithdraw": "249999914563099",
+        "sourceAssetsOf": "249999914563099",
+        "sourceShares": "249999906736717000000",
+        "executionBufferRawUnits": "1000000000000"
+      },
+      "mandatoryPreconditions": [
+        "the public post-close block and all source hashes still match",
+        "owner has zero open option legs and all temporary allowances remain zero",
+        "a fresh read of maxWithdraw is at least the committed assets amount"
+      ],
+      "mandatoryPostconditions": [
+        "receipt succeeds for this exact owner, receiver, tracker, and assets amount",
+        "underlying balance increases by exactly the withdrawn assets",
+        "tracker shares decrease only by previewWithdraw of the committed assets"
+      ]
+    },
+    {
+      "ordinal": 2,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer withdraws bounded recoverable PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldata": "0xb460af9400000000000000000000000000000000000000000000000006f05a71ccae8e4400000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f00000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "calldataKeccak256": "0x8b411ae1a18b2d3e0b51af7b1f674d4a13e836021deb029a2a094b5dcc5a38ff",
+      "decodedIntent": {
+        "function": "withdraw(uint256,address,address)",
+        "assets": "499999003449921092",
+        "receiver": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "owner": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "sourceMaxWithdraw": "500000003449921092",
+        "sourceAssetsOf": "500000003449921092",
+        "sourceShares": "499997797489678352210470",
+        "executionBufferRawUnits": "1000000000000"
+      },
+      "mandatoryPreconditions": [
+        "the public post-close block and all source hashes still match",
+        "owner has zero open option legs and all temporary allowances remain zero",
+        "a fresh read of maxWithdraw is at least the committed assets amount"
+      ],
+      "mandatoryPostconditions": [
+        "receipt succeeds for this exact owner, receiver, tracker, and assets amount",
+        "underlying balance increases by exactly the withdrawn assets",
+        "tracker shares decrease only by previewWithdraw of the committed assets"
+      ]
+    },
+    {
+      "ordinal": 3,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer withdraws bounded recoverable WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldata": "0xb460af940000000000000000000000000000000000000000000000000001c5d6b312e9b500000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f00000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "calldataKeccak256": "0x95597909dc1f9a31b7e026badbd40ccbf4a4407b89fc1e4f877ee88b115700b2",
+      "decodedIntent": {
+        "function": "withdraw(uint256,address,address)",
+        "assets": "499000894745013",
+        "receiver": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "owner": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "sourceMaxWithdraw": "500000894745013",
+        "sourceAssetsOf": "500000894745013",
+        "sourceShares": "500000879092213936449",
+        "executionBufferRawUnits": "1000000000000"
+      },
+      "mandatoryPreconditions": [
+        "the public post-close block and all source hashes still match",
+        "owner has zero open option legs and all temporary allowances remain zero",
+        "a fresh read of maxWithdraw is at least the committed assets amount"
+      ],
+      "mandatoryPostconditions": [
+        "receipt succeeds for this exact owner, receiver, tracker, and assets amount",
+        "underlying balance increases by exactly the withdrawn assets",
+        "tracker shares decrease only by previewWithdraw of the committed assets"
+      ]
+    }
+  ],
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "blockingReasons": [
+      "all nonces are deliberately null",
+      "the four-call sequence needs an exact fork replay because earlier withdrawals can change later maxWithdraw values",
+      "a fresh public post-close snapshot is required after any public lifecycle",
+      "no signing path, operator, authorization manifest, or broadcast authority exists"
+    ]
+  },
+  "executionPolicy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+  "nextGate": "EXACT_SEQUENCE_FORK_REPLAY_THEN_SEPARATE_HASH_BOUND_WITHDRAWAL_AUTHORIZATION",
+  "planBodySha256": "eba3dcd7560022518d33a149e2aae742385d881cf5cdc1d4f0a06fdbedb48112"
+}

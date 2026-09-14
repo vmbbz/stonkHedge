@@ -16,27 +16,32 @@ All nine continuation calls are now canonical: they initialized the PoolKey,
 minted bounded V4 liquidity NFT `3903`, zeroed both allowance layers, and
 deployed and registered the predicted PanopticPool and two CollateralTrackers.
 Public genesis is complete and its authorization is closed. A new unsigned
-two-actor lifecycle proposal has since passed all `25/25` ordered calls on an
+three-account lifecycle proposal has since passed all `25/25` ordered calls on an
 exact loopback fork, including collateral, matched short/long positions,
 premium observation, buyer-first close, and allowance cleanup. This was not a
 public execution: four required transaction-order reverts also pass. The next
 verifier now fails closed on runtime/wiring drift, issuer controls, stale
 balances, elevated allowances, and swap-output shortfalls, and a separate
 offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
-Execution preparation now requires a third unprivileged buyer; fresh fork
-evidence, nonces, and separate authorization still remain. Public swaps,
-collateral, options, and the application are not live yet.
+The dedicated third unprivileged buyer is now funded, and the fresh exact-head
+replay also passed `4/4` bounded state-derived withdrawals while keeping every
+residual below `2e12` raw units. Nonce/deadline-bound operator simulation,
+review, and separate authorization still remain. Public swaps, collateral,
+options, withdrawals, and the application are not live yet.
 
 Start with:
 
-1. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
+1. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+   for the current three-account lifecycle, withdrawal, failure-analysis, and
+   evidence ledger;
+2. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
    for the complete public achievement, contract and transaction ledgers,
    ordering rationale, communications facts, and next boundary;
-2. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+3. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
    for the system, component, trust-boundary, and evidence overview;
-3. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+4. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
    for the public transaction record; and
-4. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+5. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
 The current lifecycle design and exact-fork evidence are in

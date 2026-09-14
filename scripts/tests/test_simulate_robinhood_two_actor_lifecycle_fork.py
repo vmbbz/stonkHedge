@@ -14,13 +14,20 @@ simulator = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(simulator)
 
+CURRENT_PLAN = (
+    simulator.REPOSITORY
+    / "manifests"
+    / "markets"
+    / "robinhood-testnet-pltr-weth-lifecycle-proposal-2026-09-14.json"
+)
+
 
 class LifecycleForkSimulatorTests(unittest.TestCase):
     def setUp(self):
-        self.plan = json.loads(simulator.DEFAULT_PLAN.read_text(encoding="utf-8"))
+        self.plan = json.loads(CURRENT_PLAN.read_text(encoding="utf-8"))
 
     def test_committed_plan_passes_strict_offline_validation(self):
-        simulator.validate_plan(self.plan, simulator.DEFAULT_PLAN)
+        simulator.validate_plan(self.plan, CURRENT_PLAN)
 
     def test_only_http_loopback_rpc_is_allowed(self):
         for allowed in (
@@ -44,19 +51,19 @@ class LifecycleForkSimulatorTests(unittest.TestCase):
         authorized = copy.deepcopy(self.plan)
         authorized["authorization"]["signing"] = True
         with self.assertRaisesRegex(ValueError, "authorization"):
-            simulator.validate_plan(authorized, simulator.DEFAULT_PLAN)
+            simulator.validate_plan(authorized, CURRENT_PLAN)
 
         nonce_bound = copy.deepcopy(self.plan)
         nonce_bound["transactions"][0]["nonce"] = 16
         with self.assertRaisesRegex(ValueError, "binds a nonce"):
-            simulator.validate_plan(nonce_bound, simulator.DEFAULT_PLAN)
+            simulator.validate_plan(nonce_bound, CURRENT_PLAN)
 
         admin_target = copy.deepcopy(self.plan)
         admin_target["transactions"][0]["to"] = admin_target["market"][
             "stockRegistry"
         ]
         with self.assertRaisesRegex(ValueError, "outside the user-call allowlist"):
-            simulator.validate_plan(admin_target, simulator.DEFAULT_PLAN)
+            simulator.validate_plan(admin_target, CURRENT_PLAN)
 
     def test_source_has_no_wallet_or_signing_import(self):
         source = SCRIPT.read_text(encoding="utf-8")

@@ -235,6 +235,8 @@ than pretending the deposits are unchanged:
 | `simulate_robinhood_two_actor_lifecycle_fork.py` | Loopback-only account impersonation and state reconciliation | Refuses non-loopback and non-Anvil RPCs; no signing path |
 | `lifecycle-fork-rehearsal-2026-09-11.json` | Sanitized local receipts and milestone state | Proves only the discarded fork replay |
 | `prepare_robinhood_withdrawal_continuation.py` | Builds four nonce-free calls from fresh post-close `maxWithdraw` evidence | Offline only; rejects the privileged deployer as buyer |
+| `capture_robinhood_lifecycle_inputs.py` | Pins market, control, actor, and zero-allowance state to one public block | Read-only RPC allowlist; no wallet or submission path |
+| `simulate_robinhood_withdrawal_continuation_fork.py` | Replays buffered withdrawals and reconciles receipts, balances, and share burns | Same-fork loopback Anvil only; rolls back on mismatch |
 
 The 2026-09-12 [safety and withdrawal boundary](./2026-09-12-lifecycle-safety-and-withdrawal-boundary.md)
 documents the strengthened verifier, the new state-derived continuation, the
@@ -242,23 +244,21 @@ hard third-account buyer decision, and the fresh-head replay requirement.
 
 ## 8. What remains before any public lifecycle
 
-This pass starts the lifecycle phase; it does not close it. The next work is:
+The 2026-09-14 follow-up completed the dedicated third-buyer, fresh snapshot,
+positive lifecycle, negative/adverse cases, swap reconciliation, and buffered
+withdrawal replay. The next work is:
 
-1. retain the four passing transaction-order reverts and run the newly added
-   fail-closed external-state and swap-output checks on a fresh exact head;
-2. replace the buyer with a third unprivileged account. The current candidate
-   buyer is also deployer, guardian admin, and treasurer and is now rejected by
-   execution-preparation tooling;
-3. review the exact collateral, sizes, strike, 2,000-bps spread limit, minimum
-   outputs, and residual policy;
-4. capture post-close `maxWithdraw` values in the fresh replay, generate the
-   four-call bounded withdrawal continuation, and replay its exact sequence;
-5. refresh public state, expiry, nonces, gas limits, and calldata against a new
+1. independently review the exact collateral, sizes, strike, 2,000-bps spread
+   limit, minimum outputs, `1e12` withdrawal buffer, and `2e12` residual policy;
+2. refresh public state, expiry, nonces, gas limits, and calldata against a new
    exact head;
-6. build and simulate a one-transaction-at-a-time public operator with strict
+3. build and simulate a one-transaction-at-a-time public operator with strict
    after-each-step verification; and
-7. request a new hash-bound authorization that explicitly names the chosen
+4. request a new hash-bound authorization that explicitly names the chosen
    actors and maximum transaction index.
+
+The exact completed local evidence is in the
+[three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md).
 
 No previous deployment or genesis authorization applies to this lifecycle.
 No public swap, collateral deposit, option position, withdrawal, other market,

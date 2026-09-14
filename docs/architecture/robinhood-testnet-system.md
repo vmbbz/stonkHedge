@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-12 |
+| State date | 2026-09-14 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; the lifecycle passed `25/25` calls on a discarded fork; fail-closed external-state and withdrawal-continuation tooling now exists, with a third unprivileged buyer and fresh replay still required |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; a dedicated third buyer completed a fresh discarded-fork rehearsal of `25/25` lifecycle calls plus `4/4` bounded withdrawals; public lifecycle execution remains unauthorized |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -49,13 +49,17 @@ sandbox:
 - lifecycle safety tooling now binds runtime/wiring identity, Stock Token
   controls, actor balances, zero allowances, swap minimum output, and
   post-close `maxWithdraw`, while refusing the privileged deployer as buyer for
-  execution preparation.
+  execution preparation; and
+- at block `119052230`, a dedicated unprivileged third buyer passed the full
+  exact-head lifecycle and buffered withdrawal sequence on a discarded fork,
+  including receipt-level interest and share-burn reconciliation.
 
 This is now a deployed and wired Panoptic market over a functioning Uniswap V4
 liquidity pool. “Deployed market” is intentionally narrower than “validated
 user lifecycle”: there is still no public swap evidence, collateral deposit,
 option position, premium/solvency observation, close, liquidation, or
-withdrawal. Those actions require a new two-actor plan and authorization.
+withdrawal. Those public actions require a new three-account execution plan and
+authorization; the corresponding local-only mechanism rehearsal now passes.
 
 ### Milestone memory aid
 
@@ -71,11 +75,12 @@ flowchart LR
     I --> J[Pool initialized and liquidity NFT 3903 minted]
     J --> K[Allowances zeroed and Panoptic market registered]
     K --> L[Lifecycle safety and withdrawal tooling]
-    L --> G[Next: third actor and fresh full replay]
+    L --> M[Third-actor lifecycle and withdrawals rehearsed]
+    M --> G[Next: nonce-bound operator review]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D,E,F,H,I,J,K,L done;
+    class A,B,C,D,E,F,H,I,J,K,L,M done;
     class G next;
 ```
 
@@ -546,20 +551,20 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The next checkpoint is the **fresh three-account lifecycle rehearsal**, still
-before Docusaurus and still without public authority. Its predecessor's
-unsigned 25-call proposal and exact-fork replay pass, and the new fail-closed
-verifier plus withdrawal preparer are implemented:
+The next checkpoint is **three-account lifecycle execution preparation**, still
+before Docusaurus and still without public authority. The dedicated buyer,
+pinned snapshot, unsigned 25-call lifecycle, negative/adverse checks, and four
+buffered withdrawals now pass on one discarded exact-head fork:
 
-1. create and faucet-fund a third unprivileged buyer account;
-2. capture a fresh head and regenerate the nonce-free lifecycle proposal;
-3. replay all positive calls, required reverts, fail-closed checks, and the
-   four state-derived withdrawals in exact order;
-4. add independent health monitoring and safe-mode guidance;
-5. construct a fresh nonce/time-bound one-step candidate and separately review
+1. independently review the roles, exposure, minimum outputs, option TokenIds,
+   withdrawal buffer, sequence, and evidence hashes;
+2. add independent health monitoring and safe-mode guidance;
+3. construct a fresh nonce/time-bound one-step candidate and separately review
    it before any public authorization; and
-6. only after the public lifecycle and first-user path pass, freeze the
+4. only after the public lifecycle and first-user path pass, freeze the
    documentation hierarchy and build the Docusaurus site.
+
+See the [three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md).
 
 ## 14. External references
 

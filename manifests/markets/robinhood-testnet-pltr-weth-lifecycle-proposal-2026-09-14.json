@@ -1,0 +1,852 @@
+{
+  "schemaVersion": 1,
+  "status": "OFFLINE_LIFECYCLE_PROPOSAL_OWNER_ACCEPTANCE_REQUIRED_NO_EXECUTION_AUTHORITY",
+  "mode": "PUBLISHED_SDK_TOKEN_IDS_RUNTIME_BOUND_ROBINHOOD_SWAP_ENCODING_NO_RPC_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "warning": "This proposal uses valueless testnet assets and a synthetic mechanism-test price. It is not a live equity quote, issuer endorsement, audit, mainnet readiness statement, or transaction authorization.",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 119052230,
+    "referenceBlockHash": "0x4d3e584cbb313286fde094af25c3107015fe3c35cbf577c63547a8908732e41f",
+    "referenceTimestampUnix": 1789349718,
+    "referenceTimestampUtc": "2026-09-14T01:35:18Z"
+  },
+  "sourceBindings": {
+    "genesisManifest": "manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json",
+    "genesisManifestSha256": "93d31a5393f7295a0f560de45351ea72d52e9c62b8b4f6419d56e8c39ea3922b",
+    "chainManifest": "manifests/chains/robinhood-testnet-46630.json",
+    "chainManifestSha256": "4399d03e83a5bbea47287cfbbf81e21ff23256d904180e2535ff6bbcf0e4dd29",
+    "lifecycleInputs": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-inputs-2026-09-14.json",
+    "lifecycleInputsSha256": "7ce559f915777e1cc5edaec9a9accfddeb36dd4e49c1bd6afcaf9db88edbd7ce",
+    "planner": "scripts/prepare_robinhood_two_actor_lifecycle_plan.ts",
+    "plannerSha256": "ddde5487247eb032ffe5cd0b3fab80484032653564b93a435aabe455c5c3a0c7",
+    "robinhoodSwapAdapter": "src/protocol/robinhoodV4Swap.ts",
+    "robinhoodSwapAdapterSha256": "9ccebcd1f4bd8a49719d21d20aa88e90968651e35c4dfe3cd53fd1ae4b1d4c61",
+    "packageLock": "package-lock.json",
+    "packageLockSha256": "987fefbf29ea1527b3d6a8fd4c1129009d605b3c26fc10c244188d339cfe2246",
+    "panopticSdkVersion": "1.0.49",
+    "viemVersion": "2.56.3",
+    "robinhoodUniversalRouterRuntimeHash": "0xfdd90802f39ce5fc8bac4c2f1b3ac7bac530fd17ff46b0630f1bd00f1e14082f",
+    "robinhoodV4PeripherySourceCommit": "3779387e5d296f39df543d23524b050f89a62917",
+    "coreDeploymentSourceCommit": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "localLifecycleProofCommit": "cfaf42c29b5c59304540e2a31e24daee4d977797"
+  },
+  "market": {
+    "symbol": "PLTR/WETH",
+    "pltr": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+    "weth": "0x33e4191705c386532ba27cbf171db86919200b94",
+    "poolKey": {
+      "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "fee": 3000,
+      "tickSpacing": 60,
+      "hooks": "0x0000000000000000000000000000000000000000"
+    },
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "sfpmPoolId": "16897827167146926",
+    "panopticPool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+    "collateralTracker0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+    "collateralTracker1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+    "permit2": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+    "universalRouter": "0x8876789976decbfcbbbe364623c63652db8c0904",
+    "stateView": "0xf3334192d15450cdd385c8b70e03f9a6bd9e673b",
+    "stockRegistry": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+    "referenceTick": -69082,
+    "referenceTwapTick": null,
+    "referenceActiveLiquidity": "138450781996976174"
+  },
+  "roles": {
+    "writer": {
+      "address": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "role": "UNPRIVILEGED_SECOND_ACTOR_LP_OWNER_AND_BOUNDED_SHORT_WRITER",
+      "confirmedNonce": 13,
+      "nativeBalanceWei": "5982343270000000",
+      "pltrBalance": "3022157655355120211",
+      "wethBalance": "2020000000000000",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "buyer": {
+      "address": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "role": "UNPRIVILEGED_THIRD_ACTOR_BOUNDED_TEST_BUYER",
+      "confirmedNonce": 0,
+      "nativeBalanceWei": "10000000000000000",
+      "pltrBalance": "5000000000000000000",
+      "wethBalance": "0",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "privilegedBuyerRisk": {
+      "accepted": false,
+      "finding": "The buyer is a dedicated third unprivileged actor, distinct from the writer and shared deployer/guardian/treasurer.",
+      "containment": [
+        "only ordinary WETH, ERC20, Permit2, UniversalRouter, CollateralTracker, and PanopticPool user calls are proposed",
+        "no registry, guardian, treasurer, ownership, factory-admin, upgrade, or deployment call is permitted",
+        "all public execution fields remain false and every nonce remains null"
+      ]
+    }
+  },
+  "exposureCaps": {
+    "status": "OWNER_ACCEPTANCE_REQUIRED_BEFORE_EXECUTION_PLANNING",
+    "buyerWrapNativeWei": "300000000000000",
+    "writerCollateral": {
+      "pltrAssets": "500000000000000000",
+      "wethAssets": "500000000000000"
+    },
+    "buyerCollateral": {
+      "pltrAssets": "250000000000000000",
+      "wethAssets": "250000000000000"
+    },
+    "writerSwapBudget": {
+      "pltrTotalInput": "2000000000000000",
+      "wethTotalInput": "2000000000000",
+      "perSwapPltrInput": "1000000000000000",
+      "perSwapWethInput": "1000000000000",
+      "minimumWethOutputPerPltrSwap": "800000000000",
+      "minimumPltrOutputPerWethSwap": "800000000000000"
+    },
+    "option": {
+      "strategy": "MATCHED_IN_RANGE_SINGLE_LEG_CALL_MECHANISM_TEST",
+      "asset": 0,
+      "tokenType": 0,
+      "optionRatio": 1,
+      "riskPartner": 0,
+      "strike": -69060,
+      "width": 2,
+      "tickLower": -69120,
+      "tickUpper": -69000,
+      "writerShortSize": "10000000000000000",
+      "buyerLongSize": "1000000000000000",
+      "effectiveLiquidityLimitBps": 2000,
+      "usePremiaAsCollateral": true,
+      "builderCode": "0"
+    },
+    "rehearsalOnlyExpiry": {
+      "unix": 1789436118,
+      "utc": "2026-09-15T01:35:18Z",
+      "rule": "A public candidate must replace this with a fresh, short-lived deadline and Permit2 expiry after exact-head replay."
+    },
+    "nativeReserveFloorsBeforeGas": {
+      "writer": "4000000000000000",
+      "buyerAfterWrap": "7000000000000000"
+    }
+  },
+  "tokenIds": {
+    "encoding": "PUBLISHED_@panoptic-eng/sdk_V4_POOL_ID_AND_SINGLE_CALL_LEG",
+    "shortCall": "3797733774652686947289370334126",
+    "longCall": "3797733779375053430159015547822",
+    "shortDecoded": {
+      "tokenId": "3797733774652686947289370334126",
+      "poolId": "0x003c087bf9c613ae",
+      "vegoid": "8",
+      "tickSpacing": "60",
+      "legs": [
+        {
+          "index": "0",
+          "asset": "0",
+          "optionRatio": "1",
+          "isLong": false,
+          "tokenType": "0",
+          "riskPartner": "0",
+          "strike": "-69060",
+          "width": "2",
+          "tickLower": "-69120",
+          "tickUpper": "-69000"
+        }
+      ],
+      "legCount": "1"
+    },
+    "longDecoded": {
+      "tokenId": "3797733779375053430159015547822",
+      "poolId": "0x003c087bf9c613ae",
+      "vegoid": "8",
+      "tickSpacing": "60",
+      "legs": [
+        {
+          "index": "0",
+          "asset": "0",
+          "optionRatio": "1",
+          "isLong": true,
+          "tokenType": "0",
+          "riskPartner": "0",
+          "strike": "-69060",
+          "width": "2",
+          "tickLower": "-69120",
+          "tickUpper": "-69000"
+        }
+      ],
+      "legCount": "1"
+    },
+    "matchedChunk": {
+      "asset": 0,
+      "tokenType": 0,
+      "strike": -69060,
+      "width": 2,
+      "tickLower": -69120,
+      "tickUpper": -69000
+    }
+  },
+  "transactionCount": 25,
+  "transactionCountsBySender": {
+    "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7,
+    "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 18
+  },
+  "transactions": [
+    {
+      "ordinal": 0,
+      "phase": "BUYER_FUNDING",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer wraps bounded native ETH for WETH collateral",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "300000000000000",
+      "calldata": "0xd0e30db0",
+      "calldataKeccak256": "0xa1548b79599a5ef2fd6de226ea5131c228954c4bf788eb3e4386a2728abe3e8d",
+      "decodedIntent": {
+        "function": "deposit()",
+        "wrapNativeWei": "300000000000000"
+      },
+      "mandatoryPostconditions": [
+        "buyer WETH increases by exactly valueWei",
+        "buyer native reserve remains above the frozen floor"
+      ]
+    },
+    {
+      "ordinal": 1,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer approves exact total PLTR swap budget to Permit2",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba300000000000000000000000000000000000000000000000000071afd498d0000",
+      "calldataKeccak256": "0x47fbd985dcf19569a968157b54acdb7b7d8f18aa8e69b987b8ee920068e1360b",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "2000000000000000"
+      },
+      "mandatoryPostconditions": [
+        "PLTR ERC20 allowance equals the exact total swap budget and no more"
+      ]
+    },
+    {
+      "ordinal": 2,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer approves exact total WETH swap budget to Permit2",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba3000000000000000000000000000000000000000000000000000001d1a94a2000",
+      "calldataKeccak256": "0x02c30a226cb53b54d63aeb7e4ea06ef975a0514e889b4932edcc854a6b907a4a",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "2000000000000"
+      },
+      "mandatoryPostconditions": [
+        "WETH ERC20 allowance equals the exact total swap budget and no more"
+      ]
+    },
+    {
+      "ordinal": 3,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer grants exact PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000071afd498d0000000000000000000000000000000000000000000000000000000000006aa8a0d6",
+      "calldataKeccak256": "0x0241df6ba2e9c25527ac9751cd3b002bc06245ee2be514781fe22ddfade4b9dc",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000000",
+        "expiration": "1789436118"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 PLTR allowance equals the exact total budget and rehearsal-only expiry"
+      ]
+    },
+    {
+      "ordinal": 4,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer grants exact WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000008876789976decbfcbbbe364623c63652db8c0904000000000000000000000000000000000000000000000000000001d1a94a2000000000000000000000000000000000000000000000000000000000006aa8a0d6",
+      "calldataKeccak256": "0x100ace9d14ac5bb2c8190adf8fe98ffc0dab78a22b2fc6cccee9d0e9f36049a0",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000",
+        "expiration": "1789436118"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 WETH allowance equals the exact total budget and rehearsal-only expiry"
+      ]
+    },
+    {
+      "ordinal": 5,
+      "phase": "BIDIRECTIONAL_BASELINE",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer swaps tiny exact-input PLTR to WETH",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006aa8a0d600000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000ba43b7400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000ba43b74000",
+      "calldataKeccak256": "0xd893bfb39b491d36a6776a145453fedbfec3c7243c82fe577cb7a76e99965e09",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": true,
+        "tokenIn": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "tokenOut": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "amountIn": "1000000000000000",
+        "amountOutMinimum": "800000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1789436118"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ]
+    },
+    {
+      "ordinal": 6,
+      "phase": "BIDIRECTIONAL_BASELINE",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer swaps tiny exact-input WETH to PLTR",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006aa8a0d600000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000002d79883d20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000e8d4a5100000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000000000000000000000000000000002d79883d20000",
+      "calldataKeccak256": "0x9836daec02406029028f76911d467993bd385c38b20f0a34d831a95a7e0ce121",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": false,
+        "tokenIn": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "tokenOut": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "amountIn": "1000000000000",
+        "amountOutMinimum": "800000000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1789436118"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ]
+    },
+    {
+      "ordinal": 7,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer approves exact PLTR collateral to tracker0",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b30000000000000000000000002146295437da444638a4cf80900a9e2d3b1315de00000000000000000000000000000000000000000000000006f05b59d3b20000",
+      "calldataKeccak256": "0x2b6fa1704003cd600594ff404c0ca76da0e66fc7d207764fc0bf4e2a4299306c",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "amount": "500000000000000000"
+      },
+      "mandatoryPostconditions": [
+        "PLTR allowance to tracker0 equals the next deposit and no more"
+      ]
+    },
+    {
+      "ordinal": 8,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer deposits exact PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldata": "0x6e553f6500000000000000000000000000000000000000000000000006f05b59d3b2000000000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "calldataKeccak256": "0xc8251161983d420db3d8b64cf0df463c89f7d8dcf169e1559f769b4990e3a87b",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "500000000000000000",
+        "receiver": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f"
+      },
+      "mandatoryPostconditions": [
+        "tracker0 shares and assets increase by previewDeposit/asset deltas",
+        "PLTR allowance to tracker0 is zero after transferFrom"
+      ]
+    },
+    {
+      "ordinal": 9,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer approves exact WETH collateral to tracker1",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b300000000000000000000000048d0e86df893b6032ebe9f14ac0eaa23a79498670000000000000000000000000000000000000000000000000001c6bf52634000",
+      "calldataKeccak256": "0xe1dc70170eba839d8a77243cf13c9e652c7581a1a636a2bb69cc8f2f545ade7d",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "amount": "500000000000000"
+      },
+      "mandatoryPostconditions": [
+        "WETH allowance to tracker1 equals the next deposit and no more"
+      ]
+    },
+    {
+      "ordinal": 10,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer deposits exact WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldata": "0x6e553f650000000000000000000000000000000000000000000000000001c6bf5263400000000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "calldataKeccak256": "0x0127db49df1ffc4c713d3d28405d2ac9a4db6677d198d74350209463d4c717f0",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "500000000000000",
+        "receiver": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f"
+      },
+      "mandatoryPostconditions": [
+        "tracker1 shares and assets increase by previewDeposit/asset deltas",
+        "WETH allowance to tracker1 is zero after transferFrom"
+      ]
+    },
+    {
+      "ordinal": 11,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer approves exact PLTR collateral to tracker0",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b30000000000000000000000002146295437da444638a4cf80900a9e2d3b1315de00000000000000000000000000000000000000000000000003782dace9d90000",
+      "calldataKeccak256": "0xbf1450d5bcd07eff212d10f1ba46c0775d633408f06c109274206d2e2d603de8",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "amount": "250000000000000000"
+      },
+      "mandatoryPostconditions": [
+        "PLTR allowance to tracker0 equals the next deposit and no more"
+      ]
+    },
+    {
+      "ordinal": 12,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer deposits exact PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldata": "0x6e553f6500000000000000000000000000000000000000000000000003782dace9d900000000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f",
+      "calldataKeccak256": "0xdc80b76e2b84602c973ddb89170c42a191c8f27971b1e0768e7d7ba6f75878bc",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "250000000000000000",
+        "receiver": "0x6719e877c05b2d6c28abcea405fc033feef5750f"
+      },
+      "mandatoryPostconditions": [
+        "tracker0 shares and assets increase by previewDeposit/asset deltas",
+        "PLTR allowance to tracker0 is zero after transferFrom"
+      ]
+    },
+    {
+      "ordinal": 13,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer approves exact WETH collateral to tracker1",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b300000000000000000000000048d0e86df893b6032ebe9f14ac0eaa23a79498670000000000000000000000000000000000000000000000000000e35fa931a000",
+      "calldataKeccak256": "0x103ed5e3e804a8c730f83f270cc99078e73e4e57317d5e4c7a7dc19b4cc9e053",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "amount": "250000000000000"
+      },
+      "mandatoryPostconditions": [
+        "WETH allowance to tracker1 equals the next deposit and no more"
+      ]
+    },
+    {
+      "ordinal": 14,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer deposits exact WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldata": "0x6e553f650000000000000000000000000000000000000000000000000000e35fa931a0000000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f",
+      "calldataKeccak256": "0x8c219f2e9b08ae854ec40fb0cddad2cbdef55814978183703fe2de708a7411d6",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "250000000000000",
+        "receiver": "0x6719e877c05b2d6c28abcea405fc033feef5750f"
+      },
+      "mandatoryPostconditions": [
+        "tracker1 shares and assets increase by previewDeposit/asset deltas",
+        "WETH allowance to tracker1 is zero after transferFrom"
+      ]
+    },
+    {
+      "ordinal": 15,
+      "phase": "MATCHED_OPTION_OPEN",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer opens bounded in-range short call",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000180000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c002003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c002003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000002386f26fc100000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0x21a49bee25602ac6697350267fd4fd7feef4c7c36b9b72ebfe93ff8538832a7c",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "OPEN_SHORT_CALL",
+        "tokenId": "3797733774652686947289370334126",
+        "finalPositionIdList": [
+          "3797733774652686947289370334126"
+        ],
+        "positionSize": "10000000000000000",
+        "tickAndSpreadLimits": [
+          [
+            -887272,
+            887272,
+            2000
+          ]
+        ],
+        "usePremiaAsCollateral": true,
+        "builderCode": "0"
+      },
+      "mandatoryPostconditions": [
+        "writer owns exactly one leg with the planned TokenId and size",
+        "writer remains solvent at every verifier tick"
+      ]
+    },
+    {
+      "ordinal": 16,
+      "phase": "MATCHED_OPTION_OPEN",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer opens bounded matched long call",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000180000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c102003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c102003c087bf9c613ae000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0x1b00ddc9181c5c68e2d3f41de320223b240932420f0c5c4ad0762711cfaef539",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "OPEN_LONG_CALL",
+        "tokenId": "3797733779375053430159015547822",
+        "finalPositionIdList": [
+          "3797733779375053430159015547822"
+        ],
+        "positionSize": "1000000000000000",
+        "tickAndSpreadLimits": [
+          [
+            -887272,
+            887272,
+            2000
+          ]
+        ],
+        "usePremiaAsCollateral": true,
+        "builderCode": "0"
+      },
+      "mandatoryPostconditions": [
+        "buyer owns exactly one leg with the matched chunk and planned size",
+        "buyer and writer remain solvent"
+      ]
+    },
+    {
+      "ordinal": 17,
+      "phase": "PREMIUM_OBSERVATION",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer performs controlled PLTR-to-WETH premium-driving swap",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006aa8a0d600000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000ba43b7400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000ba43b74000",
+      "calldataKeccak256": "0xd893bfb39b491d36a6776a145453fedbfec3c7243c82fe577cb7a76e99965e09",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": true,
+        "tokenIn": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "tokenOut": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "amountIn": "1000000000000000",
+        "amountOutMinimum": "800000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1789436118"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ]
+    },
+    {
+      "ordinal": 18,
+      "phase": "PREMIUM_OBSERVATION",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer performs controlled WETH-to-PLTR premium-driving swap",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006aa8a0d600000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000002d79883d20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000e8d4a5100000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000000000000000000000000000000002d79883d20000",
+      "calldataKeccak256": "0x9836daec02406029028f76911d467993bd385c38b20f0a34d831a95a7e0ce121",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": false,
+        "tokenIn": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "tokenOut": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "amountIn": "1000000000000",
+        "amountOutMinimum": "800000000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1789436118"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ]
+    },
+    {
+      "ordinal": 19,
+      "phase": "ORDERED_CLOSE",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": null,
+      "label": "buyer closes matched long call before writer",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c102003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0x1f492cd72ce41c96a18cd74d04cca25ae2761772c341d9f799096be63985c777",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "CLOSE_LONG_CALL",
+        "tokenId": "3797733779375053430159015547822",
+        "finalPositionIdList": [],
+        "positionSize": "0"
+      },
+      "mandatoryPostconditions": [
+        "buyer has zero open legs",
+        "premium and collateral deltas reconcile",
+        "writer remains solvent before its close"
+      ]
+    },
+    {
+      "ordinal": 20,
+      "phase": "ORDERED_CLOSE",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer closes short call after buyer",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c002003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0xd47972f3f7475400d50b9d7d14dc43361f354fa83557459d227eab42650b5803",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "CLOSE_SHORT_CALL",
+        "tokenId": "3797733774652686947289370334126",
+        "finalPositionIdList": [],
+        "positionSize": "0"
+      },
+      "mandatoryPostconditions": [
+        "writer has zero open legs",
+        "SFPM balances and premium deltas reconcile",
+        "both actors become eligible for standard maxWithdraw"
+      ]
+    },
+    {
+      "ordinal": 21,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer revokes PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0xf570bc3a6e425c05027d3d885e9378cab9b0b6d8083c64945cd4854c806b54a4",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "0",
+        "expiration": "0"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 PLTR allowance amount is zero"
+      ]
+    },
+    {
+      "ordinal": 22,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer revokes WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0x5d48084e067995fd2b2ace1dde650288a2140625e293be47f576edb5be2bd7f3",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "0",
+        "expiration": "0"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 WETH allowance amount is zero"
+      ]
+    },
+    {
+      "ordinal": 23,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer clears PLTR ERC20 allowance to Permit2",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "0"
+      },
+      "mandatoryPostconditions": [
+        "PLTR ERC20 allowance to Permit2 is zero"
+      ]
+    },
+    {
+      "ordinal": 24,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": null,
+      "label": "writer clears WETH ERC20 allowance to Permit2",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "0"
+      },
+      "mandatoryPostconditions": [
+        "WETH ERC20 allowance to Permit2 is zero"
+      ]
+    }
+  ],
+  "postCloseContinuation": {
+    "includedInThisProposal": false,
+    "reason": "Exact recoverable assets are state-dependent after premium settlement and both closes.",
+    "requiredSteps": [
+      "reconcile both actors at the canonical close block",
+      "read maxWithdraw, assetsOf, balances, shares, and every remaining allowance",
+      "generate a new bounded withdrawal-only continuation whose calldata is bound to those post-close values",
+      "withdraw recoverable collateral one transaction at a time",
+      "verify zero open legs, bounded residuals, and zero temporary allowances"
+    ],
+    "authorizationRule": "The withdrawal continuation requires its own exact simulation, review, and hash-bound authorization."
+  },
+  "negativeRehearsalCases": [
+    "wrong chain ID or PoolId",
+    "runtime or immutable-wiring drift",
+    "paused or blocked Stock Token actor",
+    "changed UI multiplier state",
+    "same writer and buyer address",
+    "actor balance below a frozen cap or native reserve floor",
+    "allowance above the exact proposal cap",
+    "expired swap deadline or Permit2 expiry",
+    "swap output below the proposal minimum",
+    "TokenId pool, token orientation, strike, width, or long/short bit mismatch",
+    "unexpected position list, leg count, premium, solvency, receipt event, or post-state"
+  ],
+  "requiredForkReverts": [
+    "writer option open before collateral deposits",
+    "expired UniversalRouter swap deadline",
+    "buyer long with zero effective-liquidity tolerance",
+    "writer short close while the matched buyer long remains open"
+  ],
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "blockingReasons": [
+      "the owner has not accepted the exact roles and exposure caps",
+      "all nonces are deliberately null",
+      "the deadline and Permit2 expiry are rehearsal-only",
+      "an exact-head positive replay and required negative cases are not yet attached",
+      "no lifecycle verifier, one-step operator, authorization manifest, signing path, or broadcast authority exists"
+    ]
+  },
+  "nextGate": "EXACT_HEAD_FORK_REHEARSAL_THEN_OWNER_REVIEW_OF_ROLES_AND_EXPOSURE",
+  "planBodySha256": "a3ffd5a0157d69b6841d72eb914c1c1fd07d4e652c6c5906d55dc862b7476d33"
+}

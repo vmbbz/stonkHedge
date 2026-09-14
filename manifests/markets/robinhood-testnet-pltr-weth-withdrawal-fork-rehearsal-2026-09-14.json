@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_LOOPBACK_STATE_DERIVED_WITHDRAWAL_SEQUENCE",
+  "mode": "BOUND_POST_CLOSE_ANVIL_IMPERSONATION_NO_KEYS_NO_SIGNING_NO_PUBLIC_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "sourceBindings": {
+    "withdrawalPlanBodySha256": "eba3dcd7560022518d33a149e2aae742385d881cf5cdc1d4f0a06fdbedb48112",
+    "withdrawalPlanFileSha256": "3e711644f4dc9c855efb875eea85395c23cc39f20c43a5446af04d66143378d0",
+    "lifecyclePlanBodySha256": "a3ffd5a0157d69b6841d72eb914c1c1fd07d4e652c6c5906d55dc862b7476d33",
+    "lifecyclePlanFileSha256": "e2ba5f4f4826d20dcd57e2f31e5877a80e8ef52a2c4b713e765869f7cf6dd6bb",
+    "lifecycleRehearsalFileSha256": "5c30aa9a107b6dbafb49eb5321f05754b47d4ea4cdcb1850a02414671c38429b",
+    "simulatorSha256": "11eaabfa1f1beec26d15a94644cacff4a6866f01c5fb79613998e4f9b331a3ef"
+  },
+  "attachedPostCloseState": {
+    "clientVersion": "anvil/v1.8.1",
+    "chainId": 46630,
+    "postCloseBlock": 119052256,
+    "postCloseBlockHash": "0xba86690ae24e553ba92c55f9fd09e43967e514d4c58e79870674ae3e08ffefd5",
+    "terminalStateMatched": true
+  },
+  "transactions": [
+    {
+      "ordinal": 0,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "label": "buyer withdraws bounded recoverable PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldataKeccak256": "0x982762d75bb3be506021f5244803b50b6ed613cf94fdf83384c5ee36b6f7dfc0",
+      "transactionHash": "0xaa8471070d6bef56ae98a302f88825cee39593e2d279136da357053ad7e15935",
+      "blockNumber": 119052257,
+      "blockHash": "0x640d8cbf7ba041cf21d9c01828e44be0a7a743fcb3e720168b114db40c337ba3",
+      "gasUsed": 149450,
+      "status": "PASS"
+    },
+    {
+      "ordinal": 1,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "label": "buyer withdraws bounded recoverable WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldataKeccak256": "0x9c4bbbe449c8f2c09b7e53b7813d2f4aef3badf59dccbc14ef22dd7c1f6e4a6d",
+      "transactionHash": "0xaf0759d30cfc45d653905a765f5658f36165fae2f5c8b45ad90499a6812b1efa",
+      "blockNumber": 119052258,
+      "blockHash": "0x87664825728e91482434e2ea6dcc8d04e6a95b0d6a260c13867489bb2a4e6fc1",
+      "gasUsed": 119219,
+      "status": "PASS"
+    },
+    {
+      "ordinal": 2,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "label": "writer withdraws bounded recoverable PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldataKeccak256": "0x8b411ae1a18b2d3e0b51af7b1f674d4a13e836021deb029a2a094b5dcc5a38ff",
+      "transactionHash": "0x4ed3cda57597e60c44f60f2dcc0a34c8052799f32a624cdc7a464d17dabf3b07",
+      "blockNumber": 119052259,
+      "blockHash": "0xa09ab83274e26f7901faad6e7f05b1d8316bc077eb179dbd957e9ab2fc3acade",
+      "gasUsed": 149450,
+      "status": "PASS"
+    },
+    {
+      "ordinal": 3,
+      "phase": "STATE_DERIVED_COLLATERAL_WITHDRAWAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "label": "writer withdraws bounded recoverable WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldataKeccak256": "0x95597909dc1f9a31b7e026badbd40ccbf4a4407b89fc1e4f877ee88b115700b2",
+      "transactionHash": "0xa10286857bade98e285973c1c1ef364ab52b85eaa11f3b6777e291f664bdf696",
+      "blockNumber": 119052260,
+      "blockHash": "0x33978737bb1086d818b3abc711bbdbba6a2b4a0d57951dfc99c5663a83f8128b",
+      "gasUsed": 119231,
+      "status": "PASS"
+    }
+  ],
+  "postconditions": [
+    {
+      "ordinal": 0,
+      "role": "buyer",
+      "asset": "PLTR",
+      "assets": "249999719178821104",
+      "eventAssets": "249999719178821104",
+      "underlyingReceived": "249999719178821104",
+      "preAccrualPreviewWithdrawShares": "249998616199946304718917",
+      "eventShares": "249998616199946304385586",
+      "interestAccrualSharesBurned": "999996",
+      "receiptTransferToZeroShares": "249998616199946305385582",
+      "sharesBurned": "249998616199946305385582",
+      "status": "PASS_EXACT_ASSETS_AND_RECEIPT_RECONCILED_SHARE_BURNS"
+    },
+    {
+      "ordinal": 1,
+      "role": "buyer",
+      "asset": "WETH",
+      "assets": "248999914563099",
+      "eventAssets": "248999914563099",
+      "underlyingReceived": "248999914563099",
+      "preAccrualPreviewWithdrawShares": "248999906768021641045",
+      "eventShares": "248999906768021641045",
+      "interestAccrualSharesBurned": "0",
+      "receiptTransferToZeroShares": "248999906768021641045",
+      "sharesBurned": "248999906768021641045",
+      "status": "PASS_EXACT_ASSETS_AND_RECEIPT_RECONCILED_SHARE_BURNS"
+    },
+    {
+      "ordinal": 2,
+      "role": "writer",
+      "asset": "PLTR",
+      "assets": "499999003449921092",
+      "eventAssets": "499999003449921092",
+      "underlyingReceived": "499999003449921092",
+      "preAccrualPreviewWithdrawShares": "499996797494090271042017",
+      "eventShares": "499996797494090270042025",
+      "interestAccrualSharesBurned": "999996",
+      "receiptTransferToZeroShares": "499996797494090271042021",
+      "sharesBurned": "499996797494090271042021",
+      "status": "PASS_EXACT_ASSETS_AND_RECEIPT_RECONCILED_SHARE_BURNS"
+    },
+    {
+      "ordinal": 3,
+      "role": "writer",
+      "asset": "WETH",
+      "assets": "499000894745013",
+      "eventAssets": "499000894745013",
+      "underlyingReceived": "499000894745013",
+      "preAccrualPreviewWithdrawShares": "499000879123519380012",
+      "eventShares": "499000879123519380012",
+      "interestAccrualSharesBurned": "0",
+      "receiptTransferToZeroShares": "499000879123519380012",
+      "sharesBurned": "499000879123519380012",
+      "status": "PASS_EXACT_ASSETS_AND_RECEIPT_RECONCILED_SHARE_BURNS"
+    }
+  ],
+  "finalState": {
+    "blockNumber": 119052260,
+    "pool": {
+      "sqrtPriceX96": "2505414685619613721433309236",
+      "tick": -69082,
+      "protocolFee": 0,
+      "lpFee": 3000,
+      "activeLiquidity": "138450781996976174"
+    },
+    "writer": {
+      "nonce": 33,
+      "nativeBalanceWei": "5977731839344786",
+      "pltrBalance": "3022151054710941749",
+      "wethBalance": "2018994498839078",
+      "tracker0Shares": "999995588081168449",
+      "tracker0Assets": "1000000000001",
+      "tracker0MaxWithdraw": "1000000000001",
+      "tracker1Shares": "999999968694556437",
+      "tracker1Assets": "1000000000000",
+      "tracker1MaxWithdraw": "1000000000000",
+      "openLegs": 0,
+      "pltrToPermit2": "0",
+      "wethToPermit2": "0",
+      "pltrToTracker0": "0",
+      "wethToTracker1": "0",
+      "pltrPermit2ToRouter": [
+        0,
+        1789349740,
+        0
+      ],
+      "wethPermit2ToRouter": [
+        0,
+        1789349740,
+        0
+      ],
+      "premium": null
+    },
+    "buyer": {
+      "nonce": 9,
+      "nativeBalanceWei": "9698295407632844",
+      "pltrBalance": "4999999719178821104",
+      "wethBalance": "298999914563099",
+      "tracker0Shares": "999995588079058603",
+      "tracker0Assets": "999999999999",
+      "tracker0MaxWithdraw": "999999999999",
+      "tracker1Shares": "999999968695358955",
+      "tracker1Assets": "1000000000000",
+      "tracker1MaxWithdraw": "1000000000000",
+      "openLegs": 0,
+      "pltrToPermit2": "0",
+      "wethToPermit2": "0",
+      "pltrToTracker0": "0",
+      "wethToTracker1": "0",
+      "pltrPermit2ToRouter": [
+        0,
+        0,
+        0
+      ],
+      "wethPermit2ToRouter": [
+        0,
+        0,
+        0
+      ],
+      "premium": null
+    }
+  },
+  "residualAssets": {
+    "writer": {
+      "PLTR": "1000000000001",
+      "WETH": "1000000000000"
+    },
+    "buyer": {
+      "PLTR": "999999999999",
+      "WETH": "1000000000000"
+    }
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "broadcastAttempted": false
+  },
+  "nextGate": "OWNER_REVIEW_ONLY_NO_PUBLIC_EXECUTION_OPERATOR_OR_AUTHORIZATION_EXISTS"
+}

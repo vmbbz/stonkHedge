@@ -144,7 +144,7 @@ describe("two-actor lifecycle proposal", () => {
     }
     expect(plan.transactionCountsBySender).toEqual({
       "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 18,
-      "0xca60c8ef6934f8a97c6a503c4e3a46e87f5b08bd": 7,
+      "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7,
     });
   });
 
@@ -194,6 +194,20 @@ describe("two-actor lifecycle proposal", () => {
     expect(() =>
       buildPlan({ genesis: DEFAULT_GENESIS, chain: DEFAULT_CHAIN, inputs: sameActor }),
     ).toThrow("writer and buyer must be distinct accounts");
+
+    const privilegedBuyer = mutateInputs((value) => {
+      value.actors.buyer.address = "0xca60c8ef6934f8a97c6a503c4e3a46e87f5b08bd";
+    });
+    expect(() =>
+      buildPlan({ genesis: DEFAULT_GENESIS, chain: DEFAULT_CHAIN, inputs: privilegedBuyer }),
+    ).toThrow("buyer must be a third unprivileged account");
+
+    const elevatedAllowance = mutateInputs((value) => {
+      value.actors.buyer.initialAllowances.pltrToTracker0 = "1";
+    });
+    expect(() =>
+      buildPlan({ genesis: DEFAULT_GENESIS, chain: DEFAULT_CHAIN, inputs: elevatedAllowance }),
+    ).toThrow("buyer initial ERC20 allowances must be zero");
 
     const wrongPool = mutateInputs((value) => {
       value.marketState.poolId = `0x${"00".repeat(32)}`;

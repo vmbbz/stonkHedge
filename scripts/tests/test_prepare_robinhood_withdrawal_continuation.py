@@ -104,9 +104,18 @@ class WithdrawalContinuationPreparerTests(unittest.TestCase):
             self.assertRegex(transaction["calldata"], r"^0x[0-9a-f]+$")
             self.assertRegex(transaction["calldataKeccak256"], r"^0x[0-9a-f]{64}$")
             self.assertEqual(
-                transaction["decodedIntent"]["assets"],
-                transaction["decodedIntent"]["sourceMaxWithdraw"],
+                int(transaction["decodedIntent"]["assets"]),
+                int(transaction["decodedIntent"]["sourceMaxWithdraw"])
+                - preparer.WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS,
             )
+            self.assertEqual(
+                transaction["decodedIntent"]["executionBufferRawUnits"],
+                str(preparer.WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS),
+            )
+        self.assertEqual(
+            plan["withdrawalExecutionBufferRawUnits"],
+            str(preparer.WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS),
+        )
 
     def test_rejects_missing_state_derivation_and_large_residual(self):
         with tempfile.TemporaryDirectory() as name:
@@ -135,7 +144,12 @@ class WithdrawalContinuationPreparerTests(unittest.TestCase):
             )
             rehearsal["milestones"]["afterIndex24"]["writer"][
                 "tracker0MaxWithdraw"
-            ] = str(assets - preparer.MAX_RESIDUAL_RAW_UNITS - 1)
+            ] = str(
+                assets
+                - preparer.MAX_RESIDUAL_RAW_UNITS
+                + preparer.WITHDRAWAL_EXECUTION_BUFFER_RAW_UNITS
+                - 1
+            )
             with self.assertRaisesRegex(ValueError, "residual exceeds"):
                 preparer.build_withdrawal_plan(
                     lifecycle,

@@ -1103,7 +1103,9 @@ def main() -> int:
         transaction_gas=args.transaction_gas,
     )
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    args.report.write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     print(
         json.dumps(
             {

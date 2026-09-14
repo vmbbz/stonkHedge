@@ -45,11 +45,11 @@ export const DEFAULT_CHAIN = resolve(
 );
 export const DEFAULT_INPUTS = resolve(
   REPOSITORY,
-  "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-inputs-2026-09-11.json",
+  "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-inputs-2026-09-14.json",
 );
 export const DEFAULT_OUTPUT = resolve(
   REPOSITORY,
-  "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-proposal-2026-09-11.json",
+  "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-proposal-2026-09-14.json",
 );
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000" as Address;
@@ -357,9 +357,19 @@ export function buildPlan(paths: PlanPaths): JsonObject {
     chain.sharedStockInfrastructure.registryAndBeacon,
     "Stock registry",
   );
+  const deployer = address(chain.deployer.address, "shared deployer");
   const writer = address(inputs.actors.writer.address, "writer");
   const buyer = address(inputs.actors.buyer.address, "buyer");
   if (writer === buyer) throw new Error("writer and buyer must be distinct accounts");
+  if (buyer === deployer) {
+    throw new Error("buyer must be a third unprivileged account, not the shared deployer");
+  }
+  if (!String(inputs.actors.buyer.role).toUpperCase().includes("UNPRIVILEGED")) {
+    throw new Error("buyer role must be explicitly classified as unprivileged");
+  }
+  if (inputs.roleRisk.accepted !== false) {
+    throw new Error("privileged buyer risk acceptance must remain false");
+  }
   if (inputs.actors.writer.openLegs !== 0 || inputs.actors.buyer.openLegs !== 0) {
     throw new Error("both actors must begin with zero open legs");
   }
@@ -370,6 +380,30 @@ export function buildPlan(paths: PlanPaths): JsonObject {
     inputs.actors.buyer.collateralTracker1Shares !== "0"
   ) {
     throw new Error("both actors must begin with zero collateral shares");
+  }
+  for (const [role, actor] of Object.entries(inputs.actors) as [string, JsonObject][]) {
+    const allowances = actor.initialAllowances;
+    if (!allowances) {
+      throw new Error(`${role} snapshot must include initial allowance evidence`);
+    }
+    for (const name of [
+      "pltrToPermit2",
+      "wethToPermit2",
+      "pltrToTracker0",
+      "wethToTracker1",
+    ]) {
+      if (integer(allowances[name], `${role} ${name}`) !== 0n) {
+        throw new Error(`${role} initial ERC20 allowances must be zero`);
+      }
+    }
+    for (const name of ["pltrPermit2ToRouter", "wethPermit2ToRouter"]) {
+      if (!Array.isArray(allowances[name]) || allowances[name].length !== 3) {
+        throw new Error(`${role} ${name} snapshot is malformed`);
+      }
+      if (integer(allowances[name][0], `${role} ${name} amount`) !== 0n) {
+        throw new Error(`${role} initial Permit2 allowance amounts must be zero`);
+      }
+    }
   }
 
   const poolKey = {
@@ -930,14 +964,13 @@ export function buildPlan(paths: PlanPaths): JsonObject {
       ready: false,
       blockingReasons: [
         "the owner has not accepted the exact roles and exposure caps",
-        "the buyer is also the deployer, guardian admin, and treasurer and that overlap is not accepted",
         "all nonces are deliberately null",
         "the deadline and Permit2 expiry are rehearsal-only",
         "an exact-head positive replay and required negative cases are not yet attached",
         "no lifecycle verifier, one-step operator, authorization manifest, signing path, or broadcast authority exists",
       ],
     },
-    nextGate: "OWNER_REVIEW_OF_ROLE_OVERLAP_AND_EXACT_EXPOSURE_THEN_EXACT_HEAD_FORK_REHEARSAL",
+    nextGate: "EXACT_HEAD_FORK_REHEARSAL_THEN_OWNER_REVIEW_OF_ROLES_AND_EXPOSURE",
   } as JsonObject;
 
   return {

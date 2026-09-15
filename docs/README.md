@@ -44,6 +44,12 @@ Start with:
 5. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
+For the proposed Solana track, read the
+[perpetual-options feasibility and integration study](./research/2026-09-15-solana-perpetual-options-feasibility.md).
+It concludes that a Solana-native prototype investigation is technically
+plausible and warranted, while end-to-end feasibility remains unproven. It does
+not authorize implementation, deployment, asset listing, or real-value access.
+
 The current lifecycle design and exact-fork evidence are in
 [`markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md`](./markets/2026-09-11-pltr-weth-two-actor-lifecycle-design.md).
 The follow-on [lifecycle safety and withdrawal boundary](./markets/2026-09-12-lifecycle-safety-and-withdrawal-boundary.md)
@@ -90,6 +96,7 @@ state was discarded. The [execution candidate and one-step operator record](./ma
 | `deployment/` | Simulations, approvals, operator design, receipts, and reconciliation |
 | `markets/` | Asset selection, exact PoolKeys, price policy, market genesis, and lifecycle evidence |
 | `progress/` | Public milestone ledgers, communications facts, and proof-backed build-in-public records |
+| `research/` | Time-stamped feasibility, ecosystem, and comparative design studies that do not authorize implementation or deployment |
 | `review/` | Human or explicitly labelled owner-reproduced review evidence |
 | `roadmap/` | Forward-looking checkpoint plans that do not themselves authorize transactions |
 | `specs/` | Behavioral requirements and acceptance matrices |

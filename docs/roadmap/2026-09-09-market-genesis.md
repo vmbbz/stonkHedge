@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Public genesis complete; dedicated third-buyer exact-head rehearsal passes `25/25` lifecycle calls, `4/4` required reverts, `8/8` adverse checks, `4/4` swap checks, and `4/4` bounded withdrawals; execution preparation and any public lifecycle remain |
+| Status | Public genesis complete; dedicated third-buyer rehearsal passes `25/25` lifecycle calls, `4/4` required reverts, `8/8` adverse checks, `4/4` swap checks, and `4/4` bounded withdrawals; the fresh dual-sender one-step operator passes `25/25`; review, authorization, and every public lifecycle call remain |
 | Authorization | Genesis authorization consumed and closed at continuation index `8`; no swap, collateral, option, other-market, or mainnet transaction is authorized |
 | Target checkpoint | `robinhood-testnet-sandbox-0` |
 | Estimated remaining focused engineering time | 2–4 hours for independent evidence review, nonce/deadline-bound operator design and simulation, and checkpoint preparation, excluding RPC, support, or authorization delays |
@@ -395,6 +395,11 @@ preparer portions of the last row. The 2026-09-14 follow-up then funded the
 dedicated third buyer and passed the full combined replay. See the [lifecycle
 safety and withdrawal boundary](../markets/2026-09-12-lifecycle-safety-and-withdrawal-boundary.md)
 and [three-account rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md).
+
+The 2026-09-15 execution-preparation round then requalified the unchanged
+public state, bound writer nonces `13..30` and buyer nonces `0..6`, refreshed
+the Permit2/swap clocks, and passed the one-step operator for all `25/25` calls
+on the exact-head fork. See the [execution-preparation ledger](../progress/2026-09-15-lifecycle-execution-preparation.md).
 
 ## 9. Work immediately after Checkpoint C
 

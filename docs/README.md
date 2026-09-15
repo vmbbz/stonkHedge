@@ -25,23 +25,31 @@ balances, elevated allowances, and swap-output shortfalls, and a separate
 offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
 The dedicated third unprivileged buyer is now funded, and the fresh exact-head
 replay also passed `4/4` bounded state-derived withdrawals while keeping every
-residual below `2e12` raw units. Nonce/deadline-bound operator simulation,
-review, and separate authorization still remain. Public swaps, collateral,
-options, withdrawals, and the application are not live yet.
+residual below `2e12` raw units. A new public preflight then proved both actor
+states unchanged at block `120094440`. The dual-sender execution candidate
+binds writer nonces `13..30`, buyer nonces `0..6`, short-lived deadlines, exact
+calldata, and both-account nonce vectors. Its one-step operator passed `25/25`
+calls on the exact-head fork, including receipt/state reconciliation and
+premium movement. Independent review and a separate hash-bound authorization
+still remain. Public swaps, collateral, options, withdrawals, and the
+application are not live yet.
 
 Start with:
 
-1. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
-   for the current three-account lifecycle, withdrawal, failure-analysis, and
-   evidence ledger;
-2. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
+1. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
+   for the current dual-sender nonce/deadline candidate, one-step operator,
+   25-call exact-fork replay, and authorization boundary;
+2. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+   for the three-account lifecycle, withdrawal, failure-analysis, and evidence
+   ledger;
+3. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
    for the complete public achievement, contract and transaction ledgers,
    ordering rationale, communications facts, and next boundary;
-3. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+4. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
    for the system, component, trust-boundary, and evidence overview;
-4. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+5. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
    for the public transaction record; and
-5. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+6. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
 For the proposed Solana track, read the

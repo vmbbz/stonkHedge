@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_PUBLIC_LIFECYCLE_EXECUTION_PREFLIGHT_NO_AUTHORITY",
+  "mode": "PINNED_READ_ONLY_STATE_PLUS_PENDING_NONCES_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 120094440,
+    "referenceBlockHash": "0xc093ad720f23ad283ca296b9562a9508c462321c8e9cf55aa2ccfe7d43a9729a",
+    "referenceTimestampUnix": 1789504548,
+    "referenceTimestampUtc": "2026-09-15T20:35:48Z"
+  },
+  "sourceBindings": {
+    "chainManifest": {
+      "path": "manifests/chains/robinhood-testnet-46630.json",
+      "sha256": "4399d03e83a5bbea47287cfbbf81e21ff23256d904180e2535ff6bbcf0e4dd29"
+    },
+    "genesisManifest": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json",
+      "sha256": "93d31a5393f7295a0f560de45351ea72d52e9c62b8b4f6419d56e8c39ea3922b"
+    },
+    "exposurePolicy": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-inputs-2026-09-14.json",
+      "sha256": "7ce559f915777e1cc5edaec9a9accfddeb36dd4e49c1bd6afcaf9db88edbd7ce"
+    },
+    "lifecyclePlan": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-proposal-2026-09-14.json",
+      "sha256": "e2ba5f4f4826d20dcd57e2f31e5877a80e8ef52a2c4b713e765869f7cf6dd6bb"
+    },
+    "lifecycleRehearsal": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-fork-rehearsal-2026-09-14.json",
+      "sha256": "5c30aa9a107b6dbafb49eb5321f05754b47d4ea4cdcb1850a02414671c38429b"
+    },
+    "qualifier": {
+      "path": "scripts/qualify_robinhood_lifecycle_execution.py",
+      "sha256": "78ac0868402cbdc8f89e09d3c03acc688d431e0c57aa5bd0cbe94ee9a0fb22f9"
+    }
+  },
+  "plan": {
+    "planBodySha256": "a3ffd5a0157d69b6841d72eb914c1c1fd07d4e652c6c5906d55dc862b7476d33",
+    "planFileSha256": "e2ba5f4f4826d20dcd57e2f31e5877a80e8ef52a2c4b713e765869f7cf6dd6bb",
+    "rehearsalFileSha256": "5c30aa9a107b6dbafb49eb5321f05754b47d4ea4cdcb1850a02414671c38429b"
+  },
+  "marketState": {
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "sfpmPoolId": "16897827167146926",
+    "sqrtPriceX96": "2505414483750479311864138015",
+    "currentTick": -69082,
+    "twapTick": null,
+    "twapObservation": "NOT_CAPTURED_SPOT_TICK_IS_NOT_LABELLED_AS_TWAP",
+    "activeLiquidity": "138450781996976174",
+    "registryPaused": false,
+    "stockTokenPaused": false,
+    "stockUiMultiplier": "1000000000000000000",
+    "stockPendingMultiplier": "1000000000000000000",
+    "stockMultiplierEffectiveAt": "0"
+  },
+  "actors": {
+    "writer": {
+      "address": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "role": "UNPRIVILEGED_SECOND_ACTOR_LP_OWNER_AND_BOUNDED_SHORT_WRITER",
+      "confirmedNonce": 13,
+      "nativeBalanceWei": "5982343270000000",
+      "pltrBalance": "3022157655355120211",
+      "wethBalance": "2020000000000000",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "buyer": {
+      "address": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "role": "UNPRIVILEGED_THIRD_ACTOR_BOUNDED_TEST_BUYER",
+      "confirmedNonce": 0,
+      "nativeBalanceWei": "10000000000000000",
+      "pltrBalance": "5000000000000000000",
+      "wethBalance": "0",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "pendingNonces": {
+    "writer": 13,
+    "buyer": 0
+  },
+  "checks": {
+    "acceptedPlanAndRehearsalHashesMatch": true,
+    "writerStateUnchanged": true,
+    "buyerStateUnchanged": true,
+    "poolStateUnchanged": true,
+    "stockControlsEligible": true,
+    "confirmedAndPendingNoncesEqual": true
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "broadcastAttempted": false
+  },
+  "nextGate": "BUILD_NONCE_AND_DEADLINE_BOUND_CANDIDATE_THEN_EXACT_FORK_OPERATOR_SIMULATION",
+  "preflightBodySha256": "cb14f37e42f8771f6be60ed36fca7e122234b261e475fc74e5d5adf9bb1ab46f"
+}

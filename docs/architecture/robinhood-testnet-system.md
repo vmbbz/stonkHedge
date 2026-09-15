@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-14 |
+| State date | 2026-09-15 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; a dedicated third buyer completed a fresh discarded-fork rehearsal of `25/25` lifecycle calls plus `4/4` bounded withdrawals; public lifecycle execution remains unauthorized |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; a dedicated third buyer completed a discarded-fork rehearsal of `25/25` lifecycle calls plus `4/4` bounded withdrawals; the fresh dual-sender one-step operator also passed `25/25` calls with nonce/deadline binding; public lifecycle execution remains unauthorized |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -551,20 +551,26 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The next checkpoint is **three-account lifecycle execution preparation**, still
-before Docusaurus and still without public authority. The dedicated buyer,
-pinned snapshot, unsigned 25-call lifecycle, negative/adverse checks, and four
-buffered withdrawals now pass on one discarded exact-head fork:
+The **three-account lifecycle execution preparation** checkpoint now passes
+locally, still before Docusaurus and still without public authority. The
+dedicated buyer, pinned snapshot, unsigned 25-call lifecycle, negative/adverse
+checks, four buffered withdrawals, fresh public preflight, two nonce streams,
+short-lived clocks, and one-step operator all have reproducible evidence:
 
 1. independently review the roles, exposure, minimum outputs, option TokenIds,
    withdrawal buffer, sequence, and evidence hashes;
 2. add independent health monitoring and safe-mode guidance;
-3. construct a fresh nonce/time-bound one-step candidate and separately review
-   it before any public authorization; and
-4. only after the public lifecycle and first-user path pass, freeze the
+3. separately review the nonce/time-bound one-step candidate and all frozen
+   hashes before any public authorization;
+4. if review and clocks remain valid, request a new exact hash-bound lifecycle
+   authorization and execute no more than one verified transaction at a time;
+5. derive withdrawals only from the resulting public post-close state under a
+   distinct plan and authorization; and
+6. only after the public lifecycle and first-user path pass, freeze the
    documentation hierarchy and build the Docusaurus site.
 
-See the [three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md).
+See the [three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+and [execution-preparation ledger](../progress/2026-09-15-lifecycle-execution-preparation.md).
 
 ## 14. External references
 

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHORIZED_PLTR_WETH_LIFECYCLE_ONE_TRANSACTION_AT_A_TIME",
+  "approvedBy": "repository owner via current Codex session",
+  "approvedAt": "2026-09-15T21:25:47Z",
+  "network": {
+    "chainId": 46630
+  },
+  "roles": {
+    "writer": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+    "buyer": "0x6719E877C05b2d6c28aBceA405fC033FEeF5750f"
+  },
+  "evidenceBindings": {
+    "executionPlanBodySha256": "a3b454799853ddf2ce87d0bc2fcbd093d32a0bcf611c2178fb0af123b7552ae3",
+    "executionPlanFileSha256": "67e11d16ca5556a2525c6c3c50e7c25fea9f6e84493c173bbf17b8b6a8510e2c",
+    "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4",
+    "simulationReportSha256": "29a50349ddbfd7cad2f78435b92739ead31f01a9eb81c7b4971106a32230adce"
+  },
+  "maximumTransactionIndex": 24,
+  "policy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+  "deadlineAcceptance": {
+    "accepted": true,
+    "swapDeadlineUnix": 1789521218,
+    "swapDeadlineUtc": "2026-09-16T01:13:38Z",
+    "permit2ExpirationUnix": 1789528418,
+    "permit2ExpirationUtc": "2026-09-16T03:13:38Z"
+  },
+  "permittedScope": {
+    "wrapBuyerWeth": true,
+    "exactApprovals": true,
+    "fourBoundedSwaps": true,
+    "boundedCollateralDeposits": true,
+    "matchedOptionOpenAndClose": true,
+    "allowanceCleanup": true
+  },
+  "excludedScope": {
+    "withdrawals": true,
+    "otherMarkets": true,
+    "issuerAdministration": true,
+    "factoryAdministration": true,
+    "deployments": true,
+    "mainnet": true
+  }
+}

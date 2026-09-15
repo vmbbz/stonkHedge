@@ -26,7 +26,7 @@ offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
 The dedicated third unprivileged buyer is now funded, and the fresh exact-head
 replay also passed `4/4` bounded state-derived withdrawals while keeping every
 residual below `2e12` raw units. A new public preflight then proved both actor
-states unchanged at block `120094440`. The dual-sender execution candidate
+states unchanged at block `120109926`. The dual-sender execution candidate
 binds writer nonces `13..30`, buyer nonces `0..6`, short-lived deadlines, exact
 calldata, and both-account nonce vectors. Its one-step operator passed `25/25`
 calls on the exact-head fork, including receipt/state reconciliation and

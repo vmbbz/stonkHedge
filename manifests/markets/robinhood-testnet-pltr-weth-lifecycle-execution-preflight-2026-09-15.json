@@ -7,10 +7,10 @@
     "name": "Robinhood Chain Testnet",
     "chainId": 46630,
     "rpc": "https://rpc.testnet.chain.robinhood.com",
-    "referenceBlock": 120094440,
-    "referenceBlockHash": "0xc093ad720f23ad283ca296b9562a9508c462321c8e9cf55aa2ccfe7d43a9729a",
-    "referenceTimestampUnix": 1789504548,
-    "referenceTimestampUtc": "2026-09-15T20:35:48Z"
+    "referenceBlock": 120109926,
+    "referenceBlockHash": "0x55963b621b9118194476747c8bb569d08414eadeba4f85966a9f6ac1a18c0f88",
+    "referenceTimestampUnix": 1789506818,
+    "referenceTimestampUtc": "2026-09-15T21:13:38Z"
   },
   "sourceBindings": {
     "chainManifest": {
@@ -144,5 +144,5 @@
     "broadcastAttempted": false
   },
   "nextGate": "BUILD_NONCE_AND_DEADLINE_BOUND_CANDIDATE_THEN_EXACT_FORK_OPERATOR_SIMULATION",
-  "preflightBodySha256": "cb14f37e42f8771f6be60ed36fca7e122234b261e475fc74e5d5adf9bb1ab46f"
+  "preflightBodySha256": "eb0425c657c762e8ddf8fa6cfbc28320eebac9356fa2afbe138baa201fae24f5"
 }

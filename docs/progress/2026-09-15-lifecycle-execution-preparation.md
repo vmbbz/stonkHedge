@@ -4,13 +4,18 @@
 |---|---|
 | Date | 2026-09-15 |
 | Network source | Robinhood Chain Testnet (`46630`) |
-| Fresh public reference | Block `120094440`, hash `0xc093ad720f23ad283ca296b9562a9508c462321c8e9cf55aa2ccfe7d43a9729a` |
+| Fresh public reference | Block `120109926`, hash `0x55963b621b9118194476747c8bb569d08414eadeba4f85966a9f6ac1a18c0f88` |
 | Writer | `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f` |
 | Dedicated buyer | `0x6719E877C05b2d6c28aBceA405fC033FEeF5750f` |
 | One-step operator replay | `25/25` calls passed on exact-head Anvil |
 | Adverse state checks | `8/8` rejected by fail-closed preflight |
 | Public lifecycle transactions | None |
 | Signing or broadcast authorization | None |
+
+The authorization-ready evidence was refreshed after the initial preparation
+run. The current hashes and clocks in this document supersede the earlier
+candidate; unchanged account state and a second complete `25/25` operator
+replay were verified before freezing this revision.
 
 ## 1. Milestone outcome
 
@@ -72,7 +77,7 @@ account changes the vector and stops the operator before password entry.
 ## 3. Fresh public preflight
 
 The read-only qualifier rechecked the state that the 2026-09-14 rehearsal had
-accepted. All reads were pinned to block `120094440`; pending nonces were then
+accepted. All reads were pinned to block `120109926`; pending nonces were then
 sampled immediately and required to equal the confirmed values.
 
 | Check | Result |
@@ -114,8 +119,8 @@ deadline-bearing calldata blobs change:
 | Position range | ticks `-69120` to `-69000` |
 | Effective-liquidity limit | `2000` bps |
 
-The frozen candidate uses reference time `2026-09-15T20:35:48Z`, swap deadline
-`2026-09-16T00:35:48Z`, and Permit2 expiry `2026-09-16T02:35:48Z`. These values
+The frozen candidate uses reference time `2026-09-15T21:13:38Z`, swap deadline
+`2026-09-16T01:13:38Z`, and Permit2 expiry `2026-09-16T03:13:38Z`. These values
 are evidence of the replay, not a standing execution window. If the safety
 margin expires before authorization, the entire preflight, plan, and simulation
 must be regenerated and re-hashed.
@@ -188,7 +193,7 @@ addresses. It did not load either encrypted keystore.
 | Premium observation | Changed between post-open and post-swap milestones |
 | Terminal option state | Writer `0` legs; buyer `0` legs |
 | Terminal permissions | All ERC-20 and Permit2 allowance amounts zero |
-| Total local gas used | `3,754,451` |
+| Total local gas used | `3,744,435` |
 | Largest local call | Writer short open, `607,881` gas |
 | Public mutation | None |
 
@@ -201,15 +206,15 @@ deadline policy.
 
 | Artifact | SHA-256 or canonical body hash |
 |---|---|
-| Public preflight body | `cb14f37e42f8771f6be60ed36fca7e122234b261e475fc74e5d5adf9bb1ab46f` |
-| Public preflight file | `bc008233724e2b860a4af55a9eebe291a17d47c431b0d9774d3441c16511c1c6` |
-| Execution candidate body | `94e28d9f240890aab2f43d8e4cec771cdeac4ad9fd70c334253ee15212c78057` |
-| Execution candidate file | `ded54a4dd9a79773107492df4e8160803b1717869febd10c227fcb35a48efbd4` |
+| Public preflight body | `eb0425c657c762e8ddf8fa6cfbc28320eebac9356fa2afbe138baa201fae24f5` |
+| Public preflight file | `cea5dc3f98b43c2599c77008400ad7da9f4e5ca1283b526f1d676476a1f70fc6` |
+| Execution candidate body | `a3b454799853ddf2ce87d0bc2fcbd093d32a0bcf611c2178fb0af123b7552ae3` |
+| Execution candidate file | `67e11d16ca5556a2525c6c3c50e7c25fea9f6e84493c173bbf17b8b6a8510e2c` |
 | Read-only qualifier | `78ac0868402cbdc8f89e09d3c03acc688d431e0c57aa5bd0cbe94ee9a0fb22f9` |
 | Offline execution preparer | `b4538b3ac1e0a82f982f4069f5d05a29b227644fe316e2b3ae518b97f027f170` |
 | One-step operator | `cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4` |
 | Exact-fork simulation runner | `001e714a357500bdc324d8816c9946b4d94bed795feae18fb83a5ab995a40db0` |
-| Operator simulation report | `00b38fad05c8a968ce0e9322ff20e717e5e4ef80137bbd6ed3af098dade82c0f` |
+| Operator simulation report | `29a50349ddbfd7cad2f78435b92739ead31f01a9eb81c7b4971106a32230adce` |
 
 These hashes are cross-bound in the machine-readable artifacts. Editing the
 operator, simulation runner, plan, preflight, or source evidence invalidates

@@ -61,9 +61,9 @@ class LifecycleOperatorTests(unittest.TestCase):
         self.assertEqual(operator._expected_allowances(self.plan, 7)[writer]["wethPermit2ToRouter"], 1_000_000_000_000)
         self.assertEqual(operator._expected_allowances(self.plan, 19)[writer]["pltrPermit2ToRouter"], 0)
         self.assertEqual(operator._expected_allowances(self.plan, 25)[buyer]["pltrToTracker0"], 0)
-        self.assertEqual(operator._expected_open_legs(17), {"writer": 1, "buyer": 1})
-        self.assertEqual(operator._expected_open_legs(20), {"writer": 1, "buyer": 0})
-        self.assertEqual(operator._expected_open_legs(21), {"writer": 0, "buyer": 0})
+        self.assertEqual(operator._expected_open_legs(self.plan, 17), {"writer": 1, "buyer": 1})
+        self.assertEqual(operator._expected_open_legs(self.plan, 20), {"writer": 1, "buyer": 0})
+        self.assertEqual(operator._expected_open_legs(self.plan, 21), {"writer": 0, "buyer": 0})
 
     def test_authorization_requires_exact_scope_and_exclusions(self):
         plan_hash = operator.file_sha256(operator.DEFAULT_PLAN)
@@ -119,6 +119,30 @@ class LifecycleOperatorTests(unittest.TestCase):
                 operator_hash=operator_hash,
                 simulation_report_hash=simulation_hash,
             )
+
+    def test_refreshed_continuation_validates_and_begins_after_mined_prefix(self):
+        refreshed_path = (
+            operator.MARKETS
+            / "robinhood-testnet-pltr-weth-lifecycle-refresh-candidate-2026-09-16.json"
+        )
+        report_path = (
+            operator.MARKETS
+            / "robinhood-testnet-pltr-weth-lifecycle-refresh-operator-simulation-2026-09-16.json"
+        )
+        refreshed = operator.load_json(refreshed_path)
+        operator.validate_execution_plan(refreshed, refreshed_path)
+        self.assertEqual(refreshed["executionStartIndex"], 5)
+        self.assertEqual(len(refreshed["transactions"]), 27)
+        self.assertEqual(
+            refreshed["transactions"][5]["requiredNonceStateBefore"],
+            refreshed["continuationStartNonces"],
+        )
+        operator.validate_simulation_report(
+            operator.load_json(report_path),
+            refreshed,
+            plan_file_hash=operator.file_sha256(refreshed_path),
+            operator_hash=operator.file_sha256(SCRIPT),
+        )
 
 
 if __name__ == "__main__":

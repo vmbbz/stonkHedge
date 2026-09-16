@@ -1,0 +1,1522 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_EXACT_HEAD_DUAL_SENDER_LIFECYCLE_OPERATOR",
+  "mode": "EXACT_FORK_LOOPBACK_ANVIL_IMPERSONATION_NO_KEYS_NO_SIGNING_NO_PUBLIC_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "sourceBindings": {
+    "executionPlanBodySha256": "b97bd784e43e2e4e9495c39294ee87f892eb9c132449d34de7a42709bcf390cf",
+    "executionPlanFileSha256": "6ad14f4f8f4c341d3dcb477f06b523d6d380510c6e955c46460b7b31a6d347c3",
+    "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3",
+    "simulationRunnerSha256": "364990fc7bb213a832d0cf6c158512ebcc9ba72385d9b6fde49ebdcfc16290e6"
+  },
+  "fork": {
+    "clientVersion": "anvil/v1.8.1",
+    "chainId": 46630,
+    "forkBlock": 120177489,
+    "forkBlockHash": "0x5d0103524cad072f2506fa596a186f906ad45801dbb11414ee5ed680eaf6df90",
+    "forkTimestampUnix": 1789518527
+  },
+  "localCompatibilityBlock": {
+    "blockNumber": 120177490,
+    "blockHash": "0x11517f78208ccadb761f26c0494701cb9421caead2f466c3827c69594eea4840",
+    "timestampUnix": 1789518528
+  },
+  "externalState": {
+    "chainId": 46630,
+    "computedPoolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "runtimes": {
+      "stockRegistry": {
+        "address": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+        "runtimeBytes": 2332,
+        "runtimeCodeHash": "0x404e8188c4b1d0c9804205e0da253d11570e9d48d03964962cb689072b1735d2"
+      },
+      "pltr": {
+        "address": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "runtimeBytes": 283,
+        "runtimeCodeHash": "0x2f367e6a678e7b30ab613d5963e541e6f4d3ca586de76e2f441fbfeb1a27c440"
+      },
+      "weth": {
+        "address": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "runtimeBytes": 1730,
+        "runtimeCodeHash": "0x55f8ac53c64450f01880d8249fc5cb0c69c064e4bcb097ea80a02fff40485a7c"
+      },
+      "permit2": {
+        "address": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "runtimeBytes": 9152,
+        "runtimeCodeHash": "0x0117e0ed818bc3f2a8729ffc336c837e63e965f04b473047b39b35ad86aac259"
+      },
+      "universalRouter": {
+        "address": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "runtimeBytes": 24546,
+        "runtimeCodeHash": "0xfdd90802f39ce5fc8bac4c2f1b3ac7bac530fd17ff46b0630f1bd00f1e14082f"
+      },
+      "stateView": {
+        "address": "0xf3334192d15450cdd385c8b70e03f9a6bd9e673b",
+        "runtimeBytes": 3531,
+        "runtimeCodeHash": "0x7d9c591e0956fd89d98feb4ffcfe8bf1f7a62bd485edd979fa21d104b49878a6"
+      },
+      "panopticPool": {
+        "address": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "runtimeBytes": 306,
+        "runtimeCodeHash": "0xd1753140c3c20c5e81917aa8a6073aecae32c6d5153653918dcda8d7d4e56593"
+      },
+      "collateralTracker0": {
+        "address": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0x6073a68416f1668735eab80d3a06c8febffa6877517d029350e4c04a1561a344"
+      },
+      "collateralTracker1": {
+        "address": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0xabd430adfb0b8bb9f60709ebc6b9b5cc26578f2dff0c8adab64e8b61fd9d6339"
+      }
+    },
+    "expectedRuntimes": {
+      "stockRegistry": {
+        "runtimeBytes": 2332,
+        "runtimeCodeHash": "0x404e8188c4b1d0c9804205e0da253d11570e9d48d03964962cb689072b1735d2"
+      },
+      "pltr": {
+        "runtimeBytes": 283,
+        "runtimeCodeHash": "0x2f367e6a678e7b30ab613d5963e541e6f4d3ca586de76e2f441fbfeb1a27c440"
+      },
+      "weth": {
+        "runtimeBytes": 1730,
+        "runtimeCodeHash": "0x55f8ac53c64450f01880d8249fc5cb0c69c064e4bcb097ea80a02fff40485a7c"
+      },
+      "permit2": {
+        "runtimeBytes": 9152,
+        "runtimeCodeHash": "0x0117e0ed818bc3f2a8729ffc336c837e63e965f04b473047b39b35ad86aac259"
+      },
+      "universalRouter": {
+        "runtimeBytes": 24546,
+        "runtimeCodeHash": "0xfdd90802f39ce5fc8bac4c2f1b3ac7bac530fd17ff46b0630f1bd00f1e14082f"
+      },
+      "stateView": {
+        "runtimeBytes": 3531,
+        "runtimeCodeHash": "0x7d9c591e0956fd89d98feb4ffcfe8bf1f7a62bd485edd979fa21d104b49878a6"
+      },
+      "panopticPool": {
+        "runtimeBytes": 306,
+        "runtimeCodeHash": "0xd1753140c3c20c5e81917aa8a6073aecae32c6d5153653918dcda8d7d4e56593"
+      },
+      "collateralTracker0": {
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0x6073a68416f1668735eab80d3a06c8febffa6877517d029350e4c04a1561a344"
+      },
+      "collateralTracker1": {
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0xabd430adfb0b8bb9f60709ebc6b9b5cc26578f2dff0c8adab64e8b61fd9d6339"
+      }
+    },
+    "stockControls": {
+      "registryPaused": false,
+      "tokenPaused": false,
+      "uiMultiplier": "1000000000000000000",
+      "newUIMultiplier": "1000000000000000000",
+      "effectiveAt": "0",
+      "writerBlocked": false,
+      "buyerBlocked": false
+    },
+    "wiring": {
+      "pltrRegistry": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+      "panopticPoolCollateral0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "panopticPoolCollateral1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "panopticPoolManager": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "panopticPoolRiskEngine": "0x3ad134ff173dfa0a892b4116a65b76b818218585",
+      "panopticPoolSfpm": "0x86ef420fd3e27c3ac896c479b19b6a840b97bee1",
+      "panopticPoolNumericId": "16897827167146926",
+      "tracker0Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker0Underlying": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "tracker1Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker1Underlying": "0x33e4191705c386532ba27cbf171db86919200b94"
+    },
+    "expectedWiring": {
+      "pltrRegistry": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+      "panopticPoolCollateral0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "panopticPoolCollateral1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "panopticPoolManager": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "panopticPoolRiskEngine": "0x3ad134ff173dfa0a892b4116a65b76b818218585",
+      "panopticPoolSfpm": "0x86ef420fd3e27c3ac896c479b19b6a840b97bee1",
+      "panopticPoolNumericId": "16897827167146926",
+      "tracker0Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker0Underlying": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "tracker1Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker1Underlying": "0x33e4191705c386532ba27cbf171db86919200b94"
+    },
+    "requiredStockState": {
+      "registryPaused": false,
+      "tokenPaused": false,
+      "uiMultiplier": "1000000000000000000",
+      "newUIMultiplier": "1000000000000000000",
+      "effectiveAt": "0",
+      "writerBlocked": false,
+      "buyerBlocked": false
+    }
+  },
+  "adversePreflightRejections": {
+    "status": "INHERITED_FROM_HASH_BOUND_PRIOR_SIMULATION",
+    "priorSimulationReportSha256": "29a50349ddbfd7cad2f78435b92739ead31f01a9eb81c7b4971106a32230adce"
+  },
+  "transactionCount": 22,
+  "transactions": [
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 5,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 17,
+      "label": "writer refreshes exact PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0x56208c250b71d34c7c0eb778ae02e3b95c20a7ed0bd70210f852627c999d8067",
+      "minedTransaction": {
+        "transactionHash": "0x06e33111b55f4bd8211a2d0b6870d1cb055e021edc29ddbd515809abfb00ca7f",
+        "blockNumber": 120177491,
+        "blockHash": "0xf3cc5c493159fc1f1ea0da02ecefcd3f8933a847d168d8a926624821d386eacc",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "nonce": 17,
+        "valueWei": "0",
+        "calldataKeccak256": "0x56208c250b71d34c7c0eb778ae02e3b95c20a7ed0bd70210f852627c999d8067",
+        "gasUsed": 30514
+      },
+      "postconditions": {
+        "function": "approve(address,address,uint160,uint48)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 18,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 6,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 18,
+      "label": "writer refreshes exact WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xd1336fb20428958e9b6fcdf0a5187333794a9eb24d72b9a4129cdcfa9ea434b3",
+      "minedTransaction": {
+        "transactionHash": "0xb46690bd6f559888d5d42f15f7e4210d5332cb6769fe8b0cd2932e976468697c",
+        "blockNumber": 120177492,
+        "blockHash": "0x9409b6e7bc390ae9a026c58759d9d635c3dc42c60bb0aac88a2f4e48ee085c9b",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "nonce": 18,
+        "valueWei": "0",
+        "calldataKeccak256": "0xd1336fb20428958e9b6fcdf0a5187333794a9eb24d72b9a4129cdcfa9ea434b3",
+        "gasUsed": 30514
+      },
+      "postconditions": {
+        "function": "approve(address,address,uint160,uint48)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 19,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 7,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 19,
+      "label": "writer swaps tiny exact-input PLTR to WETH",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldataKeccak256": "0xb382cf57927ae1242eec850ef554253f82989c7fafa9942aa3fbc63c1467bb30",
+      "minedTransaction": {
+        "transactionHash": "0x77282079828c3e04e7f80f528f3f9289cb587cc7650d2627337d6fc465ec3f16",
+        "blockNumber": 120177493,
+        "blockHash": "0x7ba3626d712aaf893937858430252c87d041fe73120e6c0d2fa22bd88231104b",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "nonce": 19,
+        "valueWei": "0",
+        "calldataKeccak256": "0xb382cf57927ae1242eec850ef554253f82989c7fafa9942aa3fbc63c1467bb30",
+        "gasUsed": 173979
+      },
+      "postconditions": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "status": "PASS",
+        "swap": {
+          "ordinal": 7,
+          "status": "PASS_EXACT_INPUT_AND_MINIMUM_OUTPUT",
+          "amountIn": "1000000000000000",
+          "actualInputSpent": "1000000000000000",
+          "amountOutMinimum": "800000000000",
+          "actualOutputReceived": "996773015596"
+        }
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 20,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 8,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 20,
+      "label": "writer swaps tiny exact-input WETH to PLTR",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldataKeccak256": "0x3dfc7e6540df318034a60eb1887447daac2b6850aee00842be6fc23d553f4d3f",
+      "minedTransaction": {
+        "transactionHash": "0x9ec8e1bb59e9e75be854110d6b75359231ebfea80671798749075d524e7bf44f",
+        "blockNumber": 120177494,
+        "blockHash": "0xe5aada55fbc8cf0d5c2801e4ad3ba30dae8796e8fd943aefd5165ddd1ffab90a",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "nonce": 20,
+        "valueWei": "0",
+        "calldataKeccak256": "0x3dfc7e6540df318034a60eb1887447daac2b6850aee00842be6fc23d553f4d3f",
+        "gasUsed": 168401
+      },
+      "postconditions": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "status": "PASS",
+        "swap": {
+          "ordinal": 8,
+          "status": "PASS_EXACT_INPUT_AND_MINIMUM_OUTPUT",
+          "amountIn": "1000000000000",
+          "actualInputSpent": "1000000000000",
+          "amountOutMinimum": "800000000000000",
+          "actualOutputReceived": "997226984392005"
+        }
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 21,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 9,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 21,
+      "label": "writer approves exact PLTR collateral to tracker0",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldataKeccak256": "0x2b6fa1704003cd600594ff404c0ca76da0e66fc7d207764fc0bf4e2a4299306c",
+      "minedTransaction": {
+        "transactionHash": "0x5dd7487f0abe5c2ea4840657ecdd6b93914927c53e3f63e09408e544b8a5f83f",
+        "blockNumber": 120177495,
+        "blockHash": "0x6b40f66430ed8b328403f02e1a57b78ca0d162a248562fb8bd3e2ca3fb6ab862",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "nonce": 21,
+        "valueWei": "0",
+        "calldataKeccak256": "0x2b6fa1704003cd600594ff404c0ca76da0e66fc7d207764fc0bf4e2a4299306c",
+        "gasUsed": 60588
+      },
+      "postconditions": {
+        "function": "approve(address,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 22,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 10,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 22,
+      "label": "writer deposits exact PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldataKeccak256": "0xc8251161983d420db3d8b64cf0df463c89f7d8dcf169e1559f769b4990e3a87b",
+      "minedTransaction": {
+        "transactionHash": "0x9e4d3302305c0b5a1b83ce3671aa74d6b2e2baa02c936abd10b3d1b826b49c65",
+        "blockNumber": 120177496,
+        "blockHash": "0x5e1e824d64e5c1be0da50f41ae1b6ec6d7acad082deea3b7b0cd7c5cc7af10e7",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "nonce": 22,
+        "valueWei": "0",
+        "calldataKeccak256": "0xc8251161983d420db3d8b64cf0df463c89f7d8dcf169e1559f769b4990e3a87b",
+        "gasUsed": 189333
+      },
+      "postconditions": {
+        "function": "deposit(uint256,address)",
+        "status": "PASS",
+        "assetsDeposited": "500000000000000000"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 23,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 11,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 23,
+      "label": "writer approves exact WETH collateral to tracker1",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldataKeccak256": "0xe1dc70170eba839d8a77243cf13c9e652c7581a1a636a2bb69cc8f2f545ade7d",
+      "minedTransaction": {
+        "transactionHash": "0x3146ff45431155d01cbf79ad73ba96d12f0365a10c826aaee68e7a8f1411a9f4",
+        "blockNumber": 120177497,
+        "blockHash": "0xf612941fd6be2dd0561b9fed087b4a8266719a68d1d7bb5442d2f58780e9855f",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "nonce": 23,
+        "valueWei": "0",
+        "calldataKeccak256": "0xe1dc70170eba839d8a77243cf13c9e652c7581a1a636a2bb69cc8f2f545ade7d",
+        "gasUsed": 46087
+      },
+      "postconditions": {
+        "function": "approve(address,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 24,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 12,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 24,
+      "label": "writer deposits exact WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldataKeccak256": "0x0127db49df1ffc4c713d3d28405d2ac9a4db6677d198d74350209463d4c717f0",
+      "minedTransaction": {
+        "transactionHash": "0x11b73df6933b9cf871c6c1a70a34a3141db67cf8640cf6508a4b7133c37350f8",
+        "blockNumber": 120177498,
+        "blockHash": "0xac45aef7c6b29b46f5dfacbdd713cd0414ba5a798436a72bf087ff1036d89038",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "nonce": 24,
+        "valueWei": "0",
+        "calldataKeccak256": "0x0127db49df1ffc4c713d3d28405d2ac9a4db6677d198d74350209463d4c717f0",
+        "gasUsed": 157968
+      },
+      "postconditions": {
+        "function": "deposit(uint256,address)",
+        "status": "PASS",
+        "assetsDeposited": "500000000000000"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 13,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 1,
+      "label": "buyer approves exact PLTR collateral to tracker0",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldataKeccak256": "0xbf1450d5bcd07eff212d10f1ba46c0775d633408f06c109274206d2e2d603de8",
+      "minedTransaction": {
+        "transactionHash": "0x91d99912fc978d44dd70eebf9676ca4c8560e14114f1e869722bb4949f839cce",
+        "blockNumber": 120177499,
+        "blockHash": "0xd54ddca2e5df3de55dd947873a76b8791d483cd6622fa6b02465a600198830ed",
+        "from": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "nonce": 1,
+        "valueWei": "0",
+        "calldataKeccak256": "0xbf1450d5bcd07eff212d10f1ba46c0775d633408f06c109274206d2e2d603de8",
+        "gasUsed": 60588
+      },
+      "postconditions": {
+        "function": "approve(address,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 2
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 14,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 2,
+      "label": "buyer deposits exact PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldataKeccak256": "0xdc80b76e2b84602c973ddb89170c42a191c8f27971b1e0768e7d7ba6f75878bc",
+      "minedTransaction": {
+        "transactionHash": "0x4b2ee50b35786a0c24f49622d8aa74a5ceb2b103272f9b35873ceb638cbfb921",
+        "blockNumber": 120177500,
+        "blockHash": "0x60b50902d40fa0425532decdfce76e03c286537e38594cd9c4678085278ba8ec",
+        "from": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "nonce": 2,
+        "valueWei": "0",
+        "calldataKeccak256": "0xdc80b76e2b84602c973ddb89170c42a191c8f27971b1e0768e7d7ba6f75878bc",
+        "gasUsed": 174480
+      },
+      "postconditions": {
+        "function": "deposit(uint256,address)",
+        "status": "PASS",
+        "assetsDeposited": "250000000000000000"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 3
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 15,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 3,
+      "label": "buyer approves exact WETH collateral to tracker1",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldataKeccak256": "0x103ed5e3e804a8c730f83f270cc99078e73e4e57317d5e4c7a7dc19b4cc9e053",
+      "minedTransaction": {
+        "transactionHash": "0xd9db063bee819ab9bc56a93f334d3ad2412d8f1be25bdbbdaa59b01cb3820e11",
+        "blockNumber": 120177501,
+        "blockHash": "0x7003795fb8ccdb4764377df9bc692a8cb6a82328d7f57e27af52ba3e2e426ae1",
+        "from": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "nonce": 3,
+        "valueWei": "0",
+        "calldataKeccak256": "0x103ed5e3e804a8c730f83f270cc99078e73e4e57317d5e4c7a7dc19b4cc9e053",
+        "gasUsed": 46075
+      },
+      "postconditions": {
+        "function": "approve(address,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 4
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 16,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 4,
+      "label": "buyer deposits exact WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldataKeccak256": "0x8c219f2e9b08ae854ec40fb0cddad2cbdef55814978183703fe2de708a7411d6",
+      "minedTransaction": {
+        "transactionHash": "0x66e22b2dcd1a43c6df7d15af2ef048d614d8974962c49220d36fc0d3ecb10125",
+        "blockNumber": 120177502,
+        "blockHash": "0xa177858f698309fc4d49d4305a50924b4e05533af1cd0f186bf78292fccc2548",
+        "from": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "nonce": 4,
+        "valueWei": "0",
+        "calldataKeccak256": "0x8c219f2e9b08ae854ec40fb0cddad2cbdef55814978183703fe2de708a7411d6",
+        "gasUsed": 143103
+      },
+      "postconditions": {
+        "function": "deposit(uint256,address)",
+        "status": "PASS",
+        "assetsDeposited": "250000000000000"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 5
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 17,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 25,
+      "label": "writer opens bounded in-range short call",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldataKeccak256": "0x21a49bee25602ac6697350267fd4fd7feef4c7c36b9b72ebfe93ff8538832a7c",
+      "minedTransaction": {
+        "transactionHash": "0x254123dedf30bbbcef6ae338a41af0858bbe78ae6daf40171376cba591d97e83",
+        "blockNumber": 120177503,
+        "blockHash": "0x46b04bbc818f25f0e5773fe3f988222ecf3255757ffc23a223dba1e85c391243",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "nonce": 25,
+        "valueWei": "0",
+        "calldataKeccak256": "0x21a49bee25602ac6697350267fd4fd7feef4c7c36b9b72ebfe93ff8538832a7c",
+        "gasUsed": 607881
+      },
+      "postconditions": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 26,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 5
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 18,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 5,
+      "label": "buyer opens bounded matched long call",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldataKeccak256": "0x1b00ddc9181c5c68e2d3f41de320223b240932420f0c5c4ad0762711cfaef539",
+      "minedTransaction": {
+        "transactionHash": "0xc8594dc7a7d71739246df678083b34012a053762f6ddea9fc1a587f3cf0af76f",
+        "blockNumber": 120177504,
+        "blockHash": "0x9088a1a2c3ed1a12cab1f3d285cfdad00b8bf632bf76736028dfa093ac21777d",
+        "from": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "nonce": 5,
+        "valueWei": "0",
+        "calldataKeccak256": "0x1b00ddc9181c5c68e2d3f41de320223b240932420f0c5c4ad0762711cfaef539",
+        "gasUsed": 489003
+      },
+      "postconditions": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 26,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 19,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 26,
+      "label": "writer performs controlled PLTR-to-WETH premium-driving swap",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldataKeccak256": "0xb382cf57927ae1242eec850ef554253f82989c7fafa9942aa3fbc63c1467bb30",
+      "minedTransaction": {
+        "transactionHash": "0xb05cfb3f46a2138f828d0988fa41df0d9989ad1b7db039aeeaf5b030b60f74bb",
+        "blockNumber": 120177505,
+        "blockHash": "0xc0b81a205550c03f532c7d7b58f83b06a18e24ab5a82f140a81296e4fa4eda07",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "nonce": 26,
+        "valueWei": "0",
+        "calldataKeccak256": "0xb382cf57927ae1242eec850ef554253f82989c7fafa9942aa3fbc63c1467bb30",
+        "gasUsed": 152242
+      },
+      "postconditions": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "status": "PASS",
+        "swap": {
+          "ordinal": 19,
+          "status": "PASS_EXACT_INPUT_AND_MINIMUM_OUTPUT",
+          "amountIn": "1000000000000000",
+          "actualInputSpent": "1000000000000000",
+          "amountOutMinimum": "800000000000",
+          "actualOutputReceived": "996831078469"
+        }
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 20,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 27,
+      "label": "writer performs controlled WETH-to-PLTR premium-driving swap",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldataKeccak256": "0x3dfc7e6540df318034a60eb1887447daac2b6850aee00842be6fc23d553f4d3f",
+      "minedTransaction": {
+        "transactionHash": "0xae8779a1913e0b7724bd88c35c99ab5c9dc3dffee9f5602f6418dc92c4f80055",
+        "blockNumber": 120177506,
+        "blockHash": "0xd43a16f28f24b61bf087b685e891c197c95b7f5aa348b11496f698e018b5fab0",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "nonce": 27,
+        "valueWei": "0",
+        "calldataKeccak256": "0x3dfc7e6540df318034a60eb1887447daac2b6850aee00842be6fc23d553f4d3f",
+        "gasUsed": 146532
+      },
+      "postconditions": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "status": "PASS",
+        "swap": {
+          "ordinal": 20,
+          "status": "PASS_EXACT_INPUT_AND_MINIMUM_OUTPUT",
+          "amountIn": "1000000000000",
+          "actualInputSpent": "1000000000000",
+          "amountOutMinimum": "800000000000000",
+          "actualOutputReceived": "997168921508441"
+        }
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 28,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 21,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 6,
+      "label": "buyer closes matched long call before writer",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldataKeccak256": "0x1f492cd72ce41c96a18cd74d04cca25ae2761772c341d9f799096be63985c777",
+      "minedTransaction": {
+        "transactionHash": "0xb71882b3bc7bc25b83cff7c62abcd8c4898006e9daebaafc0d4aa9b21db351a2",
+        "blockNumber": 120177507,
+        "blockHash": "0x0f0a3b6e1fc7a084a848430e76a56d0e8770a14e36fb12b85870bef263882f67",
+        "from": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "nonce": 6,
+        "valueWei": "0",
+        "calldataKeccak256": "0x1f492cd72ce41c96a18cd74d04cca25ae2761772c341d9f799096be63985c777",
+        "gasUsed": 433988
+      },
+      "postconditions": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 28,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 22,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 28,
+      "label": "writer closes short call after buyer",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldataKeccak256": "0xd47972f3f7475400d50b9d7d14dc43361f354fa83557459d227eab42650b5803",
+      "minedTransaction": {
+        "transactionHash": "0xa77570a6dfe0291841c0848f699bbcac1636195bbd817bf1a947b5f3ff0cf5c7",
+        "blockNumber": 120177508,
+        "blockHash": "0xcda5b6c08fc90b814cb1c051e96ab71c02b3d1623e8f06dfdc27cac73eae0225",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "nonce": 28,
+        "valueWei": "0",
+        "calldataKeccak256": "0xd47972f3f7475400d50b9d7d14dc43361f354fa83557459d227eab42650b5803",
+        "gasUsed": 327817
+      },
+      "postconditions": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 29,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 23,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 29,
+      "label": "writer revokes PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xf570bc3a6e425c05027d3d885e9378cab9b0b6d8083c64945cd4854c806b54a4",
+      "minedTransaction": {
+        "transactionHash": "0x8779d9eb847e9d038b681643bc0f0af5f027561cbe7b97e4cb0da89a93c6916c",
+        "blockNumber": 120177509,
+        "blockHash": "0x903586f712cb2cdf01003b4b10e4f3c90b25b693c9731cb058f327f99317d6fb",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "nonce": 29,
+        "valueWei": "0",
+        "calldataKeccak256": "0xf570bc3a6e425c05027d3d885e9378cab9b0b6d8083c64945cd4854c806b54a4",
+        "gasUsed": 30396
+      },
+      "postconditions": {
+        "function": "approve(address,address,uint160,uint48)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 30,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 24,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 30,
+      "label": "writer revokes WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0x5d48084e067995fd2b2ace1dde650288a2140625e293be47f576edb5be2bd7f3",
+      "minedTransaction": {
+        "transactionHash": "0x83884e505d29f7f9a80aa7fe97bc21c424b1b6e03f84cc8e3021f551dc1d98cf",
+        "blockNumber": 120177510,
+        "blockHash": "0x4060c1a9954f5fdc027fdf8ec6a598d5809f208ad002a2d53eb74ddc64fbba65",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "nonce": 30,
+        "valueWei": "0",
+        "calldataKeccak256": "0x5d48084e067995fd2b2ace1dde650288a2140625e293be47f576edb5be2bd7f3",
+        "gasUsed": 30396
+      },
+      "postconditions": {
+        "function": "approve(address,address,uint160,uint48)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 31,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 25,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 31,
+      "label": "writer clears PLTR ERC20 allowance to Permit2",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "minedTransaction": {
+        "transactionHash": "0x4ad1bdc98f5307b63f741ffbcd8842ec1241a7d841bdb1713209e4e0f617f3e4",
+        "blockNumber": 120177511,
+        "blockHash": "0x6c09c58130d7439c919cad0118601cba98882e42174f1a201310f3e124dbae85",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "nonce": 31,
+        "valueWei": "0",
+        "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+        "gasUsed": 40556
+      },
+      "postconditions": {
+        "function": "approve(address,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 32,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    },
+    {
+      "status": "PASS_STOP_BEFORE_NEXT",
+      "transactionIndex": 26,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 32,
+      "label": "writer clears WETH ERC20 allowance to Permit2",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "minedTransaction": {
+        "transactionHash": "0x13935c364a8cec2a1d723808a4877a8a9fa9cc2a3b920c4db94b2fef4bdf2638",
+        "blockNumber": 120177512,
+        "blockHash": "0x9e1605076617719ed6c7301e8c2d3eed76360d8a97a97699d6bafd89aee5ae67",
+        "from": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "nonce": 32,
+        "valueWei": "0",
+        "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+        "gasUsed": 26055
+      },
+      "postconditions": {
+        "function": "approve(address,uint256)",
+        "status": "PASS"
+      },
+      "postNonceVector": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 33,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "nextGate": "STOP_AND_REVIEW_BEFORE_SELECTING_NEXT_INDEX"
+    }
+  ],
+  "milestones": {
+    "initial": {
+      "blockNumber": 120177490,
+      "pool": {
+        "sqrtPriceX96": "2505414483750479311864138015",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 17,
+        "nativeBalanceWei": "5980037010000000",
+        "pltrBalance": "3022157655355120211",
+        "wethBalance": "2020000000000000",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "2000000000000000",
+        "wethToPermit2": "2000000000000",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          2000000000000000,
+          1789528418,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          2000000000000,
+          1789528418,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 1,
+        "nativeBalanceWei": "9699470970000000",
+        "pltrBalance": "5000000000000000000",
+        "wethBalance": "300000000000000",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    },
+    "afterPhase:WRITER_SWAP_PERMISSION_REFRESH": {
+      "blockNumber": 120177492,
+      "pool": {
+        "sqrtPriceX96": "2505414483750479311864138015",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 19,
+        "nativeBalanceWei": "5979598967157906",
+        "pltrBalance": "3022157655355120211",
+        "wethBalance": "2020000000000000",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "2000000000000000",
+        "wethToPermit2": "2000000000000",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          2000000000000000,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          2000000000000,
+          1789540127,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 1,
+        "nativeBalanceWei": "9699470970000000",
+        "pltrBalance": "5000000000000000000",
+        "wethBalance": "300000000000000",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    },
+    "afterPhase:BIDIRECTIONAL_BASELINE": {
+      "blockNumber": 120177494,
+      "pool": {
+        "sqrtPriceX96": "2505414613641816659368669375",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 21,
+        "nativeBalanceWei": "5977715389870593",
+        "pltrBalance": "3022154882339512216",
+        "wethBalance": "2019996773015596",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "1000000000000000",
+        "wethToPermit2": "1000000000000",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          1000000000000000,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          1000000000000,
+          1789540127,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 1,
+        "nativeBalanceWei": "9699470970000000",
+        "pltrBalance": "5000000000000000000",
+        "wethBalance": "300000000000000",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    },
+    "afterPhase:BOUNDED_COLLATERAL": {
+      "blockNumber": 120177502,
+      "pool": {
+        "sqrtPriceX96": "2505414613641816659368669375",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 25,
+        "nativeBalanceWei": "5976066667790683",
+        "pltrBalance": "2522154882339512216",
+        "wethBalance": "1519996773015596",
+        "tracker0Shares": "500000000000000000000000",
+        "tracker0Assets": "500000000000000000",
+        "tracker0MaxWithdraw": "500000000000000000",
+        "tracker1Shares": "500000000000000000000",
+        "tracker1Assets": "500000000000000",
+        "tracker1MaxWithdraw": "500000000000000",
+        "openLegs": 0,
+        "pltrToPermit2": "1000000000000000",
+        "wethToPermit2": "1000000000000",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          1000000000000000,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          1000000000000,
+          1789540127,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 5,
+        "nativeBalanceWei": "9698564931266839",
+        "pltrBalance": "4750000000000000000",
+        "wethBalance": "50000000000000",
+        "tracker0Shares": "250000000000000000000000",
+        "tracker0Assets": "250000000000000000",
+        "tracker0MaxWithdraw": "250000000000000000",
+        "tracker1Shares": "250000000000000000000",
+        "tracker1Assets": "250000000000000",
+        "tracker1MaxWithdraw": "250000000000000",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    },
+    "afterPhase:MATCHED_OPTION_OPEN": {
+      "blockNumber": 120177504,
+      "pool": {
+        "sqrtPriceX96": "2505414613641816659368669375",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "185937095068141418"
+      },
+      "writer": {
+        "nonce": 26,
+        "nativeBalanceWei": "5975129252069059",
+        "pltrBalance": "2522154882339512216",
+        "wethBalance": "1519996773015596",
+        "tracker0Shares": "503253118319077323000000",
+        "tracker0Assets": "503255322917446211",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "496750223365676000000",
+        "tracker1Assets": "496750223365676",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 1,
+        "pltrToPermit2": "1000000000000000",
+        "wethToPermit2": "1000000000000",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          1000000000000000,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          1000000000000,
+          1789540127,
+          0
+        ],
+        "premium": {
+          "shortPremiumPacked": "0",
+          "longPremiumPacked": "0",
+          "positionBalances": [
+            "12656168291813774387945659390533895240081516643507184675107130488054153216"
+          ],
+          "collateralRequirementsPacked": [
+            "1982381507674147"
+          ],
+          "netPremiaPacked": [
+            "0"
+          ]
+        }
+      },
+      "buyer": {
+        "nonce": 6,
+        "nativeBalanceWei": "9697905098980813",
+        "pltrBalance": "4750000000000000000",
+        "wethBalance": "50000000000000",
+        "tracker0Shares": "249674089466121734773102",
+        "tracker0Assets": "249675183212132150",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "250324977663432000000",
+        "tracker1Assets": "250324977663432",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 1,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": {
+          "shortPremiumPacked": "0",
+          "longPremiumPacked": "0",
+          "positionBalances": [
+            "12656168397126066301702132626994140261087473306451749454645501291741478912"
+          ],
+          "collateralRequirementsPacked": [
+            "100000000000001"
+          ],
+          "netPremiaPacked": [
+            "0"
+          ]
+        }
+      }
+    },
+    "afterPhase:PREMIUM_OBSERVATION": {
+      "blockNumber": 120177506,
+      "pool": {
+        "sqrtPriceX96": "2505414685619613721433309236",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "185937095068141418"
+      },
+      "writer": {
+        "nonce": 28,
+        "nativeBalanceWei": "5974798122855297",
+        "pltrBalance": "2522152051261020657",
+        "wethBalance": "1519993604094065",
+        "tracker0Shares": "503253118319077323000000",
+        "tracker0Assets": "503255322917446211",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "496750223365676000000",
+        "tracker1Assets": "496750223365676",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 1,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          1789540127,
+          0
+        ],
+        "premium": {
+          "shortPremiumPacked": "290083728060001117105548851657771145167887941666",
+          "longPremiumPacked": "0",
+          "positionBalances": [
+            "12656168291813774387945659390533895240081516643507184675107130488054153216"
+          ],
+          "collateralRequirementsPacked": [
+            "1982381507674147"
+          ],
+          "netPremiaPacked": [
+            "290083728060001117105548851657771145167887941666"
+          ]
+        }
+      },
+      "buyer": {
+        "nonce": 6,
+        "nativeBalanceWei": "9697905098980813",
+        "pltrBalance": "4750000000000000000",
+        "wethBalance": "50000000000000",
+        "tracker0Shares": "249674089466121734773102",
+        "tracker0Assets": "249675183212132150",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "250324977663432000000",
+        "tracker1Assets": "250324977663432",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 1,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": {
+          "shortPremiumPacked": "0",
+          "longPremiumPacked": "29370474452598624361327841162749475881972506866",
+          "positionBalances": [
+            "12656168397126066301702132626994140261087473306451749454645501291741478912"
+          ],
+          "collateralRequirementsPacked": [
+            "100000000000001"
+          ],
+          "netPremiaPacked": [
+            "-29370474112316257440389377699374868450204295410"
+          ]
+        }
+      }
+    },
+    "afterPhase:ORDERED_CLOSE": {
+      "blockNumber": 120177508,
+      "pool": {
+        "sqrtPriceX96": "2505414685619613721433309236",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 29,
+        "nativeBalanceWei": "5974538832393160",
+        "pltrBalance": "2522152051261020657",
+        "wethBalance": "1519993604094065",
+        "tracker0Shares": "499997797436147449433501",
+        "tracker0Assets": "500000003432069317",
+        "tracker0MaxWithdraw": "500000003432069317",
+        "tracker1Shares": "500000879092213936449",
+        "tracker1Assets": "500000894745013",
+        "tracker1MaxWithdraw": "500000894745013",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          1789540127,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 7,
+        "nativeBalanceWei": "9697512793358273",
+        "pltrBalance": "4750000000000000000",
+        "wethBalance": "50000000000000",
+        "tracker0Shares": "249999616195528602035931",
+        "tracker0Assets": "250000719196655054",
+        "tracker0MaxWithdraw": "250000719196655054",
+        "tracker1Shares": "249999906736717000000",
+        "tracker1Assets": "249999914563099",
+        "tracker1MaxWithdraw": "249999914563099",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    },
+    "afterPhase:SWAP_PERMISSION_CLEANUP": {
+      "blockNumber": 120177512,
+      "pool": {
+        "sqrtPriceX96": "2505414685619613721433309236",
+        "tick": -69082,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 33,
+        "nativeBalanceWei": "5974465818101856",
+        "pltrBalance": "2522152051261020657",
+        "wethBalance": "1519993604094065",
+        "tracker0Shares": "499997797436147449433501",
+        "tracker0Assets": "500000003432069317",
+        "tracker0MaxWithdraw": "500000003432069317",
+        "tracker1Shares": "500000879092213936449",
+        "tracker1Assets": "500000894745013",
+        "tracker1MaxWithdraw": "500000894745013",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          1789518608,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          1789518611,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 7,
+        "nativeBalanceWei": "9697512793358273",
+        "pltrBalance": "4750000000000000000",
+        "wethBalance": "50000000000000",
+        "tracker0Shares": "249999616195528602035931",
+        "tracker0Assets": "250000719196655054",
+        "tracker0MaxWithdraw": "250000719196655054",
+        "tracker1Shares": "249999906736717000000",
+        "tracker1Assets": "249999914563099",
+        "tracker1MaxWithdraw": "249999914563099",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    }
+  },
+  "premiumObservationChanged": true,
+  "terminalState": {
+    "blockNumber": 120177512,
+    "pool": {
+      "sqrtPriceX96": "2505414685619613721433309236",
+      "tick": -69082,
+      "protocolFee": 0,
+      "lpFee": 3000,
+      "activeLiquidity": "138450781996976174"
+    },
+    "writer": {
+      "nonce": 33,
+      "nativeBalanceWei": "5974465818101856",
+      "pltrBalance": "2522152051261020657",
+      "wethBalance": "1519993604094065",
+      "tracker0Shares": "499997797436147449433501",
+      "tracker0Assets": "500000003432069317",
+      "tracker0MaxWithdraw": "500000003432069317",
+      "tracker1Shares": "500000879092213936449",
+      "tracker1Assets": "500000894745013",
+      "tracker1MaxWithdraw": "500000894745013",
+      "openLegs": 0,
+      "pltrToPermit2": "0",
+      "wethToPermit2": "0",
+      "pltrToTracker0": "0",
+      "wethToTracker1": "0",
+      "pltrPermit2ToRouter": [
+        0,
+        1789518608,
+        0
+      ],
+      "wethPermit2ToRouter": [
+        0,
+        1789518611,
+        0
+      ],
+      "premium": null
+    },
+    "buyer": {
+      "nonce": 7,
+      "nativeBalanceWei": "9697512793358273",
+      "pltrBalance": "4750000000000000000",
+      "wethBalance": "50000000000000",
+      "tracker0Shares": "249999616195528602035931",
+      "tracker0Assets": "250000719196655054",
+      "tracker0MaxWithdraw": "250000719196655054",
+      "tracker1Shares": "249999906736717000000",
+      "tracker1Assets": "249999914563099",
+      "tracker1MaxWithdraw": "249999914563099",
+      "openLegs": 0,
+      "pltrToPermit2": "0",
+      "wethToPermit2": "0",
+      "pltrToTracker0": "0",
+      "wethToTracker1": "0",
+      "pltrPermit2ToRouter": [
+        0,
+        0,
+        0
+      ],
+      "wethPermit2ToRouter": [
+        0,
+        0,
+        0
+      ],
+      "premium": null
+    }
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "broadcastAttempted": false
+  },
+  "nextGate": "INDEPENDENT_REVIEW_THEN_EXPLICIT_HASH_BOUND_PUBLIC_AUTHORIZATION"
+}

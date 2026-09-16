@@ -43,6 +43,10 @@ planner = _load_sibling(
     "stonkhedge_lifecycle_execution_planner",
     "prepare_robinhood_lifecycle_execution_plan.py",
 )
+refresh_planner = _load_sibling(
+    "stonkhedge_lifecycle_execution_refresh_planner",
+    "prepare_robinhood_lifecycle_execution_refresh.py",
+)
 simulator = _load_sibling(
     "stonkhedge_lifecycle_simulator", "simulate_robinhood_two_actor_lifecycle_fork.py"
 )
@@ -103,22 +107,35 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
         raise ValueError("execution plan body hash drifted")
 
     bindings = plan.get("sourceBindings", {})
-    for name in (
-        "baseLifecyclePlan",
-        "successfulLifecycleRehearsal",
-        "freshExecutionPreflight",
-        "generator",
-    ):
+    refresh = "refreshPreflight" in bindings
+    required_bindings = (
+        ("priorExecutionCandidate", "refreshPreflight", "generator")
+        if refresh
+        else (
+            "baseLifecyclePlan",
+            "successfulLifecycleRehearsal",
+            "freshExecutionPreflight",
+            "generator",
+        )
+    )
+    for name in required_bindings:
         binding = bindings.get(name, {})
         source = REPOSITORY / binding.get("path", "")
         if not source.is_file() or binding.get("sha256") != file_sha256(source):
             raise ValueError(f"execution plan source binding {name} drifted")
-    regenerated = planner.build_execution_plan(
-        REPOSITORY / bindings["baseLifecyclePlan"]["path"],
-        REPOSITORY / bindings["successfulLifecycleRehearsal"]["path"],
-        REPOSITORY / bindings["freshExecutionPreflight"]["path"],
-        REPOSITORY / bindings["generator"]["path"],
-    )
+    if refresh:
+        regenerated = refresh_planner.build_refresh_plan(
+            REPOSITORY / bindings["priorExecutionCandidate"]["path"],
+            REPOSITORY / bindings["refreshPreflight"]["path"],
+            REPOSITORY / bindings["generator"]["path"],
+        )
+    else:
+        regenerated = planner.build_execution_plan(
+            REPOSITORY / bindings["baseLifecyclePlan"]["path"],
+            REPOSITORY / bindings["successfulLifecycleRehearsal"]["path"],
+            REPOSITORY / bindings["freshExecutionPreflight"]["path"],
+            REPOSITORY / bindings["generator"]["path"],
+        )
     if regenerated != plan:
         raise ValueError("execution plan no longer matches deterministic regeneration")
 
@@ -138,8 +155,13 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
         )
     }
     transactions = plan.get("transactions")
-    if not isinstance(transactions, list) or len(transactions) != 25:
-        raise ValueError("lifecycle execution candidate must have 25 transactions")
+    execution_start = int(plan.get("executionStartIndex", 0))
+    expected_shape = (0, 25) if not refresh else (5, 27)
+    if (
+        not isinstance(transactions, list)
+        or (execution_start, len(transactions)) != expected_shape
+    ):
+        raise ValueError("lifecycle execution candidate transaction shape drifted")
     if plan.get("transactionCount") != len(transactions):
         raise ValueError("transaction count drifted")
     for index, transaction in enumerate(transactions):
@@ -169,6 +191,9 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
             expected = before[actor] + (1 if actor == sender else 0)
             if after[actor] != expected:
                 raise ValueError(f"transaction {index} post-nonce vector drifted")
+        if index + 1 < len(transactions):
+            if after != transactions[index + 1].get("requiredNonceStateBefore"):
+                raise ValueError(f"transaction {index} nonce chain drifted")
     if not Path(plan_path).is_file():
         raise ValueError("execution plan path is unavailable")
 
@@ -193,8 +218,17 @@ def validate_simulation_report(
         ),
     }:
         raise ValueError("operator simulation source binding drifted")
-    if report.get("transactionCount") != 25 or len(report.get("transactions", [])) != 25:
+    execution_start = int(plan.get("executionStartIndex", 0))
+    expected_count = len(plan["transactions"]) - execution_start
+    if (
+        report.get("transactionCount") != expected_count
+        or len(report.get("transactions", [])) != expected_count
+    ):
         raise ValueError("operator simulation is incomplete")
+    if [step.get("transactionIndex") for step in report["transactions"]] != list(
+        range(execution_start, len(plan["transactions"]))
+    ):
+        raise ValueError("operator simulation transaction range drifted")
     if report.get("premiumObservationChanged") is not True:
         raise ValueError("operator simulation did not prove premium movement")
     if report.get("publicExecution") != {
@@ -236,7 +270,13 @@ def validate_authorization(
         "simulationReportSha256": simulation_report_hash,
     }:
         raise ValueError("lifecycle authorization evidence binding drifted")
-    if authorization.get("maximumTransactionIndex") != 24 or not 0 <= index <= 24:
+    minimum_index = int(plan.get("executionStartIndex", 0))
+    maximum_index = len(plan["transactions"]) - 1
+    if (
+        authorization.get("minimumTransactionIndex", minimum_index) != minimum_index
+        or authorization.get("maximumTransactionIndex") != maximum_index
+        or not minimum_index <= index <= maximum_index
+    ):
         raise ValueError("lifecycle authorization index range drifted")
     if authorization.get("policy") != "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH":
         raise ValueError("lifecycle authorization operator policy drifted")
@@ -321,11 +361,43 @@ def _expected_allowances(plan: dict[str, Any], completed: int) -> dict[str, dict
     return state
 
 
-def _expected_open_legs(completed: int) -> dict[str, int]:
-    return {
-        "writer": 1 if 16 <= completed <= 20 else 0,
-        "buyer": 1 if 17 <= completed <= 19 else 0,
-    }
+def _expected_open_legs(plan: dict[str, Any], completed: int) -> dict[str, int]:
+    result = {"writer": 0, "buyer": 0}
+    writer = qualifier.normalize_address(plan["roles"]["writer"]["address"])
+    for transaction in plan["transactions"][:completed]:
+        phase = transaction["phase"]
+        sender = qualifier.normalize_address(transaction["sender"])
+        role = "writer" if sender == writer else "buyer"
+        if phase == "MATCHED_OPTION_OPEN":
+            result[role] += 1
+        elif phase == "ORDERED_CLOSE":
+            result[role] -= 1
+        if result[role] not in (0, 1):
+            raise ValueError(f"{role} option-leg schedule drifted")
+    return result
+
+
+def _required_collateral_share_checks(
+    plan: dict[str, Any], completed: int
+) -> set[tuple[str, str]]:
+    writer = qualifier.normalize_address(plan["roles"]["writer"]["address"])
+    tracker0 = qualifier.normalize_address(plan["market"]["collateralTracker0"])
+    result: set[tuple[str, str]] = set()
+    for transaction in plan["transactions"][:completed]:
+        if transaction["decodedIntent"]["function"] != "deposit(uint256,address)":
+            continue
+        role = (
+            "writer"
+            if qualifier.normalize_address(transaction["sender"]) == writer
+            else "buyer"
+        )
+        shares = (
+            "tracker0Shares"
+            if qualifier.normalize_address(transaction["to"]) == tracker0
+            else "tracker1Shares"
+        )
+        result.add((role, shares))
+    return result
 
 
 def _assert_nonce_vector(client: Any, transaction: dict[str, Any], field: str) -> None:
@@ -366,16 +438,11 @@ def verify_state(client: Any, plan: dict[str, Any], completed: int) -> dict[str,
             actual_value = actual[name][0] if name.endswith("Permit2ToRouter") else actual[name]
             if int(actual_value) != expected:
                 raise RuntimeError(f"{role} {name} allowance drifted")
-        if int(actual["openLegs"]) != _expected_open_legs(completed)[role]:
+        if int(actual["openLegs"]) != _expected_open_legs(plan, completed)[role]:
             raise RuntimeError(f"{role} open-leg count drifted")
-    if completed >= 9 and int(observed["writer"]["tracker0Shares"]) <= 0:
-        raise RuntimeError("writer tracker0 collateral shares are absent")
-    if completed >= 11 and int(observed["writer"]["tracker1Shares"]) <= 0:
-        raise RuntimeError("writer tracker1 collateral shares are absent")
-    if completed >= 13 and int(observed["buyer"]["tracker0Shares"]) <= 0:
-        raise RuntimeError("buyer tracker0 collateral shares are absent")
-    if completed >= 15 and int(observed["buyer"]["tracker1Shares"]) <= 0:
-        raise RuntimeError("buyer tracker1 collateral shares are absent")
+    for role, shares in _required_collateral_share_checks(plan, completed):
+        if int(observed[role][shares]) <= 0:
+            raise RuntimeError(f"{role} {shares} collateral shares are absent")
     return {"observed": observed, "external": external, "nonceVector": vector}
 
 
@@ -385,12 +452,19 @@ def _assert_time_window(client: Any, plan: dict[str, Any], index: int) -> int:
     clock = plan["executionClock"]
     swap_deadline = int(clock["swapDeadlineUnix"])
     permit_expiration = int(clock["permit2ExpirationUnix"])
-    if index == 0 and swap_deadline - now < int(clock["minimumSecondsRemainingAtTransactionZero"]):
+    execution_start = int(plan.get("executionStartIndex", 0))
+    if index == execution_start and swap_deadline - now < int(
+        clock["minimumSecondsRemainingAtTransactionZero"]
+    ):
         raise RuntimeError("lifecycle execution window is too short at transaction zero")
-    if index in (3, 4, 5, 6, 17, 18):
+    swap_indexes = clock.get(
+        "swapDeadlineTransactionIndexes", [3, 4, 5, 6, 17, 18]
+    )
+    if index in swap_indexes:
         if swap_deadline - now < int(clock["minimumSecondsRemainingAtDeadlineTransaction"]):
             raise RuntimeError("swap deadline safety margin is exhausted")
-    if index <= 22 and now >= permit_expiration:
+    permit_last = int(clock.get("permit2WindowLastTransactionIndex", 22))
+    if execution_start <= index <= permit_last and now >= permit_expiration:
         raise RuntimeError("Permit2 lifecycle window expired")
     return now
 

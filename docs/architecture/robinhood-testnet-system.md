@@ -551,17 +551,26 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The **three-account lifecycle execution preparation** checkpoint now passes
-locally, still before Docusaurus and still without public authority. The
-dedicated buyer, pinned snapshot, unsigned 25-call lifecycle, negative/adverse
-checks, four buffered withdrawals, fresh public preflight, two nonce streams,
-short-lived clocks, and one-step operator all have reproducible evidence:
+The **three-account lifecycle execution** has now crossed its first public
+boundary. Five canonical one-step transactions funded the buyer and installed
+the writer's exact two-layer swap permissions. The system then stopped before
+the first swap because the original clock could not credibly reach its later
+deadline-bearing calls with the mandatory margin.
+
+The recovery architecture treats mined calls as an immutable prefix rather
+than pretending the original plan is still fresh. A read-only qualifier binds
+the five public receipts and current state; an offline transformer preserves
+indexes `0..4`, inserts two same-amount Permit2 renewals, refreshes future swap
+deadlines, and recomputes both nonce streams. The generalized verifier derives
+allowances, collateral-share requirements, and open-leg state from transaction
+semantics instead of brittle fixed indexes. The refreshed remaining `22/22`
+calls pass on the exact-head fork, but have no public authority:
 
 1. independently review the roles, exposure, minimum outputs, option TokenIds,
    withdrawal buffer, sequence, and evidence hashes;
 2. add independent health monitoring and safe-mode guidance;
-3. separately review the nonce/time-bound one-step candidate and all frozen
-   hashes before any public authorization;
+3. separately review the prefix-bound refreshed candidate and all frozen hashes
+   before a replacement public authorization;
 4. if review and clocks remain valid, request a new exact hash-bound lifecycle
    authorization and execute no more than one verified transaction at a time;
 5. derive withdrawals only from the resulting public post-close state under a
@@ -569,7 +578,8 @@ short-lived clocks, and one-step operator all have reproducible evidence:
 6. only after the public lifecycle and first-user path pass, freeze the
    documentation hierarchy and build the Docusaurus site.
 
-See the [three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+See the [public-prefix and refresh ledger](../progress/2026-09-16-lifecycle-prefix-and-refresh.md),
+[three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md),
 and [execution-preparation ledger](../progress/2026-09-15-lifecycle-execution-preparation.md).
 
 ## 14. External references

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all 25 one-step lifecycle operator checks on an exact loopback fork.
+"""Run every remaining one-step lifecycle operator check on an exact fork.
 
 The caller must provide an Anvil instance forked at the candidate's exact
 reference block. This runner impersonates only the two committed public EOAs,
@@ -57,15 +57,27 @@ def simulate_all(plan: dict[str, Any], plan_path: Path, client: Any) -> dict[str
     compatibility = simulator.mine_compatibility_block(plan, client)
     external = simulator.observe_external_state(client, plan)
     simulator._assert_external_state(plan, external)
-    initial = operator.verify_state(client, plan, 0)
-    adverse = simulator.rehearse_adverse_preflight_rejections(
-        load_json(REPOSITORY / plan["sourceBindings"]["baseLifecyclePlan"]["path"]),
-        external,
-        initial["observed"],
-    )
+    execution_start = int(plan.get("executionStartIndex", 0))
+    initial = operator.verify_state(client, plan, execution_start)
+    if execution_start == 0:
+        adverse = simulator.rehearse_adverse_preflight_rejections(
+            load_json(
+                REPOSITORY
+                / plan["sourceBindings"]["baseLifecyclePlan"]["path"]
+            ),
+            external,
+            initial["observed"],
+        )
+    else:
+        adverse = {
+            "status": "INHERITED_FROM_HASH_BOUND_PRIOR_SIMULATION",
+            "priorSimulationReportSha256": plan["sourceBindings"][
+                "priorSimulationReport"
+            ]["sha256"],
+        }
     transactions: list[dict[str, Any]] = []
     milestones: dict[str, Any] = {"initial": initial["observed"]}
-    for index in range(len(plan["transactions"])):
+    for index in range(execution_start, len(plan["transactions"])):
         transactions.append(operator.simulate_one_step(
             plan,
             plan_path,
@@ -73,13 +85,19 @@ def simulate_all(plan: dict[str, Any], plan_path: Path, client: Any) -> dict[str
             index,
             sleep=time.sleep,
         ))
-        if index in (6, 14, 16, 18, 20, 24):
-            milestones[f"afterIndex{index}"] = simulator.observe(client, plan)
+        phase = plan["transactions"][index]["phase"]
+        next_phase = (
+            plan["transactions"][index + 1]["phase"]
+            if index + 1 < len(plan["transactions"])
+            else None
+        )
+        if phase != next_phase:
+            milestones[f"afterPhase:{phase}"] = simulator.observe(client, plan)
     final = operator.verify_state(client, plan, len(plan["transactions"]))
     if final["observed"]["writer"]["openLegs"] != 0 or final["observed"]["buyer"]["openLegs"] != 0:
         raise RuntimeError("terminal option-leg cleanup failed")
-    premium_before = milestones["afterIndex16"]
-    premium_after = milestones["afterIndex18"]
+    premium_before = milestones["afterPhase:MATCHED_OPTION_OPEN"]
+    premium_after = milestones["afterPhase:PREMIUM_OBSERVATION"]
     premium_changed = (
         premium_before["writer"]["premium"] != premium_after["writer"]["premium"]
         or premium_before["buyer"]["premium"] != premium_after["buyer"]["premium"]

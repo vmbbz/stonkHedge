@@ -487,6 +487,7 @@ asset residual, and `531/32` PoolManager-claim deviations.
 | Frozen fork simulation | SHA-256 `8964382c7049999de814d286f229cf55f2a1d087b1b34b8443f82a11354b9910` |
 | Public CREATE sequence | 16 successful canonical transactions |
 | Runtime reconciliation | 16 of 16 exact byte lengths and hashes |
+| Source-verification inventory | 19 of 19 direct deployments and market clones match their recorded runtime identities; nine Solidity implementations remain pending on Blockscout |
 | Constructor/wiring reconciliation | 11 of 11 pass |
 | Strict public verifier after deployment | pass; deployer nonce `16` |
 | PLTR/WETH fresh strict preflight | `79/79` shared and `17/17` exact-plan checks at block `116510322` |
@@ -499,7 +500,9 @@ asset residual, and `531/32` PoolManager-claim deviations.
 Primary local records:
 
 - [public deployment and reconciliation](../deployment/2026-09-09-direct-deployment-public-progress.md);
+- [contract source-verification runbook and 19-address classification](../deployment/2026-09-19-contract-source-verification.md);
 - [machine-readable public manifest](../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json);
+- [machine-readable contract-verification inventory](../../manifests/deployments/robinhood-testnet-contract-verification-inventory-2026-09-19.json);
 - [owner-regenerated simulation](../deployment/2026-09-09-owner-regenerated-direct-deployment-simulation.md);
 - [authorization boundary](../deployment/2026-09-09-direct-deployment-authorization.md);
 - [chain and external dependency qualification](../chain/2026-09-08-robinhood-testnet-qualification.md);
@@ -587,6 +590,7 @@ and [execution-preparation ledger](../progress/2026-09-15-lifecycle-execution-pr
 ## 14. External references
 
 - Robinhood network connection: <https://docs.robinhood.com/chain/connecting/>
+- Robinhood deployment and Blockscout verification: <https://docs.robinhood.com/chain/deploy-smart-contracts>
 - Robinhood Stock Tokens: <https://docs.robinhood.com/chain/stock-tokens/>
 - Building with Stock Tokens: <https://docs.robinhood.com/chain/building-with-stock-tokens/>
 - Robinhood testnet faucet: <https://faucet.testnet.chain.robinhood.com/>

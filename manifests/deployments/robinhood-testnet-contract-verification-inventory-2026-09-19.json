@@ -1,0 +1,639 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_RUNTIME_IDENTITY_SOURCE_PUBLICATION_PENDING",
+  "mode": "READ_ONLY_AUDIT_AND_OFFLINE_COMMAND_PREPARATION",
+  "network": {
+    "chainId": 46630,
+    "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+    "explorerUrl": "https://explorer.testnet.chain.robinhood.com",
+    "blockNumber": 121795958,
+    "blockHash": "0x0cff5ef2948232834738591825a11a755046c02c27ef22d60ed38d04936c3dd7",
+    "blockTimestamp": "2026-09-19T19:32:22Z"
+  },
+  "sourceBinding": {
+    "repository": "https://github.com/vmbbz/panoptic-v2-core.git",
+    "commit": "f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d",
+    "cleanCheckoutRequired": true,
+    "directConfigSha256": "728898b3f201e3c4421b00e9fcb2b7587796971e55fef73ac504a081da489cc0",
+    "metadataPackageSha256": "c5d1b27e67ee4b62d865c240d428afc00115dc38a741988edcf1f2a22631b5f8",
+    "compilerVersion": "0.8.28",
+    "evmVersion": "cancun",
+    "license": "BUSL-1.1"
+  },
+  "summary": {
+    "totalContracts": 19,
+    "directDeployments": 16,
+    "metadataDataStores": 7,
+    "sourceImplementations": 9,
+    "immutableArgumentsClones": 3,
+    "runtimeIdentityPass": 19,
+    "runtimeIdentityFailures": [],
+    "sourceImplementationsVerifiedOnExplorer": 0,
+    "sourceImplementationsPendingOnExplorer": 9
+  },
+  "contracts": [
+    {
+      "label": "dataContracts[0]",
+      "address": "0x05449292522e3FCCD58dB4f947A94BD083d5e13d",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x05449292522e3FCCD58dB4f947A94BD083d5e13d",
+      "creationTransactionHash": "0xbf6ad4ddcf9a22f584f53de5053186a2d9e5ab93eecbfb0847633ab1ac4fda9e",
+      "expectedRuntime": {
+        "bytes": 24439,
+        "keccak256": "0xdd0ec57b873af7e553fbd9404281da95203e426929ecb3dfb419bbcbcd87aa7f"
+      },
+      "liveRuntime": {
+        "bytes": 24439,
+        "keccak256": "0xdd0ec57b873af7e553fbd9404281da95203e426929ecb3dfb419bbcbcd87aa7f"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "dataContracts[1]",
+      "address": "0xb1820CEE1BE8b9eDdC382eE83304efBe5ceD0019",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xb1820CEE1BE8b9eDdC382eE83304efBe5ceD0019",
+      "creationTransactionHash": "0x2faa5abd65568cf95a5439e86bc312fab2586a6f287c29a2d77fb2c32f6c2050",
+      "expectedRuntime": {
+        "bytes": 20669,
+        "keccak256": "0x97d0d1afc82d4dba1ebaabd94ef9cdc7e38789cf81a410565d2502634c446615"
+      },
+      "liveRuntime": {
+        "bytes": 20669,
+        "keccak256": "0x97d0d1afc82d4dba1ebaabd94ef9cdc7e38789cf81a410565d2502634c446615"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "dataContracts[2]",
+      "address": "0xa318218fEA30EA64c223A1c8E96551c68B007656",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xa318218fEA30EA64c223A1c8E96551c68B007656",
+      "creationTransactionHash": "0x122f14060ca93053445646b08260b0290400c45e4fa76e6925c634e59dce1dcd",
+      "expectedRuntime": {
+        "bytes": 20141,
+        "keccak256": "0x3027b6042e96eabda4468d04a6366f717c3546f2e106b51b5b490574529e7097"
+      },
+      "liveRuntime": {
+        "bytes": 20141,
+        "keccak256": "0x3027b6042e96eabda4468d04a6366f717c3546f2e106b51b5b490574529e7097"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "dataContracts[3]",
+      "address": "0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xbAD75CD571AeE30644aBe85Da20B6Fa527106c5d",
+      "creationTransactionHash": "0x5a97890ee1c6262d39d8808cfa7f15e67d1e6e513b15d0f1af3498ecc905d977",
+      "expectedRuntime": {
+        "bytes": 17266,
+        "keccak256": "0xa6b6c4a12dfb4616558a30a3596c6739691e37385e69f8a366f7a43abb98d3e9"
+      },
+      "liveRuntime": {
+        "bytes": 17266,
+        "keccak256": "0xa6b6c4a12dfb4616558a30a3596c6739691e37385e69f8a366f7a43abb98d3e9"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "dataContracts[4]",
+      "address": "0x1F6f1daab8b0d9605D7A880bD738aEe6Fd764107",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x1F6f1daab8b0d9605D7A880bD738aEe6Fd764107",
+      "creationTransactionHash": "0x3574eb675f52135c29f4396cef21c92458bab91fecdc08ace1653e2e903f5a3b",
+      "expectedRuntime": {
+        "bytes": 23768,
+        "keccak256": "0xabdee20968abd3e6dddcd1ba58d0f5c7890a14122a01cefa0db86278acf43e32"
+      },
+      "liveRuntime": {
+        "bytes": 23768,
+        "keccak256": "0xabdee20968abd3e6dddcd1ba58d0f5c7890a14122a01cefa0db86278acf43e32"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "dataContracts[5]",
+      "address": "0xB1D560De10Fb3733d7A5dFefED0388A2435fdaBA",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xB1D560De10Fb3733d7A5dFefED0388A2435fdaBA",
+      "creationTransactionHash": "0x7e92dc2190ee5e89e32e3cff19cb933a00fe94202c36229104c905cea6cba42f",
+      "expectedRuntime": {
+        "bytes": 24482,
+        "keccak256": "0xd2bff9530ad0696f844e93d21e22e09572653ab5b07d7571a6c7d6829ea54552"
+      },
+      "liveRuntime": {
+        "bytes": 24482,
+        "keccak256": "0xd2bff9530ad0696f844e93d21e22e09572653ab5b07d7571a6c7d6829ea54552"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "dataContracts[6]",
+      "address": "0x19E58B3113579A02c2C266e1be0049766F333338",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x19E58B3113579A02c2C266e1be0049766F333338",
+      "creationTransactionHash": "0x74d6aaf6568918c2b22aea366593ec2a3a7c4cdad48b123b9cc43f06ebb1cf7e",
+      "expectedRuntime": {
+        "bytes": 5602,
+        "keccak256": "0x01a10a5c6d647a90937bd3e5ca3cfc9d7ee260feff04d4dc0a27a72461b21a4c"
+      },
+      "liveRuntime": {
+        "bytes": 5602,
+        "keccak256": "0x01a10a5c6d647a90937bd3e5ca3cfc9d7ee260feff04d4dc0a27a72461b21a4c"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "METADATA_DATA_STORE",
+      "sourceVerificationPolicy": "RUNTIME_HASH_ONLY_NO_SOLIDITY_ARTIFACT"
+    },
+    {
+      "label": "PanopticMath",
+      "address": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7",
+      "creationTransactionHash": "0x76517a4e1b3c045a474a0123508143d29a0d6571b492a9f84a756ba151d0e9ca",
+      "expectedRuntime": {
+        "bytes": 3217,
+        "keccak256": "0x3ac5052d577e4eab2a5d19f2f6fa439ef8a566842b27fcc00cd6316ecc1a563a"
+      },
+      "liveRuntime": {
+        "bytes": 3217,
+        "keccak256": "0x3ac5052d577e4eab2a5d19f2f6fa439ef8a566842b27fcc00cd6316ecc1a563a"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/libraries/PanopticMath.sol",
+      "sourceSha256": "e9aaca6c8343f3a0be42147cb65ac510ff6e5271678fb9ee448bc269aef04548",
+      "artifactName": "PanopticMath",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 9999999,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [],
+      "constructorArguments": "NONE",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "InteractionHelper",
+      "address": "0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A",
+      "creationTransactionHash": "0x137518d0c035b72d9e2a155320eae6a58c9a968e105f99e2bbaeace77183cd99",
+      "expectedRuntime": {
+        "bytes": 7020,
+        "keccak256": "0x400dce9bcf7100fffe197f589166b3fb9ca221d834c44834dc9fdd120a1aa1cf"
+      },
+      "liveRuntime": {
+        "bytes": 7020,
+        "keccak256": "0x400dce9bcf7100fffe197f589166b3fb9ca221d834c44834dc9fdd120a1aa1cf"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/libraries/InteractionHelper.sol",
+      "sourceSha256": "5574eb3db03692ea7a7005343e8c26bc39b350d0b599f005d726d16aa7d4726e",
+      "artifactName": "InteractionHelper",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 9999999,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [
+        {
+          "contract": "PanopticMath",
+          "sourcePath": "contracts/libraries/PanopticMath.sol",
+          "address": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7"
+        }
+      ],
+      "constructorArguments": "NONE",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "CollateralTrackerV2",
+      "address": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+      "creationTransactionHash": "0xada976f64a54e3b95945e8a0d1a3e2018ef8208967e8f737954b71376b5af8cb",
+      "expectedRuntime": {
+        "bytes": 21338,
+        "keccak256": "0x62777e330adfa9346f10108b958b4a903c8f4b53f3d33588dc9dbe8917d22e35"
+      },
+      "liveRuntime": {
+        "bytes": 21338,
+        "keccak256": "0x62777e330adfa9346f10108b958b4a903c8f4b53f3d33588dc9dbe8917d22e35"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/CollateralTracker.sol",
+      "sourceSha256": "08bf4de89314cd73152fe8d87fe366f9c4d99131591b1f89b9db727a706ad683",
+      "artifactName": "CollateralTrackerV2",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 9999999,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [
+        {
+          "contract": "InteractionHelper",
+          "sourcePath": "contracts/libraries/InteractionHelper.sol",
+          "address": "0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A"
+        }
+      ],
+      "constructorArguments": "NONE",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "PanopticGuardian",
+      "address": "0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x4620fCf531A72EC24af9325dD1Fa476A59Bd7b9e",
+      "creationTransactionHash": "0xf8d25dc1dc40287c926474dc5c3468c9dab06a618cfa248ce068cfaeb465b222",
+      "expectedRuntime": {
+        "bytes": 5562,
+        "keccak256": "0xe62ac18a0713d7683a572bf73fc70666164e13a265d16c37d820ae11df24bc2c"
+      },
+      "liveRuntime": {
+        "bytes": 5562,
+        "keccak256": "0xe62ac18a0713d7683a572bf73fc70666164e13a265d16c37d820ae11df24bc2c"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/PanopticGuardian.sol",
+      "sourceSha256": "f60639b63222a350fa84ef5c695e2a6a240e309a0977947cd626647394d1ad52",
+      "artifactName": "PanopticGuardian",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 9999999,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [],
+      "constructorArguments": "PRESENT_GENERATED_ON_DEMAND",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "BuilderFactory",
+      "address": "0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xAa1Cc5922f41C93d09CeCbE80373B63D96cC027B",
+      "creationTransactionHash": "0xe81804ec951300ab37156f53171ce200b400d4a2fbfc75900e7d60000c9181ac",
+      "expectedRuntime": {
+        "bytes": 3744,
+        "keccak256": "0xb0dbf2aa14512a0eb09c512d29f9bc437d78686fa39a5d0220de1edd374a0f43"
+      },
+      "liveRuntime": {
+        "bytes": 3744,
+        "keccak256": "0xb0dbf2aa14512a0eb09c512d29f9bc437d78686fa39a5d0220de1edd374a0f43"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/Builder.sol",
+      "sourceSha256": "4df013020b4d8aca1a5963dc53abed81bc40e99d4b7c7f9b857cccbd2b80c028",
+      "artifactName": "BuilderFactory",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 1,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [],
+      "constructorArguments": "PRESENT_GENERATED_ON_DEMAND",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "RiskEngine",
+      "address": "0x3Ad134ff173dFA0a892B4116A65B76B818218585",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x3Ad134ff173dFA0a892B4116A65B76B818218585",
+      "creationTransactionHash": "0x9016c3c23af95686aff1eb876257d854c909cf7a424e7e1b3b4627c14beace69",
+      "expectedRuntime": {
+        "bytes": 22483,
+        "keccak256": "0x9d2b3919d62b6b52830b67984b00e43ef68838dffd7f7124b31a61f5bb7269c4"
+      },
+      "liveRuntime": {
+        "bytes": 22483,
+        "keccak256": "0x9d2b3919d62b6b52830b67984b00e43ef68838dffd7f7124b31a61f5bb7269c4"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/RiskEngine.sol",
+      "sourceSha256": "0e219bf2eb08f7a78e7ae0184d9629591ad01b2ccf7f779ec2fe751e0563a3eb",
+      "artifactName": "RiskEngine",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 1,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [],
+      "constructorArguments": "PRESENT_GENERATED_ON_DEMAND",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "SemiFungiblePositionManagerV4",
+      "address": "0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1",
+      "creationTransactionHash": "0x45051fe95a982aecd8a463a4a06ceb5b0a226a4c7a88540fa7745706c1758a71",
+      "expectedRuntime": {
+        "bytes": 23608,
+        "keccak256": "0x67e289f02cd60fecc4266bdf7c52a3cd4bdbb326d386a7d11cc2c1edbc14a40e"
+      },
+      "liveRuntime": {
+        "bytes": 23608,
+        "keccak256": "0x67e289f02cd60fecc4266bdf7c52a3cd4bdbb326d386a7d11cc2c1edbc14a40e"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/SemiFungiblePositionManagerV4.sol",
+      "sourceSha256": "67ea6936ce713124f30a69817ad73fc0686b9c43a3bcc47dc28d927f50207f3d",
+      "artifactName": "SemiFungiblePositionManagerV4",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 9999999,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [],
+      "constructorArguments": "PRESENT_GENERATED_ON_DEMAND",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "PanopticPoolV2",
+      "address": "0xfBA5b34cb1471605d82BBF395F244Fa41148b155",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0xfBA5b34cb1471605d82BBF395F244Fa41148b155",
+      "creationTransactionHash": "0xa6704349e2e7382a3a0a590a174d40f71d54388e3258a003b423746d3c9a83f7",
+      "expectedRuntime": {
+        "bytes": 24275,
+        "keccak256": "0x76ecb9111c9f663d094375b19b772228094b2c9bafde434717e5c5d01db260da"
+      },
+      "liveRuntime": {
+        "bytes": 24275,
+        "keccak256": "0x76ecb9111c9f663d094375b19b772228094b2c9bafde434717e5c5d01db260da"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/PanopticPool.sol",
+      "sourceSha256": "46b59c96920d5dc062805eaa2bc401ca9882af61ca665029a1c0c7873204f03b",
+      "artifactName": "PanopticPoolV2",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 1,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [
+        {
+          "contract": "InteractionHelper",
+          "sourcePath": "contracts/libraries/InteractionHelper.sol",
+          "address": "0xDCf9936b330D6957CaD463f850D1F2B6F1eABc3A"
+        },
+        {
+          "contract": "PanopticMath",
+          "sourcePath": "contracts/libraries/PanopticMath.sol",
+          "address": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7"
+        }
+      ],
+      "constructorArguments": "PRESENT_GENERATED_ON_DEMAND",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "PanopticFactoryV4",
+      "address": "0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c",
+      "creationTransactionHash": "0xdd57acfa50ea1a9f5e06ca0825add442286f2457ea7d5a697c8cf505d7bd3150",
+      "expectedRuntime": {
+        "bytes": 20702,
+        "keccak256": "0xc6d872bf804fec1320328e54a1f246896744c880e1167fc9763fadf5e3a94f68"
+      },
+      "liveRuntime": {
+        "bytes": 20702,
+        "keccak256": "0xc6d872bf804fec1320328e54a1f246896744c880e1167fc9763fadf5e3a94f68"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "SOURCE_IMPLEMENTATION",
+      "sourcePath": "contracts/PanopticFactoryV4.sol",
+      "sourceSha256": "e09eaf5ca28355af7c66b9e8398f71290cf271080741b5285300c9e9ce8075ee",
+      "artifactName": "PanopticFactoryV4",
+      "compiler": {
+        "version": "0.8.28",
+        "evmVersion": "cancun",
+        "optimizerEnabled": true,
+        "optimizerRuns": 9999999,
+        "viaIR": false
+      },
+      "license": "BUSL-1.1",
+      "libraries": [
+        {
+          "contract": "PanopticMath",
+          "sourcePath": "contracts/libraries/PanopticMath.sol",
+          "address": "0x45bb5b5719bB2B6cf516BE7C063B4D318890D3e7"
+        }
+      ],
+      "constructorArguments": "PRESENT_GENERATED_ON_DEMAND",
+      "sourceVerificationPolicy": "VERIFY_EXACT_IMPLEMENTATION_FROM_BOUND_SOURCE_COMMIT"
+    },
+    {
+      "label": "PLTR_WETH_PanopticPool",
+      "address": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "creationTransactionHash": "0x9081a03002b0b1f902f05d3e85c9980be0dd2576b848998d6d0f1ac315a4b05e",
+      "expectedRuntime": {
+        "bytes": 306,
+        "keccak256": "0xd1753140c3c20c5e81917aa8a6073aecae32c6d5153653918dcda8d7d4e56593"
+      },
+      "liveRuntime": {
+        "bytes": 306,
+        "keccak256": "0xd1753140c3c20c5e81917aa8a6073aecae32c6d5153653918dcda8d7d4e56593"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": null,
+        "implementations": []
+      },
+      "kind": "IMMUTABLE_ARGUMENTS_CLONE",
+      "implementation": "0xfBA5b34cb1471605d82BBF395F244Fa41148b155",
+      "sourceVerificationPolicy": "VERIFY_IMPLEMENTATION_THEN_ASSOCIATE_CLONE"
+    },
+    {
+      "label": "PLTR_WETH_CollateralTracker0",
+      "address": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "creationTransactionHash": "0x9081a03002b0b1f902f05d3e85c9980be0dd2576b848998d6d0f1ac315a4b05e",
+      "expectedRuntime": {
+        "bytes": 181,
+        "keccak256": "0x6073a68416f1668735eab80d3a06c8febffa6877517d029350e4c04a1561a344"
+      },
+      "liveRuntime": {
+        "bytes": 181,
+        "keccak256": "0x6073a68416f1668735eab80d3a06c8febffa6877517d029350e4c04a1561a344"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": "clone_with_immutable_arguments",
+        "implementations": [
+          {
+            "address": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+            "name": null
+          }
+        ]
+      },
+      "kind": "IMMUTABLE_ARGUMENTS_CLONE",
+      "implementation": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+      "sourceVerificationPolicy": "VERIFY_IMPLEMENTATION_THEN_ASSOCIATE_CLONE"
+    },
+    {
+      "label": "PLTR_WETH_CollateralTracker1",
+      "address": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "explorerUrl": "https://explorer.testnet.chain.robinhood.com/address/0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "creationTransactionHash": "0x9081a03002b0b1f902f05d3e85c9980be0dd2576b848998d6d0f1ac315a4b05e",
+      "expectedRuntime": {
+        "bytes": 181,
+        "keccak256": "0xabd430adfb0b8bb9f60709ebc6b9b5cc26578f2dff0c8adab64e8b61fd9d6339"
+      },
+      "liveRuntime": {
+        "bytes": 181,
+        "keccak256": "0xabd430adfb0b8bb9f60709ebc6b9b5cc26578f2dff0c8adab64e8b61fd9d6339"
+      },
+      "runtimeIdentityMatches": true,
+      "explorer": {
+        "status": "BYTECODE_ONLY",
+        "creationStatus": "success",
+        "proxyType": "clone_with_immutable_arguments",
+        "implementations": [
+          {
+            "address": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+            "name": null
+          }
+        ]
+      },
+      "kind": "IMMUTABLE_ARGUMENTS_CLONE",
+      "implementation": "0x41119aAd1c69dba3934D0A061d312A52B06B27DF",
+      "sourceVerificationPolicy": "VERIFY_IMPLEMENTATION_THEN_ASSOCIATE_CLONE"
+    }
+  ],
+  "authorization": {
+    "sourcePublicationAuthorized": false,
+    "transactionSigningAuthorized": false,
+    "publicTransactionBroadcastAuthorized": false
+  },
+  "nextGate": "OWNER_REVIEW_OF_EXACT_SOURCE_PUBLICATION_COMMANDS_THEN_SEPARATE_APPROVAL_TO_SUBMIT_TO_BLOCKSCOUT",
+  "inventoryBodySha256": "a98eda2e196a84a6efa8b3b9d395705d0c48de2b67c62ba79c344faf147073c8"
+}

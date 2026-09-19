@@ -37,25 +37,28 @@ Collateral, options, withdrawals, and the application are not live.
 
 Start with:
 
-1. [`progress/2026-09-19-lifecycle-receipt-bound-continuation.md`](./progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
+1. [`deployment/2026-09-19-contract-source-verification.md`](./deployment/2026-09-19-contract-source-verification.md)
+   for the 19-address runtime audit, the nine exact source implementations,
+   metadata-store and clone distinctions, and the Blockscout publication gate;
+2. [`progress/2026-09-19-lifecycle-receipt-bound-continuation.md`](./progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
    for the eight canonical receipts, failed-closed expiry, exact remaining
    allowance derivation, 21-call replay, and new authorization boundary;
-2. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
+3. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
    for the five canonical public receipts, safe pre-swap stop, refreshed clock
    architecture, 22-call exact-head replay, and new authorization boundary;
-3. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
+4. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
    for the original dual-sender candidate and its 25-call preparation;
-4. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+5. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
    for the three-account lifecycle, withdrawal, failure-analysis, and evidence
    ledger;
-5. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
+6. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
    for the complete public achievement, contract and transaction ledgers,
    ordering rationale, communications facts, and next boundary;
-6. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+7. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
    for the system, component, trust-boundary, and evidence overview;
-7. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+8. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
    for the public transaction record; and
-8. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+9. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
 For the proposed Solana track, read the

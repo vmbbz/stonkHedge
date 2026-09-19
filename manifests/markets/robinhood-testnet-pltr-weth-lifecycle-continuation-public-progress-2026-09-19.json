@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_PUBLIC_LIFECYCLE_CONTINUATION_THROUGH_INDEX_8_STOP_BEFORE_INDEX_9",
+  "mode": "PUBLIC_CANONICAL_RECEIPTS_AND_READ_ONLY_POST_STATE",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com"
+  },
+  "roles": {
+    "writer": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+    "buyer": "0x6719E877C05b2d6c28aBceA405fC033FEeF5750f"
+  },
+  "sourceBindings": {
+    "executionPlanBodySha256": "cd8cdfb5fd01dc9cdfa6fc3a12c8b9e4010cb3529036df96c919c4f4b0871428",
+    "executionPlanFileSha256": "2a93225456d3365cd3bdc7588072977f88ffa1fb4fd1f8a68326181f47c4ac1b",
+    "operatorSha256": "73e0451aa99e60ed104ef75450560643ae8d0de08e3c41f39d6e5805d20a7caf",
+    "operatorSimulationReportSha256": "72bf0a44324976ae187dc9d36b650249971defc48fbf5dc8ade78e4d515453d3",
+    "authorizationManifestSha256": "9808ef343049720d1c51f04cdccb866517dbc9675a17ef4bced9e4bea82a5257"
+  },
+  "canonicalPrefix": {
+    "minimumIndex": 0,
+    "maximumIndex": 7,
+    "reexecutionPermitted": false
+  },
+  "completedThroughTransactionIndex": 8,
+  "completedTransactions": [
+    {
+      "index": 8,
+      "sender": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+      "nonce": 20,
+      "label": "writer renews remaining exact PLTR Permit2 allowance to UniversalRouter",
+      "transactionHash": "0x13df2d9fc83d2796c4e85ea5716e70604506c83de7f8fbc78f8e1fa46409e77f",
+      "explorer": "https://explorer.testnet.chain.robinhood.com/tx/0x13df2d9fc83d2796c4e85ea5716e70604506c83de7f8fbc78f8e1fa46409e77f",
+      "blockNumber": 121820023,
+      "blockHash": "0xa67181770ae8dec2405e2d3507381ca2f61dd75d9e7e77bf4f135b95a7ab16e5",
+      "blockTimestampUnix": 1789853085,
+      "blockTimestampUtc": "2026-09-19T21:24:45Z",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xab8c2c1d23d495cb8f75fe9a04827938aef80d50717a2b9f8e402b35bd1d17b5",
+      "gasUsed": 42000,
+      "status": "PASS",
+      "postcondition": {
+        "permit2PltrAllowanceRaw": "1000000000000000",
+        "permit2ExpirationUnix": 1790535553,
+        "permit2Nonce": 0
+      },
+      "externalEvidenceSha256": "a0a571a5f864c65c9a38a35ab4b9eab3428dfe3b0731d6dfb7f0ac4fbb182f2f"
+    }
+  ],
+  "postState": {
+    "writerNonce": 21,
+    "buyerNonce": 1,
+    "writerPermit2PltrAllowanceRaw": "1000000000000000",
+    "writerPermit2WethAllowanceRaw": "2000000000000"
+  },
+  "nextAuthorizedIndex": 9,
+  "remainingTransactionCount": 20,
+  "nextRequiredAction": "Run the complete read-only index-9 preflight, execute at most index 9, verify its receipt and post-state, and stop."
+}

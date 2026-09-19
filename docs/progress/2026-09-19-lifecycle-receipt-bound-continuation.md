@@ -4,7 +4,7 @@
 |---|---|
 | Network | Robinhood Chain Testnet (`46630`) |
 | Market | PLTR/WETH, 0.30% fee, tick spacing 60, zero hooks |
-| Status | Public prefix `0..7` verified; remaining `21/21` calls pass an exact-head fork; no new public authority |
+| Status | Public prefix `0..8` verified; index `8` passed publicly and stopped before index `9` |
 | Writer | `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f` |
 | Buyer | `0x6719E877C05b2d6c28aBceA405fC033FEeF5750f` |
 | Public continuation start | Index `8`; writer nonce `20`, buyer nonce `1` |
@@ -20,14 +20,22 @@ five-call prefix:
 | 6 | Renewed the remaining WETH Permit2-to-router allowance without transferring assets | `0x9dcf9a40cf1cc3b3cacb6f87889c0b1e5bdf3654c3dfc90094b1b6cd0ec2d1fa` |
 | 7 | Swapped exactly `0.001 PLTR` for `0.000000996773015596 WETH` | `0xd2d2783b10d9fcd1c2595cd4cc7c9a000acd56824c3311c8f1b888b5cc9ed5b2` |
 
-The attempted index `8` reverse swap never reached the keystore prompt. The
+The expired predecessor's attempted index `8` reverse swap never reached the keystore prompt. The
 operator rejected it during read-only preflight because the mandatory
 30-minute swap-deadline margin was exhausted. There is no index-`8` receipt or
 evidence file, the writer nonce remains `20`, and index `7` is the last
-canonical lifecycle transaction.
+canonical lifecycle transaction in that predecessor plan.
 
 This is a successful fail-closed outcome, not a failed or partially submitted
 transaction.
+
+The receipt-bound replacement was then separately authorized. Its index `8`
+renewed only the exact remaining `0.001 PLTR` Permit2 allowance and mined
+successfully as transaction
+[`0x13df...e77f`](https://explorer.testnet.chain.robinhood.com/tx/0x13df2d9fc83d2796c4e85ea5716e70604506c83de7f8fbc78f8e1fa46409e77f)
+in block `121820023`. The receipt status is `1`, gas used is `42,000`, the
+writer nonce advanced from `20` to `21`, the buyer nonce remained `1`, and the
+operator stopped before index `9`.
 
 ## 2. Why a second continuation is necessary
 
@@ -73,7 +81,7 @@ ERC-20 allowance amounts return to zero at the end of the replay.
 
 | Index | Sender nonce | Purpose |
 |---:|---:|---|
-| 8 | Writer `20` | Renew exact remaining PLTR Permit2 allowance |
+| 8 | Writer `20` | **Complete:** renewed exact remaining PLTR Permit2 allowance |
 | 9 | Writer `21` | Renew exact remaining WETH Permit2 allowance |
 | 10 | Writer `22` | Complete the bounded WETH-to-PLTR baseline swap |
 | 11–14 | Writer `23–26` | Approve and deposit exact PLTR/WETH collateral |
@@ -141,10 +149,10 @@ The disposable fork was stopped after the report was written.
 | Exact-fork simulation runner | `364990fc7bb213a832d0cf6c158512ebcc9ba72385d9b6fde49ebdcfc16290e6` |
 | Continuation simulation report | `72bf0a44324976ae187dc9d36b650249971defc48fbf5dc8ade78e4d515453d3` |
 
-## 8. Remaining authorization boundary
+## 8. Public authorization boundary
 
-No transaction in this candidate is authorized. A future authorization must
-bind all of the following exactly:
+The owner authorization recorded on `2026-09-19` binds all of the following
+exactly:
 
 - candidate body and file hashes;
 - current operator and simulation-report hashes;
@@ -154,6 +162,11 @@ bind all of the following exactly:
 - the seven-day swap and eight-day Permit2 timestamps; and
 - `ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH`.
 
-It must exclude increased exposure, prefix re-execution, withdrawals, other
+It excludes increased exposure, prefix re-execution, withdrawals, other
 markets, issuer/factory administration, deployments, mainnet, and continued
 execution after any nonce, state, hash, or time-window mismatch.
+
+Authorization of the range does not permit unattended execution. Index `8`
+has completed; the next gate is a fresh read-only preflight for index `9`, one
+encrypted-keystore prompt, receipt verification, post-state verification, and
+another unconditional stop.

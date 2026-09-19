@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHORIZED_PLTR_WETH_LIFECYCLE_ONE_TRANSACTION_AT_A_TIME",
+  "approvedBy": "repository owner via current Codex session",
+  "approvedAt": "2026-09-19T21:07:49Z",
+  "network": {
+    "chainId": 46630
+  },
+  "roles": {
+    "writer": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+    "buyer": "0x6719E877C05b2d6c28aBceA405fC033FEeF5750f"
+  },
+  "evidenceBindings": {
+    "executionPlanBodySha256": "cd8cdfb5fd01dc9cdfa6fc3a12c8b9e4010cb3529036df96c919c4f4b0871428",
+    "executionPlanFileSha256": "2a93225456d3365cd3bdc7588072977f88ffa1fb4fd1f8a68326181f47c4ac1b",
+    "operatorSha256": "73e0451aa99e60ed104ef75450560643ae8d0de08e3c41f39d6e5805d20a7caf",
+    "simulationReportSha256": "72bf0a44324976ae187dc9d36b650249971defc48fbf5dc8ade78e4d515453d3"
+  },
+  "minimumTransactionIndex": 8,
+  "maximumTransactionIndex": 28,
+  "policy": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+  "deadlineAcceptance": {
+    "accepted": true,
+    "swapDeadlineUnix": 1790449153,
+    "swapDeadlineUtc": "2026-09-26T18:59:13Z",
+    "permit2ExpirationUnix": 1790535553,
+    "permit2ExpirationUtc": "2026-09-27T18:59:13Z"
+  },
+  "canonicalPrefix": {
+    "minimumTransactionIndex": 0,
+    "maximumTransactionIndex": 7,
+    "alreadyCanonical": true,
+    "reexecutionPermitted": false
+  },
+  "exactRemainingPermit2Renewals": {
+    "pltrRaw": "1000000000000000",
+    "wethRaw": "2000000000000",
+    "increasePermitted": false
+  },
+  "permittedScope": {
+    "wrapBuyerWeth": true,
+    "exactApprovals": true,
+    "fourBoundedSwaps": true,
+    "boundedCollateralDeposits": true,
+    "matchedOptionOpenAndClose": true,
+    "allowanceCleanup": true
+  },
+  "excludedScope": {
+    "withdrawals": true,
+    "otherMarkets": true,
+    "issuerAdministration": true,
+    "factoryAdministration": true,
+    "deployments": true,
+    "mainnet": true
+  },
+  "additionalRestrictions": {
+    "increasedExposure": true,
+    "canonicalPrefixReexecution": true,
+    "stopOnNonceStateHashOrTimeWindowMismatch": true
+  }
+}

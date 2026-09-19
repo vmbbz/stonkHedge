@@ -4,7 +4,7 @@
 |---|---|
 | Network | Robinhood Chain Testnet (`46630`) |
 | Market | PLTR/WETH, 0.30% fee, tick spacing 60, zero hooks |
-| Status | Public prefix `0..12` verified; the writer's exact PLTR collateral deposit passed, then execution stopped before WETH approval |
+| Status | Public prefix `0..13` verified; the writer's exact WETH collateral approval passed, then execution stopped before its deposit |
 | Writer | `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f` |
 | Buyer | `0x6719E877C05b2d6c28aBceA405fC033FEeF5750f` |
 | Public continuation start | Index `8`; writer nonce `20`, buyer nonce `1` |
@@ -72,6 +72,15 @@ reads reconcile the full `0.5 PLTR` wallet debit, `500000000000000000000000`
 tracker shares, `0.5 PLTR` credited assets and `maxWithdraw`, zero residual
 tracker0 allowance, and writer nonce `25`. The WETH balance was unchanged.
 
+Index `13` approved exactly `0.0005 WETH` from the writer to collateral
+tracker1. Transaction
+[`0xeb1e...dfca`](https://explorer.testnet.chain.robinhood.com/tx/0xeb1ece5b5f1d63b2eb36ce50db38c9a2cadef89a9f7ee0e414039e37fb3edfca)
+mined successfully in block `121843623` and used `52,659` gas. Independent
+reads confirm the writer nonce advanced from `25` to `26`, the buyer nonce
+remained `1`, both writer token balances were unchanged, and the allowance is
+exactly `0.0005 WETH`. The operator stopped before the corresponding tracker1
+deposit.
+
 ## 2. Why a second continuation is necessary
 
 The four-hour clock was safe for automated execution but did not match the
@@ -121,7 +130,8 @@ ERC-20 allowance amounts return to zero at the end of the replay.
 | 10 | Writer `22` | **Complete:** swapped exact `0.000001 WETH` for `0.000997226984392005 PLTR` |
 | 11 | Writer `23` | **Complete:** approved exact `0.5 PLTR` collateral to tracker0 |
 | 12 | Writer `24` | **Complete:** deposited exact `0.5 PLTR` collateral into tracker0 |
-| 13–14 | Writer `25–26` | Approve and deposit exact WETH collateral |
+| 13 | Writer `25` | **Complete:** approved exact `0.0005 WETH` collateral to tracker1 |
+| 14 | Writer `26` | Deposit exact `0.0005 WETH` collateral into tracker1 |
 | 15–18 | Buyer `1–4` | Approve and deposit exact PLTR/WETH collateral |
 | 19 | Writer `27` | Open the bounded in-range short call |
 | 20 | Buyer `5` | Open the smaller matched long call |
@@ -204,6 +214,6 @@ markets, issuer/factory administration, deployments, mainnet, and continued
 execution after any nonce, state, hash, or time-window mismatch.
 
 Authorization of the range does not permit unattended execution. Indexes `8`
-through `12` have completed; the next gate is a fresh read-only preflight for index `13`, one
-encrypted-keystore prompt, receipt verification, post-state verification, and
-another unconditional stop.
+through `13` have completed; the next gate is a fresh read-only preflight for
+index `14`, one encrypted-keystore prompt, receipt verification, post-state
+verification, and another unconditional stop.

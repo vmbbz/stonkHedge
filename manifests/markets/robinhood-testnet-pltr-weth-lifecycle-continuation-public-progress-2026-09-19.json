@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "PASS_PUBLIC_LIFECYCLE_CONTINUATION_THROUGH_INDEX_8_STOP_BEFORE_INDEX_9",
+  "status": "PASS_PUBLIC_LIFECYCLE_CONTINUATION_THROUGH_INDEX_9_STOP_BEFORE_INDEX_10",
   "mode": "PUBLIC_CANONICAL_RECEIPTS_AND_READ_ONLY_POST_STATE",
   "network": {
     "name": "Robinhood Chain Testnet",
@@ -23,7 +23,7 @@
     "maximumIndex": 7,
     "reexecutionPermitted": false
   },
-  "completedThroughTransactionIndex": 8,
+  "completedThroughTransactionIndex": 9,
   "completedTransactions": [
     {
       "index": 8,
@@ -47,15 +47,40 @@
         "permit2Nonce": 0
       },
       "externalEvidenceSha256": "a0a571a5f864c65c9a38a35ab4b9eab3428dfe3b0731d6dfb7f0ac4fbb182f2f"
+    },
+    {
+      "index": 9,
+      "sender": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+      "nonce": 21,
+      "label": "writer renews remaining exact WETH Permit2 allowance to UniversalRouter",
+      "transactionHash": "0x068c593886dd268d977bec8d8027f763545c16d33d3cf1cd32749edb395a3f95",
+      "explorer": "https://explorer.testnet.chain.robinhood.com/tx/0x068c593886dd268d977bec8d8027f763545c16d33d3cf1cd32749edb395a3f95",
+      "blockNumber": 121822865,
+      "blockHash": "0x25249df93caa43dcbf5f7c07495ac928e002d7b1e69028159fd9c736e5dc2c71",
+      "blockTimestampUnix": 1789853910,
+      "blockTimestampUtc": "2026-09-19T21:38:30Z",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldataKeccak256": "0xc5098d5e5bf9eb5e79001ed781fe5c535497e279043114f8f8156aa32c42b501",
+      "gasUsed": 38969,
+      "status": "PASS",
+      "postcondition": {
+        "permit2WethAllowanceRaw": "2000000000000",
+        "permit2ExpirationUnix": 1790535553,
+        "permit2Nonce": 0
+      },
+      "externalEvidenceSha256": "17e4c7f8fc414581d343e9dd2e15d5c8e9918b5bd8dc4a8a8244eb7275ba67f2"
     }
   ],
   "postState": {
-    "writerNonce": 21,
+    "writerNonce": 22,
     "buyerNonce": 1,
     "writerPermit2PltrAllowanceRaw": "1000000000000000",
-    "writerPermit2WethAllowanceRaw": "2000000000000"
+    "writerPermit2PltrExpirationUnix": 1790535553,
+    "writerPermit2WethAllowanceRaw": "2000000000000",
+    "writerPermit2WethExpirationUnix": 1790535553
   },
-  "nextAuthorizedIndex": 9,
-  "remainingTransactionCount": 20,
-  "nextRequiredAction": "Run the complete read-only index-9 preflight, execute at most index 9, verify its receipt and post-state, and stop."
+  "nextAuthorizedIndex": 10,
+  "remainingTransactionCount": 19,
+  "nextRequiredAction": "Run the complete read-only index-10 swap preflight, execute at most index 10, verify its receipt, token deltas, pool state, and nonce vector, and stop."
 }

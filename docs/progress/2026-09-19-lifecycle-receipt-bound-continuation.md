@@ -4,7 +4,7 @@
 |---|---|
 | Network | Robinhood Chain Testnet (`46630`) |
 | Market | PLTR/WETH, 0.30% fee, tick spacing 60, zero hooks |
-| Status | Public prefix `0..8` verified; index `8` passed publicly and stopped before index `9` |
+| Status | Public prefix `0..9` verified; both exact Permit2 renewals passed and execution stopped before the index `10` swap |
 | Writer | `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f` |
 | Buyer | `0x6719E877C05b2d6c28aBceA405fC033FEeF5750f` |
 | Public continuation start | Index `8`; writer nonce `20`, buyer nonce `1` |
@@ -36,6 +36,15 @@ successfully as transaction
 in block `121820023`. The receipt status is `1`, gas used is `42,000`, the
 writer nonce advanced from `20` to `21`, the buyer nonce remained `1`, and the
 operator stopped before index `9`.
+
+Index `9` then renewed only the exact remaining `0.000002 WETH` Permit2
+allowance. Transaction
+[`0x068c...3f95`](https://explorer.testnet.chain.robinhood.com/tx/0x068c593886dd268d977bec8d8027f763545c16d33d3cf1cd32749edb395a3f95)
+mined successfully in block `121822865`. The receipt status is `1`, gas used
+is `38,969`, the writer nonce advanced from `21` to `22`, the buyer nonce
+remained `1`, and both Permit2 allowances now have the exact amounts and
+expiry committed by the authorization. The operator stopped before the first
+remaining swap at index `10`.
 
 ## 2. Why a second continuation is necessary
 
@@ -82,7 +91,7 @@ ERC-20 allowance amounts return to zero at the end of the replay.
 | Index | Sender nonce | Purpose |
 |---:|---:|---|
 | 8 | Writer `20` | **Complete:** renewed exact remaining PLTR Permit2 allowance |
-| 9 | Writer `21` | Renew exact remaining WETH Permit2 allowance |
+| 9 | Writer `21` | **Complete:** renewed exact remaining WETH Permit2 allowance |
 | 10 | Writer `22` | Complete the bounded WETH-to-PLTR baseline swap |
 | 11–14 | Writer `23–26` | Approve and deposit exact PLTR/WETH collateral |
 | 15–18 | Buyer `1–4` | Approve and deposit exact PLTR/WETH collateral |
@@ -166,7 +175,7 @@ It excludes increased exposure, prefix re-execution, withdrawals, other
 markets, issuer/factory administration, deployments, mainnet, and continued
 execution after any nonce, state, hash, or time-window mismatch.
 
-Authorization of the range does not permit unattended execution. Index `8`
-has completed; the next gate is a fresh read-only preflight for index `9`, one
+Authorization of the range does not permit unattended execution. Indexes `8`
+and `9` have completed; the next gate is a fresh read-only preflight for index `10`, one
 encrypted-keystore prompt, receipt verification, post-state verification, and
 another unconditional stop.

@@ -4,7 +4,7 @@
 |---|---|
 | Network | Robinhood Chain Testnet (`46630`) |
 | Market | PLTR/WETH, 0.30% fee, tick spacing 60, zero hooks |
-| Status | Public prefix `0..9` verified; both exact Permit2 renewals passed and execution stopped before the index `10` swap |
+| Status | Public prefix `0..10` verified; both renewals and the remaining baseline swap passed, then execution stopped before collateral approvals |
 | Writer | `0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f` |
 | Buyer | `0x6719E877C05b2d6c28aBceA405fC033FEeF5750f` |
 | Public continuation start | Index `8`; writer nonce `20`, buyer nonce `1` |
@@ -45,6 +45,16 @@ is `38,969`, the writer nonce advanced from `21` to `22`, the buyer nonce
 remained `1`, and both Permit2 allowances now have the exact amounts and
 expiry committed by the authorization. The operator stopped before the first
 remaining swap at index `10`.
+
+Index `10` then spent exactly `0.000001 WETH` and received
+`0.000997226984392005 PLTR`, exceeding the committed minimum output of
+`0.0008 PLTR`. Transaction
+[`0xf6c0...a524`](https://explorer.testnet.chain.robinhood.com/tx/0xf6c064b17f2e279b1f3f8a404929ddf836d09453d144fe5fd3c7d2f22fc2a524)
+mined successfully in block `121826821` and used `188,093` gas. Independent
+reads confirm the writer nonce advanced from `22` to `23`, both WETH
+allowances fell by exactly the input to `0.000001 WETH`, active liquidity was
+unchanged, and the pool tick moved from `-69086` to `-69082`. The operator
+stopped before any collateral approval.
 
 ## 2. Why a second continuation is necessary
 
@@ -92,7 +102,7 @@ ERC-20 allowance amounts return to zero at the end of the replay.
 |---:|---:|---|
 | 8 | Writer `20` | **Complete:** renewed exact remaining PLTR Permit2 allowance |
 | 9 | Writer `21` | **Complete:** renewed exact remaining WETH Permit2 allowance |
-| 10 | Writer `22` | Complete the bounded WETH-to-PLTR baseline swap |
+| 10 | Writer `22` | **Complete:** swapped exact `0.000001 WETH` for `0.000997226984392005 PLTR` |
 | 11–14 | Writer `23–26` | Approve and deposit exact PLTR/WETH collateral |
 | 15–18 | Buyer `1–4` | Approve and deposit exact PLTR/WETH collateral |
 | 19 | Writer `27` | Open the bounded in-range short call |
@@ -176,6 +186,6 @@ markets, issuer/factory administration, deployments, mainnet, and continued
 execution after any nonce, state, hash, or time-window mismatch.
 
 Authorization of the range does not permit unattended execution. Indexes `8`
-and `9` have completed; the next gate is a fresh read-only preflight for index `10`, one
+through `10` have completed; the next gate is a fresh read-only preflight for index `11`, one
 encrypted-keystore prompt, receipt verification, post-state verification, and
 another unconditional stop.

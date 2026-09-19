@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "PASS_PUBLIC_LIFECYCLE_CONTINUATION_THROUGH_INDEX_9_STOP_BEFORE_INDEX_10",
+  "status": "PASS_PUBLIC_LIFECYCLE_CONTINUATION_THROUGH_INDEX_10_STOP_BEFORE_INDEX_11",
   "mode": "PUBLIC_CANONICAL_RECEIPTS_AND_READ_ONLY_POST_STATE",
   "network": {
     "name": "Robinhood Chain Testnet",
@@ -23,7 +23,7 @@
     "maximumIndex": 7,
     "reexecutionPermitted": false
   },
-  "completedThroughTransactionIndex": 9,
+  "completedThroughTransactionIndex": 10,
   "completedTransactions": [
     {
       "index": 8,
@@ -70,17 +70,53 @@
         "permit2Nonce": 0
       },
       "externalEvidenceSha256": "17e4c7f8fc414581d343e9dd2e15d5c8e9918b5bd8dc4a8a8244eb7275ba67f2"
+    },
+    {
+      "index": 10,
+      "sender": "0x04D5A0f57Cb2e110faC9703024888cd4562B6d6f",
+      "nonce": 22,
+      "label": "writer swaps tiny exact-input WETH to PLTR",
+      "transactionHash": "0xf6c064b17f2e279b1f3f8a404929ddf836d09453d144fe5fd3c7d2f22fc2a524",
+      "explorer": "https://explorer.testnet.chain.robinhood.com/tx/0xf6c064b17f2e279b1f3f8a404929ddf836d09453d144fe5fd3c7d2f22fc2a524",
+      "blockNumber": 121826821,
+      "blockHash": "0xb672fa3ba8f2aa84d8c040037cbcfa63d3e84ee54fdeac271a1595fa77c3950e",
+      "blockTimestampUnix": 1789855153,
+      "blockTimestampUtc": "2026-09-19T21:59:13Z",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldataKeccak256": "0x687e6f0a86c6e68c4b6638d39098e743aeef4fe816b11dcc3977bb9dd1fc3298",
+      "gasUsed": 188093,
+      "status": "PASS",
+      "postcondition": {
+        "tokenIn": "WETH",
+        "actualInputSpentRaw": "1000000000000",
+        "tokenOut": "PLTR",
+        "minimumOutputRaw": "800000000000000",
+        "actualOutputReceivedRaw": "997226984392005",
+        "minimumOutputSatisfied": true,
+        "remainingWethErc20AllowanceToPermit2Raw": "1000000000000",
+        "remainingWethPermit2AllowanceToRouterRaw": "1000000000000",
+        "poolTickBefore": -69086,
+        "poolTickAfter": -69082,
+        "poolActiveLiquidityAfter": "138450781996976174"
+      },
+      "externalEvidenceSha256": "c141f66c9e43d45a6f6ee1bb1ff7e175fff24fe92574edabcf09b2b51579c9b3"
     }
   ],
   "postState": {
-    "writerNonce": 22,
+    "writerNonce": 23,
     "buyerNonce": 1,
+    "writerPltrBalanceRaw": "3022154882339512216",
+    "writerWethBalanceRaw": "2019996773015596",
     "writerPermit2PltrAllowanceRaw": "1000000000000000",
     "writerPermit2PltrExpirationUnix": 1790535553,
-    "writerPermit2WethAllowanceRaw": "2000000000000",
-    "writerPermit2WethExpirationUnix": 1790535553
+    "writerPermit2WethAllowanceRaw": "1000000000000",
+    "writerPermit2WethExpirationUnix": 1790535553,
+    "poolSqrtPriceX96": "2505414613641816659368669375",
+    "poolTick": -69082,
+    "poolActiveLiquidity": "138450781996976174"
   },
-  "nextAuthorizedIndex": 10,
-  "remainingTransactionCount": 19,
-  "nextRequiredAction": "Run the complete read-only index-10 swap preflight, execute at most index 10, verify its receipt, token deltas, pool state, and nonce vector, and stop."
+  "nextAuthorizedIndex": 11,
+  "remainingTransactionCount": 18,
+  "nextRequiredAction": "Run the complete read-only index-11 collateral-approval preflight, execute at most index 11, verify its receipt and exact allowance post-state, and stop."
 }

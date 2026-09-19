@@ -1,0 +1,1478 @@
+{
+  "schemaVersion": 1,
+  "status": "LIFECYCLE_EXECUTION_CANDIDATE_REQUIRES_SEPARATE_AUTHORIZATION",
+  "mode": "UNSIGNED_RECEIPT_BOUND_EXTENDED_TESTNET_CONTINUATION_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "warning": "This proposal uses valueless testnet assets and a synthetic mechanism-test price. It is not a live equity quote, issuer endorsement, audit, mainnet readiness statement, or transaction authorization.",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 121787328,
+    "referenceBlockHash": "0x1cd2d3fa1ada5fb893c2bbcb56d214b93bbf12c861cb8bf5c1054d29fc7df0d0",
+    "referenceTimestampUnix": 1789844353,
+    "referenceTimestampUtc": "2026-09-19T18:59:13Z"
+  },
+  "sourceBindings": {
+    "genesisManifest": "manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json",
+    "genesisManifestSha256": "93d31a5393f7295a0f560de45351ea72d52e9c62b8b4f6419d56e8c39ea3922b",
+    "chainManifest": "manifests/chains/robinhood-testnet-46630.json",
+    "chainManifestSha256": "4399d03e83a5bbea47287cfbbf81e21ff23256d904180e2535ff6bbcf0e4dd29",
+    "baseLifecyclePlan": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-proposal-2026-09-14.json",
+      "sha256": "e2ba5f4f4826d20dcd57e2f31e5877a80e8ef52a2c4b713e765869f7cf6dd6bb",
+      "planBodySha256": "a3ffd5a0157d69b6841d72eb914c1c1fd07d4e652c6c5906d55dc862b7476d33"
+    },
+    "successfulLifecycleRehearsal": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-fork-rehearsal-2026-09-14.json",
+      "sha256": "5c30aa9a107b6dbafb49eb5321f05754b47d4ea4cdcb1850a02414671c38429b"
+    },
+    "freshExecutionPreflight": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-execution-preflight-2026-09-15.json",
+      "sha256": "cea5dc3f98b43c2599c77008400ad7da9f4e5ca1283b526f1d676476a1f70fc6",
+      "preflightBodySha256": "eb0425c657c762e8ddf8fa6cfbc28320eebac9356fa2afbe138baa201fae24f5"
+    },
+    "generator": {
+      "path": "scripts/prepare_robinhood_lifecycle_execution_continuation.py",
+      "sha256": "86cca6d988457e17dc485d7384cb61b58824bb1938d3529e394db656bea24b73"
+    },
+    "priorExecutionCandidate": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-refresh-candidate-2026-09-16.json",
+      "sha256": "6ad14f4f8f4c341d3dcb477f06b523d6d380510c6e955c46460b7b31a6d347c3",
+      "executionPlanBodySha256": "b97bd784e43e2e4e9495c39294ee87f892eb9c132449d34de7a42709bcf390cf"
+    },
+    "priorSimulationReport": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-execution-operator-simulation-2026-09-15.json",
+      "sha256": "29a50349ddbfd7cad2f78435b92739ead31f01a9eb81c7b4971106a32230adce"
+    },
+    "refreshPreflight": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-refresh-preflight-2026-09-16.json",
+      "sha256": "2f940cee051c22ae4561eae65bca28a23719b8f1e76d73c9add244cb7fbe83e3",
+      "preflightBodySha256": "30d343cedeaa5d1562ea65b0e12a8b1f126caf47f9fee739630d8c94cbc4e05e"
+    },
+    "continuationPreflight": {
+      "path": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-preflight-2026-09-19.json",
+      "sha256": "78b43454035ca0300ad5729f942a16583226f46014c3750f0bbac97147e47d95",
+      "preflightBodySha256": "3c1a24b5faab3a656de65c52b84d03a5bf0c374f08b9ad1b3f41b9d7a6c087ee"
+    }
+  },
+  "market": {
+    "symbol": "PLTR/WETH",
+    "pltr": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+    "weth": "0x33e4191705c386532ba27cbf171db86919200b94",
+    "poolKey": {
+      "currency0": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "currency1": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "fee": 3000,
+      "tickSpacing": 60,
+      "hooks": "0x0000000000000000000000000000000000000000"
+    },
+    "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "sfpmPoolId": "16897827167146926",
+    "panopticPool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+    "collateralTracker0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+    "collateralTracker1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+    "permit2": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+    "universalRouter": "0x8876789976decbfcbbbe364623c63652db8c0904",
+    "stateView": "0xf3334192d15450cdd385c8b70e03f9a6bd9e673b",
+    "stockRegistry": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+    "referenceTick": -69082,
+    "referenceTwapTick": null,
+    "referenceActiveLiquidity": "138450781996976174"
+  },
+  "roles": {
+    "writer": {
+      "address": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "role": "UNPRIVILEGED_SECOND_ACTOR_LP_OWNER_AND_BOUNDED_SHORT_WRITER",
+      "confirmedNonce": 13,
+      "nativeBalanceWei": "5982343270000000",
+      "pltrBalance": "3022157655355120211",
+      "wethBalance": "2020000000000000",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "buyer": {
+      "address": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "role": "UNPRIVILEGED_THIRD_ACTOR_BOUNDED_TEST_BUYER",
+      "confirmedNonce": 0,
+      "nativeBalanceWei": "10000000000000000",
+      "pltrBalance": "5000000000000000000",
+      "wethBalance": "0",
+      "collateralTracker0Shares": "0",
+      "collateralTracker1Shares": "0",
+      "openLegs": 0,
+      "blockedByStockRegistry": false,
+      "initialAllowances": {
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "privilegedBuyerRisk": {
+      "accepted": false,
+      "finding": "The buyer is a dedicated third unprivileged actor, distinct from the writer and shared deployer/guardian/treasurer.",
+      "containment": [
+        "only ordinary WETH, ERC20, Permit2, UniversalRouter, CollateralTracker, and PanopticPool user calls are proposed",
+        "no registry, guardian, treasurer, ownership, factory-admin, upgrade, or deployment call is permitted",
+        "all public execution fields remain false and every nonce remains null"
+      ]
+    }
+  },
+  "exposureCaps": {
+    "status": "OWNER_ACCEPTANCE_REQUIRED_BEFORE_EXECUTION_PLANNING",
+    "buyerWrapNativeWei": "300000000000000",
+    "writerCollateral": {
+      "pltrAssets": "500000000000000000",
+      "wethAssets": "500000000000000"
+    },
+    "buyerCollateral": {
+      "pltrAssets": "250000000000000000",
+      "wethAssets": "250000000000000"
+    },
+    "writerSwapBudget": {
+      "pltrTotalInput": "2000000000000000",
+      "wethTotalInput": "2000000000000",
+      "perSwapPltrInput": "1000000000000000",
+      "perSwapWethInput": "1000000000000",
+      "minimumWethOutputPerPltrSwap": "800000000000",
+      "minimumPltrOutputPerWethSwap": "800000000000000"
+    },
+    "option": {
+      "strategy": "MATCHED_IN_RANGE_SINGLE_LEG_CALL_MECHANISM_TEST",
+      "asset": 0,
+      "tokenType": 0,
+      "optionRatio": 1,
+      "riskPartner": 0,
+      "strike": -69060,
+      "width": 2,
+      "tickLower": -69120,
+      "tickUpper": -69000,
+      "writerShortSize": "10000000000000000",
+      "buyerLongSize": "1000000000000000",
+      "effectiveLiquidityLimitBps": 2000,
+      "usePremiaAsCollateral": true,
+      "builderCode": "0"
+    },
+    "rehearsalOnlyExpiry": {
+      "unix": 1789436118,
+      "utc": "2026-09-15T01:35:18Z",
+      "rule": "A public candidate must replace this with a fresh, short-lived deadline and Permit2 expiry after exact-head replay."
+    },
+    "nativeReserveFloorsBeforeGas": {
+      "writer": "4000000000000000",
+      "buyerAfterWrap": "7000000000000000"
+    }
+  },
+  "tokenIds": {
+    "encoding": "PUBLISHED_@panoptic-eng/sdk_V4_POOL_ID_AND_SINGLE_CALL_LEG",
+    "shortCall": "3797733774652686947289370334126",
+    "longCall": "3797733779375053430159015547822",
+    "shortDecoded": {
+      "tokenId": "3797733774652686947289370334126",
+      "poolId": "0x003c087bf9c613ae",
+      "vegoid": "8",
+      "tickSpacing": "60",
+      "legs": [
+        {
+          "index": "0",
+          "asset": "0",
+          "optionRatio": "1",
+          "isLong": false,
+          "tokenType": "0",
+          "riskPartner": "0",
+          "strike": "-69060",
+          "width": "2",
+          "tickLower": "-69120",
+          "tickUpper": "-69000"
+        }
+      ],
+      "legCount": "1"
+    },
+    "longDecoded": {
+      "tokenId": "3797733779375053430159015547822",
+      "poolId": "0x003c087bf9c613ae",
+      "vegoid": "8",
+      "tickSpacing": "60",
+      "legs": [
+        {
+          "index": "0",
+          "asset": "0",
+          "optionRatio": "1",
+          "isLong": true,
+          "tokenType": "0",
+          "riskPartner": "0",
+          "strike": "-69060",
+          "width": "2",
+          "tickLower": "-69120",
+          "tickUpper": "-69000"
+        }
+      ],
+      "legCount": "1"
+    },
+    "matchedChunk": {
+      "asset": 0,
+      "tokenType": 0,
+      "strike": -69060,
+      "width": 2,
+      "tickLower": -69120,
+      "tickUpper": -69000
+    }
+  },
+  "initialState": {
+    "marketState": {
+      "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+      "sfpmPoolId": "16897827167146926",
+      "sqrtPriceX96": "2505414483750479311864138015",
+      "currentTick": -69082,
+      "twapTick": null,
+      "twapObservation": "NOT_CAPTURED_SPOT_TICK_IS_NOT_LABELLED_AS_TWAP",
+      "activeLiquidity": "138450781996976174",
+      "registryPaused": false,
+      "stockTokenPaused": false,
+      "stockUiMultiplier": "1000000000000000000",
+      "stockPendingMultiplier": "1000000000000000000",
+      "stockMultiplierEffectiveAt": "0"
+    },
+    "actors": {
+      "writer": {
+        "address": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "role": "UNPRIVILEGED_SECOND_ACTOR_LP_OWNER_AND_BOUNDED_SHORT_WRITER",
+        "confirmedNonce": 13,
+        "nativeBalanceWei": "5982343270000000",
+        "pltrBalance": "3022157655355120211",
+        "wethBalance": "2020000000000000",
+        "collateralTracker0Shares": "0",
+        "collateralTracker1Shares": "0",
+        "openLegs": 0,
+        "blockedByStockRegistry": false,
+        "initialAllowances": {
+          "pltrToPermit2": "0",
+          "wethToPermit2": "0",
+          "pltrToTracker0": "0",
+          "wethToTracker1": "0",
+          "pltrPermit2ToRouter": [
+            0,
+            0,
+            0
+          ],
+          "wethPermit2ToRouter": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "buyer": {
+        "address": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "role": "UNPRIVILEGED_THIRD_ACTOR_BOUNDED_TEST_BUYER",
+        "confirmedNonce": 0,
+        "nativeBalanceWei": "10000000000000000",
+        "pltrBalance": "5000000000000000000",
+        "wethBalance": "0",
+        "collateralTracker0Shares": "0",
+        "collateralTracker1Shares": "0",
+        "openLegs": 0,
+        "blockedByStockRegistry": false,
+        "initialAllowances": {
+          "pltrToPermit2": "0",
+          "wethToPermit2": "0",
+          "pltrToTracker0": "0",
+          "wethToTracker1": "0",
+          "pltrPermit2ToRouter": [
+            0,
+            0,
+            0
+          ],
+          "wethPermit2ToRouter": [
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "executionClock": {
+    "referenceTimestampUnix": 1789844353,
+    "swapDeadlineUnix": 1790449153,
+    "permit2ExpirationUnix": 1790535553,
+    "minimumSecondsRemainingAtTransactionZero": 518400,
+    "minimumSecondsRemainingAtDeadlineTransaction": 1800,
+    "deadlineBearingTransactionIndexes": [
+      8,
+      9,
+      25,
+      26,
+      10,
+      21,
+      22
+    ],
+    "swapDeadlineTransactionIndexes": [
+      10,
+      21,
+      22
+    ],
+    "permit2WindowLastTransactionIndex": 22,
+    "classification": "SEVEN_DAY_SWAP_EIGHT_DAY_PERMIT2_TESTNET_ONLY_EXPLICIT_ACCEPTANCE_REQUIRED"
+  },
+  "gasPolicy": {
+    "maximumGasPriceWei": "100000000",
+    "maximumGasLimitPerTransaction": 15728640,
+    "estimateMultiplierBps": 12500,
+    "estimateAdditiveBuffer": 50000
+  },
+  "startNonces": {
+    "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 13,
+    "0x6719e877c05b2d6c28abcea405fc033feef5750f": 0
+  },
+  "nextNonces": {
+    "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 35,
+    "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+  },
+  "transactionCount": 29,
+  "transactionCountsBySender": {
+    "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 22,
+    "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+  },
+  "transactions": [
+    {
+      "ordinal": 0,
+      "phase": "BUYER_FUNDING",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 0,
+      "label": "buyer wraps bounded native ETH for WETH collateral",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "300000000000000",
+      "calldata": "0xd0e30db0",
+      "calldataKeccak256": "0xa1548b79599a5ef2fd6de226ea5131c228954c4bf788eb3e4386a2728abe3e8d",
+      "decodedIntent": {
+        "function": "deposit()",
+        "wrapNativeWei": "300000000000000"
+      },
+      "mandatoryPostconditions": [
+        "buyer WETH increases by exactly valueWei",
+        "buyer native reserve remains above the frozen floor"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 13,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 0
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 13,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 1,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 13,
+      "label": "writer approves exact total PLTR swap budget to Permit2",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba300000000000000000000000000000000000000000000000000071afd498d0000",
+      "calldataKeccak256": "0x47fbd985dcf19569a968157b54acdb7b7d8f18aa8e69b987b8ee920068e1360b",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "2000000000000000"
+      },
+      "mandatoryPostconditions": [
+        "PLTR ERC20 allowance equals the exact total swap budget and no more"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 13,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 14,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 2,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 14,
+      "label": "writer approves exact total WETH swap budget to Permit2",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba3000000000000000000000000000000000000000000000000000001d1a94a2000",
+      "calldataKeccak256": "0x02c30a226cb53b54d63aeb7e4ea06ef975a0514e889b4932edcc854a6b907a4a",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "2000000000000"
+      },
+      "mandatoryPostconditions": [
+        "WETH ERC20 allowance equals the exact total swap budget and no more"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 14,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 15,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 3,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 15,
+      "label": "writer grants exact PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000071afd498d0000000000000000000000000000000000000000000000000000000000006aaa0962",
+      "calldataKeccak256": "0x30d8d820f70cf41d4a8dede15eb5a102122caa41ede355647384799eb3373631",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000000",
+        "expiration": "1789528418",
+        "clockClassification": "EXECUTION_CANDIDATE_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 PLTR allowance equals the exact total budget and rehearsal-only expiry"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 15,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 16,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 4,
+      "phase": "WRITER_SWAP_PERMISSIONS",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 16,
+      "label": "writer grants exact WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000008876789976decbfcbbbe364623c63652db8c0904000000000000000000000000000000000000000000000000000001d1a94a2000000000000000000000000000000000000000000000000000000000006aaa0962",
+      "calldataKeccak256": "0xfcbf065a8b03fa53530116608bdf5cf1a7dc97b76383406baed1f1490347106d",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000",
+        "expiration": "1789528418",
+        "clockClassification": "EXECUTION_CANDIDATE_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 WETH allowance equals the exact total budget and rehearsal-only expiry"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 16,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 17,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 5,
+      "phase": "WRITER_SWAP_PERMISSION_REFRESH",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 17,
+      "label": "writer refreshes exact PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000071afd498d0000000000000000000000000000000000000000000000000000000000006aaa371f",
+      "calldataKeccak256": "0x56208c250b71d34c7c0eb778ae02e3b95c20a7ed0bd70210f852627c999d8067",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000000",
+        "expiration": "1789540127",
+        "clockClassification": "REFRESHED_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 PLTR allowance equals the exact total budget and rehearsal-only expiry"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 17,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 18,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 6,
+      "phase": "WRITER_SWAP_PERMISSION_REFRESH",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 18,
+      "label": "writer refreshes exact WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000008876789976decbfcbbbe364623c63652db8c0904000000000000000000000000000000000000000000000000000001d1a94a2000000000000000000000000000000000000000000000000000000000006aaa371f",
+      "calldataKeccak256": "0xd1336fb20428958e9b6fcdf0a5187333794a9eb24d72b9a4129cdcfa9ea434b3",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000",
+        "expiration": "1789540127",
+        "clockClassification": "REFRESHED_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 WETH allowance equals the exact total budget and rehearsal-only expiry"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 18,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 19,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 7,
+      "phase": "BIDIRECTIONAL_BASELINE",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 19,
+      "label": "writer swaps tiny exact-input PLTR to WETH",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006aaa1aff00000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000ba43b7400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000ba43b74000",
+      "calldataKeccak256": "0xb382cf57927ae1242eec850ef554253f82989c7fafa9942aa3fbc63c1467bb30",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": true,
+        "tokenIn": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "tokenOut": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "amountIn": "1000000000000000",
+        "amountOutMinimum": "800000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1789532927",
+        "clockClassification": "REFRESHED_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 19,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 20,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 8,
+      "phase": "WRITER_REMAINING_SWAP_PERMISSION_REFRESH",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 20,
+      "label": "writer renews remaining exact PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000006ab96781",
+      "calldataKeccak256": "0xab8c2c1d23d495cb8f75fe9a04827938aef80d50717a2b9f8e402b35bd1d17b5",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "1000000000000000",
+        "expiration": "1790535553",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 PLTR allowance equals the exact total budget and rehearsal-only expiry"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 20,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 21,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 9,
+      "phase": "WRITER_REMAINING_SWAP_PERMISSION_REFRESH",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 21,
+      "label": "writer renews remaining exact WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000008876789976decbfcbbbe364623c63652db8c0904000000000000000000000000000000000000000000000000000001d1a94a2000000000000000000000000000000000000000000000000000000000006ab96781",
+      "calldataKeccak256": "0xc5098d5e5bf9eb5e79001ed781fe5c535497e279043114f8f8156aa32c42b501",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "2000000000000",
+        "expiration": "1790535553",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 WETH allowance equals the exact total budget and rehearsal-only expiry"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 21,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 22,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 10,
+      "phase": "BIDIRECTIONAL_BASELINE",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 22,
+      "label": "writer swaps tiny exact-input WETH to PLTR",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006ab8160100000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000002d79883d20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000e8d4a5100000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000000000000000000000000000000002d79883d20000",
+      "calldataKeccak256": "0x687e6f0a86c6e68c4b6638d39098e743aeef4fe816b11dcc3977bb9dd1fc3298",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": false,
+        "tokenIn": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "tokenOut": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "amountIn": "1000000000000",
+        "amountOutMinimum": "800000000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1790449153",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 22,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 23,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 11,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 23,
+      "label": "writer approves exact PLTR collateral to tracker0",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b30000000000000000000000002146295437da444638a4cf80900a9e2d3b1315de00000000000000000000000000000000000000000000000006f05b59d3b20000",
+      "calldataKeccak256": "0x2b6fa1704003cd600594ff404c0ca76da0e66fc7d207764fc0bf4e2a4299306c",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "amount": "500000000000000000"
+      },
+      "mandatoryPostconditions": [
+        "PLTR allowance to tracker0 equals the next deposit and no more"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 23,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 24,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 12,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 24,
+      "label": "writer deposits exact PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldata": "0x6e553f6500000000000000000000000000000000000000000000000006f05b59d3b2000000000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "calldataKeccak256": "0xc8251161983d420db3d8b64cf0df463c89f7d8dcf169e1559f769b4990e3a87b",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "500000000000000000",
+        "receiver": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f"
+      },
+      "mandatoryPostconditions": [
+        "tracker0 shares and assets increase by previewDeposit/asset deltas",
+        "PLTR allowance to tracker0 is zero after transferFrom"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 24,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 13,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 25,
+      "label": "writer approves exact WETH collateral to tracker1",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b300000000000000000000000048d0e86df893b6032ebe9f14ac0eaa23a79498670000000000000000000000000000000000000000000000000001c6bf52634000",
+      "calldataKeccak256": "0xe1dc70170eba839d8a77243cf13c9e652c7581a1a636a2bb69cc8f2f545ade7d",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "amount": "500000000000000"
+      },
+      "mandatoryPostconditions": [
+        "WETH allowance to tracker1 equals the next deposit and no more"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 25,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 26,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 14,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 26,
+      "label": "writer deposits exact WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldata": "0x6e553f650000000000000000000000000000000000000000000000000001c6bf5263400000000000000000000000000004d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "calldataKeccak256": "0x0127db49df1ffc4c713d3d28405d2ac9a4db6677d198d74350209463d4c717f0",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "500000000000000",
+        "receiver": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f"
+      },
+      "mandatoryPostconditions": [
+        "tracker1 shares and assets increase by previewDeposit/asset deltas",
+        "WETH allowance to tracker1 is zero after transferFrom"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 26,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 15,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 1,
+      "label": "buyer approves exact PLTR collateral to tracker0",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b30000000000000000000000002146295437da444638a4cf80900a9e2d3b1315de00000000000000000000000000000000000000000000000003782dace9d90000",
+      "calldataKeccak256": "0xbf1450d5bcd07eff212d10f1ba46c0775d633408f06c109274206d2e2d603de8",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "amount": "250000000000000000"
+      },
+      "mandatoryPostconditions": [
+        "PLTR allowance to tracker0 equals the next deposit and no more"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 2
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 16,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 2,
+      "label": "buyer deposits exact PLTR collateral",
+      "to": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "valueWei": "0",
+      "calldata": "0x6e553f6500000000000000000000000000000000000000000000000003782dace9d900000000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f",
+      "calldataKeccak256": "0xdc80b76e2b84602c973ddb89170c42a191c8f27971b1e0768e7d7ba6f75878bc",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "250000000000000000",
+        "receiver": "0x6719e877c05b2d6c28abcea405fc033feef5750f"
+      },
+      "mandatoryPostconditions": [
+        "tracker0 shares and assets increase by previewDeposit/asset deltas",
+        "PLTR allowance to tracker0 is zero after transferFrom"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 2
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 3
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 17,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 3,
+      "label": "buyer approves exact WETH collateral to tracker1",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b300000000000000000000000048d0e86df893b6032ebe9f14ac0eaa23a79498670000000000000000000000000000000000000000000000000000e35fa931a000",
+      "calldataKeccak256": "0x103ed5e3e804a8c730f83f270cc99078e73e4e57317d5e4c7a7dc19b4cc9e053",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "amount": "250000000000000"
+      },
+      "mandatoryPostconditions": [
+        "WETH allowance to tracker1 equals the next deposit and no more"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 3
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 4
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 18,
+      "phase": "BOUNDED_COLLATERAL",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 4,
+      "label": "buyer deposits exact WETH collateral",
+      "to": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "valueWei": "0",
+      "calldata": "0x6e553f650000000000000000000000000000000000000000000000000000e35fa931a0000000000000000000000000006719e877c05b2d6c28abcea405fc033feef5750f",
+      "calldataKeccak256": "0x8c219f2e9b08ae854ec40fb0cddad2cbdef55814978183703fe2de708a7411d6",
+      "decodedIntent": {
+        "function": "deposit(uint256,address)",
+        "assets": "250000000000000",
+        "receiver": "0x6719e877c05b2d6c28abcea405fc033feef5750f"
+      },
+      "mandatoryPostconditions": [
+        "tracker1 shares and assets increase by previewDeposit/asset deltas",
+        "WETH allowance to tracker1 is zero after transferFrom"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 4
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 5
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 19,
+      "phase": "MATCHED_OPTION_OPEN",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 27,
+      "label": "writer opens bounded in-range short call",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000180000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c002003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c002003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000002386f26fc100000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0x21a49bee25602ac6697350267fd4fd7feef4c7c36b9b72ebfe93ff8538832a7c",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "OPEN_SHORT_CALL",
+        "tokenId": "3797733774652686947289370334126",
+        "finalPositionIdList": [
+          "3797733774652686947289370334126"
+        ],
+        "positionSize": "10000000000000000",
+        "tickAndSpreadLimits": [
+          [
+            -887272,
+            887272,
+            2000
+          ]
+        ],
+        "usePremiaAsCollateral": true,
+        "builderCode": "0"
+      },
+      "mandatoryPostconditions": [
+        "writer owns exactly one leg with the planned TokenId and size",
+        "writer remains solvent at every verifier tick"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 27,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 5
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 28,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 5
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 20,
+      "phase": "MATCHED_OPTION_OPEN",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 5,
+      "label": "buyer opens bounded matched long call",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000180000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c102003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c102003c087bf9c613ae000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0x1b00ddc9181c5c68e2d3f41de320223b240932420f0c5c4ad0762711cfaef539",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "OPEN_LONG_CALL",
+        "tokenId": "3797733779375053430159015547822",
+        "finalPositionIdList": [
+          "3797733779375053430159015547822"
+        ],
+        "positionSize": "1000000000000000",
+        "tickAndSpreadLimits": [
+          [
+            -887272,
+            887272,
+            2000
+          ]
+        ],
+        "usePremiaAsCollateral": true,
+        "builderCode": "0"
+      },
+      "mandatoryPostconditions": [
+        "buyer owns exactly one leg with the matched chunk and planned size",
+        "buyer and writer remain solvent"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 28,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 5
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 28,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 21,
+      "phase": "PREMIUM_OBSERVATION",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 28,
+      "label": "writer performs controlled PLTR-to-WETH premium-driving swap",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006ab8160100000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000ba43b7400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000ba43b74000",
+      "calldataKeccak256": "0x3e55a4556d8787f66fc53cbeb6790cae0e13fc0efe69411d70f78183fb4872c6",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": true,
+        "tokenIn": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "tokenOut": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "amountIn": "1000000000000000",
+        "amountOutMinimum": "800000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1790449153",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 28,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 29,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 22,
+      "phase": "PREMIUM_OBSERVATION",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 29,
+      "label": "writer performs controlled WETH-to-PLTR premium-driving swap",
+      "to": "0x8876789976decbfcbbbe364623c63652db8c0904",
+      "valueWei": "0",
+      "calldata": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000006ab8160100000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000360000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000003060c0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000200000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d000000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000002d79883d20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000033e4191705c386532ba27cbf171db86919200b94000000000000000000000000000000000000000000000000000000e8d4a5100000000000000000000000000000000000000000000000000000000000000000400000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000000000000000000000000000000002d79883d20000",
+      "calldataKeccak256": "0x687e6f0a86c6e68c4b6638d39098e743aeef4fe816b11dcc3977bb9dd1fc3298",
+      "decodedIntent": {
+        "function": "execute(bytes,bytes[],uint256)",
+        "route": "UNISWAP_V4_EXACT_INPUT_SINGLE",
+        "poolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+        "zeroForOne": false,
+        "tokenIn": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "tokenOut": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "amountIn": "1000000000000",
+        "amountOutMinimum": "800000000000000",
+        "minHopPriceX36": "0",
+        "deadline": "1790449153",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "receipt contains the exact PoolId swap event",
+        "input spend does not exceed amountIn",
+        "output received is at least amountOutMinimum",
+        "tick and sqrtPrice move in the expected direction"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 29,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 30,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 23,
+      "phase": "ORDERED_CLOSE",
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "nonce": 6,
+      "label": "buyer closes matched long call before writer",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c102003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0x1f492cd72ce41c96a18cd74d04cca25ae2761772c341d9f799096be63985c777",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "CLOSE_LONG_CALL",
+        "tokenId": "3797733779375053430159015547822",
+        "finalPositionIdList": [],
+        "positionSize": "0"
+      },
+      "mandatoryPostconditions": [
+        "buyer has zero open legs",
+        "premium and collateral deltas reconcile",
+        "writer remains solvent before its close"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 30,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 6
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 30,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 24,
+      "phase": "ORDERED_CLOSE",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 30,
+      "label": "writer closes short call after buyer",
+      "to": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "valueWei": "0",
+      "calldata": "0xc25813aa00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000002fef23c002003c087bf9c613ae0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2761800000000000000000000000000000000000000000000000000000000000d89e800000000000000000000000000000000000000000000000000000000000007d0",
+      "calldataKeccak256": "0xd47972f3f7475400d50b9d7d14dc43361f354fa83557459d227eab42650b5803",
+      "decodedIntent": {
+        "function": "dispatch(uint256[],uint256[],uint128[],int24[3][],bool,uint256)",
+        "operation": "CLOSE_SHORT_CALL",
+        "tokenId": "3797733774652686947289370334126",
+        "finalPositionIdList": [],
+        "positionSize": "0"
+      },
+      "mandatoryPostconditions": [
+        "writer has zero open legs",
+        "SFPM balances and premium deltas reconcile",
+        "both actors become eligible for standard maxWithdraw"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 30,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 31,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 25,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 31,
+      "label": "writer revokes PLTR Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c450000000000000000000000001fbe1a0e43594b3455993b5de5fd0a7a266298d00000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0xf570bc3a6e425c05027d3d885e9378cab9b0b6d8083c64945cd4854c806b54a4",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "0",
+        "expiration": "0",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 PLTR allowance amount is zero"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 31,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 32,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 26,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 32,
+      "label": "writer revokes WETH Permit2 allowance to UniversalRouter",
+      "to": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+      "valueWei": "0",
+      "calldata": "0x87517c4500000000000000000000000033e4191705c386532ba27cbf171db86919200b940000000000000000000000008876789976decbfcbbbe364623c63652db8c090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0x5d48084e067995fd2b2ace1dde650288a2140625e293be47f576edb5be2bd7f3",
+      "decodedIntent": {
+        "function": "approve(address,address,uint160,uint48)",
+        "token": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "spender": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "amount": "0",
+        "expiration": "0",
+        "clockClassification": "EXTENDED_MANUAL_TESTNET_CONTINUATION_TIME_BOUND"
+      },
+      "mandatoryPostconditions": [
+        "Permit2 WETH allowance amount is zero"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 32,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 33,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 27,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 33,
+      "label": "writer clears PLTR ERC20 allowance to Permit2",
+      "to": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "0"
+      },
+      "mandatoryPostconditions": [
+        "PLTR ERC20 allowance to Permit2 is zero"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 33,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 34,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "authorizedForBroadcast": false
+    },
+    {
+      "ordinal": 28,
+      "phase": "SWAP_PERMISSION_CLEANUP",
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "nonce": 34,
+      "label": "writer clears WETH ERC20 allowance to Permit2",
+      "to": "0x33e4191705c386532ba27cbf171db86919200b94",
+      "valueWei": "0",
+      "calldata": "0x095ea7b3000000000000000000000000000000000022d473030f116ddee9f6b43ac78ba30000000000000000000000000000000000000000000000000000000000000000",
+      "calldataKeccak256": "0xcbd6108e33dd81f7e87909205e8d21d987835ad3bbdb28e8c3439727795a61aa",
+      "decodedIntent": {
+        "function": "approve(address,uint256)",
+        "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "amount": "0"
+      },
+      "mandatoryPostconditions": [
+        "WETH ERC20 allowance to Permit2 is zero"
+      ],
+      "requiredNonceStateBefore": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 34,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "requiredNonceStateAfter": {
+        "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 35,
+        "0x6719e877c05b2d6c28abcea405fc033feef5750f": 7
+      },
+      "authorizedForBroadcast": false
+    }
+  ],
+  "operatorPolicy": {
+    "mode": "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+    "bothSenderNoncesMustMatchBeforeEveryStep": true,
+    "exactCalldataAndReceiptRequired": true,
+    "separateKeystoreChosenByTransactionSender": true,
+    "executionEvidenceMustRemainOutsideRepository": true
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false,
+    "wrapping": false,
+    "approvals": false,
+    "swaps": false,
+    "collateralDeposits": false,
+    "optionPositions": false,
+    "withdrawals": false,
+    "otherMarkets": false,
+    "mainnet": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "broadcastAttempted": false,
+    "blockingReasons": [
+      "the receipt-bound continuation has not passed exact-head simulation",
+      "the seven-day swap and eight-day Permit2 windows require explicit owner acceptance",
+      "no continuation hash-bound authorization manifest exists"
+    ]
+  },
+  "nextGate": "EXACT_HEAD_CONTINUATION_SIMULATION_THEN_NEW_HASH_BOUND_AUTHORIZATION",
+  "continuationInitialState": {
+    "completedPrefixCount": 8,
+    "observed": {
+      "blockNumber": 121787195,
+      "pool": {
+        "sqrtPriceX96": "2504844082534029585032185681",
+        "tick": -69086,
+        "protocolFee": 0,
+        "lpFee": 3000,
+        "activeLiquidity": "138450781996976174"
+      },
+      "writer": {
+        "nonce": 20,
+        "nativeBalanceWei": "5977462640000000",
+        "pltrBalance": "3021157655355120211",
+        "wethBalance": "2020996773015596",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "1000000000000000",
+        "wethToPermit2": "2000000000000",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          1000000000000000,
+          1789540127,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          2000000000000,
+          1789540127,
+          0
+        ],
+        "premium": null
+      },
+      "buyer": {
+        "nonce": 1,
+        "nativeBalanceWei": "9699470970000000",
+        "pltrBalance": "5000000000000000000",
+        "wethBalance": "300000000000000",
+        "tracker0Shares": "0",
+        "tracker0Assets": "0",
+        "tracker0MaxWithdraw": "0",
+        "tracker1Shares": "0",
+        "tracker1Assets": "0",
+        "tracker1MaxWithdraw": "0",
+        "openLegs": 0,
+        "pltrToPermit2": "0",
+        "wethToPermit2": "0",
+        "pltrToTracker0": "0",
+        "wethToTracker1": "0",
+        "pltrPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "wethPermit2ToRouter": [
+          0,
+          0,
+          0
+        ],
+        "premium": null
+      }
+    },
+    "evidencePrefix": [
+      {
+        "transactionIndex": 0,
+        "nonce": 0,
+        "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+        "transactionHash": "0x73efa85dd1ee329847cc2f5618c940bda9747d73d910a6d5c523bfb9eb6c068f",
+        "receiptBlock": 120125684,
+        "evidenceFileName": "lifecycle-index-00-nonce-0.json",
+        "evidenceFileSha256": "dc9894371eb5080000998ab103b956771cd7f9d78a5f10071d7c7adb02c38c3e",
+        "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+      },
+      {
+        "transactionIndex": 1,
+        "nonce": 13,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0xe0d48363dc520f59f0b75aff779571b362c256d0690841a6284d09432a2abd11",
+        "receiptBlock": 120153874,
+        "evidenceFileName": "lifecycle-index-01-nonce-13.json",
+        "evidenceFileSha256": "6d1e4f84fc7c1150c778f364b7a08933c6644efbaeb700b0648df7ea32f34f87",
+        "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+      },
+      {
+        "transactionIndex": 2,
+        "nonce": 14,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0x06a16a46d1f36e1a84be07f4737f18c36a34cc74b4e54717d0af811c0e638387",
+        "receiptBlock": 120161936,
+        "evidenceFileName": "lifecycle-index-02-nonce-14.json",
+        "evidenceFileSha256": "34fc03742ca6924dd689e38d2465dc8c37c4056eb0251996e94fe4d08bb8b1d0",
+        "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+      },
+      {
+        "transactionIndex": 3,
+        "nonce": 15,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0x6fac923657f13afc339661927df201c0a821922bde76f2009454f4207126f334",
+        "receiptBlock": 120167059,
+        "evidenceFileName": "lifecycle-index-03-nonce-15.json",
+        "evidenceFileSha256": "e3e679ced6cddc03c53f5f998d8dce50406efae7ca2133e04e7471f8b8970bdd",
+        "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+      },
+      {
+        "transactionIndex": 4,
+        "nonce": 16,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0x01594e06fe274584c20e4a3432d5ed48ff29205ac0a558468ec1522481d7eb6f",
+        "receiptBlock": 120173573,
+        "evidenceFileName": "lifecycle-index-04-nonce-16.json",
+        "evidenceFileSha256": "59a985ca9d25197688ee01a2e4826e11b07b1df5bf8b595f150ffade7ed2da95",
+        "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+      },
+      {
+        "transactionIndex": 5,
+        "nonce": 17,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0xa0b800c1c1f75258a288c36bf2eca91c280f987d71cf42f3b03ce0578db696d0",
+        "receiptBlock": 120192214,
+        "evidenceFileName": "lifecycle-index-05-nonce-17.json",
+        "evidenceFileSha256": "05b3d19584414573d85d8558c45e1ddefe5961715957966129accb92b9515beb",
+        "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3"
+      },
+      {
+        "transactionIndex": 6,
+        "nonce": 18,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0x9dcf9a40cf1cc3b3cacb6f87889c0b1e5bdf3654c3dfc90094b1b6cd0ec2d1fa",
+        "receiptBlock": 120207042,
+        "evidenceFileName": "lifecycle-index-06-nonce-18.json",
+        "evidenceFileSha256": "9777b83ed8844ee2cb75e64d3a537c22b0b3696e4c5bc78f55e529b33a022a89",
+        "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3"
+      },
+      {
+        "transactionIndex": 7,
+        "nonce": 19,
+        "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+        "transactionHash": "0xd2d2783b10d9fcd1c2595cd4cc7c9a000acd56824c3311c8f1b888b5cc9ed5b2",
+        "receiptBlock": 120224961,
+        "evidenceFileName": "lifecycle-index-07-nonce-19.json",
+        "evidenceFileSha256": "df85f8153e953a391ee3c3a0c56ccf84fc7ead761dbdcb81376ffccfed8ceb91",
+        "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3"
+      }
+    ]
+  },
+  "executionStartIndex": 8,
+  "continuationStartNonces": {
+    "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 20,
+    "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+  },
+  "remainingSwapInputTotals": {
+    "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0": "1000000000000000",
+    "0x33e4191705c386532ba27cbf171db86919200b94": "2000000000000"
+  },
+  "executionPlanBodySha256": "cd8cdfb5fd01dc9cdfa6fc3a12c8b9e4010cb3529036df96c919c4f4b0871428"
+}

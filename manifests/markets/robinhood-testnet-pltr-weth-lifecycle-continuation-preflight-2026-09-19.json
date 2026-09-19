@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_PUBLIC_LIFECYCLE_CONTINUATION_PREFLIGHT_NO_AUTHORITY",
+  "mode": "PINNED_READ_ONLY_RECEIPT_BOUND_PARTIAL_STATE_NO_KEYS_NO_SIGNING_NO_BROADCAST",
+  "classification": "VALUELESS_ROBINHOOD_TESTNET_MECHANISM_TEST_ONLY",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "referenceBlock": 121787328,
+    "referenceBlockHash": "0x1cd2d3fa1ada5fb893c2bbcb56d214b93bbf12c861cb8bf5c1054d29fc7df0d0",
+    "referenceTimestampUnix": 1789844353,
+    "referenceTimestampUtc": "2026-09-19T18:59:13Z"
+  },
+  "priorPlan": {
+    "executionPlanBodySha256": "b97bd784e43e2e4e9495c39294ee87f892eb9c132449d34de7a42709bcf390cf",
+    "executionPlanFileSha256": "6ad14f4f8f4c341d3dcb477f06b523d6d380510c6e955c46460b7b31a6d347c3"
+  },
+  "qualifier": {
+    "path": "scripts/qualify_robinhood_lifecycle_continuation.py",
+    "sha256": "8f74eb3b66573abc4280c17434291c8432b72cc393e9d002c118568450b11835"
+  },
+  "priorExecutionStartIndex": 5,
+  "completedPrefixCount": 8,
+  "evidencePrefix": [
+    {
+      "transactionIndex": 0,
+      "nonce": 0,
+      "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+      "transactionHash": "0x73efa85dd1ee329847cc2f5618c940bda9747d73d910a6d5c523bfb9eb6c068f",
+      "receiptBlock": 120125684,
+      "evidenceFileName": "lifecycle-index-00-nonce-0.json",
+      "evidenceFileSha256": "dc9894371eb5080000998ab103b956771cd7f9d78a5f10071d7c7adb02c38c3e",
+      "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+    },
+    {
+      "transactionIndex": 1,
+      "nonce": 13,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0xe0d48363dc520f59f0b75aff779571b362c256d0690841a6284d09432a2abd11",
+      "receiptBlock": 120153874,
+      "evidenceFileName": "lifecycle-index-01-nonce-13.json",
+      "evidenceFileSha256": "6d1e4f84fc7c1150c778f364b7a08933c6644efbaeb700b0648df7ea32f34f87",
+      "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+    },
+    {
+      "transactionIndex": 2,
+      "nonce": 14,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0x06a16a46d1f36e1a84be07f4737f18c36a34cc74b4e54717d0af811c0e638387",
+      "receiptBlock": 120161936,
+      "evidenceFileName": "lifecycle-index-02-nonce-14.json",
+      "evidenceFileSha256": "34fc03742ca6924dd689e38d2465dc8c37c4056eb0251996e94fe4d08bb8b1d0",
+      "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+    },
+    {
+      "transactionIndex": 3,
+      "nonce": 15,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0x6fac923657f13afc339661927df201c0a821922bde76f2009454f4207126f334",
+      "receiptBlock": 120167059,
+      "evidenceFileName": "lifecycle-index-03-nonce-15.json",
+      "evidenceFileSha256": "e3e679ced6cddc03c53f5f998d8dce50406efae7ca2133e04e7471f8b8970bdd",
+      "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+    },
+    {
+      "transactionIndex": 4,
+      "nonce": 16,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0x01594e06fe274584c20e4a3432d5ed48ff29205ac0a558468ec1522481d7eb6f",
+      "receiptBlock": 120173573,
+      "evidenceFileName": "lifecycle-index-04-nonce-16.json",
+      "evidenceFileSha256": "59a985ca9d25197688ee01a2e4826e11b07b1df5bf8b595f150ffade7ed2da95",
+      "operatorSha256": "cdc85dfc524f68b39f3a044fe2796aa67a9826e0061d8f29309ba397d7ed38c4"
+    },
+    {
+      "transactionIndex": 5,
+      "nonce": 17,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0xa0b800c1c1f75258a288c36bf2eca91c280f987d71cf42f3b03ce0578db696d0",
+      "receiptBlock": 120192214,
+      "evidenceFileName": "lifecycle-index-05-nonce-17.json",
+      "evidenceFileSha256": "05b3d19584414573d85d8558c45e1ddefe5961715957966129accb92b9515beb",
+      "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3"
+    },
+    {
+      "transactionIndex": 6,
+      "nonce": 18,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0x9dcf9a40cf1cc3b3cacb6f87889c0b1e5bdf3654c3dfc90094b1b6cd0ec2d1fa",
+      "receiptBlock": 120207042,
+      "evidenceFileName": "lifecycle-index-06-nonce-18.json",
+      "evidenceFileSha256": "9777b83ed8844ee2cb75e64d3a537c22b0b3696e4c5bc78f55e529b33a022a89",
+      "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3"
+    },
+    {
+      "transactionIndex": 7,
+      "nonce": 19,
+      "sender": "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f",
+      "transactionHash": "0xd2d2783b10d9fcd1c2595cd4cc7c9a000acd56824c3311c8f1b888b5cc9ed5b2",
+      "receiptBlock": 120224961,
+      "evidenceFileName": "lifecycle-index-07-nonce-19.json",
+      "evidenceFileSha256": "df85f8153e953a391ee3c3a0c56ccf84fc7ead761dbdcb81376ffccfed8ceb91",
+      "operatorSha256": "d908b07b6b83638aeaea56811e827a221861bfc199db60b5818a2bfa29ab8eb3"
+    }
+  ],
+  "nonceVector": {
+    "0x04d5a0f57cb2e110fac9703024888cd4562b6d6f": 20,
+    "0x6719e877c05b2d6c28abcea405fc033feef5750f": 1
+  },
+  "observed": {
+    "blockNumber": 121787195,
+    "pool": {
+      "sqrtPriceX96": "2504844082534029585032185681",
+      "tick": -69086,
+      "protocolFee": 0,
+      "lpFee": 3000,
+      "activeLiquidity": "138450781996976174"
+    },
+    "writer": {
+      "nonce": 20,
+      "nativeBalanceWei": "5977462640000000",
+      "pltrBalance": "3021157655355120211",
+      "wethBalance": "2020996773015596",
+      "tracker0Shares": "0",
+      "tracker0Assets": "0",
+      "tracker0MaxWithdraw": "0",
+      "tracker1Shares": "0",
+      "tracker1Assets": "0",
+      "tracker1MaxWithdraw": "0",
+      "openLegs": 0,
+      "pltrToPermit2": "1000000000000000",
+      "wethToPermit2": "2000000000000",
+      "pltrToTracker0": "0",
+      "wethToTracker1": "0",
+      "pltrPermit2ToRouter": [
+        1000000000000000,
+        1789540127,
+        0
+      ],
+      "wethPermit2ToRouter": [
+        2000000000000,
+        1789540127,
+        0
+      ],
+      "premium": null
+    },
+    "buyer": {
+      "nonce": 1,
+      "nativeBalanceWei": "9699470970000000",
+      "pltrBalance": "5000000000000000000",
+      "wethBalance": "300000000000000",
+      "tracker0Shares": "0",
+      "tracker0Assets": "0",
+      "tracker0MaxWithdraw": "0",
+      "tracker1Shares": "0",
+      "tracker1Assets": "0",
+      "tracker1MaxWithdraw": "0",
+      "openLegs": 0,
+      "pltrToPermit2": "0",
+      "wethToPermit2": "0",
+      "pltrToTracker0": "0",
+      "wethToTracker1": "0",
+      "pltrPermit2ToRouter": [
+        0,
+        0,
+        0
+      ],
+      "wethPermit2ToRouter": [
+        0,
+        0,
+        0
+      ],
+      "premium": null
+    }
+  },
+  "externalState": {
+    "chainId": 46630,
+    "computedPoolId": "0xd600fd2ff936078114b72a01d3c6d31d449b7af12c24c82fb61efb7bf9c613ae",
+    "runtimes": {
+      "stockRegistry": {
+        "address": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+        "runtimeBytes": 2332,
+        "runtimeCodeHash": "0x404e8188c4b1d0c9804205e0da253d11570e9d48d03964962cb689072b1735d2"
+      },
+      "pltr": {
+        "address": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+        "runtimeBytes": 283,
+        "runtimeCodeHash": "0x2f367e6a678e7b30ab613d5963e541e6f4d3ca586de76e2f441fbfeb1a27c440"
+      },
+      "weth": {
+        "address": "0x33e4191705c386532ba27cbf171db86919200b94",
+        "runtimeBytes": 1730,
+        "runtimeCodeHash": "0x55f8ac53c64450f01880d8249fc5cb0c69c064e4bcb097ea80a02fff40485a7c"
+      },
+      "permit2": {
+        "address": "0x000000000022d473030f116ddee9f6b43ac78ba3",
+        "runtimeBytes": 9152,
+        "runtimeCodeHash": "0x0117e0ed818bc3f2a8729ffc336c837e63e965f04b473047b39b35ad86aac259"
+      },
+      "universalRouter": {
+        "address": "0x8876789976decbfcbbbe364623c63652db8c0904",
+        "runtimeBytes": 24546,
+        "runtimeCodeHash": "0xfdd90802f39ce5fc8bac4c2f1b3ac7bac530fd17ff46b0630f1bd00f1e14082f"
+      },
+      "stateView": {
+        "address": "0xf3334192d15450cdd385c8b70e03f9a6bd9e673b",
+        "runtimeBytes": 3531,
+        "runtimeCodeHash": "0x7d9c591e0956fd89d98feb4ffcfe8bf1f7a62bd485edd979fa21d104b49878a6"
+      },
+      "panopticPool": {
+        "address": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+        "runtimeBytes": 306,
+        "runtimeCodeHash": "0xd1753140c3c20c5e81917aa8a6073aecae32c6d5153653918dcda8d7d4e56593"
+      },
+      "collateralTracker0": {
+        "address": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0x6073a68416f1668735eab80d3a06c8febffa6877517d029350e4c04a1561a344"
+      },
+      "collateralTracker1": {
+        "address": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0xabd430adfb0b8bb9f60709ebc6b9b5cc26578f2dff0c8adab64e8b61fd9d6339"
+      }
+    },
+    "expectedRuntimes": {
+      "stockRegistry": {
+        "runtimeBytes": 2332,
+        "runtimeCodeHash": "0x404e8188c4b1d0c9804205e0da253d11570e9d48d03964962cb689072b1735d2"
+      },
+      "pltr": {
+        "runtimeBytes": 283,
+        "runtimeCodeHash": "0x2f367e6a678e7b30ab613d5963e541e6f4d3ca586de76e2f441fbfeb1a27c440"
+      },
+      "weth": {
+        "runtimeBytes": 1730,
+        "runtimeCodeHash": "0x55f8ac53c64450f01880d8249fc5cb0c69c064e4bcb097ea80a02fff40485a7c"
+      },
+      "permit2": {
+        "runtimeBytes": 9152,
+        "runtimeCodeHash": "0x0117e0ed818bc3f2a8729ffc336c837e63e965f04b473047b39b35ad86aac259"
+      },
+      "universalRouter": {
+        "runtimeBytes": 24546,
+        "runtimeCodeHash": "0xfdd90802f39ce5fc8bac4c2f1b3ac7bac530fd17ff46b0630f1bd00f1e14082f"
+      },
+      "stateView": {
+        "runtimeBytes": 3531,
+        "runtimeCodeHash": "0x7d9c591e0956fd89d98feb4ffcfe8bf1f7a62bd485edd979fa21d104b49878a6"
+      },
+      "panopticPool": {
+        "runtimeBytes": 306,
+        "runtimeCodeHash": "0xd1753140c3c20c5e81917aa8a6073aecae32c6d5153653918dcda8d7d4e56593"
+      },
+      "collateralTracker0": {
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0x6073a68416f1668735eab80d3a06c8febffa6877517d029350e4c04a1561a344"
+      },
+      "collateralTracker1": {
+        "runtimeBytes": 181,
+        "runtimeCodeHash": "0xabd430adfb0b8bb9f60709ebc6b9b5cc26578f2dff0c8adab64e8b61fd9d6339"
+      }
+    },
+    "stockControls": {
+      "registryPaused": false,
+      "tokenPaused": false,
+      "uiMultiplier": "1000000000000000000",
+      "newUIMultiplier": "1000000000000000000",
+      "effectiveAt": "0",
+      "writerBlocked": false,
+      "buyerBlocked": false
+    },
+    "wiring": {
+      "pltrRegistry": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+      "panopticPoolCollateral0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "panopticPoolCollateral1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "panopticPoolManager": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "panopticPoolRiskEngine": "0x3ad134ff173dfa0a892b4116a65b76b818218585",
+      "panopticPoolSfpm": "0x86ef420fd3e27c3ac896c479b19b6a840b97bee1",
+      "panopticPoolNumericId": "16897827167146926",
+      "tracker0Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker0Underlying": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "tracker1Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker1Underlying": "0x33e4191705c386532ba27cbf171db86919200b94"
+    },
+    "expectedWiring": {
+      "pltrRegistry": "0x1df3ca0fd30ed5eeb09eb01938f4e9c5196e6ca5",
+      "panopticPoolCollateral0": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "panopticPoolCollateral1": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "panopticPoolManager": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+      "panopticPoolRiskEngine": "0x3ad134ff173dfa0a892b4116a65b76b818218585",
+      "panopticPoolSfpm": "0x86ef420fd3e27c3ac896c479b19b6a840b97bee1",
+      "panopticPoolNumericId": "16897827167146926",
+      "tracker0Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker0Underlying": "0x1fbe1a0e43594b3455993b5de5fd0a7a266298d0",
+      "tracker1Pool": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "tracker1Underlying": "0x33e4191705c386532ba27cbf171db86919200b94"
+    },
+    "requiredStockState": {
+      "registryPaused": false,
+      "tokenPaused": false,
+      "uiMultiplier": "1000000000000000000",
+      "newUIMultiplier": "1000000000000000000",
+      "effectiveAt": "0",
+      "writerBlocked": false,
+      "buyerBlocked": false
+    }
+  },
+  "checks": {
+    "evidenceFileCount": 3,
+    "publicReceiptCount": 8,
+    "allPublicReceiptsSucceeded": true,
+    "partialStateMatchesCompletedPrefix": true,
+    "confirmedAndPendingNoncesEqual": true,
+    "externalRuntimeAndWiringMatch": true
+  },
+  "authorization": {
+    "signing": false,
+    "publicBroadcast": false
+  },
+  "publicExecution": {
+    "ready": false,
+    "broadcastAttempted": false
+  },
+  "nextGate": "BUILD_CONTINUATION_THEN_EXACT_HEAD_SIMULATION",
+  "preflightBodySha256": "3c1a24b5faab3a656de65c52b84d03a5bf0c374f08b9ad1b3f41b9d7a6c087ee"
+}

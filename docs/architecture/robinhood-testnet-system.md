@@ -4,7 +4,7 @@
 |---|---|
 | State date | 2026-09-15 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; all genesis allowances are zero; a dedicated third buyer completed a discarded-fork rehearsal of `25/25` lifecycle calls plus `4/4` bounded withdrawals; the fresh dual-sender one-step operator also passed `25/25` calls with nonce/deadline binding; public lifecycle execution remains unauthorized |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; eight lifecycle calls are canonical through the first bounded baseline swap; a receipt-bound continuation for indexes `8..28` passes `21/21` calls on an exact-head fork but remains unauthorized |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -552,24 +552,25 @@ including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
 The **three-account lifecycle execution** has now crossed its first public
-boundary. Five canonical one-step transactions funded the buyer and installed
-the writer's exact two-layer swap permissions. The system then stopped before
-the first swap because the original clock could not credibly reach its later
-deadline-bearing calls with the mandatory margin.
+swap boundary. Eight canonical one-step transactions funded the buyer,
+installed and renewed the writer's exact swap permissions, and completed the
+first bounded PLTR-to-WETH baseline swap. The reverse swap then failed closed
+before signing because its deadline margin expired.
 
 The recovery architecture treats mined calls as an immutable prefix rather
-than pretending the original plan is still fresh. A read-only qualifier binds
-the five public receipts and current state; an offline transformer preserves
-indexes `0..4`, inserts two same-amount Permit2 renewals, refreshes future swap
-deadlines, and recomputes both nonce streams. The generalized verifier derives
-allowances, collateral-share requirements, and open-leg state from transaction
-semantics instead of brittle fixed indexes. The refreshed remaining `22/22`
-calls pass on the exact-head fork, but have no public authority:
+than pretending an expired plan is still fresh. The second read-only qualifier
+binds all eight public receipts and current state; the offline transformer
+preserves indexes `0..7`, derives renewals from only the unexecuted swap inputs,
+refreshes future deadlines, and recomputes both nonce streams. The generalized
+verifier derives allowances, collateral-share requirements, and open-leg state
+from transaction semantics instead of brittle fixed indexes. The remaining
+`21/21` calls pass on the exact-head fork, but have no public authority:
 
 1. independently review the roles, exposure, minimum outputs, option TokenIds,
    withdrawal buffer, sequence, and evidence hashes;
 2. add independent health monitoring and safe-mode guidance;
-3. separately review the prefix-bound refreshed candidate and all frozen hashes
+3. separately review the receipt-bound continuation, its longer testnet-only
+   clock policy, exact remaining approvals, and all frozen hashes
    before a replacement public authorization;
 4. if review and clocks remain valid, request a new exact hash-bound lifecycle
    authorization and execute no more than one verified transaction at a time;
@@ -578,7 +579,8 @@ calls pass on the exact-head fork, but have no public authority:
 6. only after the public lifecycle and first-user path pass, freeze the
    documentation hierarchy and build the Docusaurus site.
 
-See the [public-prefix and refresh ledger](../progress/2026-09-16-lifecycle-prefix-and-refresh.md),
+See the [receipt-bound continuation ledger](../progress/2026-09-19-lifecycle-receipt-bound-continuation.md),
+[public-prefix and refresh ledger](../progress/2026-09-16-lifecycle-prefix-and-refresh.md),
 [three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md),
 and [execution-preparation ledger](../progress/2026-09-15-lifecycle-execution-preparation.md).
 

@@ -125,10 +125,6 @@ class LifecycleOperatorTests(unittest.TestCase):
             operator.MARKETS
             / "robinhood-testnet-pltr-weth-lifecycle-refresh-candidate-2026-09-16.json"
         )
-        report_path = (
-            operator.MARKETS
-            / "robinhood-testnet-pltr-weth-lifecycle-refresh-operator-simulation-2026-09-16.json"
-        )
         refreshed = operator.load_json(refreshed_path)
         operator.validate_execution_plan(refreshed, refreshed_path)
         self.assertEqual(refreshed["executionStartIndex"], 5)
@@ -137,10 +133,28 @@ class LifecycleOperatorTests(unittest.TestCase):
             refreshed["transactions"][5]["requiredNonceStateBefore"],
             refreshed["continuationStartNonces"],
         )
+
+    def test_receipt_bound_continuation_validates_after_expired_step(self):
+        continuation_path = (
+            operator.MARKETS
+            / "robinhood-testnet-pltr-weth-lifecycle-continuation-candidate-2026-09-19.json"
+        )
+        report_path = (
+            operator.MARKETS
+            / "robinhood-testnet-pltr-weth-lifecycle-continuation-operator-simulation-2026-09-19.json"
+        )
+        continuation = operator.load_json(continuation_path)
+        operator.validate_execution_plan(continuation, continuation_path)
+        self.assertEqual(continuation["executionStartIndex"], 8)
+        self.assertEqual(len(continuation["transactions"]), 29)
+        self.assertEqual(
+            continuation["transactions"][8]["requiredNonceStateBefore"],
+            continuation["continuationStartNonces"],
+        )
         operator.validate_simulation_report(
             operator.load_json(report_path),
-            refreshed,
-            plan_file_hash=operator.file_sha256(refreshed_path),
+            continuation,
+            plan_file_hash=operator.file_sha256(continuation_path),
             operator_hash=operator.file_sha256(SCRIPT),
         )
 

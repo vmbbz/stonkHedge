@@ -25,34 +25,37 @@ balances, elevated allowances, and swap-output shortfalls, and a separate
 offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
 The dedicated third unprivileged buyer is now funded, and the fresh exact-head
 replay also passed `4/4` bounded state-derived withdrawals while keeping every
-residual below `2e12` raw units. The first public lifecycle authorization then
-completed five one-step transactions: buyer WETH funding and the writer's exact
-two-layer swap permissions. StonkHedge stopped before the first swap when the
-remaining clock could no longer safely reach the later premium-observation
-swaps. A prefix-bound refresh now preserves those five receipts, inserts two
-exact Permit2 renewals, refreshes the four swap deadlines, and passes all
-remaining `22/22` calls on an exact-head fork. The refresh still requires a new
-hash-bound authorization. Public swaps, collateral, options, withdrawals, and
-the application are not live yet.
+residual below `2e12` raw units. Public lifecycle execution has completed eight
+one-step transactions: buyer WETH funding, the writer's exact two-layer swap
+permissions, two same-amount Permit2 renewals, and the first bounded
+PLTR-to-WETH baseline swap. The reverse swap then failed closed before signing
+because its clock margin expired. A second receipt-bound continuation preserves
+indexes `0..7`, reduces renewals to only the exact unexecuted swap inputs, and
+passes all remaining `21/21` calls on an exact-head fork. Its proposed
+seven-day swap and eight-day Permit2 windows are not authorized yet.
+Collateral, options, withdrawals, and the application are not live.
 
 Start with:
 
-1. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
+1. [`progress/2026-09-19-lifecycle-receipt-bound-continuation.md`](./progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
+   for the eight canonical receipts, failed-closed expiry, exact remaining
+   allowance derivation, 21-call replay, and new authorization boundary;
+2. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
    for the five canonical public receipts, safe pre-swap stop, refreshed clock
    architecture, 22-call exact-head replay, and new authorization boundary;
-2. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
+3. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
    for the original dual-sender candidate and its 25-call preparation;
-3. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+4. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
    for the three-account lifecycle, withdrawal, failure-analysis, and evidence
    ledger;
-4. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
+5. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
    for the complete public achievement, contract and transaction ledgers,
    ordering rationale, communications facts, and next boundary;
-5. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+6. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
    for the system, component, trust-boundary, and evidence overview;
-6. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+7. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
    for the public transaction record; and
-7. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+8. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
 For the proposed Solana track, read the

@@ -47,6 +47,10 @@ refresh_planner = _load_sibling(
     "stonkhedge_lifecycle_execution_refresh_planner",
     "prepare_robinhood_lifecycle_execution_refresh.py",
 )
+continuation_planner = _load_sibling(
+    "stonkhedge_lifecycle_execution_continuation_planner",
+    "prepare_robinhood_lifecycle_execution_continuation.py",
+)
 simulator = _load_sibling(
     "stonkhedge_lifecycle_simulator", "simulate_robinhood_two_actor_lifecycle_fork.py"
 )
@@ -107,15 +111,20 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
         raise ValueError("execution plan body hash drifted")
 
     bindings = plan.get("sourceBindings", {})
-    refresh = "refreshPreflight" in bindings
+    continuation = "continuationPreflight" in bindings
+    refresh = "refreshPreflight" in bindings and not continuation
     required_bindings = (
-        ("priorExecutionCandidate", "refreshPreflight", "generator")
-        if refresh
+        ("priorExecutionCandidate", "continuationPreflight", "generator")
+        if continuation
         else (
+            ("priorExecutionCandidate", "refreshPreflight", "generator")
+            if refresh
+            else (
             "baseLifecyclePlan",
             "successfulLifecycleRehearsal",
             "freshExecutionPreflight",
             "generator",
+            )
         )
     )
     for name in required_bindings:
@@ -123,7 +132,13 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
         source = REPOSITORY / binding.get("path", "")
         if not source.is_file() or binding.get("sha256") != file_sha256(source):
             raise ValueError(f"execution plan source binding {name} drifted")
-    if refresh:
+    if continuation:
+        regenerated = continuation_planner.build_continuation_plan(
+            REPOSITORY / bindings["priorExecutionCandidate"]["path"],
+            REPOSITORY / bindings["continuationPreflight"]["path"],
+            REPOSITORY / bindings["generator"]["path"],
+        )
+    elif refresh:
         regenerated = refresh_planner.build_refresh_plan(
             REPOSITORY / bindings["priorExecutionCandidate"]["path"],
             REPOSITORY / bindings["refreshPreflight"]["path"],
@@ -157,10 +172,19 @@ def validate_execution_plan(plan: dict[str, Any], plan_path: Path) -> None:
     transactions = plan.get("transactions")
     execution_start = int(plan.get("executionStartIndex", 0))
     expected_shape = (0, 25) if not refresh else (5, 27)
-    if (
-        not isinstance(transactions, list)
-        or (execution_start, len(transactions)) != expected_shape
-    ):
+    invalid_shape = not isinstance(transactions, list)
+    if continuation:
+        invalid_shape = invalid_shape or execution_start != int(
+            plan.get("continuationInitialState", {}).get(
+                "completedPrefixCount", -1
+            )
+        ) or not 0 < execution_start < len(transactions)
+    else:
+        invalid_shape = invalid_shape or (
+            execution_start,
+            len(transactions),
+        ) != expected_shape
+    if invalid_shape:
         raise ValueError("lifecycle execution candidate transaction shape drifted")
     if plan.get("transactionCount") != len(transactions):
         raise ValueError("transaction count drifted")

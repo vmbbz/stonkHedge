@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-19 |
+| State date | 2026-09-20 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; the public lifecycle is verified through index `15` (`16/29` canonical calls), including both bounded writer collateral deposits and the buyer's exact PLTR approval, and is stopped before the buyer deposit |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; the public lifecycle is verified through index `16` (`17/29` canonical calls), including both bounded writer collateral deposits and the buyer's exact PLTR deposit, and is stopped before buyer WETH approval |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -54,9 +54,9 @@ sandbox:
   exact-head lifecycle and buffered withdrawal sequence on a discarded fork,
   including receipt-level interest and share-burn reconciliation; and
 - the separately authorized public lifecycle now has a canonical prefix of
-  indexes `0..15`: buyer funding, exact swap permissions and renewals, both
+  indexes `0..16`: buyer funding, exact swap permissions and renewals, both
   bounded baseline swaps, exact writer deposits of `0.5 PLTR` plus
-  `0.0005 WETH`, and the buyer's exact `0.25 PLTR` tracker approval. Every call
+  `0.0005 WETH`, and the buyer's exact `0.25 PLTR` tracker deposit. Every call
   was independently receipt/state reconciled before the next index, and no
   option leg is open.
 
@@ -83,8 +83,8 @@ flowchart LR
     J --> K[Allowances zeroed and Panoptic market registered]
     K --> L[Lifecycle safety and withdrawal tooling]
     L --> M[Third-actor lifecycle and withdrawals rehearsed]
-    M --> N[Public lifecycle 0..15 verified]
-    N --> G[Next: buyer PLTR deposit index 16]
+    M --> N[Public lifecycle 0..16 verified]
+    N --> G[Next: buyer WETH approval index 17]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
@@ -562,7 +562,7 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The **two-actor public lifecycle execution** now has `16/29` canonical calls.
+The **two-actor public lifecycle execution** now has `17/29` canonical calls.
 Indexes `0..7` funded the buyer, installed and renewed the writer's exact swap
 permissions, and completed the first bounded PLTR-to-WETH baseline swap. The
 next reverse swap then failed closed before signing because its deadline
@@ -573,16 +573,16 @@ than pretending an expired plan is still fresh. The second read-only qualifier
 binds all eight predecessor receipts and state; the offline transformer
 preserves indexes `0..7`, derives renewals from only the unexecuted swap inputs,
 refreshes future deadlines, and recomputes both nonce streams. Its separately
-authorized continuation has now completed indexes `8..15`: exact remaining
+authorized continuation has now completed indexes `8..16`: exact remaining
 Permit2 renewals, the bounded WETH-to-PLTR reverse swap, and the writer's PLTR
 and WETH tracker approvals/deposits, followed by the buyer's exact `0.25 PLTR`
-approval to tracker0. Writer nonce is `27`, buyer nonce is `2`, and both actors
-have zero open option legs.
+approval and deposit into tracker0. Writer nonce is `27`, buyer nonce is `3`,
+and both actors have zero open option legs.
 
 The next boundary remains narrow:
 
-1. preflight and execute at most index `16`, the buyer's exact PLTR tracker
-   deposit, then reconcile and stop;
+1. preflight and execute at most index `17`, the buyer's exact WETH tracker
+   approval, then reconcile and stop;
 2. continue the authorized sequence only while every nonce, state, hash, and
    time-window condition matches;
 3. do not claim the options lifecycle complete until matched open, premium

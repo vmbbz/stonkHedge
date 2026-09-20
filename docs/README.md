@@ -25,13 +25,14 @@ balances, elevated allowances, and swap-output shortfalls, and a separate
 offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
 The dedicated third unprivileged buyer is now funded, and the fresh exact-head
 replay also passed `4/4` bounded state-derived withdrawals while keeping every
-residual below `2e12` raw units. Public lifecycle execution now has `15/29`
+residual below `2e12` raw units. Public lifecycle execution now has `16/29`
 verified one-step transactions. After the first eight-call prefix and a
 fail-closed deadline stop, a separately authorized receipt-bound continuation
 renewed only the exact remaining permissions, completed the bounded reverse
 swap, and deposited the writer's exact `0.5 PLTR` plus `0.0005 WETH`
-collateral. Writer nonce is `27`, buyer nonce is `1`, and no option leg is
-open. Buyer collateral, matched option positions, premium observation,
+collateral. The buyer has also approved exactly `0.25 PLTR` to tracker0. Writer
+nonce is `27`, buyer nonce is `2`, and no option leg is open. Buyer collateral
+deposits, matched option positions, premium observation,
 ordered close, cleanup, withdrawals, and the user application remain ahead.
 
 Start with:
@@ -40,9 +41,9 @@ Start with:
    for the 19-address runtime audit, the nine exact source implementations,
    metadata-store and clone distinctions, and the Blockscout publication gate;
 2. [`progress/2026-09-19-lifecycle-receipt-bound-continuation.md`](./progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
-   for the canonical lifecycle prefix through index `14`, failed-closed expiry,
-   exact remaining allowance derivation, both writer collateral deposits, and
-   the next one-transaction boundary;
+   for the canonical lifecycle prefix through index `15`, failed-closed expiry,
+   exact remaining allowance derivation, both writer collateral deposits, the
+   buyer's PLTR approval, and the next one-transaction boundary;
 3. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
    for the five canonical public receipts, safe pre-swap stop, refreshed clock
    architecture, 22-call exact-head replay, and new authorization boundary;

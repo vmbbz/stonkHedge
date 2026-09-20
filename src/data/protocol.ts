@@ -1,6 +1,9 @@
 import chainManifest from "../../manifests/chains/robinhood-testnet-46630.json";
 import deploymentManifest from "../../manifests/deployments/robinhood-testnet-direct-public-progress-2026-09-09.json";
 import genesisManifest from "../../manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json";
+import lifecyclePlan from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-candidate-2026-09-19.json";
+import lifecyclePreflight from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-preflight-2026-09-19.json";
+import lifecycleProgress from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-public-progress-2026-09-19.json";
 import progressJson from "../../content/progress.json";
 import type {
   ArchitectureNode,
@@ -13,7 +16,7 @@ import type {
 export const explorerBase = "https://explorer.testnet.chain.robinhood.com";
 export const repositoryBase = "https://github.com/vmbbz/stonkHedge/blob/main";
 
-export const progress = progressJson as ProgressContent;
+const progressBase = progressJson as ProgressContent;
 
 const sharedNames = [
   "FactoryNFT data slice 0",
@@ -141,6 +144,63 @@ const genesisTransactions: TransactionRecord[] = genesisManifest.completedTransa
   }),
 );
 
+const lifecycleReason = (phase: string) => {
+  const reasons: Record<string, string> = {
+    BUYER_FUNDING: "Fund the ordinary buyer with the exact bounded WETH collateral amount before any market interaction.",
+    WRITER_SWAP_PERMISSIONS: "Establish the exact two-layer token permission required by the bounded baseline swaps.",
+    WRITER_SWAP_PERMISSION_REFRESH: "Refresh only the existing Permit2 expiry after the original human-review window became too short.",
+    BIDIRECTIONAL_BASELINE: "Exercise the live V4 route with a capped exact input and calldata-bound minimum output.",
+    WRITER_REMAINING_SWAP_PERMISSION_REFRESH: "Renew only the unspent router allowance preserved by the canonical receipt prefix.",
+    BOUNDED_COLLATERAL: "Move the exact authorized test collateral through its approval and tracker-deposit boundary.",
+  };
+  return reasons[phase] ?? "Advance one hash-bound lifecycle transition and stop for receipt and state verification.";
+};
+
+type LifecyclePlanTransaction = (typeof lifecyclePlan.transactions)[number];
+
+const lifecycleTransactionAt = (index: number): LifecyclePlanTransaction => {
+  const transaction = lifecyclePlan.transactions.find((candidate) => candidate.ordinal === index);
+  if (!transaction) throw new Error(`Missing lifecycle transaction ${index}`);
+  return transaction;
+};
+
+const lifecyclePrefixTransactions: TransactionRecord[] = lifecyclePreflight.evidencePrefix.map((evidence) => {
+  const transaction = lifecycleTransactionAt(evidence.transactionIndex);
+  return {
+    id: `lifecycle-${evidence.transactionIndex}`,
+    phase: "lifecycle",
+    index: evidence.transactionIndex,
+    nonce: evidence.nonce,
+    label: transaction.label,
+    hash: evidence.transactionHash,
+    blockNumber: evidence.receiptBlock,
+    toOrCreated: transaction.to,
+    reason: lifecycleReason(transaction.phase),
+    signedByProject: true,
+  };
+});
+
+const lifecycleContinuationTransactions: TransactionRecord[] = lifecycleProgress.completedTransactions.map((evidence) => {
+  const transaction = lifecycleTransactionAt(evidence.index);
+  return {
+    id: `lifecycle-${evidence.index}`,
+    phase: "lifecycle",
+    index: evidence.index,
+    nonce: evidence.nonce,
+    label: evidence.label,
+    hash: evidence.transactionHash,
+    blockNumber: evidence.blockNumber,
+    toOrCreated: evidence.to,
+    reason: lifecycleReason(transaction.phase),
+    signedByProject: true,
+  };
+});
+
+const lifecycleTransactions = [
+  ...lifecyclePrefixTransactions,
+  ...lifecycleContinuationTransactions,
+].sort((left, right) => left.index - right.index);
+
 const fundingTransactions: TransactionRecord[] = [
   {
     id: "funding-deployer",
@@ -170,7 +230,87 @@ export const transactions: TransactionRecord[] = [
   ...fundingTransactions,
   ...sharedTransactions,
   ...genesisTransactions,
+  ...lifecycleTransactions,
 ];
+
+const latestLifecycleTransaction = lifecycleProgress.completedTransactions.at(-1);
+const nextLifecycleTransaction = lifecyclePlan.transactions.find(
+  (transaction) => transaction.ordinal === lifecycleProgress.nextAuthorizedIndex,
+);
+
+const lifecycleCheckpoint = (nextIndex: number) => {
+  if (nextIndex <= 10) return {
+    headline: "Bounded swaps in progress.",
+    summary: "The permission and baseline-swap prefix is advancing under receipt-by-receipt verification.",
+  };
+  if (nextIndex <= 14) return {
+    headline: "Writer collateral in progress.",
+    summary: "The writer's exact PLTR and WETH collateral path is advancing through the two trackers.",
+  };
+  if (nextIndex <= 18) return {
+    headline: "Writer funded. Buyer collateral next.",
+    summary: "Both writer collateral deposits are live; the next gated phase establishes the buyer's bounded collateral.",
+  };
+  if (nextIndex <= 20) return {
+    headline: "Collateral live. Matched positions next.",
+    summary: "Both actors are funded; the lifecycle is advancing into the bounded matched short/long option pair.",
+  };
+  if (nextIndex <= 22) return {
+    headline: "Matched positions live. Premium test next.",
+    summary: "The bounded option pair is open; controlled swaps and premium/solvency observations are next.",
+  };
+  if (nextIndex <= 24) return {
+    headline: "Premium observed. Ordered close next.",
+    summary: "The mechanism observation has run; the buyer-first then writer close sequence remains gated.",
+  };
+  if (nextIndex <= 28) return {
+    headline: "Positions closed. Cleanup next.",
+    summary: "Both option legs are closed; only exact Permit2 and ERC-20 permission cleanup remains.",
+  };
+  return {
+    headline: "Public lifecycle complete.",
+    summary: "All plan-bound lifecycle calls have canonical receipts and reconciled terminal state.",
+  };
+};
+
+const checkpoint = lifecycleCheckpoint(lifecycleProgress.nextAuthorizedIndex);
+
+export const lifecycleFacts = {
+  completedCalls: lifecycleTransactions.length,
+  completedThrough: lifecycleProgress.completedThroughTransactionIndex,
+  totalCalls: lifecyclePlan.transactionCount,
+  remainingCalls: lifecycleProgress.remainingTransactionCount,
+  nextAuthorizedIndex: lifecycleProgress.nextAuthorizedIndex,
+  nextLabel: nextLifecycleTransaction?.label ?? "No remaining plan-bound transaction",
+  nextRequiredAction: lifecycleProgress.nextRequiredAction,
+  latestBlock: latestLifecycleTransaction?.blockNumber ?? genesisManifest.network.referenceBlock,
+  latestTimestampUtc: latestLifecycleTransaction?.blockTimestampUtc ?? genesisManifest.network.referenceTimestampUtc,
+  writerNonce: lifecycleProgress.postState.writerNonce,
+  buyerNonce: lifecycleProgress.postState.buyerNonce,
+  headline: checkpoint.headline,
+  checkpointSummary: checkpoint.summary,
+};
+
+export const progress: ProgressContent = {
+  ...progressBase,
+  updatedAt: lifecycleFacts.latestTimestampUtc.slice(0, 10),
+  entries: progressBase.entries.map((entry) => entry.id === "two-actor-lifecycle" ? {
+    ...entry,
+    summary: `The hash-bound public lifecycle is verified through index ${lifecycleFacts.completedThrough}: ${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls} calls are canonical. ${lifecycleFacts.checkpointSummary} Next: ${lifecycleFacts.nextLabel}.`,
+    outcomes: [
+      `${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls} public lifecycle calls have canonical receipts and reconciled post-state`,
+      "Every public call is bound to its plan, receipt, exact post-state, and both actors' nonce stream",
+      `${lifecycleFacts.remainingCalls} authorized one-step calls remain; next is ${lifecycleFacts.nextLabel}`,
+    ],
+    transactionRefs: lifecycleTransactions.map((transaction) => transaction.id),
+    evidence: [
+      `Verified public prefix 0..${lifecycleFacts.completedThrough}`,
+      `Latest reconciled block ${lifecycleFacts.latestBlock}`,
+      `Writer nonce ${lifecycleFacts.writerNonce} · buyer nonce ${lifecycleFacts.buyerNonce}`,
+      "ONE_TRANSACTION_WAIT_VERIFY_STOP_ON_MISMATCH",
+    ],
+  } : entry),
+};
 
 const sharedContracts: ContractRecord[] = deploymentManifest.transactions.map(
   (transaction: SharedTransaction, index: number) => ({
@@ -275,9 +415,9 @@ export const contracts: ContractRecord[] = [
 
 export const metrics: Metric[] = [
   { value: "19", label: "StonkHedge deployments", note: "16 shared + 3 market clones" },
-  { value: "29", label: "Project-signed transactions", note: "All canonical and successful" },
-  { value: "1", label: "Registered market", note: "PLTR / WETH mechanism test" },
-  { value: "0", label: "Lingering allowances", note: "ERC-20 + Permit2 cleared" },
+  { value: String(transactions.filter((transaction) => transaction.signedByProject).length), label: "Project-signed transactions", note: "Deployment + genesis + public lifecycle" },
+  { value: `${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls}`, label: "Lifecycle calls verified", note: `Canonical public prefix through index ${lifecycleFacts.completedThrough}` },
+  { value: "2", label: "Writer collateral deposits", note: "Bounded PLTR + WETH mechanism-test assets" },
 ];
 
 export const architectureNodes: ArchitectureNode[] = [
@@ -287,18 +427,19 @@ export const architectureNodes: ArchitectureNode[] = [
   { id: "sfpm", contractId: "sfpm-v4", label: "SFPM V4", layer: "shared", position: [0.1, -1.8, 0], connections: ["market"] },
   { id: "factory", contractId: "panoptic-factory", label: "Panoptic\nFactory V4", layer: "shared", position: [2.4, 1.2, 0], connections: ["market"] },
   { id: "liquidity", label: "PLTR / WETH\nLP NFT 3903", layer: "market", position: [-1.6, -3.8, 0], connections: ["market"] },
-  { id: "market", contractId: "market-panoptic-pool", label: "PanopticPool +\n2 Trackers", layer: "market", position: [4.5, -0.7, 0], connections: ["next"] },
-  { id: "next", label: "Two-actor\nlifecycle", layer: "next", position: [6.2, 2.2, 0], connections: [] },
+  { id: "market", contractId: "market-panoptic-pool", label: "PanopticPool +\n2 Trackers", layer: "market", position: [4.5, -0.7, 0], connections: ["lifecycle"] },
+  { id: "lifecycle", label: `Public lifecycle\n${lifecycleFacts.completedCalls} / ${lifecycleFacts.totalCalls}`, layer: "market", position: [6.2, 2.2, 0], connections: ["next"] },
+  { id: "next", label: `Next plan-bound\nindex ${lifecycleFacts.nextAuthorizedIndex}`, layer: "next", position: [7.5, -1.4, 0], connections: [] },
 ];
 
 export const terminalFacts = {
-  status: genesisManifest.status,
-  referenceBlock: genesisManifest.network.referenceBlock,
-  referenceTimestamp: genesisManifest.network.referenceTimestampUtc,
+  status: lifecycleProgress.status,
+  referenceBlock: lifecycleFacts.latestBlock,
+  referenceTimestamp: lifecycleFacts.latestTimestampUtc,
   poolId: genesisManifest.market.poolId,
   lpNft: genesisManifest.market.liquidityPosition.tokenId,
   liquidity: genesisManifest.market.liquidityPosition.liquidity,
   sfpmPoolId: genesisManifest.registeredMarket.sfpmPoolId,
-  finalTransaction: genesisManifest.completedTransactions[12].transactionHash,
-  nextGate: genesisManifest.nextGate,
+  finalTransaction: latestLifecycleTransaction?.transactionHash ?? genesisManifest.completedTransactions[12].transactionHash,
+  nextGate: lifecycleFacts.nextRequiredAction,
 };

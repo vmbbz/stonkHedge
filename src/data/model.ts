@@ -46,7 +46,7 @@ export interface ContractRecord {
 
 export interface TransactionRecord {
   id: string;
-  phase: "funding" | "shared" | "genesis";
+  phase: "funding" | "shared" | "genesis" | "lifecycle";
   index: number;
   nonce?: number;
   label: string;

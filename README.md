@@ -12,6 +12,9 @@ The current repository is the product and delivery control plane. It contains th
 - Use the [public-genesis milestone ledger](./docs/progress/2026-09-11-public-genesis-milestone.md)
   for the complete 19-deployment, 29-transaction architecture and
   communications record.
+- Use the [receipt-bound lifecycle ledger](./docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
+  for the current public prefix through index `14`, including both bounded
+  writer collateral deposits and the exact next stop boundary.
 - Read [`plan.md`](./plan.md), beginning with **StonkHedge build and Robinhood Chain testnet launch plan**.
 - Use the [`docs` index](./docs/README.md) to navigate architecture, evidence,
   deployment, review, testing, and roadmap records.
@@ -43,8 +46,12 @@ The current repository is the product and delivery control plane. It contains th
   exist, all genesis allowances are zero, and PanopticPool `0x042c…e586` plus
   both CollateralTrackers are registered. The [final public-genesis
   manifest](./manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json)
-  binds all 13 receipts and the terminal wiring. Its authorization is closed;
-  swaps, collateral, options, other markets, and mainnet remain excluded.
+  binds all 13 receipts and the terminal wiring. Its authorization is closed.
+  A separate hash-bound lifecycle plan has since reached `15/29` verified
+  public calls, including two bounded swaps and exact writer PLTR/WETH
+  collateral deposits. No option leg is open; buyer collateral, matched
+  positions, close, cleanup, withdrawals, other markets, and mainnet remain
+  incomplete or excluded.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
 - Use the [Checkpoint B evidence](./docs/baseline/2026-09-08-checkpoint-b.md), checked-in baseline manifest, and verifier before changing inherited protocol behavior.
 - Review the [exact-sender direct-deployment simulation](./docs/deployment/2026-09-08-direct-deployment-simulation.md) and its sanitized manifest before any Robinhood testnet deployment work.
@@ -59,8 +66,9 @@ The current repository is the product and delivery control plane. It contains th
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
   Robinhood Chain testnet. The PLTR/WETH PoolKey is initialized and bounded V4
   liquidity NFT `3903` is public. The first per-market Panoptic contracts are
-  deployed and wired, and all genesis allowances are zero. Collateral, options,
-  public lifecycle evidence, and the application remain undeployed or untested.
+  deployed and wired. Public lifecycle evidence now covers indexes `0..14`,
+  including both writer collateral deposits. Buyer collateral, options,
+  close/cleanup, withdrawals, and the user application remain incomplete.
 
 ## Repository map
 

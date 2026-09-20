@@ -9,6 +9,13 @@ repository documents. Contract and transaction facts are generated from the
 canonical deployment and market manifests; do not duplicate or hand-edit an
 address merely to change the website.
 
+The `two-actor-lifecycle` entry is intentionally special: its live receipt
+count, latest block, nonce checkpoint, outcomes, and `lifecycle-*` transaction
+references are derived at build time from the receipt-bound continuation
+preflight, candidate, and public-progress manifests. Edit its prose, commits,
+media, or document links here, but update public transaction facts only in the
+canonical lifecycle progress manifest after independent receipt/state checks.
+
 Before committing an entry:
 
 1. link only to checked-in evidence or a canonical explorer transaction;

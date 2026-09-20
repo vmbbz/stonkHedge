@@ -4,6 +4,7 @@ import {
   architectureNodes,
   contracts,
   explorerBase,
+  lifecycleFacts,
   metrics,
   progress,
   repositoryBase,
@@ -46,7 +47,7 @@ const milestoneCard = (entry: ProgressEntry, index: number) => `
     <div class="milestone-body">
       <div class="milestone-meta">
         <span>${entry.eyebrow}</span><time>${entry.date}</time>
-        <span class="status-pill">${entry.status === "next" ? "Next gate" : "Verified"}</span>
+        <span class="status-pill">${entry.status === "next" ? "Next gate" : entry.status === "in-progress" ? "In progress" : "Verified"}</span>
       </div>
       <h3>${entry.title}</h3>
       <p class="target"><span>${icon("target")}</span>${entry.target}</p>
@@ -99,19 +100,19 @@ app.innerHTML = `
       <div class="hero-copy">
         <div class="eyebrow"><span class="live-dot"></span>Building in public · updated ${progress.updatedAt}</div>
         <h1>Hedging gets<br/><em>a little weird.</em></h1>
-        <p class="hero-lede">Follow a proof-backed trail from test assets to a registered Panoptic market—every contract, transaction, decision, and honest boundary included.</p>
+        <p class="hero-lede">Follow a proof-backed trail from test assets and deployed contracts into a live, one-transaction-at-a-time Panoptic lifecycle.</p>
         <div class="hero-actions">
           <a class="primary-button" href="#timeline">Explore the build ${icon("arrow")}</a>
-          <a class="secondary-button" href="${repoUrl("docs/progress/2026-09-11-public-genesis-milestone.md")}" target="_blank" rel="noreferrer">Read the milestone ${icon("external")}</a>
+          <a class="secondary-button" href="${repoUrl("docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md")}" target="_blank" rel="noreferrer">Read the live checkpoint ${icon("external")}</a>
         </div>
         <p class="truth-note">Valueless mechanism test. Not a market quote, audit, endorsement, or mainnet release.</p>
       </div>
       <div class="hero-visual" aria-label="StonkHedge green crystal character">
         <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
         <img src="${assetUrl("/media/stonkhedge-crystal.png")}" alt="A cheerful translucent green crystal character wearing a red bow tie" />
-        <div class="float-card card-one"><span>29</span>canonical txs</div>
+        <div class="float-card card-one"><span>${transactions.filter((transaction) => transaction.signedByProject).length}</span>canonical txs</div>
         <div class="float-card card-two"><span>19</span>deployments</div>
-        <div class="float-card card-three"><span>0</span>allowances left</div>
+        <div class="float-card card-three"><span>${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls}</span>lifecycle</div>
       </div>
       <div class="scroll-cue">Scroll the ledger <span>↓</span></div>
     </section>
@@ -132,12 +133,12 @@ app.innerHTML = `
         </div>
         <div class="architecture-panel" id="architecture-panel" aria-live="polite">
           <span class="panel-kicker">Selected node</span>
-          <h3>PanopticPool + 2 Trackers</h3>
-          <p>The first deployed per-market options graph, connected to the exact PLTR/WETH PoolKey.</p>
-          <a href="#contracts">Open contract ledger ${icon("arrow")}</a>
+          <h3>Public lifecycle ${lifecycleFacts.completedCalls} / ${lifecycleFacts.totalCalls}</h3>
+          <p>${lifecycleFacts.checkpointSummary} Next: ${lifecycleFacts.nextLabel}.</p>
+          <a href="#timeline">Open lifecycle evidence ${icon("arrow")}</a>
         </div>
         <div class="architecture-controls" role="group" aria-label="Architecture components">
-          ${architectureNodes.map((node) => `<button type="button" data-node="${node.id}" class="${node.id === "market" ? "active" : ""}"><span class="node-dot ${node.layer}"></span>${node.label.replace("\n", " ")}</button>`).join("")}
+          ${architectureNodes.map((node) => `<button type="button" data-node="${node.id}" class="${node.id === "lifecycle" ? "active" : ""}"><span class="node-dot ${node.layer}"></span>${node.label.replace("\n", " ")}</button>`).join("")}
         </div>
       </div>
     </section>
@@ -146,7 +147,7 @@ app.innerHTML = `
       <div class="park-intro wrap">
         <span class="kicker">Protocol Park</span>
         <h2>Infrastructure should feel alive.</h2>
-        <p>Walk the route from shared foundations to the first market—and see the two-actor lifecycle advancing under an explicit no-broadcast boundary.</p>
+        <p>Walk the route from shared foundations to the first market—and watch the two-actor lifecycle advance one verified public receipt at a time.</p>
       </div>
       <div class="park-scene" id="protocol-park" aria-label="A playful layered park showing StonkHedge's completed and upcoming milestones">
         <div class="park-sky-fill"></div>
@@ -174,8 +175,8 @@ app.innerHTML = `
         <a class="park-marker marker-genesis" href="#timeline" aria-label="Market genesis milestone complete">
           <span>02</span><strong>Market genesis</strong><small>PLTR/WETH · complete</small>
         </a>
-        <a class="park-marker marker-next" href="#timeline" aria-label="Two-actor lifecycle planning is in progress">
-          <span>03</span><strong>Two-actor lifecycle</strong><small>fork pass · no authorization</small>
+        <a class="park-marker marker-next" href="#timeline" aria-label="Two-actor public lifecycle is in progress">
+          <span>03</span><strong>Two-actor lifecycle</strong><small>${lifecycleFacts.completedCalls} / ${lifecycleFacts.totalCalls} public · verified</small>
         </a>
         <div class="park-caption"><span class="live-dot"></span>Move your pointer to explore the layers</div>
       </div>
@@ -209,14 +210,15 @@ app.innerHTML = `
     <section class="section transaction-section" id="transactions">
       <div class="wrap section-heading split-heading">
         <div><span class="kicker">Transaction trail</span><h2>Why this transaction, right now?</h2></div>
-        <p>The answer sits next to every receipt. Faucet events are intentionally outside the 29 project-signed total.</p>
+        <p>The answer sits next to every receipt. Faucet events remain visibly separate from the project-signed deployment, genesis, and lifecycle totals.</p>
       </div>
       <div class="wrap toolbar">
         <div class="filter-group" role="group" aria-label="Filter transactions">
-          <button class="filter active" type="button" data-tx-filter="all">All 31 events</button>
-          <button class="filter" type="button" data-tx-filter="shared">16 shared</button>
-          <button class="filter" type="button" data-tx-filter="genesis">13 genesis</button>
-          <button class="filter" type="button" data-tx-filter="funding">2 external funding</button>
+          <button class="filter active" type="button" data-tx-filter="all">All ${transactions.length} events</button>
+          <button class="filter" type="button" data-tx-filter="shared">${transactions.filter((transaction) => transaction.phase === "shared").length} shared</button>
+          <button class="filter" type="button" data-tx-filter="genesis">${transactions.filter((transaction) => transaction.phase === "genesis").length} genesis</button>
+          <button class="filter" type="button" data-tx-filter="lifecycle">${lifecycleFacts.completedCalls} lifecycle</button>
+          <button class="filter" type="button" data-tx-filter="funding">${transactions.filter((transaction) => transaction.phase === "funding").length} external funding</button>
         </div>
         <label class="search"><span class="sr-only">Search transactions</span><input id="tx-search" type="search" placeholder="Search action or tx hash" /></label>
       </div>
@@ -230,15 +232,15 @@ app.innerHTML = `
         </div>
         <div class="proof-copy">
           <span class="kicker">Current checkpoint</span>
-          <h2>Genesis complete.<br/>Lifecycle next.</h2>
-          <p>The graph exists. Now the harder proof begins: two actors, bounded collateral, one option position, premium and solvency observations, a clean close, and explicit cleanup.</p>
+          <h2>${lifecycleFacts.headline.replace(". ", ".<br/>")}</h2>
+          <p>The public sequence is verified through index ${lifecycleFacts.completedThrough}. ${lifecycleFacts.checkpointSummary} The next plan-bound action is “${lifecycleFacts.nextLabel}.”</p>
           <dl>
-            <div><dt>Reconciled block</dt><dd>${terminalFacts.referenceBlock.toLocaleString()}</dd></div>
-            <div><dt>LP NFT</dt><dd>#${terminalFacts.lpNft}</dd></div>
-            <div><dt>SFPM pool ID</dt><dd>${terminalFacts.sfpmPoolId}</dd></div>
-            <div><dt>Authorization</dt><dd>Closed · 0 actions remain</dd></div>
+            <div><dt>Latest verified block</dt><dd>${terminalFacts.referenceBlock.toLocaleString()}</dd></div>
+            <div><dt>Lifecycle</dt><dd>${lifecycleFacts.completedCalls} / ${lifecycleFacts.totalCalls} calls</dd></div>
+            <div><dt>Writer collateral</dt><dd>PLTR + WETH</dd></div>
+            <div><dt>Next gate</dt><dd>Index ${lifecycleFacts.nextAuthorizedIndex} · ${lifecycleFacts.nextLabel}</dd></div>
           </dl>
-          <a class="primary-button" href="${repoUrl("docs/roadmap/2026-09-09-market-genesis.md")}" target="_blank" rel="noreferrer">Inspect the next gate ${icon("external")}</a>
+          <a class="primary-button" href="${repoUrl("docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md")}" target="_blank" rel="noreferrer">Inspect the receipt ledger ${icon("external")}</a>
         </div>
       </div>
     </section>
@@ -247,8 +249,8 @@ app.innerHTML = `
   <footer>
     <div class="wrap footer-grid">
       <div><a class="wordmark" href="#top"><span class="mark">S</span><span>StonkHedge</span></a><p>Mechanism testing in public, with receipts.</p></div>
-      <div><span>Source of truth</span><a href="${repoUrl("docs/architecture/robinhood-testnet-system.md")}" target="_blank" rel="noreferrer">Architecture</a><a href="${repoUrl("manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json")}" target="_blank" rel="noreferrer">Genesis manifest</a></div>
-      <div><span>Boundaries</span><p>Robinhood Chain Testnet only. No real value. No public trading lifecycle yet.</p></div>
+      <div><span>Source of truth</span><a href="${repoUrl("docs/architecture/robinhood-testnet-system.md")}" target="_blank" rel="noreferrer">Architecture</a><a href="${repoUrl("manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-public-progress-2026-09-19.json")}" target="_blank" rel="noreferrer">Lifecycle manifest</a></div>
+      <div><span>Boundaries</span><p>Robinhood Chain Testnet only. No real value, withdrawal, liquidation, or mainnet activity.</p></div>
     </div>
   </footer>
 
@@ -264,7 +266,8 @@ const nodeDescription = (node: ArchitectureNode) => {
   const descriptions: Record<string, string> = {
     assets: "Five faucet Stock Tokens plus WETH are external test assets. PLTR is the first market's base asset.",
     liquidity: "Position NFT 3903 supplies bounded two-sided liquidity to the exact PLTR/WETH PoolKey.",
-    next: "A separately planned two-actor lifecycle will test collateral, options, premium, solvency, close, and cleanup.",
+    lifecycle: `The hash-bound two-actor lifecycle is public through index ${lifecycleFacts.completedThrough}. ${lifecycleFacts.checkpointSummary} Every call still stops for receipt and state verification.`,
+    next: `The next exact plan-bound action is “${lifecycleFacts.nextLabel}.”`,
   };
   return {
     title: node.label.replace("\n", " "),

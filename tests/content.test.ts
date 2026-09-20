@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { contracts, progress, transactions } from "../src/data/protocol";
+import { contracts, lifecycleFacts, progress, transactions } from "../src/data/protocol";
 
 const addressPattern = /^0x[a-fA-F0-9]{40}$/;
 const transactionPattern = /^0x[a-fA-F0-9]{64}$/;
@@ -36,8 +36,19 @@ describe("build-in-public content", () => {
   it("preserves the milestone's provenance-aware totals", () => {
     expect(contracts.filter((contract) => contract.provenance === "stonkhedge")).toHaveLength(16);
     expect(contracts.filter((contract) => contract.provenance === "market")).toHaveLength(3);
-    expect(transactions.filter((transaction) => transaction.signedByProject)).toHaveLength(29);
+    expect(transactions.filter((transaction) => transaction.signedByProject)).toHaveLength(29 + lifecycleFacts.completedCalls);
     expect(transactions.filter((transaction) => !transaction.signedByProject)).toHaveLength(2);
+  });
+
+  it("derives the complete public lifecycle prefix from canonical manifests", () => {
+    const lifecycleTransactions = transactions.filter((transaction) => transaction.phase === "lifecycle");
+    expect(lifecycleFacts.completedCalls).toBe(lifecycleFacts.completedThrough + 1);
+    expect(lifecycleTransactions).toHaveLength(lifecycleFacts.completedCalls);
+    expect(lifecycleTransactions.map((transaction) => transaction.index)).toEqual(
+      Array.from({ length: lifecycleFacts.completedCalls }, (_, index) => index),
+    );
+    expect(lifecycleTransactions.at(-1)?.blockNumber).toBe(lifecycleFacts.latestBlock);
+    expect(progress.entries.find((entry) => entry.id === "two-actor-lifecycle")?.transactionRefs).toHaveLength(lifecycleFacts.completedCalls);
   });
 
   it("links editorial entries only to files that exist in the repository", () => {

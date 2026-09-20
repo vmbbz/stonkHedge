@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-15 |
+| State date | 2026-09-19 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; eight lifecycle calls are canonical through the first bounded baseline swap; a receipt-bound continuation for indexes `8..28` passes `21/21` calls on an exact-head fork but remains unauthorized |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; the public lifecycle is verified through index `14` (`15/29` canonical calls), including both bounded writer collateral deposits, and is stopped before buyer collateral approval |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -52,14 +52,20 @@ sandbox:
   execution preparation; and
 - at block `119052230`, a dedicated unprivileged third buyer passed the full
   exact-head lifecycle and buffered withdrawal sequence on a discarded fork,
-  including receipt-level interest and share-burn reconciliation.
+  including receipt-level interest and share-burn reconciliation; and
+- the separately authorized public lifecycle now has a canonical prefix of
+  indexes `0..14`: buyer funding, exact swap permissions and renewals, both
+  bounded baseline swaps, and exact writer deposits of `0.5 PLTR` plus
+  `0.0005 WETH`. Every call was independently receipt/state reconciled before
+  the next index, and no option leg is open.
 
 This is now a deployed and wired Panoptic market over a functioning Uniswap V4
-liquidity pool. “Deployed market” is intentionally narrower than “validated
-user lifecycle”: there is still no public swap evidence, collateral deposit,
-option position, premium/solvency observation, close, liquidation, or
-withdrawal. Those public actions require a new three-account execution plan and
-authorization; the corresponding local-only mechanism rehearsal now passes.
+liquidity pool with public swap and writer-collateral evidence. “Collateral
+prefix” is intentionally narrower than “validated user lifecycle”: buyer
+collateral, option positions, premium/solvency observation, close, liquidation,
+and withdrawal are not yet public. The currently authorized plan preserves
+one-transaction execution with mandatory receipt/state review and stop on any
+nonce, state, hash, or time-window mismatch.
 
 ### Milestone memory aid
 
@@ -76,11 +82,12 @@ flowchart LR
     J --> K[Allowances zeroed and Panoptic market registered]
     K --> L[Lifecycle safety and withdrawal tooling]
     L --> M[Third-actor lifecycle and withdrawals rehearsed]
-    M --> G[Next: nonce-bound operator review]
+    M --> N[Public lifecycle 0..14 verified]
+    N --> G[Next: buyer collateral index 15]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
-    class A,B,C,D,E,F,H,I,J,K,L,M done;
+    class A,B,C,D,E,F,H,I,J,K,L,M,N done;
     class G next;
 ```
 
@@ -554,33 +561,35 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The **three-account lifecycle execution** has now crossed its first public
-swap boundary. Eight canonical one-step transactions funded the buyer,
-installed and renewed the writer's exact swap permissions, and completed the
-first bounded PLTR-to-WETH baseline swap. The reverse swap then failed closed
-before signing because its deadline margin expired.
+The **two-actor public lifecycle execution** now has `15/29` canonical calls.
+Indexes `0..7` funded the buyer, installed and renewed the writer's exact swap
+permissions, and completed the first bounded PLTR-to-WETH baseline swap. The
+next reverse swap then failed closed before signing because its deadline
+margin expired; no transaction was lost or partially submitted.
 
 The recovery architecture treats mined calls as an immutable prefix rather
 than pretending an expired plan is still fresh. The second read-only qualifier
-binds all eight public receipts and current state; the offline transformer
+binds all eight predecessor receipts and state; the offline transformer
 preserves indexes `0..7`, derives renewals from only the unexecuted swap inputs,
-refreshes future deadlines, and recomputes both nonce streams. The generalized
-verifier derives allowances, collateral-share requirements, and open-leg state
-from transaction semantics instead of brittle fixed indexes. The remaining
-`21/21` calls pass on the exact-head fork, but have no public authority:
+refreshes future deadlines, and recomputes both nonce streams. Its separately
+authorized continuation has now completed indexes `8..14`: exact remaining
+Permit2 renewals, the bounded WETH-to-PLTR reverse swap, and the writer's PLTR
+and WETH tracker approvals/deposits. Writer nonce is `27`, buyer nonce is `1`,
+and both actors have zero open option legs.
 
-1. independently review the roles, exposure, minimum outputs, option TokenIds,
-   withdrawal buffer, sequence, and evidence hashes;
-2. add independent health monitoring and safe-mode guidance;
-3. separately review the receipt-bound continuation, its longer testnet-only
-   clock policy, exact remaining approvals, and all frozen hashes
-   before a replacement public authorization;
-4. if review and clocks remain valid, request a new exact hash-bound lifecycle
-   authorization and execute no more than one verified transaction at a time;
-5. derive withdrawals only from the resulting public post-close state under a
+The next boundary remains narrow:
+
+1. preflight and execute at most index `15`, the buyer's exact PLTR tracker
+   approval, then reconcile and stop;
+2. continue the authorized sequence only while every nonce, state, hash, and
+   time-window condition matches;
+3. do not claim the options lifecycle complete until matched open, premium
+   movement, buyer-first close, writer close, and permission cleanup reconcile;
+4. derive withdrawals only from the eventual public post-close state under a
    distinct plan and authorization; and
-6. only after the public lifecycle and first-user path pass, freeze the
-   documentation hierarchy and build the Docusaurus site.
+5. keep the build-in-public dashboard derived from the canonical lifecycle
+   manifests so the public status cannot silently remain at an older fork-only
+   milestone.
 
 See the [receipt-bound continuation ledger](../progress/2026-09-19-lifecycle-receipt-bound-continuation.md),
 [public-prefix and refresh ledger](../progress/2026-09-16-lifecycle-prefix-and-refresh.md),

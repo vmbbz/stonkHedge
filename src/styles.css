@@ -184,6 +184,40 @@ code { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.86em; }
 .guardian-reasons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
 .guardian-reasons span { padding: 6px 8px; border-radius: 8px; background: #edf2e9; color: #52604e; font-size: .63rem; }
 .guardian-address { display: inline-flex; align-items: center; gap: 7px; margin-top: 19px; color: #426300; font-weight: 800; }
+.guardian-quote { margin-top: 34px; padding: 26px; border: 1px solid #9faf96; border-radius: 24px; background: #101b0e; color: #f5faef; box-shadow: 0 28px 90px rgba(20,43,10,.18); }
+.guardian-quote-heading { display: grid; grid-template-columns: 1.05fr .95fr; gap: 50px; align-items: end; }
+.guardian-quote-heading .kicker { color: var(--acid); }
+.guardian-quote-heading h3 { margin: 8px 0 0; font-size: clamp(1.7rem, 3.4vw, 3rem); letter-spacing: -.055em; }
+.guardian-quote-heading p { margin: 0; color: #afbdab; line-height: 1.65; }
+.guardian-quote-fields { display: grid; grid-template-columns: 1.05fr .55fr 1.35fr auto; gap: 10px; align-items: end; margin-top: 25px; }
+.guardian-quote-fields label { display: flex; flex-direction: column; gap: 8px; min-width: 0; color: #9eac9a; font: 600 .6rem "DM Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
+.guardian-quote-fields input, .guardian-quote-fields select { width: 100%; min-width: 0; min-height: 54px; padding: 0 13px; border: 1px solid #41503e; border-radius: 12px; outline: none; background: #172315; color: white; font: 650 .75rem "DM Mono", monospace; text-transform: none; }
+.guardian-quote-fields input:focus, .guardian-quote-fields select:focus { border-color: var(--acid); box-shadow: 0 0 0 3px rgba(202,255,0,.11); }
+.guardian-quote-fields button { min-height: 54px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 18px; border: 1px solid var(--acid); border-radius: 12px; background: var(--acid); color: #071006; font-weight: 900; white-space: nowrap; cursor: pointer; }
+.guardian-quote-fields button:disabled { cursor: wait; opacity: .45; }
+.guardian-quote > small { display: block; margin-top: 12px; color: #849180; line-height: 1.5; }
+.guardian-quote-result { min-height: 78px; margin-top: 12px; }
+.guardian-quote-result > p { margin: 0; padding: 20px; border: 1px dashed #b3c2ab; border-radius: 18px; color: #596654; text-align: center; }
+.guardian-loading.compact, .guardian-error.compact { min-height: 150px; }
+.quote-card { position: relative; overflow: hidden; padding: 25px; border: 1px solid #bdcbb6; border-radius: 22px; background: rgba(255,255,255,.8); box-shadow: 0 24px 70px rgba(30,57,16,.08); }
+.quote-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: #648c00; }
+.quote-card.watch::before { background: #e39919; }
+.quote-card.blocked::before { background: #e45948; }
+.quote-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.quote-card-top > div { display: flex; flex-direction: column; gap: 4px; }
+.quote-card-top > div > span { color: #697564; font: 600 .6rem "DM Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
+.quote-card-top h3 { margin: 0; font-size: 1.35rem; letter-spacing: -.035em; }
+.quote-output { display: flex; flex-direction: column; margin: 25px 0 18px; }
+.quote-output > span { color: #6a7665; font-size: .67rem; }
+.quote-output strong { margin: 3px 0; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; letter-spacing: -.06em; overflow-wrap: anywhere; }
+.quote-output small { color: #667260; font: 500 .65rem "DM Mono", monospace; }
+.quote-facts { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; border: 1px solid #d3ddd0; border-radius: 14px; overflow: hidden; }
+.quote-facts > div { min-width: 0; padding: 12px; border-right: 1px solid #d3ddd0; border-bottom: 1px solid #d3ddd0; }
+.quote-facts > div:nth-child(3n) { border-right: 0; }
+.quote-facts > div:nth-last-child(-n+3) { border-bottom: 0; }
+.quote-facts dt { color: #74806f; font-size: .57rem; text-transform: uppercase; }
+.quote-facts dd { margin: 4px 0 0; color: #1d2a1a; font-size: .72rem; font-weight: 750; overflow-wrap: anywhere; }
+.quote-depth-note { margin: 16px 0 0; color: #687563; font-size: .65rem; line-height: 1.55; }
 .guardian-disclosure { max-width: 900px; margin: 24px auto 0; color: #61705d; text-align: center; font-size: .7rem; line-height: 1.6; }
 
 .section-heading { margin-bottom: 52px; }
@@ -412,6 +446,13 @@ dialog p { color: var(--muted); line-height: 1.7; }
   .guardian-facts { grid-template-columns: 1fr; }
   .guardian-facts > div { border-right: 0; }
   .guardian-facts > div:nth-last-child(2) { border-bottom: 1px solid #d3ddd0; }
+  .guardian-quote { padding: 19px; }
+  .guardian-quote-heading { grid-template-columns: 1fr; gap: 14px; }
+  .guardian-quote-fields { grid-template-columns: 1fr; }
+  .quote-card-top { flex-direction: column; }
+  .quote-facts { grid-template-columns: 1fr; }
+  .quote-facts > div, .quote-facts > div:nth-child(3n) { border-right: 0; border-bottom: 1px solid #d3ddd0; }
+  .quote-facts > div:last-child { border-bottom: 0; }
   .architecture-shell { grid-template-rows: 390px auto auto; }
   .architecture-controls { grid-template-columns: 1fr; max-height: 230px; overflow-y: auto; }
   .architecture-panel { padding: 28px 22px; }

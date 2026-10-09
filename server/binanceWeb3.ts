@@ -5,6 +5,14 @@ const DEFAULT_TIMEOUT_MS = 8_000;
 const MAX_TIMEOUT_MS = 30_000;
 const BSC_CHAIN_ID = "56";
 const ADDRESS_PATTERN = /^0x[a-fA-F0-9]{40}$/;
+const INTEGER_STRING_PATTERN = /^(?:0|[1-9]\d*)$/u;
+const QUOTE_IDENTIFIER_PATTERN = /^[A-Za-z0-9_-]{1,128}$/u;
+const USDT_DECIMALS = 18;
+const MIN_USDT_QUOTE_RAW = 5_100_000_000_000_000_000n;
+const MAX_USDT_QUOTE_RAW = 5_100_000_000_000_000_000n;
+const PUBLIC_QUOTE_LIFETIME_MS = 20_000;
+
+export const BSC_USDT_ADDRESS = "0x55d398326f99059ff775485246999027b3197955";
 
 type QueryEntry = readonly [key: string, value: string];
 type FetchImplementation = typeof fetch;
@@ -163,6 +171,68 @@ export interface RwaComparison {
     profiles: number[];
     markets: number[];
   };
+}
+
+export interface AggregatorQuoteToken {
+  tokenContractAddress: string;
+  tokenSymbol: string;
+  tokenUnitPrice: string;
+  decimal: string;
+  isHoneyPot: boolean;
+  taxRate: string;
+}
+
+export interface AggregatorQuoteRouteSegment {
+  dexProtocol: {
+    dexName: string;
+    percent: string;
+  };
+  fromToken: {
+    tokenContractAddress: string;
+    tokenSymbol: string;
+  };
+  fromTokenIndex: string;
+  toToken: {
+    tokenContractAddress: string;
+    tokenSymbol: string;
+  };
+  toTokenIndex: string;
+}
+
+export interface AggregatorQuoteRoute {
+  quoteId: string;
+  vendorName: string;
+  binanceChainId: string;
+  fromTokenAmount: string;
+  toTokenAmount: string;
+  tradeFee: string | null;
+  estimateGasFee: string | null;
+  priceImpactPercent: string | null;
+  router: string;
+  fromToken: AggregatorQuoteToken;
+  toToken: AggregatorQuoteToken;
+  dexRouterList: AggregatorQuoteRouteSegment[];
+  executionMode: "RFQ" | "SWAP";
+  approveTarget: string | null;
+  isBest: boolean;
+  feeAmount: string | null;
+  feeToken: string | null;
+  actualSwapAmount: string | null;
+}
+
+export interface RwaReadOnlyQuote {
+  ticker: string;
+  companyName: string;
+  asset: RwaAsset;
+  userWalletAddress: string;
+  input: {
+    symbol: "USDT";
+    displayAmount: string;
+    rawAmount: string;
+  };
+  routes: AggregatorQuoteRoute[];
+  timestamp: number;
+  expiresAt: number;
 }
 
 export interface TimestampedResult<T> {
@@ -360,6 +430,21 @@ function requireDecimalString(value: unknown, path: string, positive = false): s
 function requireNullableDecimalString(value: unknown, path: string): string | null {
   if (value === null) return null;
   return requireDecimalString(value, path);
+}
+
+function requireIntegerString(value: unknown, path: string, positive = false): string {
+  const integer = requireString(value, path);
+  if (!INTEGER_STRING_PATTERN.test(integer) || (positive && BigInt(integer) <= 0n)) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return integer;
+}
+
+function requireNullableIntegerString(value: unknown, path: string): string | null {
+  if (value === null) return null;
+  return requireIntegerString(value, path);
 }
 
 function requireAssetType(value: unknown, path: string): RwaAssetType {
@@ -691,6 +776,179 @@ function parseUnderlyingMarket(value: unknown): RwaUnderlyingMarket {
   };
 }
 
+function requireShortString(value: unknown, path: string, maximumLength: number): string {
+  const text = requireString(value, path);
+  if (text.length > maximumLength || /[\u0000-\u001f\u007f]/u.test(text)) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return text;
+}
+
+function requireRate(value: unknown, path: string, maximum: number): string {
+  const rate = requireDecimalString(value, path);
+  const numeric = Number(rate);
+  if (numeric < 0 || numeric > maximum) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return rate;
+}
+
+function parseQuoteToken(value: unknown, path: string): AggregatorQuoteToken {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, { kind: "schema" });
+  }
+  const decimals = requireIntegerString(value.decimal, `${path} decimal`);
+  if (BigInt(decimals) > 255n) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path} decimal`, {
+      kind: "schema",
+    });
+  }
+  return {
+    tokenContractAddress: requireBscAddress(value.tokenContractAddress, `${path} address`),
+    tokenSymbol: requireShortString(value.tokenSymbol, `${path} symbol`, 32),
+    tokenUnitPrice: requireDecimalString(value.tokenUnitPrice, `${path} unit price`, true),
+    decimal: decimals,
+    isHoneyPot: requireBoolean(value.isHoneyPot, `${path} honeypot flag`),
+    taxRate: requireRate(value.taxRate, `${path} tax rate`, 1),
+  };
+}
+
+function parseQuoteRouteToken(
+  value: unknown,
+  path: string,
+): AggregatorQuoteRouteSegment["fromToken"] {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, { kind: "schema" });
+  }
+  return {
+    tokenContractAddress: requireBscAddress(value.tokenContractAddress, `${path} address`),
+    tokenSymbol: requireShortString(value.tokenSymbol, `${path} symbol`, 32),
+  };
+}
+
+function parseQuoteSegments(value: unknown, routeIndex: number): AggregatorQuoteRouteSegment[] {
+  const segments = requireArray(value, `quote ${routeIndex} route list`);
+  if (segments.length > 32) {
+    throw new BinanceWeb3Error("Binance Web3 quote route exceeds the segment safety limit", {
+      kind: "schema",
+    });
+  }
+  return segments.map((candidate, segmentIndex) => {
+    if (!isRecord(candidate) || !isRecord(candidate.dexProtocol)) {
+      throw new BinanceWeb3Error(
+        `Binance Web3 response has invalid quote ${routeIndex} segment ${segmentIndex}`,
+        { kind: "schema" },
+      );
+    }
+    return {
+      dexProtocol: {
+        dexName: requireShortString(
+          candidate.dexProtocol.dexName,
+          `quote ${routeIndex} segment ${segmentIndex} DEX name`,
+          80,
+        ),
+        percent: requireRate(
+          candidate.dexProtocol.percent,
+          `quote ${routeIndex} segment ${segmentIndex} percent`,
+          100,
+        ),
+      },
+      fromToken: parseQuoteRouteToken(
+        candidate.fromToken,
+        `quote ${routeIndex} segment ${segmentIndex} from token`,
+      ),
+      fromTokenIndex: requireIntegerString(
+        candidate.fromTokenIndex,
+        `quote ${routeIndex} segment ${segmentIndex} from index`,
+      ),
+      toToken: parseQuoteRouteToken(
+        candidate.toToken,
+        `quote ${routeIndex} segment ${segmentIndex} to token`,
+      ),
+      toTokenIndex: requireIntegerString(
+        candidate.toTokenIndex,
+        `quote ${routeIndex} segment ${segmentIndex} to index`,
+      ),
+    };
+  });
+}
+
+function parseAggregatorQuoteRoutes(value: unknown): AggregatorQuoteRoute[] {
+  const candidates = requireArray(value, "quote data");
+  if (candidates.length < 1 || candidates.length > 8) {
+    throw new BinanceWeb3Error("Binance Web3 quote requires 1 to 8 routes", {
+      kind: candidates.length === 0 ? "not_found" : "schema",
+    });
+  }
+  const quoteIds = new Set<string>();
+  const routes = candidates.map((candidate, index): AggregatorQuoteRoute => {
+    if (!isRecord(candidate)) {
+      throw new BinanceWeb3Error(`Binance Web3 response has invalid quote ${index}`, {
+        kind: "schema",
+      });
+    }
+    const quoteId = requireShortString(candidate.quoteId, `quote ${index} ID`, 128);
+    if (!QUOTE_IDENTIFIER_PATTERN.test(quoteId) || quoteIds.has(quoteId)) {
+      throw new BinanceWeb3Error(`Binance Web3 response has invalid quote ${index} ID`, {
+        kind: "schema",
+      });
+    }
+    quoteIds.add(quoteId);
+    const executionMode = requireString(candidate.executionMode, `quote ${index} execution mode`);
+    if (executionMode !== "RFQ" && executionMode !== "SWAP") {
+      throw new BinanceWeb3Error(
+        `Binance Web3 response has invalid quote ${index} execution mode ${JSON.stringify(executionMode)}`,
+        {
+          kind: "schema",
+        },
+      );
+    }
+    const approveTarget = candidate.approveTarget === null
+      ? null
+      : requireBscAddress(candidate.approveTarget, `quote ${index} approve target`);
+    const feeToken = candidate.feeToken === null
+      ? null
+      : requireBscAddress(candidate.feeToken, `quote ${index} fee token`);
+    return {
+      quoteId,
+      vendorName: requireShortString(candidate.vendorName, `quote ${index} vendor`, 80),
+      binanceChainId: requireString(candidate.binanceChainId, `quote ${index} chain`),
+      fromTokenAmount: requireIntegerString(candidate.fromTokenAmount, `quote ${index} input`, true),
+      toTokenAmount: requireIntegerString(candidate.toTokenAmount, `quote ${index} output`, true),
+      tradeFee: candidate.tradeFee === null
+        ? null
+        : requireDecimalString(candidate.tradeFee, `quote ${index} trade fee`),
+      estimateGasFee: requireNullableIntegerString(candidate.estimateGasFee, `quote ${index} gas estimate`),
+      priceImpactPercent: candidate.priceImpactPercent === null
+        ? null
+        : requireDecimalString(candidate.priceImpactPercent, `quote ${index} price impact`),
+      router: requireShortString(candidate.router, `quote ${index} router`, 2_048),
+      fromToken: parseQuoteToken(candidate.fromToken, `quote ${index} from token`),
+      toToken: parseQuoteToken(candidate.toToken, `quote ${index} to token`),
+      dexRouterList: parseQuoteSegments(candidate.dexRouterList, index),
+      executionMode,
+      approveTarget,
+      isBest: requireBoolean(candidate.isBest, `quote ${index} best flag`),
+      feeAmount: requireNullableIntegerString(candidate.feeAmount, `quote ${index} fee amount`),
+      feeToken,
+      actualSwapAmount: requireNullableIntegerString(
+        candidate.actualSwapAmount,
+        `quote ${index} actual swap amount`,
+      ),
+    };
+  });
+  if (routes.filter((route) => route.isBest).length !== 1) {
+    throw new BinanceWeb3Error("Binance Web3 quote response must identify exactly one best route", {
+      kind: "schema",
+    });
+  }
+  return routes;
+}
+
 function normalizeKeyword(value: string): string {
   const keyword = value.trim();
   if (keyword.length < 1 || keyword.length > 80 || /[\u0000-\u001f\u007f]/u.test(keyword)) {
@@ -720,6 +978,43 @@ function normalizeBscAddress(value: string): string {
     });
   }
   return address;
+}
+
+function normalizeWalletAddress(value: string): string {
+  const address = value.trim().toLowerCase();
+  if (!ADDRESS_PATTERN.test(address)) {
+    throw new BinanceWeb3Error("Quote receiver must be a valid EVM address", {
+      kind: "configuration",
+    });
+  }
+  return address;
+}
+
+export function normalizeBoundedUsdtAmount(value: string): {
+  displayAmount: string;
+  rawAmount: string;
+} {
+  const amount = value.trim();
+  const match = /^(0|[1-9]\d*)(?:\.(\d{1,18}))?$/u.exec(amount);
+  if (!match) {
+    throw new BinanceWeb3Error("Quote input must be a plain decimal USDT amount", {
+      kind: "configuration",
+    });
+  }
+  const whole = match[1] ?? "0";
+  const fraction = match[2] ?? "";
+  const rawAmount = BigInt(whole) * 10n ** BigInt(USDT_DECIMALS)
+    + BigInt(fraction.padEnd(USDT_DECIMALS, "0") || "0");
+  if (rawAmount < MIN_USDT_QUOTE_RAW || rawAmount > MAX_USDT_QUOTE_RAW) {
+    throw new BinanceWeb3Error("Quote input must be exactly 5.10 USDT", {
+      kind: "configuration",
+    });
+  }
+  const normalizedFraction = fraction.replace(/0+$/u, "");
+  return {
+    displayAmount: `${BigInt(whole)}${normalizedFraction ? `.${normalizedFraction}` : ""}`,
+    rawAmount: rawAmount.toString(),
+  };
 }
 
 function normalizeBscAddresses(values: readonly string[]): string[] {
@@ -874,6 +1169,102 @@ export function createBinanceWeb3Client(options: BinanceWeb3ClientOptions) {
         ],
         parseUnderlyingMarket,
       );
+    },
+
+    async getAggregatorQuote(input: {
+      amount: string;
+      fromTokenAddress: string;
+      toTokenAddress: string;
+      userWalletAddress: string;
+    }): Promise<TimestampedResult<AggregatorQuoteRoute[]>> {
+      const amount = requireIntegerString(input.amount, "quote input amount", true);
+      const fromTokenAddress = normalizeBscAddress(input.fromTokenAddress);
+      const toTokenAddress = normalizeBscAddress(input.toTokenAddress);
+      if (fromTokenAddress === toTokenAddress) {
+        throw new BinanceWeb3Error("Quote input and output tokens must differ", {
+          kind: "configuration",
+        });
+      }
+      return get(
+        "/api/v1/dex/aggregator/quote",
+        [
+          ["binanceChainId", BSC_CHAIN_ID],
+          ["amount", amount],
+          ["fromTokenAddress", fromTokenAddress],
+          ["toTokenAddress", toTokenAddress],
+          ["userWalletAddress", normalizeWalletAddress(input.userWalletAddress)],
+        ],
+        parseAggregatorQuoteRoutes,
+      );
+    },
+
+    async quoteRwaFromUsdt(input: {
+      keyword: string;
+      tokenContractAddress: string;
+      userWalletAddress: string;
+      usdtAmount: string;
+    }): Promise<RwaReadOnlyQuote> {
+      const targetAddress = normalizeBscAddress(input.tokenContractAddress);
+      const userWalletAddress = normalizeWalletAddress(input.userWalletAddress);
+      const normalizedAmount = normalizeBoundedUsdtAmount(input.usdtAmount);
+      const search = await this.searchRwaTokens(input.keyword);
+      const result = this.filterBscAssets(search.data).find((candidate) =>
+        candidate.assets.some(
+          (asset) => asset.tokenContractAddress.toLowerCase() === targetAddress,
+        ),
+      );
+      const asset = result?.assets.find(
+        (candidate) => candidate.tokenContractAddress.toLowerCase() === targetAddress,
+      );
+      if (!result || !asset) {
+        throw new BinanceWeb3Error(
+          "The requested quote token is not a Binance-discovered BSC RWA representation",
+          { kind: "not_found" },
+        );
+      }
+
+      const quote = await this.getAggregatorQuote({
+        amount: normalizedAmount.rawAmount,
+        fromTokenAddress: BSC_USDT_ADDRESS,
+        toTokenAddress: targetAddress,
+        userWalletAddress,
+      });
+      for (const route of quote.data) {
+        if (route.binanceChainId !== BSC_CHAIN_ID) {
+          throw new BinanceWeb3Error("Binance Web3 returned mismatched quote chain identity", {
+            kind: "schema",
+          });
+        }
+        if (route.fromTokenAmount !== normalizedAmount.rawAmount) {
+          throw new BinanceWeb3Error("Binance Web3 returned mismatched quote input amount", {
+            kind: "schema",
+          });
+        }
+        if (route.fromToken.tokenContractAddress !== BSC_USDT_ADDRESS) {
+          throw new BinanceWeb3Error("Binance Web3 returned mismatched quote from-token identity", {
+            kind: "schema",
+          });
+        }
+        if (route.toToken.tokenContractAddress !== targetAddress) {
+          throw new BinanceWeb3Error("Binance Web3 returned mismatched quote to-token identity", {
+            kind: "schema",
+          });
+        }
+      }
+
+      return {
+        ticker: result.ticker,
+        companyName: result.companyName,
+        asset,
+        userWalletAddress,
+        input: {
+          symbol: "USDT",
+          ...normalizedAmount,
+        },
+        routes: quote.data,
+        timestamp: quote.timestamp,
+        expiresAt: quote.timestamp + PUBLIC_QUOTE_LIFETIME_MS,
+      };
     },
 
     async compareRwaTicker(keyword: string): Promise<RwaComparison> {

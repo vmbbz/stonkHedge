@@ -9,6 +9,12 @@ import {
   type GuardianComparison,
 } from "./bnb/gapGuardian";
 import {
+  assessReadOnlyQuote,
+  formatRawTokenAmount,
+  parseReadOnlyQuoteResponse,
+  type ReadOnlyQuote,
+} from "./bnb/readOnlyQuote";
+import {
   architectureNodes,
   contracts,
   explorerBase,
@@ -181,6 +187,22 @@ app.innerHTML = `
         </form>
         <div class="guardian-results" id="guardian-results" aria-live="polite">
           <div class="guardian-loading"><span></span><p>Resolving issuer representations and market state…</p></div>
+        </div>
+        <form class="guardian-quote" id="guardian-quote-form">
+          <div class="guardian-quote-heading">
+            <div><span class="kicker">Bounded route lens</span><h3>Ask what exactly 5.10 USDT can buy.</h3></div>
+            <p>This sends only the selected public token address, exact amount, and a public receiver address to Binance. It cannot approve, build, sign, or broadcast anything.</p>
+          </div>
+          <div class="guardian-quote-fields">
+            <label>Representation<select id="guardian-quote-asset" required disabled><option value="">Run the comparison first</option></select></label>
+            <label>Exact USDT input<input id="guardian-quote-amount" type="text" inputmode="decimal" value="5.1" maxlength="20" autocomplete="off" readonly aria-readonly="true" /></label>
+            <label>Public BSC receiver<input id="guardian-quote-receiver" type="text" placeholder="0x… (no key or connection)" maxlength="42" autocomplete="off" spellcheck="false" /></label>
+            <button type="submit" disabled>Get read-only quote ${icon("arrow")}</button>
+          </div>
+          <small>Binance enforces a 5 USD notional floor; the 5.10 USDT buffer cleared that live gate. Route count is availability evidence, not a claim about reserve depth. Quotes expire quickly.</small>
+        </form>
+        <div class="guardian-quote-result" id="guardian-quote-result" aria-live="polite">
+          <p>Select a representation and enter a public receiver to inspect a bounded route.</p>
         </div>
         <p class="guardian-disclosure">Binance documents its “reference price” as a per-share conversion derived from on-chain token price—not an official traditional-market quote. This monitor is informational and read-only.</p>
       </div>
@@ -389,12 +411,22 @@ const renderGuardianComparison = (comparison: GuardianComparison) => {
     <div class="guardian-grid">
       ${comparison.assets.map((asset) => renderGuardianAsset(asset, gapBps, now)).join("")}
     </div>`;
+  const assetSelect = document.querySelector<HTMLSelectElement>("#guardian-quote-asset");
+  const quoteButton = document.querySelector<HTMLButtonElement>("#guardian-quote-form button[type='submit']");
+  if (assetSelect) {
+    assetSelect.innerHTML = comparison.assets.map((asset) => `
+      <option value="${escapeHtml(asset.asset.tokenContractAddress)}">${escapeHtml(asset.asset.tokenSymbol)} · ${escapeHtml(asset.asset.platformId)}</option>`).join("");
+    assetSelect.disabled = false;
+  }
+  if (quoteButton) quoteButton.disabled = comparison.assets.length === 0;
+  latestGuardianComparison = comparison;
 };
 
 const guardianForm = document.querySelector<HTMLFormElement>("#guardian-search");
 const guardianInput = document.querySelector<HTMLInputElement>("#guardian-query");
 const guardianResults = document.querySelector<HTMLElement>("#guardian-results");
 let guardianRequest: AbortController | undefined;
+let latestGuardianComparison: GuardianComparison | undefined;
 
 const loadGuardianComparison = async (query: string) => {
   if (!guardianResults || !guardianForm) return;
@@ -404,10 +436,27 @@ const loadGuardianComparison = async (query: string) => {
     return;
   }
   guardianRequest?.abort();
+  const supersededQuoteRequest = quoteRequest;
+  quoteRequest = undefined;
+  supersededQuoteRequest?.abort();
+  if (quoteExpiryTimer !== undefined) {
+    window.clearTimeout(quoteExpiryTimer);
+    quoteExpiryTimer = undefined;
+  }
   const controller = new AbortController();
   guardianRequest = controller;
   const button = guardianForm.querySelector<HTMLButtonElement>("button[type='submit']");
   if (button) button.disabled = true;
+  latestGuardianComparison = undefined;
+  const quoteSelect = document.querySelector<HTMLSelectElement>("#guardian-quote-asset");
+  const quoteButton = document.querySelector<HTMLButtonElement>("#guardian-quote-form button[type='submit']");
+  if (quoteSelect) {
+    quoteSelect.disabled = true;
+    quoteSelect.innerHTML = '<option value="">Waiting for comparison</option>';
+  }
+  if (quoteButton) quoteButton.disabled = true;
+  const currentQuote = document.querySelector<HTMLElement>("#guardian-quote-result");
+  if (currentQuote) currentQuote.innerHTML = "<p>Refresh a comparison before requesting a route.</p>";
   guardianResults.setAttribute("aria-busy", "true");
   guardianResults.innerHTML = '<div class="guardian-loading"><span></span><p>Resolving issuer representations and market state…</p></div>';
   const timeout = window.setTimeout(() => controller.abort(), 15_000);
@@ -445,7 +494,113 @@ guardianForm?.addEventListener("submit", (event) => {
   void loadGuardianComparison(guardianInput?.value ?? "");
 });
 
+const quoteForm = document.querySelector<HTMLFormElement>("#guardian-quote-form");
+const quoteAsset = document.querySelector<HTMLSelectElement>("#guardian-quote-asset");
+const quoteAmount = document.querySelector<HTMLInputElement>("#guardian-quote-amount");
+const quoteReceiver = document.querySelector<HTMLInputElement>("#guardian-quote-receiver");
+const quoteResult = document.querySelector<HTMLElement>("#guardian-quote-result");
+let quoteRequest: AbortController | undefined;
+let quoteExpiryTimer: number | undefined;
+
 void loadGuardianComparison(guardianInput?.value ?? "NVDA");
+
+const renderReadOnlyQuote = (quote: ReadOnlyQuote) => {
+  if (!quoteResult) return;
+  const assessment = assessReadOnlyQuote(quote);
+  const best = quote.routes.find((route) => route.isBest) ?? quote.routes[0];
+  if (!best) return;
+  const output = formatRawTokenAmount(best.toTokenAmount, best.toToken.decimal);
+  const routeNames = [...new Set(best.dexRouterList.map((segment) => segment.dexProtocol.dexName))];
+  const impact = best.priceImpactPercent === null ? "Not reported" : `${Math.abs(Number(best.priceImpactPercent)).toFixed(2)}%`;
+  const usableSeconds = Math.floor(assessment.usableForMs / 1_000);
+  quoteResult.innerHTML = `
+    <article class="quote-card ${assessment.level}">
+      <div class="quote-card-top"><div><span>Best bounded route</span><h3>${escapeHtml(quote.input.displayAmount)} USDT → ${escapeHtml(best.toToken.tokenSymbol)}</h3></div><span class="guardian-risk ${assessment.level}">${escapeHtml(assessment.label)}</span></div>
+      <div class="quote-output"><span>Estimated output</span><strong>${escapeHtml(output)} ${escapeHtml(best.toToken.tokenSymbol)}</strong><small>${escapeHtml(best.vendorName)} · ${escapeHtml(best.executionMode)} · no transaction built</small></div>
+      <dl class="quote-facts">
+        <div><dt>Price impact</dt><dd>${escapeHtml(impact)}</dd></div>
+        <div><dt>Freshness window</dt><dd>${usableSeconds}s remaining</dd></div>
+        <div><dt>Liquidity evidence</dt><dd>${assessment.routeCount} vendor route${assessment.routeCount === 1 ? "" : "s"}</dd></div>
+        <div><dt>Reported path</dt><dd>${routeNames.length ? escapeHtml(routeNames.join(" + ")) : "No segments reported"}</dd></div>
+        <div><dt>Receiver binding</dt><dd><code>${escapeHtml(shorten(quote.userWalletAddress, 8, 6))}</code></dd></div>
+        <div><dt>Approval target</dt><dd>${best.approveTarget ? `<code>${escapeHtml(shorten(best.approveTarget, 8, 6))}</code>` : "Not reported"}</dd></div>
+      </dl>
+      <div class="guardian-reasons">${assessment.reasons.map((reason) => `<span>${escapeHtml(reason)}</span>`).join("")}</div>
+      <p class="quote-depth-note">Route availability and reported impact are quote-level evidence; they do not prove pool reserves, fill certainty, or future execution.</p>
+    </article>`;
+  if (quoteExpiryTimer !== undefined) window.clearTimeout(quoteExpiryTimer);
+  quoteExpiryTimer = window.setTimeout(() => {
+    if (!quoteResult) return;
+    const expired = assessReadOnlyQuote(quote, quote.expiresAt);
+    const risk = quoteResult.querySelector<HTMLElement>(".guardian-risk");
+    const card = quoteResult.querySelector<HTMLElement>(".quote-card");
+    if (risk) risk.textContent = expired.label;
+    if (card) card.className = "quote-card blocked";
+    const freshness = quoteResult.querySelectorAll<HTMLElement>(".quote-facts dd")[1];
+    if (freshness) freshness.textContent = "Expired · refresh required";
+  }, Math.max(0, quote.expiresAt - Date.now()));
+};
+
+quoteForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!quoteResult || !quoteAsset || !quoteAmount || !quoteReceiver || !latestGuardianComparison) return;
+  const receiver = quoteReceiver.value.trim();
+  const amount = quoteAmount.value.trim();
+  if (!/^0x[a-fA-F0-9]{40}$/u.test(receiver)) {
+    quoteResult.innerHTML = '<div class="guardian-error compact"><strong>Check the receiver</strong><p>Enter a public 0x BSC address. Never enter a private key.</p></div>';
+    return;
+  }
+  if (!/^(0|[1-9]\d*)(?:\.\d{1,18})?$/u.test(amount) || Number(amount) !== 5.1) {
+    quoteResult.innerHTML = '<div class="guardian-error compact"><strong>Check the amount</strong><p>This live quote currently requires exactly 5.10 USDT.</p></div>';
+    return;
+  }
+  quoteRequest?.abort();
+  if (quoteExpiryTimer !== undefined) {
+    window.clearTimeout(quoteExpiryTimer);
+    quoteExpiryTimer = undefined;
+  }
+  const controller = new AbortController();
+  quoteRequest = controller;
+  const button = quoteForm.querySelector<HTMLButtonElement>("button[type='submit']");
+  if (button) button.disabled = true;
+  quoteResult.setAttribute("aria-busy", "true");
+  quoteResult.innerHTML = '<div class="guardian-loading compact"><span></span><p>Requesting bounded routes…</p></div>';
+  const timeout = window.setTimeout(() => controller.abort(), 20_000);
+  try {
+    const parameters = new URLSearchParams({
+      operation: "quote",
+      q: latestGuardianComparison.ticker,
+      token: quoteAsset.value,
+      receiver,
+      amount,
+    });
+    const response = await fetch(`/api/bnb/rwa?${parameters.toString()}`, {
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
+    });
+    const body: unknown = await response.json();
+    if (!response.ok) {
+      const message = typeof body === "object" && body !== null && "message" in body
+        && typeof body.message === "string"
+        ? body.message
+        : `The quote service returned HTTP ${response.status}`;
+      throw new Error(message);
+    }
+    renderReadOnlyQuote(parseReadOnlyQuoteResponse(body));
+  } catch (error) {
+    if (controller.signal.aborted && quoteRequest !== controller) return;
+    const message = controller.signal.aborted
+      ? "The quote request timed out. Try again."
+      : error instanceof Error ? error.message : "The quote request could not be loaded.";
+    quoteResult.innerHTML = `<div class="guardian-error compact"><strong>Quote unavailable</strong><p>${escapeHtml(message)}</p><small>No cached route was substituted.</small></div>`;
+  } finally {
+    window.clearTimeout(timeout);
+    if (quoteRequest === controller) {
+      quoteResult.removeAttribute("aria-busy");
+      if (button) button.disabled = false;
+    }
+  }
+});
 
 const nodeDescription = (node: ArchitectureNode) => {
   const contract = node.contractId ? contracts.find((candidate) => candidate.id === node.contractId) : undefined;

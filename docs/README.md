@@ -16,8 +16,9 @@ The [Binance Web3 integration experience log](./hackathons/2026-10-09-binance-we
 records only observed onboarding and API behavior for the required Developer
 Experience Report.
 The [BNB Gap Guardian architecture](./architecture/bnb-gap-guardian.md)
-documents the live two-issuer NVDA comparison, server-only trust boundary,
-normalization math, risk policy, and observed API schema drift.
+documents the live two-issuer NVDA comparison, bounded `5.10 USDT` read-only
+quotes for both representations, server-only trust boundary, normalization
+math, quote identity/expiry policy, and observed API schema drift.
 
 ## Current milestone
 

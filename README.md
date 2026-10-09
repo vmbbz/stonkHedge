@@ -12,10 +12,12 @@ StonkHedge product shell and fail-closed transaction discipline, but it does
 not port Robinhood/Panoptic contracts or public-testnet authorizations to BSC.
 Read the [entry architecture and 51-hour delivery plan](./docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
 
-The first integration gate is now live: the server-only Binance Web3 adapter
+The first two integration gates are now live: the server-only Binance Web3 adapter
 resolves both Ondo `NVDAon` and bStocks `NVDAB`, retrieves their public price,
 profile, protection, and market-status records, and feeds the read-only Gap
-Guardian comparison on the website. Read the
+Guardian comparison on the website. It also returns a strictly bounded,
+short-lived `5.10 USDT` read-only quote for either representation while
+building no transaction. Read the
 [component architecture](./docs/architecture/bnb-gap-guardian.md).
 
 Reproduce the credential-safe live check with:
@@ -24,12 +26,16 @@ Reproduce the credential-safe live check with:
 Copy-Item .env.example .env.local
 notepad .env.local
 npm run bnb:rwa:check -- NVDA
+npm run bnb:rwa:quote -- 0xYourPublicBscReceiver NVDA 5.1 ondo
 ```
 
 Both `BINANCE_WEB3_API_KEY` and `BINANCE_WEB3_SECRET_KEY` are required. They
 remain server-side and `.env.local` is ignored. Never use a `VITE_` prefix for
 either credential. The check lists supported RWA platforms and BSC ticker
-representations; it has no wallet, signing, or broadcast capability. Record
+representations and the second command prints route metadata for one exact
+input. Both have no wallet connection, transaction building, approval,
+signing, or broadcast capability. Use only a public receiver address—never a
+private key. Record
 observed integration facts in the [DX log](./docs/hackathons/2026-10-09-binance-web3-dx-log.md).
 For a hosted deployment, configure the same two variables as encrypted
 server-side environment variables; the browser calls `/api/bnb/rwa` and never

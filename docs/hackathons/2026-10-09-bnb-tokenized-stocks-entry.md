@@ -17,6 +17,22 @@ At the planning snapshot, approximately 51.5 hours remained. The official
 the event as ongoing and requires the repository, demo, and deployed link to
 remain accessible through judging.
 
+## Current implementation status
+
+The live read-only lane now completes steps 1 through 6 of the product thesis.
+It resolves and compares Ondo `NVDAon` and bStocks `NVDAB`, then requests a
+strictly bounded `5.10 USDT` exact-input quote for either representation. Both
+issuer paths passed live on 2026-10-09. The server and browser bind the quote to
+chain, settlement token, destination contract, raw amount, receiver, unique
+route IDs, best route, and a conservative expiry. The site displays reported
+mode, route, output, impact, fee, and freshness without returning transaction
+calldata.
+
+Steps 7 through 9 remain unimplemented and unauthorized. There is no
+transaction builder, simulation, wallet connection, approval, signing, mainnet
+spend, receipt, or proof card yet. Live quote success is evidence for the next
+simulation milestone, not execution readiness.
+
 ## 1. Why StonkHedge fits
 
 The event asks for a working tokenized-stock product on BNB Smart Chain. At

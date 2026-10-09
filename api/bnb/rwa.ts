@@ -165,9 +165,26 @@ export default async function handler(
       return;
     }
 
+    if (operation === "quote") {
+      const quote = await client.quoteRwaFromUsdt({
+        keyword: url.searchParams.get("q") ?? "",
+        tokenContractAddress: url.searchParams.get("token") ?? "",
+        userWalletAddress: url.searchParams.get("receiver") ?? "",
+        usdtAmount: url.searchParams.get("amount") ?? "",
+      });
+      sendJson(response, 200, {
+        operation,
+        chainId: 56,
+        data: quote,
+        requestId,
+        boundary: "READ_ONLY_QUOTE_NO_BUILD_NO_WALLET_NO_SIGNING_NO_BROADCAST",
+      });
+      return;
+    }
+
     sendJson(response, 400, {
       error: "INVALID_OPERATION",
-      message: "operation must be platforms, search, or compare",
+      message: "operation must be platforms, search, compare, or quote",
       requestId,
     });
   } catch (error) {

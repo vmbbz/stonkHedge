@@ -41,7 +41,7 @@ AI-generated reports.
 ### Still to observe
 
 - exact permission errors, if any;
-- spot quote, route, and price-impact behavior;
+- transaction-build and simulation behavior;
 - support response quality if the integration blocks; and
 - Agentic Wallet installation and execution experience.
 
@@ -88,8 +88,54 @@ AI-generated reports.
   authentication header, wallet, private key, signature, or transaction is
   produced.
 
+## 2026-10-09: exact-input quote acceptance
+
+### Observed
+
+- The generic Trading API quote requires a public receiver for tokenized-stock
+  routes, even though the call itself is read-only. StonkHedge used the existing
+  public unprivileged test-buyer address; no key was loaded or connected.
+- A `1 USDT` exact-input request was rejected with `Minimum order amount is 5
+  USD`. Exactly `5 USDT` was rejected with the same response, demonstrating
+  that the threshold is USD notional rather than a raw stablecoin quantity.
+- A `5.10 USDT` request cleared the live floor. The Ondo `NVDAon` acceptance
+  completed in `2,795 ms` and returned one best route from `LiquidMesh`,
+  approximately `0.02216819 NVDAon`, reported price impact
+  `0.0009675127%`, and PancakeSwap V4 plus Uniswap V4 route segments.
+- The same bounded check for bStocks `NVDAB` completed in `1,845 ms` and
+  returned one best `LiquidMesh` route, approximately `0.02216217 NVDAB`,
+  reported price impact `0.0008714545%`, and a PancakeSwap V4 segment.
+- Both responses used `executionMode: SWAP`. This differs from the RFQ-only
+  expectation formed from the Trading API documentation. The output was still
+  quote metadata only; no approval payload, swap calldata, signature, or
+  transaction was requested or produced.
+- Binance quote timestamps were given a shorter local 20-second lifetime. Both
+  accepted routes passed independent browser-shape validation with roughly 15
+  seconds remaining after the complete search-plus-quote round trip.
+- The first end-to-end public-handler check hit an upstream timeout and returned
+  a redacted HTTP `504` with a request ID and `Cache-Control: private,
+  no-store`. One bounded retry returned HTTP `200`, chain `56`, one `SWAP`
+  route, the explicit read-only boundary, and the same no-store policy. This is
+  useful evidence that transient upstream latency must remain visible rather
+  than being replaced with cached or invented quote data.
+
+### Engineering response
+
+- Fixed the public input at `5.10 USDT` so the demo stays narrowly bounded and
+  reliably clears the observed `5 USD` notional floor.
+- Allowed only the two observed/documented aggregator modes, `RFQ` and `SWAP`,
+  and display the actual value. Every other mode fails closed.
+- Bound every route to chain `56`, exact raw input, BSC USDT, the
+  Binance-discovered RWA contract, unique quote ID, and exactly one best route.
+  The browser independently repeats the material identity checks.
+- Added expiry, honeypot, tax, impact, and route-availability policy. The UI
+  explicitly says route metadata is not reserve depth or fill certainty.
+- Kept the endpoint and acceptance script read-only. Transaction building,
+  approval, simulation, wallet connection, and broadcast remain out of scope.
+
 ## Sources consulted
 
 - [Hackathon rules and resources](https://www.bnbchain.org/en/hackathons/tokenized-stocks)
 - [Authentication](https://web3.binance.com/en/dev-docs/authentication)
 - [RWA Data API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/rwa-data)
+- [Trading API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api)

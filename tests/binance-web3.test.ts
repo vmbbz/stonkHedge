@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  BSC_USDT_ADDRESS,
   BinanceWeb3Error,
   buildSignedGetRequest,
   createBinanceWeb3Client,
+  normalizeBoundedUsdtAmount,
 } from "../server/binanceWeb3";
 
 const timestamp = "2026-10-09T08:30:00.000Z";
@@ -272,5 +274,173 @@ describe("Binance Web3 server-only client", () => {
     expect(result.assets.map((item) => item.asset.tokenSymbol)).toEqual(["NVDAon", "NVDAB"]);
     expect(result.assets[0]?.profile.protections.dailyAttestationReport?.supported).toBe(true);
     expect(fetchMock).toHaveBeenCalledTimes(6);
+  });
+
+  it("normalizes only the exact 5.10 USDT buffered quote input", () => {
+    expect(normalizeBoundedUsdtAmount("5.100000000000000000")).toEqual({
+      displayAmount: "5.1",
+      rawAmount: "5100000000000000000",
+    });
+    expect(() => normalizeBoundedUsdtAmount("5.099999999999999999")).toThrow("exactly 5.10");
+    expect(() => normalizeBoundedUsdtAmount("5.100000000000000001")).toThrow("exactly 5.10");
+    expect(() => normalizeBoundedUsdtAmount("1e18")).toThrow("decimal USDT amount");
+  });
+
+  it("parses and identity-binds an observed RWA SWAP quote without building a transaction", async () => {
+    const ondo = "0xa9ee28c80f960b889dfbd1902055218cba016f75";
+    const wallet = "0x6719e877c05b2d6c28abcea405fc033feef5750f";
+    const envelope = (data: unknown, responseTimestamp = 1_791_550_732_585) => JSON.stringify({
+      code: 0,
+      msg: "success",
+      data,
+      timestamp: responseTimestamp,
+      success: true,
+    });
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/search")) {
+        return new Response(envelope([{
+          ticker: "NVDA",
+          companyName: "Nvidia Corp",
+          assets: [{
+            platformId: "ondo",
+            binanceChainId: "56",
+            tokenContractAddress: ondo,
+            tokenSymbol: "NVDAon",
+            assetType: 1,
+          }],
+        }]));
+      }
+      expect(url.pathname).toContain("/aggregator/quote");
+      expect(url.searchParams.get("binanceChainId")).toBe("56");
+      expect(url.searchParams.get("amount")).toBe("5100000000000000000");
+      expect(url.searchParams.get("fromTokenAddress")?.toLowerCase()).toBe(BSC_USDT_ADDRESS);
+      expect(url.searchParams.get("toTokenAddress")?.toLowerCase()).toBe(ondo);
+      expect(url.searchParams.get("userWalletAddress")?.toLowerCase()).toBe(wallet);
+      return new Response(envelope([{
+        quoteId: "a1b2c3d4e5f64a8b9c0d1e2f3a4b5c6d",
+        vendorName: "PcsXRfq",
+        binanceChainId: "56",
+        fromTokenAmount: "5100000000000000000",
+        toTokenAmount: "5192000000000000",
+        tradeFee: "0.03",
+        estimateGasFee: "220000",
+        priceImpactPercent: "-0.04",
+        router: `${BSC_USDT_ADDRESS}--${ondo}`,
+        fromToken: {
+          tokenContractAddress: BSC_USDT_ADDRESS,
+          tokenSymbol: "USDT",
+          tokenUnitPrice: "1",
+          decimal: "18",
+          isHoneyPot: false,
+          taxRate: "0",
+        },
+        toToken: {
+          tokenContractAddress: ondo,
+          tokenSymbol: "NVDAon",
+          tokenUnitPrice: "192.6",
+          decimal: "18",
+          isHoneyPot: false,
+          taxRate: "0",
+        },
+        dexRouterList: [{
+          dexProtocol: { dexName: "PcsX RFQ", percent: "100.00" },
+          fromToken: { tokenContractAddress: BSC_USDT_ADDRESS, tokenSymbol: "USDT" },
+          fromTokenIndex: "0",
+          toToken: { tokenContractAddress: ondo, tokenSymbol: "NVDAon" },
+          toTokenIndex: "1",
+        }],
+        executionMode: "SWAP",
+        approveTarget: "0xc67879f4065d3b9fe1c09ee990b891aa8e3a4c2f",
+        isBest: true,
+        feeAmount: null,
+        feeToken: null,
+        actualSwapAmount: null,
+      }]));
+    });
+    const client = createBinanceWeb3Client({
+      apiKey: "api-key",
+      secretKey: "top-secret",
+      fetchImplementation: fetchMock,
+      now: () => new Date(timestamp),
+      nonce: () => "nonce-1",
+    });
+
+    const quote = await client.quoteRwaFromUsdt({
+      keyword: "NVDA",
+      tokenContractAddress: ondo,
+      userWalletAddress: wallet,
+      usdtAmount: "5.1",
+    });
+    expect(quote.asset.tokenSymbol).toBe("NVDAon");
+    expect(quote.input).toEqual({ symbol: "USDT", displayAmount: "5.1", rawAmount: "5100000000000000000" });
+    expect(quote.routes).toHaveLength(1);
+    expect(quote.routes[0]).toMatchObject({ executionMode: "SWAP", vendorName: "PcsXRfq", isBest: true });
+    expect(quote.expiresAt).toBe(1_791_550_752_585);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("rejects arbitrary contracts and route identity drift before exposure to the browser", async () => {
+    const ondo = "0xa9ee28c80f960b889dfbd1902055218cba016f75";
+    const other = "0x02fca66c1d1afb4e2a7884261eb00f63598a7436";
+    const wallet = "0x6719e877c05b2d6c28abcea405fc033feef5750f";
+    const envelope = (data: unknown) => new Response(JSON.stringify({
+      code: 0,
+      msg: "success",
+      data,
+      timestamp: 1_791_550_732_585,
+      success: true,
+    }));
+    const search = [{
+      ticker: "NVDA",
+      companyName: "Nvidia Corp",
+      assets: [{ platformId: "ondo", binanceChainId: "56", tokenContractAddress: ondo, tokenSymbol: "NVDAon", assetType: 1 }],
+    }];
+    const client = createBinanceWeb3Client({
+      apiKey: "api-key",
+      secretKey: "top-secret",
+      fetchImplementation: vi.fn(async () => envelope(search)),
+    });
+    await expect(client.quoteRwaFromUsdt({
+      keyword: "NVDA",
+      tokenContractAddress: other,
+      userWalletAddress: wallet,
+      usdtAmount: "5.1",
+    })).rejects.toMatchObject({ kind: "not_found" });
+
+    const driftClient = createBinanceWeb3Client({
+      apiKey: "api-key",
+      secretKey: "top-secret",
+      fetchImplementation: vi.fn(async (input: string | URL | Request) => {
+        const url = new URL(String(input));
+        if (url.pathname.endsWith("/search")) return envelope(search);
+        return envelope([{
+          quoteId: "quote1",
+          vendorName: "PcsXRfq",
+          binanceChainId: "56",
+          fromTokenAmount: "5100000000000000000",
+          toTokenAmount: "1",
+          tradeFee: null,
+          estimateGasFee: null,
+          priceImpactPercent: null,
+          router: `${BSC_USDT_ADDRESS}--${other}`,
+          fromToken: { tokenContractAddress: BSC_USDT_ADDRESS, tokenSymbol: "USDT", tokenUnitPrice: "1", decimal: "18", isHoneyPot: false, taxRate: "0" },
+          toToken: { tokenContractAddress: other, tokenSymbol: "NVDAB", tokenUnitPrice: "1", decimal: "18", isHoneyPot: false, taxRate: "0" },
+          dexRouterList: [],
+          executionMode: "RFQ",
+          approveTarget: null,
+          isBest: true,
+          feeAmount: null,
+          feeToken: null,
+          actualSwapAmount: null,
+        }]);
+      }),
+    });
+    await expect(driftClient.quoteRwaFromUsdt({
+      keyword: "NVDA",
+      tokenContractAddress: ondo,
+      userWalletAddress: wallet,
+      usdtAmount: "5.1",
+    })).rejects.toThrow("mismatched quote to-token identity");
   });
 });

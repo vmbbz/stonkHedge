@@ -35,7 +35,7 @@ function getClientIdentifier(request: IncomingMessage): string {
   return request.socket.remoteAddress ?? "unknown";
 }
 
-function consumeRateLimit(identifier: string, now = Date.now()): boolean {
+function consumeRateLimit(identifier: string, cost = 1, now = Date.now()): boolean {
   if (requestWindows.size > 1_000) {
     for (const [key, value] of requestWindows) {
       if (value.resetAt <= now) requestWindows.delete(key);
@@ -43,11 +43,11 @@ function consumeRateLimit(identifier: string, now = Date.now()): boolean {
   }
   const current = requestWindows.get(identifier);
   if (!current || current.resetAt <= now) {
-    requestWindows.set(identifier, { count: 1, resetAt: now + WINDOW_MS });
+    requestWindows.set(identifier, { count: cost, resetAt: now + WINDOW_MS });
     return true;
   }
-  if (current.count >= REQUESTS_PER_WINDOW) return false;
-  current.count += 1;
+  if (current.count + cost > REQUESTS_PER_WINDOW) return false;
+  current.count += cost;
   return true;
 }
 
@@ -111,7 +111,10 @@ export default async function handler(
     return;
   }
 
-  if (!consumeRateLimit(getClientIdentifier(request))) {
+  const url = new URL(request.url ?? "/", "https://stonkhedge.invalid");
+  const operation = url.searchParams.get("operation") ?? "platforms";
+  const requestCost = operation === "simulate" ? 6 : operation === "compare" ? 2 : 1;
+  if (!consumeRateLimit(getClientIdentifier(request), requestCost)) {
     response.setHeader("Retry-After", "60");
     sendJson(response, 429, {
       error: "RATE_LIMITED",
@@ -122,8 +125,6 @@ export default async function handler(
   }
 
   try {
-    const url = new URL(request.url ?? "/", "https://stonkhedge.invalid");
-    const operation = url.searchParams.get("operation") ?? "platforms";
     const platform = url.searchParams.get("platform") ?? undefined;
     const client = createBinanceWeb3ClientFromEnv();
 
@@ -182,9 +183,26 @@ export default async function handler(
       return;
     }
 
+    if (operation === "simulate") {
+      const proof = await client.simulateRwaSwap({
+        keyword: url.searchParams.get("q") ?? "",
+        tokenContractAddress: url.searchParams.get("token") ?? "",
+        userWalletAddress: url.searchParams.get("receiver") ?? "",
+        usdtAmount: url.searchParams.get("amount") ?? "",
+      });
+      sendJson(response, 200, {
+        operation,
+        chainId: 56,
+        data: proof,
+        requestId,
+        boundary: "SIMULATION_ONLY_NO_WALLET_NO_PRIVATE_KEY_NO_SIGNING_NO_BROADCAST",
+      });
+      return;
+    }
+
     sendJson(response, 400, {
       error: "INVALID_OPERATION",
-      message: "operation must be platforms, search, compare, or quote",
+      message: "operation must be platforms, search, compare, quote, or simulate",
       requestId,
     });
   } catch (error) {

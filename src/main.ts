@@ -15,6 +15,10 @@ import {
   type ReadOnlyQuote,
 } from "./bnb/readOnlyQuote";
 import {
+  parseSimulationProofResponse,
+  type PublicSimulationProof,
+} from "./bnb/simulationProof";
+import {
   architectureNodes,
   contracts,
   explorerBase,
@@ -169,7 +173,7 @@ app.innerHTML = `
       <div class="wrap guardian-shell">
         <div class="guardian-heading">
           <div>
-            <span class="kicker">BNB Hack · live read-only API</span>
+            <span class="kicker">BNB Hack · live simulation-only API</span>
             <h2>One stock.<br/><em>Two wrappers.</em></h2>
           </div>
           <div class="guardian-intro">
@@ -191,7 +195,7 @@ app.innerHTML = `
         <form class="guardian-quote" id="guardian-quote-form">
           <div class="guardian-quote-heading">
             <div><span class="kicker">Bounded route lens</span><h3>Ask what exactly 5.10 USDT can buy.</h3></div>
-            <p>This sends only the selected public token address, exact amount, and a public receiver address to Binance. It cannot approve, build, sign, or broadcast anything.</p>
+            <p>The quote request sends only the selected public token address, exact amount, and a public receiver address. A separate button can compile and simulate fresh unsigned bytes on the server, but cannot sign or broadcast them.</p>
           </div>
           <div class="guardian-quote-fields">
             <label>Representation<select id="guardian-quote-asset" required disabled><option value="">Run the comparison first</option></select></label>
@@ -204,7 +208,10 @@ app.innerHTML = `
         <div class="guardian-quote-result" id="guardian-quote-result" aria-live="polite">
           <p>Select a representation and enter a public receiver to inspect a bounded route.</p>
         </div>
-        <p class="guardian-disclosure">Binance documents its “reference price” as a per-share conversion derived from on-chain token price—not an official traditional-market quote. This monitor is informational and read-only.</p>
+        <div class="guardian-simulation-result" id="guardian-simulation-result" aria-live="polite">
+          <p>Unsigned simulation becomes available after a fresh bounded quote.</p>
+        </div>
+        <p class="guardian-disclosure">Binance documents its “reference price” as a per-share conversion derived from on-chain token price—not an official traditional-market quote. This monitor is informational; its transaction lane ends at unsigned simulation and cannot sign or broadcast.</p>
       </div>
     </section>
 
@@ -439,6 +446,9 @@ const loadGuardianComparison = async (query: string) => {
   const supersededQuoteRequest = quoteRequest;
   quoteRequest = undefined;
   supersededQuoteRequest?.abort();
+  const supersededSimulationRequest = simulationRequest;
+  simulationRequest = undefined;
+  supersededSimulationRequest?.abort();
   if (quoteExpiryTimer !== undefined) {
     window.clearTimeout(quoteExpiryTimer);
     quoteExpiryTimer = undefined;
@@ -457,6 +467,8 @@ const loadGuardianComparison = async (query: string) => {
   if (quoteButton) quoteButton.disabled = true;
   const currentQuote = document.querySelector<HTMLElement>("#guardian-quote-result");
   if (currentQuote) currentQuote.innerHTML = "<p>Refresh a comparison before requesting a route.</p>";
+  const currentSimulation = document.querySelector<HTMLElement>("#guardian-simulation-result");
+  if (currentSimulation) currentSimulation.innerHTML = "<p>Refresh a comparison and quote before running an unsigned simulation.</p>";
   guardianResults.setAttribute("aria-busy", "true");
   guardianResults.innerHTML = '<div class="guardian-loading"><span></span><p>Resolving issuer representations and market state…</p></div>';
   const timeout = window.setTimeout(() => controller.abort(), 15_000);
@@ -499,8 +511,10 @@ const quoteAsset = document.querySelector<HTMLSelectElement>("#guardian-quote-as
 const quoteAmount = document.querySelector<HTMLInputElement>("#guardian-quote-amount");
 const quoteReceiver = document.querySelector<HTMLInputElement>("#guardian-quote-receiver");
 const quoteResult = document.querySelector<HTMLElement>("#guardian-quote-result");
+const simulationResult = document.querySelector<HTMLElement>("#guardian-simulation-result");
 let quoteRequest: AbortController | undefined;
 let quoteExpiryTimer: number | undefined;
+let simulationRequest: AbortController | undefined;
 
 void loadGuardianComparison(guardianInput?.value ?? "NVDA");
 
@@ -527,7 +541,12 @@ const renderReadOnlyQuote = (quote: ReadOnlyQuote) => {
       </dl>
       <div class="guardian-reasons">${assessment.reasons.map((reason) => `<span>${escapeHtml(reason)}</span>`).join("")}</div>
       <p class="quote-depth-note">Route availability and reported impact are quote-level evidence; they do not prove pool reserves, fill certainty, or future execution.</p>
+      <button class="simulation-button" type="button" ${assessment.level === "blocked" ? "disabled" : ""}>Compile & simulate a fresh route ${icon("arrow")}</button>
+      <p class="simulation-boundary">Build and simulation stay server-side. No calldata is returned, no wallet is connected, and nothing can be signed or broadcast.</p>
     </article>`;
+  if (simulationResult) {
+    simulationResult.innerHTML = "<p>Ready to compile a fresh route and test it without a wallet.</p>";
+  }
   if (quoteExpiryTimer !== undefined) window.clearTimeout(quoteExpiryTimer);
   quoteExpiryTimer = window.setTimeout(() => {
     if (!quoteResult) return;
@@ -598,6 +617,86 @@ quoteForm?.addEventListener("submit", async (event) => {
     if (quoteRequest === controller) {
       quoteResult.removeAttribute("aria-busy");
       if (button) button.disabled = false;
+    }
+  }
+});
+
+const renderSimulationProof = (proof: PublicSimulationProof) => {
+  if (!simulationResult) return;
+  const blocked = proof.verdict === "BLOCKED";
+  simulationResult.innerHTML = `
+    <article class="simulation-card ${blocked ? "blocked" : "clear"}">
+      <div class="simulation-card-top">
+        <div><span>Unsigned transaction rehearsal</span><h3>${escapeHtml(proof.input.displayAmount)} USDT → ${escapeHtml(proof.asset.tokenSymbol)}</h3></div>
+        <span class="guardian-risk ${blocked ? "blocked" : "clear"}">${blocked ? "Blocked as expected" : "Simulation clear"}</span>
+      </div>
+      <div class="simulation-verdict">
+        <strong>${blocked ? "No signing gate opened" : "Both unsigned calls simulated successfully"}</strong>
+        <p>${blocked ? "The exact route remains non-executable and requires remediation plus a fresh simulation." : "This is still only a prediction. It grants no authority to sign or spend."}</p>
+      </div>
+      <dl class="quote-facts simulation-facts">
+        <div><dt>Approval</dt><dd>${escapeHtml(proof.approval.simulation.status)}</dd></div>
+        <div><dt>Swap</dt><dd>${escapeHtml(proof.swap.simulation.status)}</dd></div>
+        <div><dt>Exact approval</dt><dd>${escapeHtml(proof.input.displayAmount)} USDT</dd></div>
+        <div><dt>Slippage cap</dt><dd>${escapeHtml(proof.route.slippagePercent)}%</dd></div>
+        <div><dt>Approval selector</dt><dd><code>${escapeHtml(proof.approval.transaction.selector)}</code></dd></div>
+        <div><dt>Swap selector</dt><dd><code>${escapeHtml(proof.swap.transaction.selector)}</code></dd></div>
+        <div><dt>Minimum output</dt><dd><code>${escapeHtml(proof.swap.minimumOutputRaw)}</code> raw</dd></div>
+        <div><dt>Vendor</dt><dd>${escapeHtml(proof.route.vendorName)}</dd></div>
+      </dl>
+      <div class="guardian-reasons">${(proof.reasons.length ? proof.reasons : ["Exact approval and swap simulations returned SUCCESS"]).map((reason) => `<span>${escapeHtml(reason)}</span>`).join("")}</div>
+      <details class="simulation-hashes"><summary>Inspect non-executable byte fingerprints</summary><dl>
+        <div><dt>Quote ID SHA-256</dt><dd><code>${escapeHtml(proof.route.quoteIdHash)}</code></dd></div>
+        <div><dt>Approval SHA-256</dt><dd><code>${escapeHtml(proof.approval.transaction.calldataHash)}</code></dd></div>
+        <div><dt>Swap SHA-256</dt><dd><code>${escapeHtml(proof.swap.transaction.calldataHash)}</code></dd></div>
+      </dl></details>
+      <p class="simulation-boundary">Simulation only · no raw calldata · no wallet · no private key · no signing · no broadcast</p>
+    </article>`;
+};
+
+quoteResult?.addEventListener("click", async (event) => {
+  const target = event.target;
+  const button = target instanceof Element ? target.closest<HTMLButtonElement>(".simulation-button") : null;
+  if (!button || !simulationResult || !quoteAsset || !quoteAmount || !quoteReceiver || !latestGuardianComparison) return;
+  simulationRequest?.abort();
+  const controller = new AbortController();
+  simulationRequest = controller;
+  button.disabled = true;
+  simulationResult.setAttribute("aria-busy", "true");
+  simulationResult.innerHTML = '<div class="guardian-loading compact"><span></span><p>Compiling fresh exact bytes and running two unsigned simulations…</p></div>';
+  const timeout = window.setTimeout(() => controller.abort(), 30_000);
+  try {
+    const parameters = new URLSearchParams({
+      operation: "simulate",
+      q: latestGuardianComparison.ticker,
+      token: quoteAsset.value,
+      receiver: quoteReceiver.value.trim(),
+      amount: quoteAmount.value.trim(),
+    });
+    const response = await fetch(`/api/bnb/rwa?${parameters.toString()}`, {
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
+    });
+    const body: unknown = await response.json();
+    if (!response.ok) {
+      const message = typeof body === "object" && body !== null && "message" in body
+        && typeof body.message === "string"
+        ? body.message
+        : `The simulation service returned HTTP ${response.status}`;
+      throw new Error(message);
+    }
+    renderSimulationProof(parseSimulationProofResponse(body));
+  } catch (error) {
+    if (controller.signal.aborted && simulationRequest !== controller) return;
+    const message = controller.signal.aborted
+      ? "The unsigned simulation timed out. Refresh the quote and try again."
+      : error instanceof Error ? error.message : "The unsigned simulation could not be completed.";
+    simulationResult.innerHTML = `<div class="guardian-error compact"><strong>Simulation unavailable</strong><p>${escapeHtml(message)}</p><small>No wallet or transaction fallback was attempted.</small></div>`;
+  } finally {
+    window.clearTimeout(timeout);
+    if (simulationRequest === controller) {
+      simulationResult.removeAttribute("aria-busy");
+      button.disabled = false;
     }
   }
 });

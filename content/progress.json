@@ -3,7 +3,7 @@
   "project": "StonkHedge",
   "network": "Robinhood Chain Testnet",
   "chainId": 46630,
-  "updatedAt": "2026-09-19",
+  "updatedAt": "2026-10-09",
   "entries": [
     {
       "id": "foundation-and-research",
@@ -142,6 +142,36 @@
         {"label": "Public continuation ledger", "path": "docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md"},
         {"label": "Public prefix and refresh", "path": "docs/progress/2026-09-16-lifecycle-prefix-and-refresh.md"},
         {"label": "Architecture", "path": "docs/architecture/robinhood-testnet-system.md"}
+      ]
+    },
+    {
+      "id": "bnb-gap-guardian-simulation",
+      "date": "2026-10-09",
+      "eyebrow": "BNB Hack · simulation milestone",
+      "title": "Two stock wrappers reached a fail-closed unsigned rehearsal",
+      "target": "Resolve competing BSC tokenized-stock representations, bind a capped route, compile exact approval and swap bytes, and simulate both without exposing an execution surface.",
+      "status": "complete",
+      "summary": "Gap Guardian now compares Ondo NVDAon and bStocks NVDAB, obtains a fresh 5.10 USDT route, compiles an exact approval plus swap on the server, and returns only non-executable simulation evidence. Both live unfunded-wallet checks blocked at the swap exactly as intended.",
+      "outcomes": [
+        "Both issuer representations passed fresh live route construction and exact approval simulation on BSC mainnet",
+        "Both swap simulations failed closed because the public buyer has zero USDT, proving that a failed rehearsal cannot open a signing gate",
+        "Raw quote IDs and calldata remain server-side; the public proof contains only selectors, SHA-256 fingerprints, bounded amounts, statuses, and reasons"
+      ],
+      "commits": ["6367f01", "dc0b53b208c0b84601bd0890df0238eed0a2375d"],
+      "contractRefs": [],
+      "transactionRefs": [],
+      "evidence": [
+        "Exact 5.10 USDT approval amount · 0.5% slippage cap",
+        "NVDAon approval SUCCESS · swap FAILED insufficient balance",
+        "NVDAB approval SUCCESS · swap FAILED insufficient balance",
+        "43/43 automated tests and production build passed",
+        "No wallet · no private key · no signing · no broadcast"
+      ],
+      "media": ["/media/stonkhedge-crystal.png"],
+      "docs": [
+        {"label": "Unsigned simulation milestone", "path": "docs/progress/2026-10-09-bnb-unsigned-simulation.md"},
+        {"label": "Gap Guardian architecture", "path": "docs/architecture/bnb-gap-guardian.md"},
+        {"label": "BNB hackathon lane", "path": "docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md"}
       ]
     }
   ]

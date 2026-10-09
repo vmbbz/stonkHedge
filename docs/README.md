@@ -17,8 +17,12 @@ records only observed onboarding and API behavior for the required Developer
 Experience Report.
 The [BNB Gap Guardian architecture](./architecture/bnb-gap-guardian.md)
 documents the live two-issuer NVDA comparison, bounded `5.10 USDT` read-only
-quotes for both representations, server-only trust boundary, normalization
-math, quote identity/expiry policy, and observed API schema drift.
+quotes for both representations, exact server-only approval/swap preparation,
+unsigned Transaction API simulation, normalization math, quote identity/expiry
+policy, and observed API schema drift. The
+[unsigned-simulation milestone](./progress/2026-10-09-bnb-unsigned-simulation.md)
+records both live fail-closed issuer rehearsals and the non-executable evidence
+boundary. No wallet, signing, broadcast, or BSC mainnet spend is implemented.
 
 ## Current milestone
 

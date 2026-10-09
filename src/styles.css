@@ -218,6 +218,34 @@ code { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.86em; }
 .quote-facts dt { color: #74806f; font-size: .57rem; text-transform: uppercase; }
 .quote-facts dd { margin: 4px 0 0; color: #1d2a1a; font-size: .72rem; font-weight: 750; overflow-wrap: anywhere; }
 .quote-depth-note { margin: 16px 0 0; color: #687563; font-size: .65rem; line-height: 1.55; }
+.simulation-button { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; margin-top: 18px; padding: 0 16px; border: 1px solid #22351c; border-radius: 11px; background: #132611; color: var(--acid); font-weight: 850; cursor: pointer; }
+.simulation-button:hover { border-color: #52763e; background: #1a3116; }
+.simulation-button:disabled { cursor: not-allowed; opacity: .45; }
+.simulation-button svg { width: 16px; height: 16px; }
+.simulation-boundary { margin: 11px 0 0; color: #73806f; font: 500 .6rem/1.55 "DM Mono", monospace; }
+.guardian-simulation-result { min-height: 78px; margin-top: 12px; }
+.guardian-simulation-result > p { margin: 0; padding: 20px; border: 1px dashed #b3c2ab; border-radius: 18px; color: #596654; text-align: center; }
+.simulation-card { position: relative; overflow: hidden; padding: 25px; border: 1px solid #bdcbb6; border-radius: 22px; background: #f7fbf3; box-shadow: 0 24px 70px rgba(30,57,16,.08); }
+.simulation-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: #648c00; }
+.simulation-card.blocked::before { background: #e45948; }
+.simulation-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.simulation-card-top > div { display: flex; flex-direction: column; gap: 4px; }
+.simulation-card-top > div > span { color: #697564; font: 600 .6rem "DM Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
+.simulation-card-top h3 { margin: 0; font-size: 1.35rem; letter-spacing: -.035em; }
+.simulation-verdict { margin: 22px 0 18px; padding: 16px; border-radius: 14px; background: #eaf3e4; }
+.simulation-card.blocked .simulation-verdict { background: #fff0ed; }
+.simulation-verdict strong { display: block; color: #22351c; }
+.simulation-verdict p { margin: 5px 0 0; color: #657060; font-size: .68rem; line-height: 1.55; }
+.simulation-facts { grid-template-columns: repeat(4, 1fr); }
+.simulation-facts > div:nth-child(3n) { border-right: 1px solid #d3ddd0; }
+.simulation-facts > div:nth-child(4n) { border-right: 0; }
+.simulation-facts > div:nth-last-child(-n+4) { border-bottom: 0; }
+.simulation-hashes { margin-top: 16px; border-top: 1px solid #d3ddd0; padding-top: 13px; color: #596654; }
+.simulation-hashes summary { cursor: pointer; font-size: .68rem; font-weight: 800; }
+.simulation-hashes dl { display: grid; gap: 7px; margin: 12px 0 0; }
+.simulation-hashes dl > div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; }
+.simulation-hashes dt { font-size: .58rem; text-transform: uppercase; }
+.simulation-hashes dd { min-width: 0; margin: 0; overflow-wrap: anywhere; font-size: .62rem; }
 .guardian-disclosure { max-width: 900px; margin: 24px auto 0; color: #61705d; text-align: center; font-size: .7rem; line-height: 1.6; }
 
 .section-heading { margin-bottom: 52px; }
@@ -450,6 +478,13 @@ dialog p { color: var(--muted); line-height: 1.7; }
   .guardian-quote-heading { grid-template-columns: 1fr; gap: 14px; }
   .guardian-quote-fields { grid-template-columns: 1fr; }
   .quote-card-top { flex-direction: column; }
+  .simulation-card-top { flex-direction: column; }
+  .simulation-facts { grid-template-columns: 1fr 1fr; }
+  .simulation-facts > div:nth-child(4n) { border-right: 1px solid #d3ddd0; }
+  .simulation-facts > div:nth-child(2n) { border-right: 0; }
+  .simulation-facts > div:nth-last-child(-n+4) { border-bottom: 1px solid #d3ddd0; }
+  .simulation-facts > div:nth-last-child(-n+2) { border-bottom: 0; }
+  .simulation-hashes dl > div { grid-template-columns: 1fr; gap: 3px; }
   .quote-facts { grid-template-columns: 1fr; }
   .quote-facts > div, .quote-facts > div:nth-child(3n) { border-right: 0; border-bottom: 1px solid #d3ddd0; }
   .quote-facts > div:last-child { border-bottom: 0; }

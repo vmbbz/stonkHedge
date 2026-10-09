@@ -1,11 +1,11 @@
 # BNB Gap Guardian architecture
 
-**Status:** live read-only comparison and exact-input quote vertical slice
+**Status:** live comparison, exact-input quote, and unsigned-simulation vertical slice
 
 **Network:** BNB Smart Chain (`56`)
 
-**Execution boundary:** no wallet connection, transaction building, approval,
-signing, simulation, or broadcast
+**Execution boundary:** server-side transaction preparation and simulation only;
+no wallet connection, private key, signing, broadcast, or mainnet spend
 
 Gap Guardian compares supported BSC tokenized-stock representations without
 treating different issuers as interchangeable. The first accepted ticker is
@@ -37,6 +37,13 @@ sequenceDiagram
     A->>A: bind chain, input, token, receiver, route IDs, best route
     A-->>B: quote metadata only; no calldata or transaction
     B->>B: independently validate identity, mode, expiry, impact, tax, route
+    B->>A: request fresh exact unsigned simulation
+    A->>W: fresh quote + exact approval build + exact swap build
+    W-->>A: approval and swap calldata
+    A->>W: simulate approval and swap independently
+    W-->>A: statuses + bounded state-change summaries
+    A->>A: decode approval, bind swap, hash calldata, derive verdict
+    A-->>B: selectors + SHA-256 fingerprints + statuses; no calldata
 ```
 
 The API key and HMAC secret exist only in the server environment. The browser
@@ -44,7 +51,7 @@ receives neither signing material nor authentication headers. The public route
 accepts an enumerated operation, rate-limits callers, disables caching, and
 maps upstream failures to redacted errors with request IDs.
 
-## Exact-input quote model
+## Exact-input quote and simulation model
 
 The live quote is deliberately fixed at `5.10 USDT` (`5100000000000000000`
 raw units). Binance rejected both `1 USDT` and exactly `5 USDT` with
@@ -57,9 +64,22 @@ The selected destination must first be discovered by the RWA search on chain
 amount, BSC USDT contract, selected RWA contract, and chain. Quote IDs must be
 unique and exactly one route must be marked best. The browser repeats those
 checks, restricts modes to `RFQ` or `SWAP`, and rejects responses older than a
-conservative 20-second local lifetime. The public payload contains quote
-metadata only. It does not expose transaction calldata and cannot call an
-approval, build, simulation, signing, or broadcast endpoint.
+conservative 20-second local lifetime. The quote payload contains metadata
+only. From that screen the user may request a new server-side rehearsal. The
+server deliberately obtains a fresh quote, builds an exact ERC-20 approval and
+swap, simulates both unsigned payloads, and then discards the executable bytes.
+The browser receives selectors and SHA-256 calldata fingerprints, not raw
+calldata. No wallet, private key, signature, raw transaction, or broadcast
+method exists in this lane.
+
+The approval is accepted only when it is a canonical two-argument ERC-20
+`approve` call whose decoded spender equals the best route's reported approval
+target and whose amount equals exactly `5.10 USDT`. The swap must repeat chain
+`56`, the discovered destination, BSC USDT input, public sender, exact raw
+amount, vendor, expected output, zero native value, and `0.5%` slippage. RFQ
+routes fail closed because they require signing. Approval and swap simulations
+run independently, so an unfunded sender cannot borrow state from a
+hypothetical approval transition.
 
 The screen treats honeypot flags, token tax over 10%, and absolute reported
 price impact over 1% as blocking evidence. Missing impact, impact above 0.5%,
@@ -133,13 +153,28 @@ notional floor. At `5.10 USDT`, both accepted NVDA representations returned
 `executionMode: SWAP` through `LiquidMesh`, rather than an RFQ-only response.
 The implementation therefore allows only the two known modes, renders the
 actual mode, and fails closed on any other value. This does not authorize a
-swap: the integration still calls only the quote endpoint.
+swap: only a `SWAP` route may proceed into the separately labelled unsigned
+simulation lane, while an RFQ route stops before its required signing step.
 
 At the 2026-10-09 acceptance observation, Ondo `NVDAon` reported one route,
 approximately `0.02216819 NVDAon`, `0.0009675127%` price impact, and PancakeSwap
 V4 plus Uniswap V4 segments. bStocks `NVDAB` reported one route, approximately
 `0.02216217 NVDAB`, `0.0008714545%` price impact, and a PancakeSwap V4 segment.
 These are ephemeral observations, not reusable prices.
+
+The first unsigned-simulation integration found two additional response-shape
+differences. A live `SWAP` transaction omitted the documented `signatureData`
+array, and a successful simulation represented the absent failure reason as an
+empty string rather than `null`. The parser accepts only those two narrow
+equivalences and preserves strict validation for every material transaction and
+state field.
+
+At `2026-10-09T20:11:53.446Z` and `2026-10-09T20:12:35.814Z`, respectively,
+fresh `NVDAon` and `NVDAB` rehearsals both produced an exact-approval
+`SUCCESS` followed by a swap `FAILED` result because the public sender held no
+BSC USDT. Both public verdicts were `BLOCKED`. This is the intended negative
+acceptance: the compiler reached real upstream simulation without creating a
+signing or broadcast path.
 
 ## Runtime surfaces
 
@@ -149,22 +184,25 @@ These are ephemeral observations, not reusable prices.
 | `api/bnb/rwa.ts` | public GET route, operation allow-list, rate limit, redacted errors |
 | `src/bnb/gapGuardian.ts` | browser response validation, normalization, gap math, risk classification |
 | `src/bnb/readOnlyQuote.ts` | independent quote identity, amount, route, expiry, and risk validation |
+| `src/bnb/simulationProof.ts` | rejects executable fields and validates the redacted public proof |
 | `src/main.ts` | accessible search and comparison rendering |
 | `scripts/check_bnb_rwa_api.ts` | credential-safe live acceptance evidence |
 | `scripts/check_bnb_rwa_quote.ts` | metadata-only exact-input quote acceptance; no execution path |
+| `scripts/check_bnb_rwa_simulation.ts` | live unsigned approval/swap rehearsal; no key, signature, or broadcast |
 
 ## Next boundary
 
-The next product gate is transaction preparation plus simulation for the exact
-selected route, while remaining unable to sign or broadcast. It must prove
-chain, sender, receiver, token, amount, allowance target, value, calldata,
-expiry, and quote identity; it must also handle changed-wallet, changed-route,
-expired-quote, simulation-revert, and excessive-approval cases. Wallet
-connection and any BSC mainnet spend remain later, separately authorized gates.
+The next product gate is a separately designed browser-wallet confirmation
+lane. It must bind the connected account and chain to a newly built and newly
+simulated route, display decoded approval and swap intent, enforce the same
+notional and slippage caps, reject byte drift, and reconcile receipt plus
+post-state. Wallet connection and any BSC mainnet spend remain unauthorized
+until that lane is reviewed and the owner grants a fresh explicit approval.
 
 ## Sources
 
 - [Binance Web3 RWA Data API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/rwa-data)
 - [Binance Web3 authentication](https://web3.binance.com/en/dev-docs/authentication)
 - [Binance Web3 Trading API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api)
+- [Binance Web3 Transaction API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/transaction-api)
 - [BNB Hack: Tokenized Stocks Edition](https://www.bnbchain.org/en/hackathons/tokenized-stocks)

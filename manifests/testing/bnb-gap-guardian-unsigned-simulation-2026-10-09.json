@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "project": "StonkHedge Gap Guardian",
+  "network": "BNB Smart Chain",
+  "chainId": 56,
+  "observedAt": "2026-10-09T20:12:35.814Z",
+  "boundary": "SIMULATION_ONLY_NO_WALLET_NO_PRIVATE_KEY_NO_SIGNING_NO_BROADCAST",
+  "sender": "0x6719e877c05b2d6c28abcea405fc033feef5750f",
+  "input": {
+    "symbol": "USDT",
+    "contract": "0x55d398326f99059ff775485246999027b3197955",
+    "displayAmount": "5.1",
+    "rawAmount": "5100000000000000000",
+    "slippagePercent": "0.5"
+  },
+  "observations": [
+    {
+      "observedAt": "2026-10-09T20:11:53.446Z",
+      "ticker": "NVDA",
+      "platformId": "ondo",
+      "tokenSymbol": "NVDAon",
+      "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "vendorName": "LiquidMesh",
+      "executionMode": "SWAP",
+      "quoteIdSha256": "0xcead2ca52c39052b0d52bf19b4385e17a15fc81c0e442b99fc1aa3dd06e50bc3",
+      "expectedOutputRaw": "22191481095775605",
+      "approval": {
+        "spender": "0xb44446b0c8e56988c34f7ff73ae904982b5fdda5",
+        "amount": "5100000000000000000",
+        "selector": "0x095ea7b3",
+        "calldataSha256": "0x6f727a116c93879700852666b2e8728ce91393f9322457f4fb1b5b31fc917975",
+        "status": "SUCCESS",
+        "failReason": null,
+        "allowanceChangeCount": 1
+      },
+      "swap": {
+        "destination": "0xb44446b0c8e56988c34f7ff73ae904982b5fdda5",
+        "value": "0",
+        "selector": "0xad43f73d",
+        "calldataSha256": "0xfb735ed59c8202cb9ecb9b75193e04c2a3f13d552178037eab724c30694183b5",
+        "minimumOutputRaw": "22080523690296726",
+        "status": "FAILED",
+        "failReason": "execution reverted: BEP20: transfer amount exceeds balance"
+      },
+      "verdict": "BLOCKED"
+    },
+    {
+      "observedAt": "2026-10-09T20:12:35.814Z",
+      "ticker": "NVDA",
+      "platformId": "bstock",
+      "tokenSymbol": "NVDAB",
+      "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+      "vendorName": "LiquidMesh",
+      "executionMode": "SWAP",
+      "quoteIdSha256": "0x75966956c10ceae7346be650a934a770d4c7217c7063441c5e5db0087c9b112c",
+      "expectedOutputRaw": "22212164404358349",
+      "approval": {
+        "spender": "0xb44446b0c8e56988c34f7ff73ae904982b5fdda5",
+        "amount": "5100000000000000000",
+        "selector": "0x095ea7b3",
+        "calldataSha256": "0x6f727a116c93879700852666b2e8728ce91393f9322457f4fb1b5b31fc917975",
+        "status": "SUCCESS",
+        "failReason": null,
+        "allowanceChangeCount": 1
+      },
+      "swap": {
+        "destination": "0xb44446b0c8e56988c34f7ff73ae904982b5fdda5",
+        "value": "0",
+        "selector": "0xad43f73d",
+        "calldataSha256": "0x352743ca5cafdcd7762a16be97d159252445ee493e49c9b9f6552c88e7b094b0",
+        "minimumOutputRaw": "22101103582336557",
+        "status": "FAILED",
+        "failReason": "execution reverted: BEP20: transfer amount exceeds balance"
+      },
+      "verdict": "BLOCKED"
+    }
+  ],
+  "conclusion": "Both exact approval simulations succeeded and both unfunded-wallet swap simulations failed closed. No transaction was signed or broadcast."
+}

@@ -130,8 +130,49 @@ AI-generated reports.
   The browser independently repeats the material identity checks.
 - Added expiry, honeypot, tax, impact, and route-availability policy. The UI
   explicitly says route metadata is not reserve depth or fill certainty.
-- Kept the endpoint and acceptance script read-only. Transaction building,
-  approval, simulation, wallet connection, and broadcast remain out of scope.
+- At this checkpoint, kept the endpoint and acceptance script read-only;
+  transaction building and simulation moved only in the next recorded round.
+  Wallet connection, signing, and broadcast remained out of scope.
+
+## 2026-10-09: unsigned transaction simulation acceptance
+
+### Observed
+
+- The approval endpoint returned a canonical ERC-20 `approve` payload for
+  exactly `5.10 USDT` and the LiquidMesh spender reported by the fresh best
+  route.
+- The live swap response omitted `tx.signatureData`, although the published
+  response model presents it as an array. The field was not required for the
+  `SWAP` route or its unsigned simulation.
+- Successful simulation responses returned an empty-string `failReason`
+  instead of the documented null form.
+- A first retry during the underlying market's phase change returned business
+  code `40367` with `The stock market is shifting its trading phase`. The
+  application surfaced the upstream failure and did not reuse an older quote.
+- At `2026-10-09T20:11:53.446Z`, Ondo `NVDAon` returned an exact approval
+  simulation `SUCCESS` and a swap simulation `FAILED` with `BEP20: transfer
+  amount exceeds balance` for the unfunded public buyer.
+- At `2026-10-09T20:12:35.814Z`, bStocks `NVDAB` produced the same controlled
+  outcome. Both public verdicts were `BLOCKED`.
+- No wallet, keystore, private key, signature, raw transaction, or broadcast
+  method was used. The checked-in evidence contains selectors and SHA-256
+  fingerprints rather than executable calldata or quote IDs.
+
+### Engineering response
+
+- Added exact POST-body HMAC signing for the Transaction API simulation call.
+- Decode and require a canonical `approve(spender, amount)` before accepting
+  approval bytes. The spender and amount must equal the fresh quote's target
+  and the fixed raw `5.10 USDT` input.
+- Bind swap construction to chain `56`, sender, both tokens, raw amount,
+  vendor, expected output, zero native value, and `0.5%` slippage.
+- Accept omitted `signatureData` only as an empty list and normalize only the
+  exact empty-string failure reason to null. Other schema mismatches still fail.
+- Reject RFQ routes because this lane cannot produce the signatures they need.
+- Simulate approval and swap independently, derive `BLOCKED` on either failure,
+  and expose only redacted proof fields to the browser.
+- Added source-boundary tests ensuring the simulation surfaces contain no
+  signing or broadcast primitive.
 
 ## Sources consulted
 
@@ -139,3 +180,4 @@ AI-generated reports.
 - [Authentication](https://web3.binance.com/en/dev-docs/authentication)
 - [RWA Data API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/rwa-data)
 - [Trading API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api)
+- [Transaction API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/transaction-api)

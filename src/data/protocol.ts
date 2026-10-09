@@ -293,7 +293,6 @@ export const lifecycleFacts = {
 
 export const progress: ProgressContent = {
   ...progressBase,
-  updatedAt: lifecycleFacts.latestTimestampUtc.slice(0, 10),
   entries: progressBase.entries.map((entry) => entry.id === "two-actor-lifecycle" ? {
     ...entry,
     summary: `The hash-bound public lifecycle is verified through index ${lifecycleFacts.completedThrough}: ${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls} calls are canonical. ${lifecycleFacts.checkpointSummary} Next: ${lifecycleFacts.nextLabel}.`,

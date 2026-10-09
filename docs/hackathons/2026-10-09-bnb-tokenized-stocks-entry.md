@@ -19,19 +19,25 @@ remain accessible through judging.
 
 ## Current implementation status
 
-The live read-only lane now completes steps 1 through 6 of the product thesis.
-It resolves and compares Ondo `NVDAon` and bStocks `NVDAB`, then requests a
-strictly bounded `5.10 USDT` exact-input quote for either representation. Both
-issuer paths passed live on 2026-10-09. The server and browser bind the quote to
-chain, settlement token, destination contract, raw amount, receiver, unique
-route IDs, best route, and a conservative expiry. The site displays reported
-mode, route, output, impact, fee, and freshness without returning transaction
-calldata.
+The live simulation-only lane now completes steps 1 through 7 of the product
+thesis. It resolves and compares Ondo `NVDAon` and bStocks `NVDAB`, requests a
+strictly bounded `5.10 USDT` exact-input route, compiles an exact approval and
+swap on the server, and submits both unsigned payloads to the Binance
+Transaction API simulator. The server and browser bind chain, settlement token,
+destination contract, raw amount, sender, vendor, best route, approval target,
+zero native value, expected/minimum output, and the `0.5%` slippage cap.
 
-Steps 7 through 9 remain unimplemented and unauthorized. There is no
-transaction builder, simulation, wallet connection, approval, signing, mainnet
-spend, receipt, or proof card yet. Live quote success is evidence for the next
-simulation milestone, not execution readiness.
+Both issuer paths passed live negative acceptance on 2026-10-09: their exact
+approval simulations succeeded and their swap simulations failed for
+insufficient USDT balance at the unfunded public buyer. Both final verdicts
+were `BLOCKED`. The site receives a non-executable proof card containing
+selectors, SHA-256 calldata fingerprints, statuses, counts, and reasons; raw
+quote IDs and calldata remain server-side.
+
+Steps 8 and 9 remain unimplemented and unauthorized. There is no wallet
+connection, approval submission, transaction signing, mainnet spend, receipt,
+or post-trade proof yet. Live simulation success is evidence for a separately
+reviewed wallet-confirmation milestone, not execution readiness.
 
 ## 1. Why StonkHedge fits
 

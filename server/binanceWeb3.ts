@@ -1,4 +1,4 @@
-import { createHmac, randomUUID } from "node:crypto";
+import { createHash, createHmac, randomUUID } from "node:crypto";
 
 const DEFAULT_BASE_URL = "https://web3.binance.com/build";
 const DEFAULT_TIMEOUT_MS = 8_000;
@@ -43,6 +43,45 @@ export interface SignedGetRequest {
   requestPath: string;
   timestamp: string;
   headers: Readonly<Record<string, string>>;
+}
+
+export interface SignedPostRequest extends SignedGetRequest {
+  body: string;
+}
+
+export interface ExactErc20Approval {
+  functionName: "approve";
+  spender: string;
+  amount: string;
+}
+
+export interface EvmTransactionPayload {
+  from: string;
+  to: string;
+  value: string;
+  data: string;
+}
+
+export interface TransactionBalanceChange {
+  contractAddress: string;
+  tokenType: string;
+  change: string;
+  owner: string;
+}
+
+export interface TransactionAllowanceChange {
+  tokenAddress: string;
+  owner: string;
+  spender: string;
+  preAmount: string;
+  postAmount: string;
+}
+
+export interface TransactionSimulation {
+  status: "SUCCESS" | "FAILED";
+  failReason: string | null;
+  balanceChanges: TransactionBalanceChange[];
+  allowanceChanges: TransactionAllowanceChange[];
 }
 
 export interface RwaChainDistribution {
@@ -235,6 +274,93 @@ export interface RwaReadOnlyQuote {
   expiresAt: number;
 }
 
+export interface AggregatorApprovalTransaction {
+  data: string;
+  dexContractAddress: string;
+  gasLimit: string;
+  gasPrice: string;
+  decoded: ExactErc20Approval;
+}
+
+export interface AggregatorSwapTransaction extends EvmTransactionPayload {
+  gas: string;
+  gasPrice: string;
+  maxPriorityFeePerGas: string;
+  minReceiveAmount: string;
+  slippagePercent: string;
+  signatureData: string[];
+}
+
+export interface AggregatorSwapBuild {
+  routerResult: {
+    binanceChainId: string;
+    vendorName: string;
+    fromTokenAmount: string;
+    toTokenAmount: string;
+    tradeFee: string | null;
+    estimateGasFee: string | null;
+    router: string;
+    priceImpactPercent: string;
+    dexRouterList: AggregatorQuoteRouteSegment[];
+    fromToken: AggregatorQuoteToken;
+    toToken: AggregatorQuoteToken;
+    feeAmount: string | null;
+    feeToken: string | null;
+    actualSwapAmount: string | null;
+  };
+  tx: AggregatorSwapTransaction;
+  executionMode: "SWAP" | "RFQ";
+}
+
+export interface PublicTransactionEvidence {
+  from?: string;
+  to: string;
+  value: string;
+  selector: string;
+  calldataHash: string;
+}
+
+export interface PublicSimulationSummary {
+  status: "SUCCESS" | "FAILED";
+  failReason: string | null;
+  balanceChangeCount: number;
+  allowanceChangeCount: number;
+}
+
+export interface RwaSimulationProof {
+  ticker: string;
+  companyName: string;
+  asset: {
+    platformId: string;
+    tokenContractAddress: string;
+    tokenSymbol: string;
+  };
+  sender: string;
+  input: { symbol: "USDT"; displayAmount: string; rawAmount: string };
+  route: {
+    quoteIdHash: string;
+    vendorName: string;
+    executionMode: "SWAP";
+    expectedOutputRaw: string;
+    slippagePercent: "0.5";
+  };
+  approval: {
+    token: string;
+    spender: string;
+    amount: string;
+    transaction: PublicTransactionEvidence;
+    simulation: PublicSimulationSummary;
+  };
+  swap: {
+    transaction: PublicTransactionEvidence & { from: string };
+    minimumOutputRaw: string;
+    simulation: PublicSimulationSummary;
+  };
+  verdict: "CLEAR" | "BLOCKED";
+  reasons: string[];
+  timestamp: number;
+}
+
 export interface TimestampedResult<T> {
   data: T;
   timestamp: number;
@@ -341,6 +467,48 @@ export function buildSignedGetRequest(
     timestamp: options.timestamp,
     headers: {
       Accept: "application/json",
+      "X-OC-APIKEY": apiKey,
+      "X-OC-TIMESTAMP": options.timestamp,
+      "X-OC-SIGN": signature,
+      "X-OC-RECV-WINDOW": "5000",
+      "X-OC-NONCE": requireNonEmpty(options.nonce, "Binance Web3 request nonce"),
+    },
+  };
+}
+
+export function buildSignedPostRequest(
+  credentials: BinanceWeb3Credentials,
+  options: {
+    apiPath: string;
+    body: string;
+    timestamp: string;
+    nonce: string;
+    baseUrl?: string;
+  },
+): SignedPostRequest {
+  const apiKey = requireNonEmpty(credentials.apiKey, "Binance Web3 API key");
+  const secretKey = requireNonEmpty(credentials.secretKey, "Binance Web3 secret key");
+  assertApiPath(options.apiPath);
+  if (!options.body || options.body.length > 100_000) {
+    throw new BinanceWeb3Error("Binance Web3 POST body is invalid", {
+      kind: "configuration",
+    });
+  }
+  const baseUrl = normalizeBaseUrl(options.baseUrl ?? DEFAULT_BASE_URL);
+  const requestPath = `/build${options.apiPath}`;
+  const preHash = `${options.timestamp}POST${requestPath}${options.body}`;
+  const signature = createHmac("sha256", secretKey)
+    .update(preHash, "utf8")
+    .digest("base64");
+
+  return {
+    url: `${baseUrl}${options.apiPath}`,
+    requestPath,
+    timestamp: options.timestamp,
+    body: options.body,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
       "X-OC-APIKEY": apiKey,
       "X-OC-TIMESTAMP": options.timestamp,
       "X-OC-SIGN": signature,
@@ -465,6 +633,119 @@ function requireBscAddress(value: unknown, path: string): string {
     });
   }
   return address.toLowerCase();
+}
+
+function requireHexData(value: unknown, path: string, minimumBytes = 4): string {
+  const data = requireString(value, path).toLowerCase();
+  const payload = data.slice(2);
+  if (
+    !data.startsWith("0x")
+    || payload.length < minimumBytes * 2
+    || payload.length % 2 !== 0
+    || !/^[a-f0-9]+$/u.test(payload)
+  ) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return data;
+}
+
+function sha256Hex(value: string): string {
+  return `0x${createHash("sha256").update(value, "utf8").digest("hex")}`;
+}
+
+function sha256Calldata(value: string): string {
+  return `0x${createHash("sha256").update(Buffer.from(value.slice(2), "hex")).digest("hex")}`;
+}
+
+export function decodeExactErc20Approval(value: string): ExactErc20Approval {
+  const data = requireHexData(value, "approve calldata");
+  if (data.length !== 2 + 8 + 64 + 64) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid approve calldata length", {
+      kind: "schema",
+    });
+  }
+  if (!data.startsWith("0x095ea7b3")) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid approve selector", {
+      kind: "schema",
+    });
+  }
+  const spenderWord = data.slice(10, 74);
+  if (!/^0{24}[a-f0-9]{40}$/u.test(spenderWord)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid approve spender encoding", {
+      kind: "schema",
+    });
+  }
+  return {
+    functionName: "approve",
+    spender: `0x${spenderWord.slice(24)}`,
+    amount: BigInt(`0x${data.slice(74)}`).toString(),
+  };
+}
+
+export function parseTransactionSimulation(value: unknown): TransactionSimulation {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid simulation data", {
+      kind: "schema",
+    });
+  }
+  const status = requireString(value.status, "simulation status");
+  if (status !== "SUCCESS" && status !== "FAILED") {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid simulation status", {
+      kind: "schema",
+    });
+  }
+  const failReason = value.failReason === null || value.failReason === ""
+    ? null
+    : requireShortString(value.failReason, "simulation failure reason", 2_048);
+  const balanceChanges = requireArray(value.balanceChanges, "simulation balance changes");
+  const allowanceChanges = requireArray(value.allowanceChanges, "simulation allowance changes");
+  if (balanceChanges.length > 128 || allowanceChanges.length > 128) {
+    throw new BinanceWeb3Error("Binance Web3 simulation change set exceeds the safety limit", {
+      kind: "schema",
+    });
+  }
+  return {
+    status,
+    failReason,
+    balanceChanges: balanceChanges.map((candidate, index) => {
+      if (!isRecord(candidate)) {
+        throw new BinanceWeb3Error(`Binance Web3 response has invalid balance change ${index}`, {
+          kind: "schema",
+        });
+      }
+      const contractAddress = candidate.contractAddress === ""
+        ? ""
+        : requireBscAddress(candidate.contractAddress, `balance change ${index} token`);
+      const change = requireString(candidate.change, `balance change ${index} amount`);
+      if (!/^-?(?:0|[1-9]\d*)$/u.test(change)) {
+        throw new BinanceWeb3Error(`Binance Web3 response has invalid balance change ${index} amount`, {
+          kind: "schema",
+        });
+      }
+      return {
+        contractAddress,
+        tokenType: requireShortString(candidate.tokenType, `balance change ${index} type`, 32),
+        change,
+        owner: requireBscAddress(candidate.owner, `balance change ${index} owner`),
+      };
+    }),
+    allowanceChanges: allowanceChanges.map((candidate, index) => {
+      if (!isRecord(candidate)) {
+        throw new BinanceWeb3Error(`Binance Web3 response has invalid allowance change ${index}`, {
+          kind: "schema",
+        });
+      }
+      return {
+        tokenAddress: requireBscAddress(candidate.tokenAddress, `allowance change ${index} token`),
+        owner: requireBscAddress(candidate.owner, `allowance change ${index} owner`),
+        spender: requireBscAddress(candidate.spender, `allowance change ${index} spender`),
+        preAmount: requireIntegerString(candidate.preAmount, `allowance change ${index} pre amount`),
+        postAmount: requireIntegerString(candidate.postAmount, `allowance change ${index} post amount`),
+      };
+    }),
+  };
 }
 
 function requireArray(value: unknown, path: string): unknown[] {
@@ -949,6 +1230,109 @@ function parseAggregatorQuoteRoutes(value: unknown): AggregatorQuoteRoute[] {
   return routes;
 }
 
+function parseApprovalTransactions(value: unknown): AggregatorApprovalTransaction[] {
+  const candidates = requireArray(value, "approval transaction data");
+  if (candidates.length !== 1) {
+    throw new BinanceWeb3Error("Binance Web3 must return exactly one approval transaction", {
+      kind: "schema",
+    });
+  }
+  return candidates.map((candidate, index) => {
+    if (!isRecord(candidate)) {
+      throw new BinanceWeb3Error(`Binance Web3 response has invalid approval ${index}`, {
+        kind: "schema",
+      });
+    }
+    const data = requireHexData(candidate.data, `approval ${index} calldata`);
+    return {
+      data,
+      dexContractAddress: requireBscAddress(
+        candidate.dexContractAddress,
+        `approval ${index} spender`,
+      ),
+      gasLimit: requireIntegerString(candidate.gasLimit, `approval ${index} gas limit`, true),
+      gasPrice: requireIntegerString(candidate.gasPrice, `approval ${index} gas price`, true),
+      decoded: decodeExactErc20Approval(data),
+    };
+  });
+}
+
+function parseSwapBuild(value: unknown): AggregatorSwapBuild {
+  if (!isRecord(value) || !isRecord(value.routerResult) || !isRecord(value.tx)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid swap transaction data", {
+      kind: "schema",
+    });
+  }
+  const result = value.routerResult;
+  const tx = value.tx;
+  const executionMode = requireString(value.executionMode, "swap execution mode");
+  if (executionMode !== "SWAP" && executionMode !== "RFQ") {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid swap execution mode", {
+      kind: "schema",
+    });
+  }
+  const signatureData = tx.signatureData === undefined || tx.signatureData === null
+    ? []
+    : requireArray(tx.signatureData, "swap signature data");
+  if (signatureData.length > 16) {
+    throw new BinanceWeb3Error("Binance Web3 swap signature data exceeds the safety limit", {
+      kind: "schema",
+    });
+  }
+  return {
+    routerResult: {
+      binanceChainId: requireString(result.binanceChainId, "swap chain"),
+      vendorName: requireShortString(result.vendorName, "swap vendor", 80),
+      fromTokenAmount: requireIntegerString(result.fromTokenAmount, "swap input", true),
+      toTokenAmount: requireIntegerString(result.toTokenAmount, "swap output", true),
+      tradeFee: result.tradeFee === null
+        ? null
+        : requireDecimalString(result.tradeFee, "swap trade fee"),
+      estimateGasFee: requireNullableIntegerString(result.estimateGasFee, "swap gas estimate"),
+      router: requireShortString(result.router, "swap router", 2_048),
+      priceImpactPercent: requireDecimalString(result.priceImpactPercent, "swap price impact"),
+      dexRouterList: parseQuoteSegments(result.dexRouterList, 0),
+      fromToken: parseQuoteToken(result.fromToken, "swap from token"),
+      toToken: parseQuoteToken(result.toToken, "swap to token"),
+      feeAmount: requireNullableIntegerString(result.feeAmount, "swap fee amount"),
+      feeToken: result.feeToken === null
+        ? null
+        : requireBscAddress(result.feeToken, "swap fee token"),
+      actualSwapAmount: requireNullableIntegerString(result.actualSwapAmount, "swap actual amount"),
+    },
+    tx: {
+      from: requireBscAddress(tx.from, "swap transaction sender"),
+      to: requireBscAddress(tx.to, "swap transaction destination"),
+      data: requireHexData(tx.data, "swap transaction calldata"),
+      value: requireIntegerString(tx.value, "swap transaction value"),
+      gas: requireIntegerString(tx.gas, "swap transaction gas", true),
+      gasPrice: requireIntegerString(tx.gasPrice, "swap transaction gas price", true),
+      maxPriorityFeePerGas: requireIntegerString(
+        tx.maxPriorityFeePerGas,
+        "swap transaction priority fee",
+      ),
+      minReceiveAmount: requireIntegerString(
+        tx.minReceiveAmount,
+        "swap minimum receive amount",
+        true,
+      ),
+      slippagePercent: requireRate(tx.slippagePercent, "swap slippage", 100),
+      signatureData: signatureData.map((item, index) =>
+        requireShortString(item, `swap signature data ${index}`, 8_192)),
+    },
+    executionMode,
+  };
+}
+
+function simulationSummary(simulation: TransactionSimulation): PublicSimulationSummary {
+  return {
+    status: simulation.status,
+    failReason: simulation.failReason,
+    balanceChangeCount: simulation.balanceChanges.length,
+    allowanceChangeCount: simulation.allowanceChanges.length,
+  };
+}
+
 function normalizeKeyword(value: string): string {
   const keyword = value.trim();
   if (keyword.length < 1 || keyword.length > 80 || /[\u0000-\u001f\u007f]/u.test(keyword)) {
@@ -1111,6 +1495,65 @@ export function createBinanceWeb3Client(options: BinanceWeb3ClientOptions) {
     };
   }
 
+  async function post<T>(
+    apiPath: string,
+    body: unknown,
+    parseData: (value: unknown) => T,
+  ): Promise<TimestampedResult<T>> {
+    const bodyText = JSON.stringify(body);
+    const signed = buildSignedPostRequest(credentials, {
+      apiPath,
+      body: bodyText,
+      timestamp: now().toISOString(),
+      nonce: nonce(),
+      baseUrl,
+    });
+
+    let response: Response;
+    try {
+      response = await fetchImplementation(signed.url, {
+        method: "POST",
+        headers: signed.headers,
+        body: signed.body,
+        redirect: "error",
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+    } catch (error) {
+      const timedOut = error instanceof DOMException && error.name === "TimeoutError";
+      throw new BinanceWeb3Error(
+        timedOut ? "Binance Web3 request timed out" : "Binance Web3 request failed",
+        { kind: timedOut ? "timeout" : "upstream", cause: error },
+      );
+    }
+
+    let decoded: unknown;
+    try {
+      decoded = await response.json();
+    } catch (error) {
+      throw new BinanceWeb3Error("Binance Web3 returned invalid JSON", {
+        kind: "schema",
+        status: response.status,
+        cause: error,
+      });
+    }
+
+    const envelope = parseEnvelope(decoded);
+    const code = typeof envelope.code === "number" ? envelope.code : undefined;
+    const message = typeof envelope.msg === "string" ? envelope.msg : "Upstream request failed";
+    if (!response.ok || code !== 0 || envelope.success !== true) {
+      throw new BinanceWeb3Error(`Binance Web3 rejected the request: ${message}`, {
+        kind: "upstream",
+        status: response.status,
+        code,
+      });
+    }
+
+    return {
+      data: parseData(envelope.data),
+      timestamp: parseTimestamp(envelope.timestamp),
+    };
+  }
+
   return {
     async getRwaPlatforms(platform?: string): Promise<TimestampedResult<RwaPlatform[]>> {
       const normalizedPlatform = normalizePlatform(platform);
@@ -1198,6 +1641,120 @@ export function createBinanceWeb3Client(options: BinanceWeb3ClientOptions) {
       );
     },
 
+    async getApproveTransaction(input: {
+      tokenContractAddress: string;
+      approveAmount: string;
+      vendorName: string;
+      expectedSpender: string;
+    }): Promise<TimestampedResult<AggregatorApprovalTransaction>> {
+      const tokenContractAddress = normalizeBscAddress(input.tokenContractAddress);
+      const approveAmount = requireIntegerString(input.approveAmount, "approval amount", true);
+      const vendorName = requireShortString(input.vendorName, "approval vendor", 80);
+      const expectedSpender = normalizeBscAddress(input.expectedSpender);
+      const result = await get(
+        "/api/v1/dex/aggregator/approve-transaction",
+        [
+          ["binanceChainId", BSC_CHAIN_ID],
+          ["tokenContractAddress", tokenContractAddress],
+          ["approveAmount", approveAmount],
+          ["vendor", vendorName],
+        ],
+        parseApprovalTransactions,
+      );
+      const approval = result.data[0];
+      if (
+        !approval
+        || approval.dexContractAddress !== expectedSpender
+        || approval.decoded.spender !== expectedSpender
+        || approval.decoded.amount !== approveAmount
+      ) {
+        throw new BinanceWeb3Error("Binance Web3 returned mismatched approval intent", {
+          kind: "schema",
+        });
+      }
+      return { data: approval, timestamp: result.timestamp };
+    },
+
+    async buildSwapTransaction(input: {
+      amount: string;
+      fromTokenAddress: string;
+      toTokenAddress: string;
+      userWalletAddress: string;
+      quoteId: string;
+      vendorName: string;
+      expectedOutputAmount: string;
+      slippagePercent: "0.5";
+    }): Promise<TimestampedResult<AggregatorSwapBuild>> {
+      const amount = requireIntegerString(input.amount, "swap input amount", true);
+      const fromTokenAddress = normalizeBscAddress(input.fromTokenAddress);
+      const toTokenAddress = normalizeBscAddress(input.toTokenAddress);
+      const userWalletAddress = normalizeWalletAddress(input.userWalletAddress);
+      const quoteId = requireShortString(input.quoteId, "swap quote ID", 128);
+      if (!QUOTE_IDENTIFIER_PATTERN.test(quoteId)) {
+        throw new BinanceWeb3Error("Swap quote ID is invalid", { kind: "configuration" });
+      }
+      const vendorName = requireShortString(input.vendorName, "swap vendor", 80);
+      const expectedOutputAmount = requireIntegerString(
+        input.expectedOutputAmount,
+        "expected swap output",
+        true,
+      );
+      const result = await get(
+        "/api/v1/dex/aggregator/swap",
+        [
+          ["binanceChainId", BSC_CHAIN_ID],
+          ["amount", amount],
+          ["fromTokenAddress", fromTokenAddress],
+          ["toTokenAddress", toTokenAddress],
+          ["userWalletAddress", userWalletAddress],
+          ["quoteId", quoteId],
+          ["slippagePercent", input.slippagePercent],
+          ["approveTransaction", "false"],
+        ],
+        parseSwapBuild,
+      );
+      const swap = result.data;
+      if (swap.executionMode !== "SWAP") {
+        throw new BinanceWeb3Error(
+          "The selected route requires RFQ signing and cannot enter unsigned simulation",
+          { kind: "configuration" },
+        );
+      }
+      if (
+        swap.routerResult.binanceChainId !== BSC_CHAIN_ID
+        || swap.routerResult.vendorName !== vendorName
+        || swap.routerResult.fromTokenAmount !== amount
+        || swap.routerResult.toTokenAmount !== expectedOutputAmount
+        || swap.routerResult.fromToken.tokenContractAddress !== fromTokenAddress
+        || swap.routerResult.toToken.tokenContractAddress !== toTokenAddress
+        || swap.tx.from !== userWalletAddress
+        || swap.tx.value !== "0"
+        || swap.tx.slippagePercent !== input.slippagePercent
+        || BigInt(swap.tx.minReceiveAmount) > BigInt(expectedOutputAmount)
+      ) {
+        throw new BinanceWeb3Error("Binance Web3 returned mismatched swap intent", {
+          kind: "schema",
+        });
+      }
+      return result;
+    },
+
+    async simulateEvmTransaction(
+      transaction: EvmTransactionPayload,
+    ): Promise<TimestampedResult<TransactionSimulation>> {
+      const evmTx: EvmTransactionPayload = {
+        from: normalizeWalletAddress(transaction.from),
+        to: normalizeBscAddress(transaction.to),
+        value: requireIntegerString(transaction.value, "simulation transaction value"),
+        data: requireHexData(transaction.data, "simulation transaction calldata"),
+      };
+      return post(
+        "/api/v1/dex/pre-transaction/simulate",
+        { binanceChainId: BSC_CHAIN_ID, evmTx },
+        parseTransactionSimulation,
+      );
+    },
+
     async quoteRwaFromUsdt(input: {
       keyword: string;
       tokenContractAddress: string;
@@ -1264,6 +1821,150 @@ export function createBinanceWeb3Client(options: BinanceWeb3ClientOptions) {
         routes: quote.data,
         timestamp: quote.timestamp,
         expiresAt: quote.timestamp + PUBLIC_QUOTE_LIFETIME_MS,
+      };
+    },
+
+    async simulateRwaSwap(input: {
+      keyword: string;
+      tokenContractAddress: string;
+      userWalletAddress: string;
+      usdtAmount: string;
+    }): Promise<RwaSimulationProof> {
+      const quote = await this.quoteRwaFromUsdt(input);
+      const route = quote.routes.find((candidate) => candidate.isBest);
+      if (!route) {
+        throw new BinanceWeb3Error("The quote has no unique best route", { kind: "schema" });
+      }
+      if (route.executionMode !== "SWAP") {
+        throw new BinanceWeb3Error(
+          "The best route requires RFQ signing and cannot enter unsigned simulation",
+          { kind: "configuration" },
+        );
+      }
+      if (!route.approveTarget) {
+        throw new BinanceWeb3Error(
+          "The exact ERC-20 approval target was not reported for this route",
+          { kind: "schema" },
+        );
+      }
+
+      const approval = await this.getApproveTransaction({
+        tokenContractAddress: BSC_USDT_ADDRESS,
+        approveAmount: quote.input.rawAmount,
+        vendorName: route.vendorName,
+        expectedSpender: route.approveTarget,
+      });
+      const swap = await this.buildSwapTransaction({
+        amount: quote.input.rawAmount,
+        fromTokenAddress: BSC_USDT_ADDRESS,
+        toTokenAddress: quote.asset.tokenContractAddress,
+        userWalletAddress: quote.userWalletAddress,
+        quoteId: route.quoteId,
+        vendorName: route.vendorName,
+        expectedOutputAmount: route.toTokenAmount,
+        slippagePercent: "0.5",
+      });
+      const approvalTransaction: EvmTransactionPayload = {
+        from: quote.userWalletAddress,
+        to: BSC_USDT_ADDRESS,
+        value: "0",
+        data: approval.data.data,
+      };
+      const [approvalSimulation, swapSimulation] = await Promise.all([
+        this.simulateEvmTransaction(approvalTransaction),
+        this.simulateEvmTransaction(swap.data.tx),
+      ]);
+
+      for (const change of approvalSimulation.data.allowanceChanges) {
+        if (
+          change.tokenAddress !== BSC_USDT_ADDRESS
+          || change.owner !== quote.userWalletAddress
+          || change.spender !== route.approveTarget
+          || change.postAmount !== quote.input.rawAmount
+        ) {
+          throw new BinanceWeb3Error(
+            "Binance Web3 returned an approval simulation with mismatched allowance state",
+            { kind: "schema" },
+          );
+        }
+      }
+      if (
+        approvalSimulation.data.status === "SUCCESS"
+        && approvalSimulation.data.allowanceChanges.length !== 1
+      ) {
+        throw new BinanceWeb3Error(
+          "Binance Web3 approval simulation omitted the exact allowance change",
+          { kind: "schema" },
+        );
+      }
+
+      const reasons: string[] = [];
+      if (approvalSimulation.data.status !== "SUCCESS") {
+        reasons.push(
+          `Approval simulation failed${approvalSimulation.data.failReason ? `: ${approvalSimulation.data.failReason}` : ""}`,
+        );
+      }
+      if (swapSimulation.data.status !== "SUCCESS") {
+        reasons.push(
+          `Swap simulation failed${swapSimulation.data.failReason ? `: ${swapSimulation.data.failReason}` : ""}`,
+        );
+      }
+      if (approvalSimulation.data.status === "SUCCESS" && approvalSimulation.data.failReason) {
+        reasons.push(`Approval simulator reported a failure reason: ${approvalSimulation.data.failReason}`);
+      }
+      if (swapSimulation.data.status === "SUCCESS" && swapSimulation.data.failReason) {
+        reasons.push(`Swap simulator reported a failure reason: ${swapSimulation.data.failReason}`);
+      }
+
+      return {
+        ticker: quote.ticker,
+        companyName: quote.companyName,
+        asset: {
+          platformId: quote.asset.platformId,
+          tokenContractAddress: quote.asset.tokenContractAddress.toLowerCase(),
+          tokenSymbol: quote.asset.tokenSymbol,
+        },
+        sender: quote.userWalletAddress,
+        input: quote.input,
+        route: {
+          quoteIdHash: sha256Hex(route.quoteId),
+          vendorName: route.vendorName,
+          executionMode: "SWAP",
+          expectedOutputRaw: route.toTokenAmount,
+          slippagePercent: "0.5",
+        },
+        approval: {
+          token: BSC_USDT_ADDRESS,
+          spender: route.approveTarget,
+          amount: quote.input.rawAmount,
+          transaction: {
+            to: BSC_USDT_ADDRESS,
+            value: "0",
+            selector: approval.data.data.slice(0, 10),
+            calldataHash: sha256Calldata(approval.data.data),
+          },
+          simulation: simulationSummary(approvalSimulation.data),
+        },
+        swap: {
+          transaction: {
+            from: swap.data.tx.from,
+            to: swap.data.tx.to,
+            value: swap.data.tx.value,
+            selector: swap.data.tx.data.slice(0, 10),
+            calldataHash: sha256Calldata(swap.data.tx.data),
+          },
+          minimumOutputRaw: swap.data.tx.minReceiveAmount,
+          simulation: simulationSummary(swapSimulation.data),
+        },
+        verdict: reasons.length === 0 ? "CLEAR" : "BLOCKED",
+        reasons,
+        timestamp: Math.max(
+          quote.timestamp,
+          approval.timestamp,
+          swap.timestamp,
+          approvalSimulation.timestamp,
+          swapSimulation.timestamp,
+        ),
       };
     },
 

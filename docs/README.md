@@ -12,6 +12,9 @@ spot-only BSC entry plan for the BNB Hack: Tokenized Stocks Edition. Start with
 the [entry architecture, compliance boundary, and hour-by-hour plan](./hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
 This lane reuses product and safety patterns but remains separate from the
 Robinhood Chain testnet deployment and its transaction authorizations.
+The [Binance Web3 integration experience log](./hackathons/2026-10-09-binance-web3-dx-log.md)
+records only observed onboarding and API behavior for the required Developer
+Experience Report.
 
 ## Current milestone
 

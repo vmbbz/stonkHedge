@@ -12,6 +12,20 @@ StonkHedge product shell and fail-closed transaction discipline, but it does
 not port Robinhood/Panoptic contracts or public-testnet authorizations to BSC.
 Read the [entry architecture and 51-hour delivery plan](./docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
 
+The first integration gate is a server-only, read-only Binance Web3 API check:
+
+```powershell
+Copy-Item .env.example .env.local
+notepad .env.local
+npm run bnb:rwa:check -- NVDA
+```
+
+Both `BINANCE_WEB3_API_KEY` and `BINANCE_WEB3_SECRET_KEY` are required. They
+remain server-side and `.env.local` is ignored. Never use a `VITE_` prefix for
+either credential. The check lists supported RWA platforms and BSC ticker
+representations; it has no wallet, signing, or broadcast capability. Record
+observed integration facts in the [DX log](./docs/hackathons/2026-10-09-binance-web3-dx-log.md).
+
 ## Start here
 
 - Explore the data-driven build-in-public dashboard locally with `npm install`

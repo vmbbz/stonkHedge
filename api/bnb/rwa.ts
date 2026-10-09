@@ -53,6 +53,16 @@ function consumeRateLimit(identifier: string, now = Date.now()): boolean {
 
 function publicError(error: unknown, requestId: string): { status: number; body: PublicError } {
   if (error instanceof BinanceWeb3Error) {
+    if (error.kind === "not_found") {
+      return {
+        status: 404,
+        body: {
+          error: "RWA_NOT_FOUND",
+          message: error.message,
+          requestId,
+        },
+      };
+    }
     if (error.kind === "configuration") {
       const missingCredentials = error.message.includes("not configured");
       return {
@@ -141,9 +151,23 @@ export default async function handler(
       return;
     }
 
+    if (operation === "compare") {
+      const keyword = url.searchParams.get("q") ?? "";
+      const comparison = await client.compareRwaTicker(keyword);
+      sendJson(response, 200, {
+        operation,
+        chainId: 56,
+        data: comparison,
+        timestamp: Date.now(),
+        requestId,
+        boundary: "READ_ONLY_NO_WALLET_NO_SIGNING_NO_BROADCAST",
+      });
+      return;
+    }
+
     sendJson(response, 400, {
       error: "INVALID_OPERATION",
-      message: "operation must be platforms or search",
+      message: "operation must be platforms, search, or compare",
       requestId,
     });
   } catch (error) {

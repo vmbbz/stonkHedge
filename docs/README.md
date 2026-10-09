@@ -15,6 +15,9 @@ Robinhood Chain testnet deployment and its transaction authorizations.
 The [Binance Web3 integration experience log](./hackathons/2026-10-09-binance-web3-dx-log.md)
 records only observed onboarding and API behavior for the required Developer
 Experience Report.
+The [BNB Gap Guardian architecture](./architecture/bnb-gap-guardian.md)
+documents the live two-issuer NVDA comparison, server-only trust boundary,
+normalization math, risk policy, and observed API schema drift.
 
 ## Current milestone
 

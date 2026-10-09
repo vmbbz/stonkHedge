@@ -66,13 +66,112 @@ export interface RwaSearchResult {
   assets: RwaAsset[];
 }
 
+export interface RwaTokenPrice {
+  binanceChainId: string;
+  tokenContractAddress: string;
+  platformId: string;
+  tokenPrice: string;
+  referencePrice: string;
+  tokenPriceUpdatedAt: number;
+}
+
+export interface RwaProtection {
+  supported: boolean;
+  url: string | null;
+}
+
+export interface RwaUnderlyingProfile {
+  binanceChainId: string;
+  tokenContractAddress: string;
+  platformId: string;
+  underlyingTicker: string;
+  underlyingFullName: string;
+  assetType: RwaAssetType;
+  tokenToShareRatio: string;
+  protections: Record<string, RwaProtection>;
+  companyInfo: {
+    website: string | null;
+    industry: string | null;
+  } | null;
+}
+
+export type RwaMarketStatus =
+  | "premarket"
+  | "regular"
+  | "postmarket"
+  | "overnight"
+  | "closed"
+  | "pause";
+
+export type RwaReasonCode =
+  | "TRADING"
+  | "MARKET_CLOSED"
+  | "MARKET_PAUSED"
+  | "MARKET_MAINTENANCE"
+  | "ASSET_PAUSED"
+  | "ASSET_LIMITED"
+  | "UNSUPPORTED";
+
+export interface RwaStatusInfo {
+  openState: boolean;
+  marketStatus: RwaMarketStatus | null;
+  reasonCode: RwaReasonCode | null;
+  reasonMsg: string | null;
+  nextOpenTime: number | null;
+  nextCloseTime: number | null;
+}
+
+export interface RwaMarketData {
+  referencePrice: string | null;
+  high52W: string | null;
+  low52W: string | null;
+  volumeShares24H: string | null;
+  avgDailyVolume1Y: string | null;
+  totalShares: string | null;
+  marketCap: string | null;
+  turnoverRate: string | null;
+  amplitude: string | null;
+  peRatioTTM: string | null;
+  pbRatio: string | null;
+  dividendYield: string | null;
+  latestDividend: string | null;
+}
+
+export interface RwaUnderlyingMarket {
+  binanceChainId: string;
+  tokenContractAddress: string;
+  platformId: string;
+  assetType: RwaAssetType;
+  statusInfo: RwaStatusInfo;
+  marketData: RwaMarketData;
+}
+
+export interface RwaComparisonAsset {
+  asset: RwaAsset;
+  price: RwaTokenPrice;
+  profile: RwaUnderlyingProfile;
+  market: RwaUnderlyingMarket;
+}
+
+export interface RwaComparison {
+  ticker: string;
+  companyName: string;
+  assets: RwaComparisonAsset[];
+  timestamps: {
+    search: number;
+    price: number;
+    profiles: number[];
+    markets: number[];
+  };
+}
+
 export interface TimestampedResult<T> {
   data: T;
   timestamp: number;
 }
 
 export class BinanceWeb3Error extends Error {
-  readonly kind: "configuration" | "upstream" | "schema" | "timeout";
+  readonly kind: "configuration" | "not_found" | "upstream" | "schema" | "timeout";
   readonly status?: number;
   readonly code?: number;
 
@@ -214,6 +313,20 @@ function requireNullableString(value: unknown, path: string): string | null {
   return requireString(value, path);
 }
 
+function optionalNullableString(value: unknown, path: string): string | null {
+  if (value === undefined || value === null) return null;
+  return requireString(value, path);
+}
+
+function requireBoolean(value: unknown, path: string): boolean {
+  if (typeof value !== "boolean") {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return value;
+}
+
 function requireInteger(value: unknown, path: string): number {
   if (typeof value !== "number" || !Number.isSafeInteger(value)) {
     throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
@@ -221,6 +334,52 @@ function requireInteger(value: unknown, path: string): number {
     });
   }
   return value;
+}
+
+function requireNullableInteger(value: unknown, path: string): number | null {
+  if (value === null) return null;
+  return requireInteger(value, path);
+}
+
+function requireDecimalString(value: unknown, path: string, positive = false): string {
+  const decimal = requireString(value, path);
+  const numeric = Number(decimal);
+  if (!/^-?(?:0|[1-9]\d*)(?:\.\d+)?$/u.test(decimal) || !Number.isFinite(numeric)) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  if (positive && numeric <= 0) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return decimal;
+}
+
+function requireNullableDecimalString(value: unknown, path: string): string | null {
+  if (value === null) return null;
+  return requireDecimalString(value, path);
+}
+
+function requireAssetType(value: unknown, path: string): RwaAssetType {
+  const assetType = requireInteger(value, path);
+  if (assetType !== 1 && assetType !== 2 && assetType !== 3) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return assetType;
+}
+
+function requireBscAddress(value: unknown, path: string): string {
+  const address = requireString(value, path);
+  if (!ADDRESS_PATTERN.test(address)) {
+    throw new BinanceWeb3Error(`Binance Web3 response has invalid ${path}`, {
+      kind: "schema",
+    });
+  }
+  return address.toLowerCase();
 }
 
 function requireArray(value: unknown, path: string): unknown[] {
@@ -311,16 +470,10 @@ function parseSearchResults(value: unknown): RwaSearchResult[] {
             { kind: "schema" },
           );
         }
-        const assetType = requireInteger(
+        const assetType = requireAssetType(
           asset.assetType,
           `result ${index} asset ${assetIndex} assetType`,
         );
-        if (assetType !== 1 && assetType !== 2 && assetType !== 3) {
-          throw new BinanceWeb3Error(
-            `Binance Web3 response has invalid result ${index} asset ${assetIndex} type`,
-            { kind: "schema" },
-          );
-        }
         return {
           platformId: requireString(
             asset.platformId,
@@ -345,6 +498,199 @@ function parseSearchResults(value: unknown): RwaSearchResult[] {
   });
 }
 
+function parseTokenPrices(value: unknown): RwaTokenPrice[] {
+  return requireArray(value, "price data").map((candidate, index) => {
+    if (!isRecord(candidate)) {
+      throw new BinanceWeb3Error(`Binance Web3 response has invalid price ${index}`, {
+        kind: "schema",
+      });
+    }
+    const binanceChainId = requireString(candidate.binanceChainId, `price ${index} binanceChainId`);
+    if (binanceChainId !== BSC_CHAIN_ID) {
+      throw new BinanceWeb3Error(`Binance Web3 response has invalid price ${index} chain`, {
+        kind: "schema",
+      });
+    }
+    return {
+      binanceChainId,
+      tokenContractAddress: requireBscAddress(
+        candidate.tokenContractAddress,
+        `price ${index} tokenContractAddress`,
+      ),
+      platformId: requireString(candidate.platformId, `price ${index} platformId`),
+      tokenPrice: requireDecimalString(candidate.tokenPrice, `price ${index} tokenPrice`, true),
+      referencePrice: requireDecimalString(
+        candidate.referencePrice,
+        `price ${index} referencePrice`,
+        true,
+      ),
+      tokenPriceUpdatedAt: requireInteger(
+        candidate.tokenPriceUpdatedAt,
+        `price ${index} tokenPriceUpdatedAt`,
+      ),
+    };
+  });
+}
+
+function parseProtections(value: unknown): Record<string, RwaProtection> {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid protections", {
+      kind: "schema",
+    });
+  }
+  return Object.fromEntries(
+    Object.entries(value).map(([key, candidate]) => {
+      if (!isRecord(candidate)) {
+        throw new BinanceWeb3Error(`Binance Web3 response has invalid protection ${key}`, {
+          kind: "schema",
+        });
+      }
+      return [
+        key,
+        {
+          supported: requireBoolean(candidate.supported, `protection ${key} supported`),
+          url: requireNullableString(candidate.url, `protection ${key} url`),
+        },
+      ];
+    }),
+  );
+}
+
+function parseUnderlyingProfile(value: unknown): RwaUnderlyingProfile {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid underlying profile", {
+      kind: "schema",
+    });
+  }
+  const binanceChainId = requireString(value.binanceChainId, "profile binanceChainId");
+  if (binanceChainId !== BSC_CHAIN_ID) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid profile chain", {
+      kind: "schema",
+    });
+  }
+  let companyInfo: RwaUnderlyingProfile["companyInfo"] = null;
+  if (value.companyInfo !== null) {
+    if (!isRecord(value.companyInfo)) {
+      throw new BinanceWeb3Error("Binance Web3 response has invalid profile companyInfo", {
+        kind: "schema",
+      });
+    }
+    companyInfo = {
+      website: optionalNullableString(value.companyInfo.website, "profile companyInfo website"),
+      industry: optionalNullableString(value.companyInfo.industry, "profile companyInfo industry"),
+    };
+  }
+  return {
+    binanceChainId,
+    tokenContractAddress: requireBscAddress(
+      value.tokenContractAddress,
+      "profile tokenContractAddress",
+    ),
+    platformId: requireString(value.platformId, "profile platformId"),
+    underlyingTicker: requireString(value.underlyingTicker, "profile underlyingTicker"),
+    underlyingFullName: requireString(value.underlyingFullName, "profile underlyingFullName"),
+    assetType: requireAssetType(value.assetType, "profile assetType"),
+    tokenToShareRatio: requireDecimalString(
+      value.tokenToShareRatio,
+      "profile tokenToShareRatio",
+      true,
+    ),
+    protections: parseProtections(value.protections),
+    companyInfo,
+  };
+}
+
+const MARKET_STATUSES = new Set<RwaMarketStatus>([
+  "premarket",
+  "regular",
+  "postmarket",
+  "overnight",
+  "closed",
+  "pause",
+]);
+const REASON_CODES = new Set<RwaReasonCode>([
+  "TRADING",
+  "MARKET_CLOSED",
+  "MARKET_PAUSED",
+  "MARKET_MAINTENANCE",
+  "ASSET_PAUSED",
+  "ASSET_LIMITED",
+  "UNSUPPORTED",
+]);
+
+function parseStatusInfo(value: unknown): RwaStatusInfo {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid statusInfo", {
+      kind: "schema",
+    });
+  }
+  const marketStatus = requireNullableString(value.marketStatus, "statusInfo marketStatus");
+  if (marketStatus !== null && !MARKET_STATUSES.has(marketStatus as RwaMarketStatus)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid statusInfo marketStatus", {
+      kind: "schema",
+    });
+  }
+  const reasonCode = requireNullableString(value.reasonCode, "statusInfo reasonCode");
+  if (reasonCode !== null && !REASON_CODES.has(reasonCode as RwaReasonCode)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid statusInfo reasonCode", {
+      kind: "schema",
+    });
+  }
+  return {
+    openState: requireBoolean(value.openState, "statusInfo openState"),
+    marketStatus: marketStatus as RwaMarketStatus | null,
+    reasonCode: reasonCode as RwaReasonCode | null,
+    reasonMsg: requireNullableString(value.reasonMsg, "statusInfo reasonMsg"),
+    nextOpenTime: requireNullableInteger(value.nextOpenTime, "statusInfo nextOpenTime"),
+    nextCloseTime: requireNullableInteger(value.nextCloseTime, "statusInfo nextCloseTime"),
+  };
+}
+
+function parseMarketData(value: unknown): RwaMarketData {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid marketData", {
+      kind: "schema",
+    });
+  }
+  return {
+    referencePrice: requireNullableDecimalString(value.referencePrice, "marketData referencePrice"),
+    high52W: requireNullableDecimalString(value.high52W, "marketData high52W"),
+    low52W: requireNullableDecimalString(value.low52W, "marketData low52W"),
+    volumeShares24H: requireNullableDecimalString(value.volumeShares24H, "marketData volumeShares24H"),
+    avgDailyVolume1Y: requireNullableDecimalString(value.avgDailyVolume1Y, "marketData avgDailyVolume1Y"),
+    totalShares: requireNullableDecimalString(value.totalShares, "marketData totalShares"),
+    marketCap: requireNullableDecimalString(value.marketCap, "marketData marketCap"),
+    turnoverRate: requireNullableDecimalString(value.turnoverRate, "marketData turnoverRate"),
+    amplitude: requireNullableDecimalString(value.amplitude, "marketData amplitude"),
+    peRatioTTM: requireNullableDecimalString(value.peRatioTTM, "marketData peRatioTTM"),
+    pbRatio: requireNullableDecimalString(value.pbRatio, "marketData pbRatio"),
+    dividendYield: requireNullableDecimalString(value.dividendYield, "marketData dividendYield"),
+    latestDividend: requireNullableDecimalString(value.latestDividend, "marketData latestDividend"),
+  };
+}
+
+function parseUnderlyingMarket(value: unknown): RwaUnderlyingMarket {
+  if (!isRecord(value)) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid underlying market", {
+      kind: "schema",
+    });
+  }
+  const binanceChainId = requireString(value.binanceChainId, "market binanceChainId");
+  if (binanceChainId !== BSC_CHAIN_ID) {
+    throw new BinanceWeb3Error("Binance Web3 response has invalid market chain", {
+      kind: "schema",
+    });
+  }
+  return {
+    binanceChainId,
+    tokenContractAddress: requireBscAddress(value.tokenContractAddress, "market tokenContractAddress"),
+    platformId: requireString(value.platformId, "market platformId"),
+    assetType: requireAssetType(value.assetType, "market assetType"),
+    statusInfo: parseStatusInfo(value.statusInfo),
+    marketData: parseMarketData(value.marketData),
+  };
+}
+
 function normalizeKeyword(value: string): string {
   const keyword = value.trim();
   if (keyword.length < 1 || keyword.length > 80 || /[\u0000-\u001f\u007f]/u.test(keyword)) {
@@ -364,6 +710,42 @@ function normalizePlatform(value: string | undefined): "ondo" | "bstock" | undef
     });
   }
   return value;
+}
+
+function normalizeBscAddress(value: string): string {
+  const address = value.trim().toLowerCase();
+  if (!ADDRESS_PATTERN.test(address)) {
+    throw new BinanceWeb3Error("RWA token contract address must be a valid EVM address", {
+      kind: "configuration",
+    });
+  }
+  return address;
+}
+
+function normalizeBscAddresses(values: readonly string[]): string[] {
+  const addresses = [...new Set(values.map(normalizeBscAddress))];
+  if (addresses.length < 1 || addresses.length > 100) {
+    throw new BinanceWeb3Error("RWA price query requires 1 to 100 unique addresses", {
+      kind: "configuration",
+    });
+  }
+  return addresses;
+}
+
+function assertMatchingIdentity(
+  asset: RwaAsset,
+  value: { binanceChainId: string; tokenContractAddress: string; platformId: string },
+  label: string,
+): void {
+  if (
+    value.binanceChainId !== BSC_CHAIN_ID ||
+    value.tokenContractAddress.toLowerCase() !== asset.tokenContractAddress.toLowerCase() ||
+    value.platformId !== asset.platformId
+  ) {
+    throw new BinanceWeb3Error(`Binance Web3 returned mismatched ${label} identity`, {
+      kind: "schema",
+    });
+  }
 }
 
 export function createBinanceWeb3Client(options: BinanceWeb3ClientOptions) {
@@ -452,6 +834,108 @@ export function createBinanceWeb3Client(options: BinanceWeb3ClientOptions) {
       const query: QueryEntry[] = [["keyword", normalizeKeyword(keyword)]];
       if (normalizedPlatform) query.push(["platformId", normalizedPlatform]);
       return get("/api/v1/dex/market/rwa/search", query, parseSearchResults);
+    },
+
+    async getRwaTokenPrices(
+      tokenContractAddresses: readonly string[],
+    ): Promise<TimestampedResult<RwaTokenPrice[]>> {
+      const addresses = normalizeBscAddresses(tokenContractAddresses);
+      return get(
+        "/api/v1/dex/market/rwa/price",
+        [
+          ["binanceChainId", BSC_CHAIN_ID],
+          ["tokenContractAddresses", addresses.join(",")],
+        ],
+        parseTokenPrices,
+      );
+    },
+
+    async getRwaUnderlyingProfile(
+      tokenContractAddress: string,
+    ): Promise<TimestampedResult<RwaUnderlyingProfile>> {
+      return get(
+        "/api/v1/dex/market/rwa/underlying-profile",
+        [
+          ["binanceChainId", BSC_CHAIN_ID],
+          ["tokenContractAddress", normalizeBscAddress(tokenContractAddress)],
+        ],
+        parseUnderlyingProfile,
+      );
+    },
+
+    async getRwaUnderlyingMarket(
+      tokenContractAddress: string,
+    ): Promise<TimestampedResult<RwaUnderlyingMarket>> {
+      return get(
+        "/api/v1/dex/market/rwa/underlying-market",
+        [
+          ["binanceChainId", BSC_CHAIN_ID],
+          ["tokenContractAddress", normalizeBscAddress(tokenContractAddress)],
+        ],
+        parseUnderlyingMarket,
+      );
+    },
+
+    async compareRwaTicker(keyword: string): Promise<RwaComparison> {
+      const search = await this.searchRwaTokens(keyword);
+      const bscResults = this.filterBscAssets(search.data);
+      const exact = bscResults.find(
+        (candidate) => candidate.ticker.toLowerCase() === keyword.trim().toLowerCase(),
+      );
+      const result = exact ?? bscResults[0];
+      if (!result) {
+        throw new BinanceWeb3Error("No supported BSC tokenized-stock representation was found", {
+          kind: "not_found",
+        });
+      }
+
+      const seen = new Set<string>();
+      const assets = result.assets.filter((asset) => {
+        const address = asset.tokenContractAddress.toLowerCase();
+        if (seen.has(address)) return false;
+        seen.add(address);
+        return true;
+      });
+      if (assets.length > 8) {
+        throw new BinanceWeb3Error("RWA comparison fan-out exceeds the eight-asset safety limit", {
+          kind: "schema",
+        });
+      }
+
+      const [prices, profiles, markets] = await Promise.all([
+        this.getRwaTokenPrices(assets.map((asset) => asset.tokenContractAddress)),
+        Promise.all(assets.map((asset) => this.getRwaUnderlyingProfile(asset.tokenContractAddress))),
+        Promise.all(assets.map((asset) => this.getRwaUnderlyingMarket(asset.tokenContractAddress))),
+      ]);
+      const pricesByAddress = new Map(
+        prices.data.map((price) => [price.tokenContractAddress.toLowerCase(), price]),
+      );
+      const comparisonAssets = assets.map((asset, index): RwaComparisonAsset => {
+        const price = pricesByAddress.get(asset.tokenContractAddress.toLowerCase());
+        const profile = profiles[index]?.data;
+        const market = markets[index]?.data;
+        if (!price || !profile || !market) {
+          throw new BinanceWeb3Error("Binance Web3 returned incomplete comparison data", {
+            kind: "schema",
+          });
+        }
+        assertMatchingIdentity(asset, price, "price");
+        assertMatchingIdentity(asset, profile, "profile");
+        assertMatchingIdentity(asset, market, "market");
+        return { asset, price, profile, market };
+      });
+
+      return {
+        ticker: result.ticker,
+        companyName: result.companyName,
+        assets: comparisonAssets,
+        timestamps: {
+          search: search.timestamp,
+          price: prices.timestamp,
+          profiles: profiles.map((profile) => profile.timestamp),
+          markets: markets.map((market) => market.timestamp),
+        },
+      };
     },
 
     filterBscAssets(results: readonly RwaSearchResult[]): RwaSearchResult[] {

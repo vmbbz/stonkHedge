@@ -1,6 +1,14 @@
 import "./styles.css";
 import type { ArchitectureScene } from "./architecture";
 import {
+  assessGuardianAsset,
+  issuerGapBps,
+  normalizedPerSharePrice,
+  parseGuardianResponse,
+  type GuardianAsset,
+  type GuardianComparison,
+} from "./bnb/gapGuardian";
+import {
   architectureNodes,
   contracts,
   explorerBase,
@@ -21,6 +29,33 @@ const shorten = (value: string, left = 6, right = 4) => `${value.slice(0, left)}
 const repoUrl = (path: string) => `${repositoryBase}/${path}`;
 const txUrl = (hash: string) => `${explorerBase}/tx/${hash}`;
 const addressUrl = (address: string) => `${explorerBase}/address/${address}`;
+const bscTokenUrl = (address: string) => `https://bscscan.com/token/${address}`;
+const escapeHtml = (value: string) => value
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;")
+  .replaceAll("'", "&#039;");
+const formatUsd = (value: number) => new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: value < 1 ? 6 : 2,
+}).format(value);
+const formatAge = (milliseconds: number) => {
+  const seconds = Math.max(0, Math.floor(milliseconds / 1_000));
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  return `${Math.floor(minutes / 60)}h ago`;
+};
+const formatClock = (timestamp: number | null) => timestamp === null
+  ? "Not reported"
+  : new Intl.DateTimeFormat("en-ZA", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "Africa/Johannesburg",
+    }).format(timestamp);
 const canRenderWebGL = () => {
   try {
     const canvas = document.createElement("canvas");
@@ -86,6 +121,7 @@ app.innerHTML = `
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="StonkHedge home"><span class="mark">S</span><span>StonkHedge</span></a>
     <nav aria-label="Primary">
+      <a href="#gap-guardian">BNB Gap</a>
       <a href="#architecture">Architecture</a>
       <a href="#timeline">Timeline</a>
       <a href="#contracts">Contracts</a>
@@ -119,6 +155,35 @@ app.innerHTML = `
 
     <section class="metrics wrap" aria-label="Milestone totals">
       ${metrics.map((metric) => `<div class="metric"><strong>${metric.value}</strong><span>${metric.label}</span><small>${metric.note}</small></div>`).join("")}
+    </section>
+
+    <section class="section guardian-section" id="gap-guardian">
+      <div class="guardian-orb guardian-orb-one"></div>
+      <div class="guardian-orb guardian-orb-two"></div>
+      <div class="wrap guardian-shell">
+        <div class="guardian-heading">
+          <div>
+            <span class="kicker">BNB Hack · live read-only API</span>
+            <h2>One stock.<br/><em>Two wrappers.</em></h2>
+          </div>
+          <div class="guardian-intro">
+            <p>Gap Guardian resolves BSC tokenized-stock representations, normalizes each token by its token-to-share ratio, and surfaces issuer, freshness, and underlying-session differences before any wallet is involved.</p>
+            <div class="guardian-boundary"><span class="live-dot"></span>BSC · chain 56 · no signing</div>
+          </div>
+        </div>
+        <form class="guardian-search" id="guardian-search" role="search">
+          <label for="guardian-query">Ticker, company, or BSC contract</label>
+          <div>
+            <input id="guardian-query" name="q" type="search" value="NVDA" maxlength="80" autocomplete="off" spellcheck="false" />
+            <button type="submit">Compare live ${icon("arrow")}</button>
+          </div>
+          <small>First accepted candidate: NVDAon by Ondo and NVDAB by bStocks.</small>
+        </form>
+        <div class="guardian-results" id="guardian-results" aria-live="polite">
+          <div class="guardian-loading"><span></span><p>Resolving issuer representations and market state…</p></div>
+        </div>
+        <p class="guardian-disclosure">Binance documents its “reference price” as a per-share conversion derived from on-chain token price—not an official traditional-market quote. This monitor is informational and read-only.</p>
+      </div>
     </section>
 
     <section class="section architecture-section" id="architecture">
@@ -260,6 +325,127 @@ app.innerHTML = `
   </dialog>
   <div class="toast" role="status" aria-live="polite"></div>
 `;
+
+const renderGuardianAsset = (
+  asset: GuardianAsset,
+  gapBps: number | null,
+  now: number,
+) => {
+  const assessment = assessGuardianAsset(asset, now, gapBps);
+  const perShare = normalizedPerSharePrice(asset);
+  const supportedProtections = Object.entries(asset.profile.protections)
+    .filter(([, protection]) => protection.supported)
+    .map(([name]) => name.replace(/([a-z])([A-Z])/gu, "$1 $2").toLowerCase());
+  const session = asset.market.statusInfo.marketStatus
+    ?? (asset.market.statusInfo.openState ? "open · unlabeled" : "unreported");
+  const sessionDetail = asset.market.statusInfo.reasonMsg
+    ?? (asset.market.statusInfo.openState ? "Underlying marked open" : "No reason reported");
+  return `
+    <article class="guardian-card ${assessment.level}">
+      <div class="guardian-card-top">
+        <div class="issuer-mark ${escapeHtml(asset.asset.platformId)}">${escapeHtml(asset.asset.platformId.slice(0, 1).toUpperCase())}</div>
+        <div><span>${escapeHtml(asset.asset.platformId)}</span><h3>${escapeHtml(asset.asset.tokenSymbol)}</h3></div>
+        <span class="guardian-risk ${assessment.level}">${escapeHtml(assessment.label)}</span>
+      </div>
+      <div class="guardian-price">
+        <span>Normalized per share</span>
+        <strong>${formatUsd(perShare)}</strong>
+        <small>Raw token ${formatUsd(Number(asset.price.tokenPrice))} · ratio ${escapeHtml(asset.profile.tokenToShareRatio)}</small>
+      </div>
+      <dl class="guardian-facts">
+        <div><dt>Reported reference</dt><dd>${formatUsd(Number(asset.price.referencePrice))}</dd></div>
+        <div><dt>Price freshness</dt><dd>${formatAge(assessment.priceAgeMs)}</dd></div>
+        <div><dt>Underlying session</dt><dd>${escapeHtml(session)}</dd></div>
+        <div><dt>Session detail</dt><dd>${escapeHtml(sessionDetail)}</dd></div>
+        <div><dt>Next open</dt><dd>${escapeHtml(formatClock(asset.market.statusInfo.nextOpenTime))}</dd></div>
+        <div><dt>Protection evidence</dt><dd>${supportedProtections.length ? escapeHtml(supportedProtections.join(", ")) : "None reported"}</dd></div>
+      </dl>
+      <div class="guardian-reasons">
+        ${assessment.reasons.map((reason) => `<span>${escapeHtml(reason)}</span>`).join("")}
+      </div>
+      <a class="guardian-address" href="${bscTokenUrl(asset.asset.tokenContractAddress)}" target="_blank" rel="noreferrer">
+        <code>${escapeHtml(shorten(asset.asset.tokenContractAddress, 9, 7))}</code>${icon("external")}
+      </a>
+    </article>`;
+};
+
+const renderGuardianComparison = (comparison: GuardianComparison) => {
+  const results = document.querySelector<HTMLElement>("#guardian-results");
+  if (!results) return;
+  const gapBps = issuerGapBps(comparison.assets);
+  const now = Date.now();
+  const observedAt = Math.max(
+    comparison.timestamps.search,
+    comparison.timestamps.price,
+    ...comparison.timestamps.profiles,
+    ...comparison.timestamps.markets,
+  );
+  results.innerHTML = `
+    <div class="guardian-summary">
+      <div><span>Resolved underlying</span><strong>${escapeHtml(comparison.ticker)}</strong><small>${escapeHtml(comparison.companyName)}</small></div>
+      <div><span>Issuer-normalized gap</span><strong>${gapBps === null ? "—" : `${gapBps.toFixed(2)} bps`}</strong><small>${comparison.assets.length} BSC representation${comparison.assets.length === 1 ? "" : "s"}</small></div>
+      <div><span>API observation</span><strong>${formatAge(Math.max(0, now - observedAt))}</strong><small>${escapeHtml(formatClock(observedAt))}</small></div>
+    </div>
+    <div class="guardian-grid">
+      ${comparison.assets.map((asset) => renderGuardianAsset(asset, gapBps, now)).join("")}
+    </div>`;
+};
+
+const guardianForm = document.querySelector<HTMLFormElement>("#guardian-search");
+const guardianInput = document.querySelector<HTMLInputElement>("#guardian-query");
+const guardianResults = document.querySelector<HTMLElement>("#guardian-results");
+let guardianRequest: AbortController | undefined;
+
+const loadGuardianComparison = async (query: string) => {
+  if (!guardianResults || !guardianForm) return;
+  const normalized = query.trim();
+  if (!normalized || normalized.length > 80 || /[\u0000-\u001f\u007f]/u.test(normalized)) {
+    guardianResults.innerHTML = '<div class="guardian-error"><strong>Check the search</strong><p>Use 1–80 visible characters.</p></div>';
+    return;
+  }
+  guardianRequest?.abort();
+  const controller = new AbortController();
+  guardianRequest = controller;
+  const button = guardianForm.querySelector<HTMLButtonElement>("button[type='submit']");
+  if (button) button.disabled = true;
+  guardianResults.setAttribute("aria-busy", "true");
+  guardianResults.innerHTML = '<div class="guardian-loading"><span></span><p>Resolving issuer representations and market state…</p></div>';
+  const timeout = window.setTimeout(() => controller.abort(), 15_000);
+  try {
+    const response = await fetch(`/api/bnb/rwa?operation=compare&q=${encodeURIComponent(normalized)}`, {
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
+    });
+    const body: unknown = await response.json();
+    if (!response.ok) {
+      const error = typeof body === "object" && body !== null && "message" in body
+        && typeof body.message === "string"
+        ? body.message
+        : `The comparison service returned HTTP ${response.status}`;
+      throw new Error(error);
+    }
+    renderGuardianComparison(parseGuardianResponse(body));
+  } catch (error) {
+    if (controller.signal.aborted && guardianRequest !== controller) return;
+    const message = controller.signal.aborted
+      ? "The live comparison timed out. Try again."
+      : error instanceof Error ? error.message : "The live comparison could not be loaded.";
+    guardianResults.innerHTML = `<div class="guardian-error"><strong>Live data unavailable</strong><p>${escapeHtml(message)}</p><small>No cached or invented price was substituted.</small></div>`;
+  } finally {
+    window.clearTimeout(timeout);
+    if (guardianRequest === controller) {
+      guardianResults.removeAttribute("aria-busy");
+      if (button) button.disabled = false;
+    }
+  }
+};
+
+guardianForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  void loadGuardianComparison(guardianInput?.value ?? "");
+});
+
+void loadGuardianComparison(guardianInput?.value ?? "NVDA");
 
 const nodeDescription = (node: ArchitectureNode) => {
   const contract = node.contractId ? contracts.find((candidate) => candidate.id === node.contractId) : undefined;

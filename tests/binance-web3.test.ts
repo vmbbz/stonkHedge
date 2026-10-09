@@ -176,4 +176,101 @@ describe("Binance Web3 server-only client", () => {
     await expect(client.searchRwaTokens("x".repeat(81))).rejects.toThrow("1 to 80 characters");
     await expect(client.searchRwaTokens("NV\nDA")).rejects.toThrow("control characters");
   });
+
+  it("binds a comparison to matching BSC price, profile, and market identities", async () => {
+    const ondo = "0xa9ee28c80f960b889dfbd1902055218cba016f75";
+    const bstock = "0x02fca66c1d1afb4e2a7884261eb00f63598a7436";
+    const envelope = (data: unknown) => JSON.stringify({
+      code: 0,
+      msg: "success",
+      data,
+      timestamp: 1_791_550_732_585,
+      success: true,
+    });
+    const profile = (address: string, platformId: string) => ({
+      binanceChainId: "56",
+      tokenContractAddress: address,
+      platformId,
+      underlyingTicker: "NVDA",
+      underlyingFullName: "Nvidia Corp",
+      assetType: 1,
+      tokenToShareRatio: "1",
+      protections: {
+        dailyAttestationReport: { supported: true, url: "https://example.com/report.pdf" },
+      },
+      companyInfo: { website: "https://nvidia.com", industry: "Technology" },
+    });
+    const market = (address: string, platformId: string) => ({
+      binanceChainId: "56",
+      tokenContractAddress: address,
+      platformId,
+      assetType: 1,
+      statusInfo: {
+        openState: true,
+        marketStatus: "regular",
+        reasonCode: null,
+        reasonMsg: null,
+        nextOpenTime: null,
+        nextCloseTime: 1_791_600_000_000,
+      },
+      marketData: {
+        referencePrice: "192.50",
+        high52W: "200",
+        low52W: "80",
+        volumeShares24H: "1000000",
+        avgDailyVolume1Y: "900000",
+        totalShares: "24000000000",
+        marketCap: "4600000000000",
+        turnoverRate: "1.2",
+        amplitude: "2.5",
+        peRatioTTM: "50",
+        pbRatio: "45",
+        dividendYield: "0.02",
+        latestDividend: "0.01",
+      },
+    });
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      const path = url.pathname;
+      if (path.endsWith("/search")) {
+        return new Response(envelope([{
+          ticker: "NVDA",
+          companyName: "Nvidia Corp",
+          assets: [
+            { platformId: "ondo", binanceChainId: "56", tokenContractAddress: ondo, tokenSymbol: "NVDAon", assetType: 1 },
+            { platformId: "bstock", binanceChainId: "56", tokenContractAddress: bstock, tokenSymbol: "NVDAB", assetType: 1 },
+          ],
+        }]));
+      }
+      if (path.endsWith("/price")) {
+        expect(url.searchParams.get("tokenContractAddresses")).toBe(`${ondo},${bstock}`);
+        return new Response(envelope([
+          { binanceChainId: "56", tokenContractAddress: ondo, platformId: "ondo", tokenPrice: "192.90", referencePrice: "192.50", tokenPriceUpdatedAt: 1_791_550_700_000 },
+          { binanceChainId: "56", tokenContractAddress: bstock, platformId: "bstock", tokenPrice: "193.10", referencePrice: "192.50", tokenPriceUpdatedAt: 1_791_550_700_000 },
+        ]));
+      }
+      const address = url.searchParams.get("tokenContractAddress") ?? "";
+      const platformId = address === ondo ? "ondo" : "bstock";
+      if (path.endsWith("/underlying-profile")) {
+        return new Response(envelope(profile(address, platformId)));
+      }
+      if (path.endsWith("/underlying-market")) {
+        return new Response(envelope(market(address, platformId)));
+      }
+      return new Response("not found", { status: 404 });
+    });
+    const client = createBinanceWeb3Client({
+      apiKey: "api-key",
+      secretKey: "top-secret",
+      fetchImplementation: fetchMock,
+      now: () => new Date(timestamp),
+      nonce: () => "nonce-1",
+    });
+
+    const result = await client.compareRwaTicker("NVDA");
+    expect(result.ticker).toBe("NVDA");
+    expect(result.assets.map((item) => item.asset.tokenSymbol)).toEqual(["NVDAon", "NVDAB"]);
+    expect(result.assets[0]?.profile.protections.dailyAttestationReport?.supported).toBe(true);
+    expect(fetchMock).toHaveBeenCalledTimes(6);
+  });
 });

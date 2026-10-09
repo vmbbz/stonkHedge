@@ -5,6 +5,14 @@ testnet project. The Markdown is intentionally organized so it can later move
 into Docusaurus without rewriting the technical content. Docusaurus is a
 publishing layer, not a substitute for accurate manifests and runbooks.
 
+## Active BNB hackathon lane
+
+The `hackathon/bnb-tokenized-stocks-2026` branch contains a time-boxed,
+spot-only BSC entry plan for the BNB Hack: Tokenized Stocks Edition. Start with
+the [entry architecture, compliance boundary, and hour-by-hour plan](./hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
+This lane reuses product and safety patterns but remains separate from the
+Robinhood Chain testnet deployment and its transaction authorizations.
+
 ## Current milestone
 
 The 16-contract shared Panoptic V4 stack is deployed and reconciled on
@@ -112,6 +120,7 @@ state was discarded. The [execution candidate and one-step operator record](./ma
 | `baseline/` | Immutable build, test, licensing, and release-size checkpoints |
 | `chain/` | External chain, token, and infrastructure qualification |
 | `deployment/` | Simulations, approvals, operator design, receipts, and reconciliation |
+| `hackathons/` | Time-boxed event requirements, entry architecture, delivery gates, and submission records |
 | `markets/` | Asset selection, exact PoolKeys, price policy, market genesis, and lifecycle evidence |
 | `progress/` | Public milestone ledgers, communications facts, and proof-backed build-in-public records |
 | `research/` | Time-stamped feasibility, ecosystem, and comparative design studies that do not authorize implementation or deployment |

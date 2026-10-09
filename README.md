@@ -4,6 +4,14 @@ StonkHedge is an early-stage project exploring Panoptic-native perpetual options
 
 The current repository is the product and delivery control plane. It contains the researched execution plan and will later hold chain manifests, deployment verification, monitoring, and the developer-facing application. Protocol and SDK changes remain isolated in auditable upstream forks.
 
+## BNB tokenized-stocks hackathon lane
+
+The `hackathon/bnb-tokenized-stocks-2026` branch adds a separate, spot-only BSC
+product lane for the BNB Hack: Tokenized Stocks Edition. It reuses the
+StonkHedge product shell and fail-closed transaction discipline, but it does
+not port Robinhood/Panoptic contracts or public-testnet authorizations to BSC.
+Read the [entry architecture and 51-hour delivery plan](./docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
+
 ## Start here
 
 - Explore the data-driven build-in-public dashboard locally with `npm install`

@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -10,6 +13,7 @@
     "bnb:rwa:check": "node --env-file-if-exists=.env.local --import tsx scripts/check_bnb_rwa_api.ts",
     "bnb:rwa:quote": "node --env-file-if-exists=.env.local --import tsx scripts/check_bnb_rwa_quote.ts",
     "bnb:rwa:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/check_bnb_rwa_simulation.ts",
+    "bnb:rwa:preview": "node --import tsx scripts/check_bnb_rwa_preview.ts",
     "test": "vitest run",
     "check": "npm run test && npm run build"
   },

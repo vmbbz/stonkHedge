@@ -21,6 +21,7 @@ __pycache__/
 
 # JavaScript/build outputs for the future product app
 node_modules/
+.vercel/
 *.tsbuildinfo
 dist/
 build/

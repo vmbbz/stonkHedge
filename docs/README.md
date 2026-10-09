@@ -23,6 +23,10 @@ policy, and observed API schema drift. The
 [unsigned-simulation milestone](./progress/2026-10-09-bnb-unsigned-simulation.md)
 records both live fail-closed issuer rehearsals and the non-executable evidence
 boundary. No wallet, signing, broadcast, or BSC mainnet spend is implemented.
+The [simulation-only preview runbook](./deployment/2026-10-09-bnb-preview-deployment.md)
+pins the Vercel branch settings, Preview-scoped secret handling, deployment
+headers, deployed smoke test, and stop conditions. A preview URL is not yet
+recorded and must not be inferred from repository readiness.
 
 ## Current milestone
 

@@ -164,12 +164,13 @@
         "Exact 5.10 USDT approval amount · 0.5% slippage cap",
         "NVDAon approval SUCCESS · swap FAILED insufficient balance",
         "NVDAB approval SUCCESS · swap FAILED insufficient balance",
-        "43/43 automated tests and production build passed",
+        "45/45 automated tests and production build passed after preview hardening",
         "No wallet · no private key · no signing · no broadcast"
       ],
       "media": ["/media/stonkhedge-crystal.png"],
       "docs": [
         {"label": "Unsigned simulation milestone", "path": "docs/progress/2026-10-09-bnb-unsigned-simulation.md"},
+        {"label": "Preview deployment gate", "path": "docs/deployment/2026-10-09-bnb-preview-deployment.md"},
         {"label": "Gap Guardian architecture", "path": "docs/architecture/bnb-gap-guardian.md"},
         {"label": "BNB hackathon lane", "path": "docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md"}
       ]

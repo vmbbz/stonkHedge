@@ -9,6 +9,46 @@ their own voice, and submit the official form.
 Source log:
 [`2026-10-09-binance-web3-dx-log.md`](./2026-10-09-binance-web3-dx-log.md)
 
+## How to use this draft without submitting an AI-written report
+
+The official form is a set of individual questions, not a document upload.
+Use this file as an evidence index and write the final responses in the
+builder's own voice inside the form.
+
+1. Open the form and first answer the personal multiple-choice fields without
+   copying from this draft: Web3 experience, previous Binance API experience,
+   onboarding time, API-key time, ratings, use of `llms.txt`, code-example
+   experience, rate-limit severity, and whether the builder will keep using
+   the platform.
+2. For each free-text field, select only the relevant facts below. Rewrite the
+   answer as a first-person account of what the builder actually did and saw.
+3. Keep exact endpoint names, response codes, error strings, timestamps, and
+   latency figures unchanged. These are evidence, not prose to improvise.
+4. Add one or two personal observations that are not in this file—for example,
+   which error was most frustrating, what finally made the signing rule click,
+   or which UI result made the product idea feel useful.
+5. Remove any fact the builder cannot personally defend. Do not invent a start
+   time, successful trade, liquidity depth, support interaction, AI-stack use,
+   or production deployment.
+6. Save a private copy of the final form answers before submitting, then submit
+   the DX form before checking its confirmation in the project form.
+
+### Live-form mapping
+
+| Official question group | Use from this draft | Builder must supply personally |
+|---|---|---|
+| Submission details | project, repository, modules, platforms | email, experience, prior API use |
+| Onboarding | exact signing-path issue and first-success timestamp | elapsed-time choices, ratings, where the builder first felt blocked |
+| Documentation | documented schema drift and proposed corrections | rating, which examples the builder personally tried, `llms.txt` answer |
+| API pitfalls | endpoint behavior, errors, latency, rate limiting, reconciliation | severity choices and the builder's judgment of reliability |
+| AI stack | truthful `None` boundary | `N/A` rating and any personal reason for not adding execution authority |
+| Tokenized stocks | Ondo/bStocks comparison, `5.10 USDT` quotes, session behavior, gaps | no claim of executed-trade liquidity or fill quality unless a later receipt proves it |
+| Redesign and requested capabilities | concrete SDK, schema, retry, capacity, and orchestration proposals | the single change the builder values most and whether they will keep building |
+
+The form states that a submission without this report is not scored and that
+the report is worth 25% of the total. Specific criticism is an advantage here;
+do not smooth away the production mismatches that made the integration harder.
+
 ## Submission details
 
 | Field | Draft answer |

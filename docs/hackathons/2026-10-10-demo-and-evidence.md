@@ -33,6 +33,63 @@ that stops when the sender has no funds.
 7. Disable desktop notifications and inspect the full captured frame before
    publishing.
 
+## Fast Windows recording setup
+
+Prefer OBS Studio because it can isolate the browser and microphone and can
+recover a recording if the application closes unexpectedly.
+
+1. In OBS, create a **Window Capture** source for the clean browser window.
+   Do not capture the entire desktop unless the browser-capture method fails.
+2. Set the canvas and output to `1920x1080`, `30 FPS`, with the browser at
+   `100%` zoom. Record to `MKV`, then use **File -> Remux Recordings** to make
+   the uploadable `MP4`. This avoids losing the whole take if OBS or Windows
+   closes during recording.
+3. Add the microphone as an audio input and make a ten-second scratch
+   recording. Confirm that speech is clear, system notification sounds are
+   absent, and no password-manager or wallet overlay appears.
+4. Start the application from a terminal that will not be captured:
+
+   ```powershell
+   cd C:\dev-shared\stonkHedge
+   npm run check
+   npm run bnb:rwa:demo
+   ```
+
+5. Open `http://127.0.0.1:3000/#gap-guardian`, maximize the clean browser,
+   and position the page at the hero before starting the take.
+6. Make one silent rehearsal using the already-captured evidence before using
+   another live request. During the real take, run the comparison, quote, and
+   simulation once each. Repeated retries can consume the upstream quota.
+7. Stop recording after the honest close, remux to MP4, and watch the entire
+   file once at normal speed. Reject the take if it exceeds four minutes,
+   leaks a notification or secret, loses audio, or describes a simulation as
+   a transaction.
+
+If OBS is unavailable, Windows Game Bar (`Win+Alt+R`) is an acceptable
+fallback. Capture only the browser application, verify the microphone toggle,
+and perform the same ten-second scratch test first.
+
+## Tonight's recording order
+
+Record a complete simulation-only fallback before attempting any new mainnet
+execution work. That guarantees the submission has an honest demo even if a
+wallet integration, funding step, live route, or receipt later fails.
+
+1. **Take A — current revision:** use the script below exactly and retain the
+   simulation-only close.
+2. Upload Take A privately or unlisted, open the share URL signed out, and
+   retain it as the submission fallback.
+3. Only after Take A is safe may a separately reviewed and authorized mainnet
+   proof be attempted.
+4. If that proof succeeds and reconciles on BscScan, record **Take B**. Replace
+   the simulation-only close with a brief receipt and post-state segment. Do
+   not splice a manual wallet trade into the product story unless the receipt
+   is bound to the same token, exact input, receiver, route intent, and product
+   revision.
+
+The saved screenshots are evidence and rehearsal aids. They are not a
+substitute for showing the working browser flow in the video.
+
 ## Shot-by-shot script
 
 ### 0:00–0:25 — the problem
@@ -173,3 +230,32 @@ approve the final narration because it contains personal product claims and
 must match what is visibly demonstrated. After recording, save a local master
 outside Git, upload a compressed copy to a stable public host, and place only
 the public URL in the submission form.
+
+## Small-mainnet-proof decision gate
+
+The track rule says to dry-run with the Transaction API and then demonstrate
+with a small live amount. The project form does not expose a separate receipt
+field, but a completed, reconciled proof is therefore the strongest reading
+of full track compliance. The current revision deliberately stops before
+wallet connection or broadcast, so this proof is **not yet present**.
+
+Do not rush a mainnet transaction merely to change the narration. Attempt the
+proof only when all of these are true:
+
+- Take A, the DX report, and the project-form copy are already safe;
+- a dedicated BSC mainnet browser wallet controlled by the builder is
+  available without sharing its private key or seed phrase;
+- the wallet has exactly budgeted mainnet USDT plus enough BNB for approval,
+  swap, and recovery gas;
+- a reviewed state machine binds chain `56`, BSC USDT, one Binance-discovered
+  tokenized-stock contract, exact `5.10 USDT` input, receiver, spender, minimum
+  output, route expiry, and zero native swap value;
+- approval and swap are freshly simulated, separately confirmed by the user,
+  and stopped on any identity, expiry, balance, allowance, or gas mismatch;
+- approval and swap receipts plus token/allowance post-state can be reconciled
+  publicly; and
+- the builder gives a new, explicit mainnet signing and broadcast
+  authorization after reviewing the final transaction plan.
+
+A testnet token, an unsigned successful simulation, an approval alone, or an
+unrelated manual swap does not satisfy this proof.

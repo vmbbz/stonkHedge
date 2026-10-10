@@ -1,19 +1,29 @@
 # StonkHedge Gap Guardian demo and evidence runbook
 
-**Target duration:** 3:35–3:50
+**Target duration:** 3:20–3:35
 
 **Hard limit:** 4:00
+
+**Submission lock:** 11 October 2026 at 12:00 UTC / 14:00 SAST
 
 **Demo boundary:** BSC mainnet data, live quote, and unsigned simulation; no
 wallet, signing, broadcast, or completed trade unless a later separately
 authorized milestone adds and proves that path
 
-## Story in one sentence
+## Product and demo in one sentence each
 
-StonkHedge compares two issuer-specific versions of NVDA on BSC, explains the
-risk of trading while the underlying session is off-hours or unreported, and
-turns one bounded `5.10 USDT` route into an exact, redacted simulation proof
-that stops when the sender has no funds.
+**StonkHedge:** a risk-first interface for tokenized stocks that helps users
+compare issuer wrappers and inspect a proposed route before anything can touch
+a wallet.
+
+**This BNB demo:** Gap Guardian uses live Binance Web3 APIs on BSC to discover
+and normalize two issuer-specific versions of NVDA, request one bounded
+`5.10 USDT` route, and turn it into redacted unsigned simulation evidence that
+stops when the sender has no funds.
+
+The first sentence explains the product. The second explains the exact feature
+and evidence being demonstrated. Do not merge the broader Robinhood testnet
+options milestone into this BNB spot-product recording.
 
 ## Recording preparation
 
@@ -69,7 +79,7 @@ If OBS is unavailable, Windows Game Bar (`Win+Alt+R`) is an acceptable
 fallback. Capture only the browser application, verify the microphone toggle,
 and perform the same ten-second scratch test first.
 
-## Tonight's recording order
+## Submission-day recording order
 
 Record a complete simulation-only fallback before attempting any new mainnet
 execution work. That guarantees the submission has an honest demo even if a
@@ -90,20 +100,52 @@ wallet integration, funding step, live route, or receipt later fails.
 The saved screenshots are evidence and rehearsal aids. They are not a
 substitute for showing the working browser flow in the video.
 
+## Pacing guardrails learned from the rehearsal
+
+The first recorded rehearsal was technically healthy but lasted `13:01`. Its
+opening four minutes had not yet reached the simulation, and its final section
+drifted into the separate Robinhood testnet story. The final take must correct
+that editorial problem:
+
+- begin speaking within two seconds of the first frame;
+- keep narration continuous while scrolling, typing, and waiting for results;
+- spend no more than the allocated time on any result card;
+- use only the hero and Gap Guardian section—do not enter Architecture,
+  Timeline, Contracts, Transactions, or the Robinhood lifecycle;
+- perform one comparison, one quote, and one simulation; and
+- stop recording immediately after the final boundary statement.
+
+If a live response takes longer than the narration allocated to it, briefly say
+that the request is live and keep speaking about the visible safety controls.
+Do not fill the delay by navigating to another part of the site.
+
 ## Shot-by-shot script
 
-### 0:00–0:25 — the problem
+### 0:00–0:25 — what StonkHedge is and what this demo tests
 
 **Visual:** StonkHedge hero, then scroll to Gap Guardian.
 
 **Narration:**
 
-> Tokenized stocks keep trading when the underlying market is closed, and the
-> same company can have multiple issuer wrappers with different prices and
-> controls. StonkHedge Gap Guardian makes those differences visible before a
-> user acts.
+> StonkHedge is a risk-first interface for tokenized stocks. It helps users
+> compare issuer wrappers and inspect a proposed route before anything can
+> touch a wallet. For BNB Hack, we built Gap Guardian on BSC. This demo tests
+> live discovery, issuer-normalized comparison, a bounded quote, and unsigned
+> transaction simulation.
 
-### 0:25–1:15 — live issuer comparison
+### 0:25–1:05 — why the comparison matters
+
+**Visual:** Arrive at Gap Guardian and keep the explanation card visible.
+
+**Narration:**
+
+> A tokenized stock can keep trading while its underlying exchange is closed,
+> and one company can have several on-chain representations with different
+> issuers, ratios, prices, and controls. Comparing raw token prices can
+> therefore be misleading. Gap Guardian makes those differences explicit
+> before a user chooses a route.
+
+### 1:05–1:45 — live issuer comparison
 
 **Action:** Search `NVDA` and select **Compare live**.
 
@@ -113,15 +155,17 @@ freshness, protection evidence, and warnings.
 **Narration:**
 
 > One signed server-side RWA search resolves Ondo NVDAon and bStocks NVDAB on
-> BSC mainnet. We normalize by each token-to-share ratio before calculating the
-> cross-issuer gap. Today Ondo reports an undocumented `offhours` state, while
-> bStocks omits the session label. We surface both as review warnings instead
-> of guessing that the market is regular.
+> BSC mainnet. We normalize each price by its token-to-share ratio before
+> calculating the issuer gap. The session values and freshness come from the
+> live response. Missing, off-hours, or unfamiliar states become visible
+> review warnings instead of being guessed into a green signal.
 
-Pause briefly on the raw contract links and the “API observation” time. Do not
-claim that `referencePrice` is an official exchange quote.
+Pause for no more than three seconds on the clickable contract links and API
+observation time. Narrate the state actually shown; do not assume that a prior
+`offhours` observation will repeat, and do not describe `referencePrice` as an
+official exchange quote.
 
-### 1:15–2:05 — bounded live route
+### 1:45–2:20 — bounded live route
 
 **Action:** Keep `5.1 USDT`, choose `NVDAon · ondo`, paste the public receiver,
 and select **Get read-only quote**.
@@ -131,13 +175,13 @@ freshness window, receiver binding, and approval target.
 
 **Narration:**
 
-> The amount is deliberately fixed at 5.10 USDT: Binance rejected one dollar
-> and exactly five because the route has a five-dollar notional floor. The
-> browser receives live route metadata, not transaction bytes. Chain, tokens,
-> amount, receiver, vendor, quote identity, expiry, and approval target are all
-> checked twice—server-side and again in the browser.
+> The amount is deliberately fixed at 5.10 USDT. In testing, one dollar and
+> exactly five were rejected by the five-dollar notional rule. The browser gets
+> live route metadata, never transaction bytes. Chain, tokens, amount,
+> receiver, vendor, quote identity, expiry, and approval target are checked by
+> the server and independently checked again in the browser.
 
-### 2:05–2:55 — compile and simulate
+### 2:20–3:00 — compile and simulate
 
 **Action:** Select **Compile & simulate a fresh route**.
 
@@ -147,33 +191,38 @@ approval result, swap failure, reasons, and simulation-only boundary.
 **Narration:**
 
 > The server gets a fresh route, decodes an exact approval for 5.10 USDT,
-> builds the swap with a 0.5 percent slippage cap, and sends both unsigned calls
-> to the Transaction API simulator. The approval simulation succeeds. The swap
-> fails because this public address has no USDT, so StonkHedge returns BLOCKED
-> and opens no signing gate. Raw calldata and quote IDs never reach the page.
+> builds the swap with a 0.5 percent slippage cap, and sends the approval and
+> swap independently to the Transaction API simulator. Here the approval
+> succeeds, but the unfunded public address cannot execute the swap. StonkHedge
+> therefore returns BLOCKED and opens no signing gate. Raw calldata and quote
+> IDs never reach the page.
 
-### 2:55–3:25 — engineering depth
+If the visible verdict differs, describe exactly what is shown. A `CLEAR`
+simulation is still not a signature, broadcast, or completed trade.
 
-**Visual:** Briefly show the architecture document or test output.
+### 3:00–3:20 — engineering depth without leaving the proof
+
+**Visual:** Remain on the simulation proof card. Do not navigate to the site's
+Robinhood-focused Architecture section.
 
 **Narration:**
 
-> Forty-eight automated tests cover HMAC request identity, upstream schema
-> validation, issuer and route binding, expiry, policy, redaction, and source
-> boundaries. The integration also recorded real documentation drift: null
-> session fields, an undocumented offhours value, omitted signature data, an
-> empty-string failure reason, and the actual minimum-order behavior.
+> Forty-eight automated tests cover request signing, schema validation, issuer
+> and route binding, expiry, redaction, and source boundaries. The integration
+> also recorded real API behavior that differed from the published schemas,
+> including nullable session data, an undocumented state, omitted signature
+> data, and empty-string failure reasons.
 
-### 3:25–3:45 — honest close
+### 3:20–3:35 — honest close
 
 **Visual:** Return to the blocked proof card and product name.
 
 **Narration:**
 
-> This submission proves a live BSC discovery-to-simulation workflow. It does
-> not claim a completed swap: there is no wallet, signature, broadcast, or
-> receipt in this revision. StonkHedge turns uncertainty into visible evidence
-> and stops when the evidence is insufficient.
+> This proves a live BSC discovery-to-simulation workflow, not a completed
+> trade. This revision has no wallet, signature, broadcast, or receipt.
+> StonkHedge turns uncertainty into visible evidence and stops when the
+> evidence is insufficient.
 
 End immediately. Do not add a long credits slide that risks crossing 4:00.
 

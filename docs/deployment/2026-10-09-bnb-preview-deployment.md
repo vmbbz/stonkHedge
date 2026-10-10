@@ -11,7 +11,9 @@ exact deployed SHA during live preview acceptance
 project linked and branch-scoped Preview secrets configured, but no deployment
 has passed the Preview-target acceptance gate; Git auto-deployment is
 disconnected and the separately authorized domainless bootstrap was rejected
-because Vercel assigned an alias despite `--skip-domain`
+because Vercel assigned an alias despite `--skip-domain`; a subsequently
+authorized explicit Preview attempt was still classified and aliased as
+Production
 
 **Boundary:** preview only; no wallet, private key, signing, broadcast, or
 mainnet spend
@@ -79,7 +81,7 @@ deployment with the target omitted were also classified as `production`. This
 matches the open upstream Vercel issue
 [`vercel/vercel#17069`](https://github.com/vercel/vercel/issues/17069).
 
-The operator removed all seven rejected deployments:
+The operator removed all eight rejected deployments:
 
 - `dpl_F95uiwe9aoBCeeptXKmVFw5wiwVU` — default CLI;
 - `dpl_GPZgKiqmhzsNwuPDTQfy1q8PHh5w` — explicit CLI Preview target;
@@ -93,7 +95,11 @@ The operator removed all seven rejected deployments:
 - `dpl_chc4sYLSDhZB3ZGMbnuBYyiqViFN` — explicitly authorized, Production-target
   bootstrap with `--skip-domain`; rejected before any Preview attempt because
   Vercel nevertheless assigned the project alias
-  `stonkhedge-katzs-projects-2f9ffaf0.vercel.app`.
+  `stonkhedge-katzs-projects-2f9ffaf0.vercel.app`; and
+- `dpl_9Suusv3RhQRMM4ghmFswUVGWm2Fa` — explicit `--target=preview` attempt after
+  the bootstrap had been removed; Vercel still returned `target: production`
+  and assigned `stonkhedge.vercel.app`, so the deployment was deleted before
+  any smoke test or application request.
 
 The seventh attempt began only after confirming that Production had no
 environment variables, the public Production alias returned `404`, and the
@@ -104,6 +110,16 @@ attempt the planned Preview. The bootstrap was deleted immediately. At
 `2026-10-10T11:32:35Z`, the immutable deployment URL, assigned project alias,
 and public Production alias all returned `404`; Vercel listed zero deployments
 and Production still had no environment variables.
+
+The eighth attempt tested whether the completed-and-removed bootstrap had
+changed Vercel's first-deployment state. It had not. The local CLI rejected
+combining `--target=preview` with `--skip-domain` before creating a deployment,
+because `--skip-domain` is accepted only for Production targets. The operator
+then used the explicit Preview target alone, inspected the returned metadata,
+and stopped when it reported Production. At `2026-10-10T11:43:36Z`, Vercel
+again listed zero deployments, Production had no environment variables, and
+the rejected deployment URL, assigned public alias, and project alias all
+returned `404`.
 
 Vercel now lists zero deployments for the project, and the production alias
 returns `404`. The Git integration is disconnected to prevent future
@@ -117,10 +133,10 @@ REST, or bootstrap deployment until one of these gates is explicitly chosen:
    without assigning any Production or project alias, and the owner separately
    authorizes that exact procedure.
 
-The one-time domainless bootstrap authorization has been consumed and failed
-closed. Never repeat `--prod`, promote, assign an alias, or reconnect Git
-without new authorization for an exact reviewed procedure. `.vercel/` remains
-local and ignored.
+The one-time domainless bootstrap and follow-up Preview authorizations have
+been consumed and failed closed. Never repeat `--prod`, `--target=preview`,
+promote, assign an alias, or reconnect Git without new authorization for an
+exact reviewed procedure. `.vercel/` remains local and ignored.
 
 ## Acceptance
 

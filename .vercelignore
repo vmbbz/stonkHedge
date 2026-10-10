@@ -1,0 +1,10 @@
+.env
+.env.*
+.vercel/
+buildl.md
+broadcast/
+cache/
+coverage/
+dist/
+node_modules/
+out/

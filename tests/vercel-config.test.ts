@@ -22,6 +22,10 @@ const packageJson = JSON.parse(readFileSync(
   resolve(process.cwd(), "package.json"),
   "utf8",
 )) as { engines?: { node?: string } };
+const vercelIgnore = new Set(readFileSync(
+  resolve(process.cwd(), ".vercelignore"),
+  "utf8",
+).split(/\r?\n/u).filter(Boolean));
 
 describe("Vercel preview configuration", () => {
   it("uses Vite zero-config functions with enough time for bounded upstream calls", () => {
@@ -48,5 +52,17 @@ describe("Vercel preview configuration", () => {
     expect(headers.get("Permissions-Policy")).toContain("payment=()");
     expect(headers.get("X-Content-Type-Options")).toBe("nosniff");
     expect(headers.get("X-Frame-Options")).toBe("DENY");
+  });
+
+  it("excludes local secrets, project metadata, and unrelated workspace files", () => {
+    for (const requiredEntry of [
+      ".env",
+      ".env.*",
+      ".vercel/",
+      "buildl.md",
+      "node_modules/",
+    ]) {
+      expect(vercelIgnore.has(requiredEntry)).toBe(true);
+    }
   });
 });

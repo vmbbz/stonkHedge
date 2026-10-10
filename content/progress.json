@@ -164,7 +164,7 @@
         "Exact 5.10 USDT approval amount · 0.5% slippage cap",
         "NVDAon approval SUCCESS · swap FAILED insufficient balance",
         "NVDAB approval SUCCESS · swap FAILED insufficient balance",
-        "45/45 automated tests and production build passed after preview hardening",
+        "46/46 automated tests and production build passed after preview hardening",
         "No wallet · no private key · no signing · no broadcast"
       ],
       "media": ["/media/stonkhedge-crystal.png"],

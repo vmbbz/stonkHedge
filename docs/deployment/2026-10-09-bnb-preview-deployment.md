@@ -7,8 +7,8 @@
 **Prepared revision:** the branch commit containing this runbook; record the
 exact deployed SHA during live preview acceptance
 
-**Deployment state:** repository prepared; Vercel authentication and live URL
-remain external gates
+**Deployment state:** Vercel project linked and branch-scoped Preview secrets
+configured; no deployment has yet passed the Preview-target acceptance gate
 
 **Boundary:** preview only; no wallet, private key, signing, broadcast, or
 mainnet spend
@@ -26,6 +26,10 @@ cancellation, and applies browser security headers. It does not embed
 credentials or override the build with legacy `builds` or `routes` rules.
 The package pins Node.js `22.x`, matching the locally accepted runtime and
 avoiding an unreviewed runtime jump during deployment.
+
+`.vercelignore` excludes local environment files, Vercel link metadata,
+dependency/build artifacts, transaction build directories, and the unrelated
+local `buildl.md` file from the CLI upload boundary.
 
 ## Vercel settings
 
@@ -59,23 +63,28 @@ redeploy after adding or rotating either credential.
 
 ## Authentication and deployment
 
-The local Vercel CLI currently reports an expired token. Re-authenticate in the
-user's own terminal:
+The local Vercel CLI is authenticated as `cosychiruka-7184`, and this checkout
+is linked to `katzs-projects-2f9ffaf0/stonkhedge`. The Vercel project is connected
+to `vmbbz/stonkHedge`, with `main` confirmed as its production branch.
+
+On 2026-10-10, Vercel CLI `62.7.0` classified both a default deployment and an
+explicit `--target=preview` deployment as `production`. The operator removed
+both deployments (`dpl_F95uiwe9aoBCeeptXKmVFw5wiwVU` and
+`dpl_GPZgKiqmhzsNwuPDTQfy1q8PHh5w`); the production alias subsequently returned
+`404`. Neither deployment is accepted evidence.
+
+Do not create another direct CLI deployment for this gate. Trigger the Preview
+through the connected Git integration by pushing this non-production branch:
 
 ```powershell
 cd C:\dev-shared\stonkHedge
-vercel login
-vercel link
-vercel
+git push origin hackathon/bnb-tokenized-stocks-2026
 ```
 
-`vercel` without `--prod` creates a Preview deployment. Never use `--prod` for
-this milestone. Linking creates `.vercel/`, which is ignored and must not be
-committed.
-
-Alternatively, import `vmbbz/stonkHedge` in the Vercel dashboard, add the two
-Preview-scoped environment variables, and deploy the hackathon branch. Vercel's
-Git integration should then create future previews from new branch commits.
+Vercel's Git integration should create a Preview because the branch differs
+from `main`. Inspect the resulting deployment and require `target: preview`
+before opening or testing its URL. Never use `--prod`, promote, or assign the
+production alias for this milestone. `.vercel/` remains local and ignored.
 
 ## Acceptance
 
@@ -100,7 +109,7 @@ Confirm that Compare live, Get read-only quote, and Compile & simulate a fresh
 route work, that the simulation proof contains no raw calldata, and that the
 browser console has no Content Security Policy violations.
 
-Repository preparation passed `45/45` automated tests, the TypeScript/Vite
+Repository preparation passed `46/46` automated tests, the TypeScript/Vite
 production build, and JSON/configuration validation. The production dependency
 audit reports zero advisories. The full audit reports one high-severity advisory
 in development-only transitive dependency `source-map-js@1.2.1`; it is not part

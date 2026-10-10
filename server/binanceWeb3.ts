@@ -147,6 +147,7 @@ export type RwaMarketStatus =
   | "regular"
   | "postmarket"
   | "overnight"
+  | "offhours"
   | "closed"
   | "pause";
 
@@ -971,6 +972,7 @@ const MARKET_STATUSES = new Set<RwaMarketStatus>([
   "regular",
   "postmarket",
   "overnight",
+  "offhours",
   "closed",
   "pause",
 ]);

@@ -99,6 +99,30 @@ describe("Gap Guardian policy", () => {
     expect(result.reasons).toContain("Underlying session is closed");
   });
 
+  it("treats the observed offhours state as a review warning", () => {
+    const offhours = asset({
+      market: {
+        statusInfo: {
+          openState: true,
+          marketStatus: "offhours",
+          reasonCode: "TRADING",
+          reasonMsg: null,
+          nextOpenTime: 9_000_000,
+          nextCloseTime: 8_000_000,
+        },
+        marketData: {
+          referencePrice: "100",
+          volumeShares24H: "1000",
+          marketCap: "1000000",
+        },
+      },
+    });
+
+    const result = assessGuardianAsset(offhours, 1_100_000);
+    expect(result.level).toBe("watch");
+    expect(result.reasons).toContain("Underlying session is offhours");
+  });
+
   it("rejects an unbound or malformed public response", () => {
     expect(() => parseGuardianResponse({ operation: "search", chainId: 56 })).toThrow(
       "Invalid comparison identity",

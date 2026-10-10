@@ -276,6 +276,64 @@ describe("Binance Web3 server-only client", () => {
     expect(fetchMock).toHaveBeenCalledTimes(6);
   });
 
+  it("accepts the observed offhours status without treating it as regular hours", async () => {
+    const address = "0xa9ee28c80f960b889dfbd1902055218cba016f75";
+    const fetchMock = vi.fn(async () =>
+      new Response(
+        JSON.stringify({
+          code: 0,
+          msg: "success",
+          data: {
+            binanceChainId: "56",
+            tokenContractAddress: address,
+            platformId: "ondo",
+            assetType: 1,
+            statusInfo: {
+              openState: true,
+              marketStatus: "offhours",
+              reasonCode: "TRADING",
+              reasonMsg: null,
+              nextOpenTime: 1_791_763_500_000,
+              nextCloseTime: 1_791_762_900_000,
+            },
+            marketData: {
+              referencePrice: "192.50",
+              high52W: null,
+              low52W: null,
+              volumeShares24H: null,
+              avgDailyVolume1Y: null,
+              totalShares: null,
+              marketCap: null,
+              turnoverRate: null,
+              amplitude: null,
+              peRatioTTM: null,
+              pbRatio: null,
+              dividendYield: null,
+              latestDividend: null,
+            },
+          },
+          timestamp: 1_791_632_943_037,
+          success: true,
+        }),
+        { status: 200 },
+      ),
+    );
+    const client = createBinanceWeb3Client({
+      apiKey: "api-key",
+      secretKey: "top-secret",
+      fetchImplementation: fetchMock,
+      now: () => new Date(timestamp),
+      nonce: () => "nonce-1",
+    });
+
+    const result = await client.getRwaUnderlyingMarket(address);
+    expect(result.data.statusInfo).toMatchObject({
+      openState: true,
+      marketStatus: "offhours",
+      reasonCode: "TRADING",
+    });
+  });
+
   it("normalizes only the exact 5.10 USDT buffered quote input", () => {
     expect(normalizeBoundedUsdtAmount("5.100000000000000000")).toEqual({
       displayAmount: "5.1",

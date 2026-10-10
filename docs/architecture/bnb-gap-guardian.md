@@ -147,6 +147,12 @@ documented per-asset nullability while rendering the missing session label as
 **unreported** and raising a review warning. It does not infer `regular` from
 `openState`.
 
+On 2026-10-10, Ondo's live NVDA response introduced another undocumented
+value: `marketStatus: offhours` with `openState: true` and
+`reasonCode: TRADING`. The published enum still omitted `offhours`. The parser
+accepts that exact observed value, and the policy treats it as a non-regular
+session requiring review. Unknown values still fail closed.
+
 The first quote integration found a second live/documentation divergence.
 Binance rejected exactly `5 USDT` because the endpoint enforces a `5 USD`
 notional floor. At `5.10 USDT`, both accepted NVDA representations returned

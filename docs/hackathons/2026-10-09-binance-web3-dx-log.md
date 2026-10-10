@@ -181,3 +181,38 @@ AI-generated reports.
 - [RWA Data API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/rwa-data)
 - [Trading API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api)
 - [Transaction API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/transaction-api)
+
+## 2026-10-10: undocumented `offhours` market status
+
+### Observed
+
+- A fresh read-only `NVDA` acceptance stopped because Ondo's
+  `/api/v1/dex/market/rwa/underlying-market` response returned
+  `statusInfo.marketStatus: "offhours"`.
+- The current RWA Data documentation still enumerates only `premarket`,
+  `regular`, `postmarket`, `overnight`, `closed`, and `pause` for this field.
+- The same bounded diagnostic returned `openState: true` and
+  `reasonCode: "TRADING"` for Ondo. bStocks returned `marketStatus: null`, as
+  observed previously. No authentication header or credential was printed.
+
+### Engineering response
+
+- Added the exact observed `offhours` value to the server schema and retained
+  fail-closed rejection for every other unknown value.
+- Classified `offhours` as a non-regular session that requires review. It is
+  not treated as equivalent to `regular`, and it does not open any signing or
+  broadcast path.
+- Added server-parser and browser-policy regression tests. The product still
+  reports the upstream value verbatim so the documentation difference remains
+  visible to judges and maintainers.
+- The repaired acceptance completed in `4,128 ms` at
+  `2026-10-10T11:50:01.479Z`. The issuer-normalized gap was approximately
+  `15.8038 bps`; both representations produced review warnings rather than a
+  clear action signal.
+- Fresh `5.10 USDT` quotes then completed in `2,684 ms` for Ondo and `2,184 ms`
+  for bStocks. Each returned one `LiquidMesh` `SWAP` route. The observed
+  outputs were approximately `0.0221037 NVDAon` and `0.02211223 NVDAB`.
+- Fresh unsigned rehearsals at `2026-10-10T11:50:28.281Z` and
+  `2026-10-10T11:50:32.190Z` again produced exact-approval `SUCCESS`, swap
+  `FAILED` for insufficient USDT balance, and final verdict `BLOCKED` for the
+  unfunded public sender.

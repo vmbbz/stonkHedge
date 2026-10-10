@@ -7,8 +7,9 @@
 **Prepared revision:** the branch commit containing this runbook; record the
 exact deployed SHA during live preview acceptance
 
-**Deployment state:** Vercel project linked and branch-scoped Preview secrets
-configured; no deployment has yet passed the Preview-target acceptance gate
+**Deployment state:** blocked by upstream Vercel first-deployment target bug;
+project linked and branch-scoped Preview secrets configured, but no deployment
+has passed the Preview-target acceptance gate
 
 **Boundary:** preview only; no wallet, private key, signing, broadcast, or
 mainnet spend
@@ -68,23 +69,30 @@ is linked to `katzs-projects-2f9ffaf0/stonkhedge`. The Vercel project is connect
 to `vmbbz/stonkHedge`, with `main` confirmed as its production branch.
 
 On 2026-10-10, Vercel CLI `62.7.0` classified both a default deployment and an
-explicit `--target=preview` deployment as `production`. The operator removed
-both deployments (`dpl_F95uiwe9aoBCeeptXKmVFw5wiwVU` and
-`dpl_GPZgKiqmhzsNwuPDTQfy1q8PHh5w`); the production alias subsequently returned
-`404`. Neither deployment is accepted evidence.
+explicit `--target=preview` deployment as `production`. A subsequent Git
+integration build from the non-production hackathon branch and a REST
+deployment with the target omitted were also classified as `production`. This
+matches the open upstream Vercel issue
+[`vercel/vercel#17069`](https://github.com/vercel/vercel/issues/17069).
 
-Do not create another direct CLI deployment for this gate. Trigger the Preview
-through the connected Git integration by pushing this non-production branch:
+The operator removed all four rejected deployments:
 
-```powershell
-cd C:\dev-shared\stonkHedge
-git push origin hackathon/bnb-tokenized-stocks-2026
-```
+- `dpl_F95uiwe9aoBCeeptXKmVFw5wiwVU` — default CLI;
+- `dpl_GPZgKiqmhzsNwuPDTQfy1q8PHh5w` — explicit CLI Preview target;
+- `dpl_323yeUj4KXAUet7TcQyuyKaUQfWq` — Git integration; and
+- `dpl_Hkj1HyaPMvo93uMAEeBDHvR79ByL` — REST target omitted.
 
-Vercel's Git integration should create a Preview because the branch differs
-from `main`. Inspect the resulting deployment and require `target: preview`
-before opening or testing its URL. Never use `--prod`, promote, or assign the
-production alias for this milestone. `.vercel/` remains local and ignored.
+Vercel now lists zero deployments for the project, and the production alias
+returns `404`. None of those deployments is accepted evidence. Do not retry
+CLI, Git, or REST deployment until one of these gates is explicitly chosen:
+
+1. Vercel resolves the upstream Preview-classification defect; or
+2. the owner separately authorizes a staged Production bootstrap with domain
+   assignment disabled, solely to test whether a subsequent deployment can be
+   classified as Preview, followed by deletion of the bootstrap.
+
+Never use `--prod`, promote, or assign the production alias without that new
+authorization. `.vercel/` remains local and ignored.
 
 ## Acceptance
 
@@ -139,9 +147,10 @@ usage.
 
 ## Next gate
 
-Record the immutable preview URL, deployed Git SHA, timestamp, response
-boundaries, and smoke-test output. Only then should work begin on the separately
-reviewed, disabled-by-default wallet confirmation state machine.
+Resolve the Vercel first-deployment target gate. Then record the immutable
+Preview URL, deployed Git SHA, timestamp, response boundaries, and smoke-test
+output. Only after that acceptance should work begin on the separately reviewed,
+disabled-by-default wallet confirmation state machine.
 
 ## Sources
 
@@ -149,3 +158,4 @@ reviewed, disabled-by-default wallet confirmation state machine.
 - [Vercel environment variables](https://vercel.com/docs/environment-variables)
 - [Vercel preview environments](https://vercel.com/docs/deployments/environments)
 - [Vercel Git deployments](https://vercel.com/docs/git)
+- [Vercel first-deployment Preview bug](https://github.com/vercel/vercel/issues/17069)

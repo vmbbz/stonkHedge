@@ -4,6 +4,7 @@ import genesisManifest from "../../manifests/markets/robinhood-testnet-pltr-weth
 import lifecyclePlan from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-candidate-2026-09-19.json";
 import lifecyclePreflight from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-preflight-2026-09-19.json";
 import lifecycleProgress from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-public-progress-2026-09-19.json";
+import lifecycleIndex17 from "../../manifests/markets/robinhood-testnet-pltr-weth-lifecycle-index-17-reconciliation-2026-10-10.json";
 import progressJson from "../../content/progress.json";
 import type {
   ArchitectureNode,
@@ -196,9 +197,23 @@ const lifecycleContinuationTransactions: TransactionRecord[] = lifecycleProgress
   };
 });
 
+const lifecycleIndex17Transaction: TransactionRecord = {
+  id: `lifecycle-${lifecycleIndex17.transaction.ordinal}`,
+  phase: "lifecycle",
+  index: lifecycleIndex17.transaction.ordinal,
+  nonce: lifecycleIndex17.transaction.nonce,
+  label: lifecycleIndex17.transaction.label,
+  hash: lifecycleIndex17.receipt.transactionHash,
+  blockNumber: lifecycleIndex17.receipt.blockNumber,
+  toOrCreated: lifecycleIndex17.transaction.to,
+  reason: lifecycleReason(lifecycleTransactionAt(lifecycleIndex17.transaction.ordinal).phase),
+  signedByProject: true,
+};
+
 const lifecycleTransactions = [
   ...lifecyclePrefixTransactions,
   ...lifecycleContinuationTransactions,
+  lifecycleIndex17Transaction,
 ].sort((left, right) => left.index - right.index);
 
 const fundingTransactions: TransactionRecord[] = [
@@ -233,9 +248,9 @@ export const transactions: TransactionRecord[] = [
   ...lifecycleTransactions,
 ];
 
-const latestLifecycleTransaction = lifecycleProgress.completedTransactions.at(-1);
+const latestLifecycleTransaction = lifecycleIndex17Transaction;
 const nextLifecycleTransaction = lifecyclePlan.transactions.find(
-  (transaction) => transaction.ordinal === lifecycleProgress.nextAuthorizedIndex,
+  (transaction) => transaction.ordinal === lifecycleIndex17.nextUnexecutedIndex,
 );
 
 const lifecycleCheckpoint = (nextIndex: number) => {
@@ -273,20 +288,20 @@ const lifecycleCheckpoint = (nextIndex: number) => {
   };
 };
 
-const checkpoint = lifecycleCheckpoint(lifecycleProgress.nextAuthorizedIndex);
+const checkpoint = lifecycleCheckpoint(lifecycleIndex17.nextUnexecutedIndex);
 
 export const lifecycleFacts = {
   completedCalls: lifecycleTransactions.length,
-  completedThrough: lifecycleProgress.completedThroughTransactionIndex,
+  completedThrough: lifecycleIndex17.completedThroughTransactionIndex,
   totalCalls: lifecyclePlan.transactionCount,
-  remainingCalls: lifecycleProgress.remainingTransactionCount,
-  nextAuthorizedIndex: lifecycleProgress.nextAuthorizedIndex,
+  remainingCalls: lifecycleIndex17.remainingTransactionCount,
+  nextUnexecutedIndex: lifecycleIndex17.nextUnexecutedIndex,
   nextLabel: nextLifecycleTransaction?.label ?? "No remaining plan-bound transaction",
-  nextRequiredAction: lifecycleProgress.nextRequiredAction,
-  latestBlock: latestLifecycleTransaction?.blockNumber ?? genesisManifest.network.referenceBlock,
-  latestTimestampUtc: latestLifecycleTransaction?.blockTimestampUtc ?? genesisManifest.network.referenceTimestampUtc,
-  writerNonce: lifecycleProgress.postState.writerNonce,
-  buyerNonce: lifecycleProgress.postState.buyerNonce,
+  nextRequiredAction: `${lifecycleIndex17.nextUnexecutedAction}; fresh plan clocks, simulation, and authorization are required`,
+  latestBlock: lifecycleIndex17.receipt.blockNumber,
+  latestTimestampUtc: lifecycleIndex17.receipt.blockTimestamp,
+  writerNonce: lifecycleIndex17.freshPostState.writerNonce,
+  buyerNonce: lifecycleIndex17.freshPostState.buyerNonce,
   headline: checkpoint.headline,
   checkpointSummary: checkpoint.summary,
 };
@@ -299,7 +314,7 @@ export const progress: ProgressContent = {
     outcomes: [
       `${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls} public lifecycle calls have canonical receipts and reconciled post-state`,
       "Every public call is bound to its plan, receipt, exact post-state, and both actors' nonce stream",
-      `${lifecycleFacts.remainingCalls} authorized one-step calls remain; next is ${lifecycleFacts.nextLabel}`,
+      `${lifecycleFacts.remainingCalls} plan-bound calls remain unexecuted; fresh authorization is required before ${lifecycleFacts.nextLabel}`,
     ],
     transactionRefs: lifecycleTransactions.map((transaction) => transaction.id),
     evidence: [
@@ -428,17 +443,17 @@ export const architectureNodes: ArchitectureNode[] = [
   { id: "liquidity", label: "PLTR / WETH\nLP NFT 3903", layer: "market", position: [-1.6, -3.8, 0], connections: ["market"] },
   { id: "market", contractId: "market-panoptic-pool", label: "PanopticPool +\n2 Trackers", layer: "market", position: [4.5, -0.7, 0], connections: ["lifecycle"] },
   { id: "lifecycle", label: `Public lifecycle\n${lifecycleFacts.completedCalls} / ${lifecycleFacts.totalCalls}`, layer: "market", position: [6.2, 2.2, 0], connections: ["next"] },
-  { id: "next", label: `Next plan-bound\nindex ${lifecycleFacts.nextAuthorizedIndex}`, layer: "next", position: [7.5, -1.4, 0], connections: [] },
+  { id: "next", label: `Next unexecuted\nindex ${lifecycleFacts.nextUnexecutedIndex}`, layer: "next", position: [7.5, -1.4, 0], connections: [] },
 ];
 
 export const terminalFacts = {
-  status: lifecycleProgress.status,
+  status: lifecycleIndex17.status,
   referenceBlock: lifecycleFacts.latestBlock,
   referenceTimestamp: lifecycleFacts.latestTimestampUtc,
   poolId: genesisManifest.market.poolId,
   lpNft: genesisManifest.market.liquidityPosition.tokenId,
   liquidity: genesisManifest.market.liquidityPosition.liquidity,
   sfpmPoolId: genesisManifest.registeredMarket.sfpmPoolId,
-  finalTransaction: latestLifecycleTransaction?.transactionHash ?? genesisManifest.completedTransactions[12].transactionHash,
+  finalTransaction: latestLifecycleTransaction.hash,
   nextGate: lifecycleFacts.nextRequiredAction,
 };

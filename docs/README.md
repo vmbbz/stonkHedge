@@ -35,6 +35,11 @@ The [simulation-only preview runbook](./deployment/2026-10-09-bnb-preview-deploy
 pins the Vercel branch settings, Preview-scoped secret handling, deployment
 headers, deployed smoke test, and stop conditions. A preview URL is not yet
 recorded and must not be inferred from repository readiness.
+The [Robinhood index-17 reconciliation](./progress/2026-10-10-lifecycle-index-17-reconciliation.md)
+records the later canonical buyer WETH approval and corrects the public
+lifecycle boundary to indexes `0..17`. Copy-ready, no-repository-link
+[Robinhood and BSC public-update threads](./social/2026-10-10-robinhood-and-bsc-launch-threads.md)
+translate the deployment and hackathon evidence into guarded public claims.
 
 ## Current milestone
 
@@ -56,14 +61,15 @@ balances, elevated allowances, and swap-output shortfalls, and a separate
 offline withdrawal preparer binds fresh post-close `maxWithdraw` values.
 The dedicated third unprivileged buyer is now funded, and the fresh exact-head
 replay also passed `4/4` bounded state-derived withdrawals while keeping every
-residual below `2e12` raw units. Public lifecycle execution now has `17/29`
+residual below `2e12` raw units. Public lifecycle execution now has `18/29`
 verified one-step transactions. After the first eight-call prefix and a
 fail-closed deadline stop, a separately authorized receipt-bound continuation
 renewed only the exact remaining permissions, completed the bounded reverse
 swap, and deposited the writer's exact `0.5 PLTR` plus `0.0005 WETH`
 collateral. The buyer has also deposited exactly `0.25 PLTR` into tracker0.
-Writer nonce is `27`, buyer nonce is `3`, and no option leg is open. Buyer WETH
-collateral, matched option positions, premium observation,
+Writer nonce is `27`, buyer nonce is `4`, and no option leg is open. The buyer
+has approved exactly `0.00025 WETH` to tracker1, but has not deposited it.
+Buyer WETH collateral deposit, matched option positions, premium observation,
 ordered close, cleanup, withdrawals, and the user application remain ahead.
 
 Start with:
@@ -71,26 +77,29 @@ Start with:
 1. [`deployment/2026-09-19-contract-source-verification.md`](./deployment/2026-09-19-contract-source-verification.md)
    for the 19-address runtime audit, the nine exact source implementations,
    metadata-store and clone distinctions, and the Blockscout publication gate;
-2. [`progress/2026-09-19-lifecycle-receipt-bound-continuation.md`](./progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
+2. [`progress/2026-10-10-lifecycle-index-17-reconciliation.md`](./progress/2026-10-10-lifecycle-index-17-reconciliation.md)
+   for the later buyer WETH approval receipt, exact calldata reconciliation,
+   live nonce/allowance state, and corrected public prefix through index `17`;
+3. [`progress/2026-09-19-lifecycle-receipt-bound-continuation.md`](./progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
    for the canonical lifecycle prefix through index `16`, failed-closed expiry,
    exact remaining allowance derivation, both writer collateral deposits, the
    buyer's PLTR deposit, and the next one-transaction boundary;
-3. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
+4. [`progress/2026-09-16-lifecycle-prefix-and-refresh.md`](./progress/2026-09-16-lifecycle-prefix-and-refresh.md)
    for the five canonical public receipts, safe pre-swap stop, refreshed clock
    architecture, 22-call exact-head replay, and new authorization boundary;
-4. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
+5. [`progress/2026-09-15-lifecycle-execution-preparation.md`](./progress/2026-09-15-lifecycle-execution-preparation.md)
    for the original dual-sender candidate and its 25-call preparation;
-5. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
+6. [`progress/2026-09-14-three-account-lifecycle-rehearsal.md`](./progress/2026-09-14-three-account-lifecycle-rehearsal.md)
    for the three-account lifecycle, withdrawal, failure-analysis, and evidence
    ledger;
-6. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
+7. [`progress/2026-09-11-public-genesis-milestone.md`](./progress/2026-09-11-public-genesis-milestone.md)
    for the complete public achievement, contract and transaction ledgers,
    ordering rationale, communications facts, and next boundary;
-7. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
+8. [`architecture/robinhood-testnet-system.md`](./architecture/robinhood-testnet-system.md)
    for the system, component, trust-boundary, and evidence overview;
-8. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
+9. [`deployment/2026-09-09-direct-deployment-public-progress.md`](./deployment/2026-09-09-direct-deployment-public-progress.md)
    for the public transaction record; and
-9. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
+10. [`roadmap/2026-09-09-market-genesis.md`](./roadmap/2026-09-09-market-genesis.md)
    for the next gated implementation phase.
 
 For the proposed Solana track, read the
@@ -149,6 +158,7 @@ state was discarded. The [execution candidate and one-step operator record](./ma
 | `research/` | Time-stamped feasibility, ecosystem, and comparative design studies that do not authorize implementation or deployment |
 | `review/` | Human or explicitly labelled owner-reproduced review evidence |
 | `roadmap/` | Forward-looking checkpoint plans that do not themselves authorize transactions |
+| `social/` | Copy-ready public communications derived from reconciled evidence and explicit claim boundaries |
 | `specs/` | Behavioral requirements and acceptance matrices |
 | `testing/` | Reproduction commands and observed test evidence |
 

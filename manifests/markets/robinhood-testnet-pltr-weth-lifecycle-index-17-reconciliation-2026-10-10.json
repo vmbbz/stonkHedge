@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_PUBLIC_LIFECYCLE_THROUGH_INDEX_17_STOP_BEFORE_INDEX_18",
+  "mode": "CANONICAL_RECEIPT_AND_FRESH_READ_ONLY_RECONCILIATION",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chainId": 46630,
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "explorer": "https://explorer.testnet.chain.robinhood.com"
+  },
+  "reconciledAt": "2026-10-10",
+  "sourceBindings": {
+    "candidatePath": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-candidate-2026-09-19.json",
+    "candidateFileSha256": "2a93225456d3365cd3bdc7588072977f88ffa1fb4fd1f8a68326181f47c4ac1b",
+    "executionPlanBodySha256": "cd8cdfb5fd01dc9cdfa6fc3a12c8b9e4010cb3529036df96c919c4f4b0871428",
+    "simulationPath": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-operator-simulation-2026-09-19.json",
+    "simulationFileSha256": "72bf0a44324976ae187dc9d36b650249971defc48fbf5dc8ade78e4d515453d3",
+    "authorizationPath": "manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-authorization-2026-09-19.json",
+    "authorizationFileSha256": "9808ef343049720d1c51f04cdccb866517dbc9675a17ef4bced9e4bea82a5257"
+  },
+  "transaction": {
+    "ordinal": 17,
+    "label": "buyer approves exact WETH collateral to tracker1",
+    "sender": "0x6719E877C05b2d6c28aBceA405fC033FEeF5750f",
+    "nonce": 3,
+    "to": "0x33e4191705c386532ba27cBF171Db86919200B94",
+    "valueWei": "0",
+    "decodedIntent": {
+      "function": "approve(address,uint256)",
+      "spender": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "amount": "250000000000000"
+    },
+    "calldataKeccak256": "0x103ed5e3e804a8c730f83f270cc99078e73e4e57317d5e4c7a7dc19b4cc9e053",
+    "inputMatchesCandidateByteForByte": true
+  },
+  "receipt": {
+    "transactionHash": "0x2bca41b0d5a9b460b6ae68634bffff91a8b37cb435d9092b465ce32e64af22ba",
+    "status": 1,
+    "blockNumber": 121897519,
+    "blockHash": "0x293472f2cf0a414dab88e57bbeff1476b98614b8b20088a56ddf7cea79ae7c80",
+    "blockTimestamp": "2026-09-20T03:24:06Z",
+    "transactionPosition": 1,
+    "gasUsed": 52683,
+    "effectiveGasPriceWei": "10000000",
+    "approvalEventMatchesIntent": true,
+    "explorerUrl": "https://explorer.testnet.chain.robinhood.com/tx/0x2bca41b0d5a9b460b6ae68634bffff91a8b37cb435d9092b465ce32e64af22ba"
+  },
+  "freshPostState": {
+    "deployerNonce": 16,
+    "writerNonce": 27,
+    "buyerNonce": 4,
+    "buyerWethBalanceRaw": "300000000000000",
+    "buyerWethAllowanceToTracker1Raw": "250000000000000"
+  },
+  "liveContractPresence": [
+    {
+      "label": "PanopticFactoryV4",
+      "address": "0x96C3291C9b0C34b007893326ee9dcA534BfcFa0c",
+      "runtimeBytes": 20702
+    },
+    {
+      "label": "SemiFungiblePositionManagerV4",
+      "address": "0x86ef420fD3e27c3Ac896c479B19b6A840b97Bee1",
+      "runtimeBytes": 23608
+    },
+    {
+      "label": "PLTR_WETH_PanopticPool",
+      "address": "0x042c0d9c497d62a85b3410f2773cfa748d18e586",
+      "runtimeBytes": 306
+    },
+    {
+      "label": "PLTR_WETH_CollateralTracker0",
+      "address": "0x2146295437da444638a4cf80900a9e2d3b1315de",
+      "runtimeBytes": 181
+    },
+    {
+      "label": "PLTR_WETH_CollateralTracker1",
+      "address": "0x48d0e86df893b6032ebe9f14ac0eaa23a7949867",
+      "runtimeBytes": 181
+    }
+  ],
+  "completedThroughTransactionIndex": 17,
+  "completedLifecycleTransactionCount": 18,
+  "nextUnexecutedIndex": 18,
+  "remainingTransactionCount": 11,
+  "nextUnexecutedAction": "buyer deposits exact 0.00025 WETH collateral",
+  "publicOptionLegsOpen": false,
+  "continuationAuthorizationState": "CLOSED_REQUIRES_FRESH_PLAN_CLOCKS_SIMULATION_AND_AUTHORIZATION",
+  "evidenceBoundary": "TESTNET_ONLY_NO_INDEX_18_DEPOSIT_NO_PUBLIC_OPTION_POSITION_NO_MAINNET_CLAIM"
+}

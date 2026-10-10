@@ -332,9 +332,9 @@ app.innerHTML = `
             <div><dt>Latest verified block</dt><dd>${terminalFacts.referenceBlock.toLocaleString()}</dd></div>
             <div><dt>Lifecycle</dt><dd>${lifecycleFacts.completedCalls} / ${lifecycleFacts.totalCalls} calls</dd></div>
             <div><dt>Writer collateral</dt><dd>PLTR + WETH</dd></div>
-            <div><dt>Next gate</dt><dd>Index ${lifecycleFacts.nextAuthorizedIndex} · ${lifecycleFacts.nextLabel}</dd></div>
+            <div><dt>Next gate</dt><dd>Index ${lifecycleFacts.nextUnexecutedIndex} · fresh authorization required</dd></div>
           </dl>
-          <a class="primary-button" href="${repoUrl("docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md")}" target="_blank" rel="noreferrer">Inspect the receipt ledger ${icon("external")}</a>
+          <a class="primary-button" href="${repoUrl("docs/progress/2026-10-10-lifecycle-index-17-reconciliation.md")}" target="_blank" rel="noreferrer">Inspect the receipt ledger ${icon("external")}</a>
         </div>
       </div>
     </section>
@@ -343,7 +343,7 @@ app.innerHTML = `
   <footer>
     <div class="wrap footer-grid">
       <div><a class="wordmark" href="#top"><span class="mark">S</span><span>StonkHedge</span></a><p>Mechanism testing in public, with receipts.</p></div>
-      <div><span>Source of truth</span><a href="${repoUrl("docs/architecture/robinhood-testnet-system.md")}" target="_blank" rel="noreferrer">Architecture</a><a href="${repoUrl("manifests/markets/robinhood-testnet-pltr-weth-lifecycle-continuation-public-progress-2026-09-19.json")}" target="_blank" rel="noreferrer">Lifecycle manifest</a></div>
+      <div><span>Source of truth</span><a href="${repoUrl("docs/architecture/robinhood-testnet-system.md")}" target="_blank" rel="noreferrer">Architecture</a><a href="${repoUrl("manifests/markets/robinhood-testnet-pltr-weth-lifecycle-index-17-reconciliation-2026-10-10.json")}" target="_blank" rel="noreferrer">Lifecycle manifest</a></div>
       <div><span>Boundaries</span><p>Robinhood Chain Testnet only. No real value, withdrawal, liquidation, or mainnet activity.</p></div>
     </div>
   </footer>

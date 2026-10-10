@@ -49,6 +49,11 @@ describe("build-in-public content", () => {
     );
     expect(lifecycleTransactions.at(-1)?.blockNumber).toBe(lifecycleFacts.latestBlock);
     expect(progress.entries.find((entry) => entry.id === "two-actor-lifecycle")?.transactionRefs).toHaveLength(lifecycleFacts.completedCalls);
+    expect(lifecycleFacts.completedThrough).toBe(17);
+    expect(lifecycleFacts.completedCalls).toBe(18);
+    expect(lifecycleFacts.nextUnexecutedIndex).toBe(18);
+    expect(lifecycleFacts.buyerNonce).toBe(4);
+    expect(lifecycleTransactions.at(-1)?.hash).toBe("0x2bca41b0d5a9b460b6ae68634bffff91a8b37cb435d9092b465ce32e64af22ba");
   });
 
   it("links editorial entries only to files that exist in the repository", () => {

@@ -75,16 +75,21 @@ deployment with the target omitted were also classified as `production`. This
 matches the open upstream Vercel issue
 [`vercel/vercel#17069`](https://github.com/vercel/vercel/issues/17069).
 
-The operator removed all four rejected deployments:
+The operator removed all five rejected deployments:
 
 - `dpl_F95uiwe9aoBCeeptXKmVFw5wiwVU` — default CLI;
 - `dpl_GPZgKiqmhzsNwuPDTQfy1q8PHh5w` — explicit CLI Preview target;
 - `dpl_323yeUj4KXAUet7TcQyuyKaUQfWq` — Git integration; and
-- `dpl_Hkj1HyaPMvo93uMAEeBDHvR79ByL` — REST target omitted.
+- `dpl_Hkj1HyaPMvo93uMAEeBDHvR79ByL` — REST target omitted; and
+- `dpl_6ivnKzh7TAC4pAWD29ZKgP79uB7S` — Git integration after the blocker
+  documentation commit.
 
 Vercel now lists zero deployments for the project, and the production alias
-returns `404`. None of those deployments is accepted evidence. Do not retry
-CLI, Git, or REST deployment until one of these gates is explicitly chosen:
+returns `404`. Automatic Git deployments are set to `disabled` to prevent
+future feature-branch pushes from silently recreating Production. The GitHub
+repository remains connected, with `main` still recorded as the production
+branch. None of those deployments is accepted evidence. Do not retry CLI, Git,
+or REST deployment until one of these gates is explicitly chosen:
 
 1. Vercel resolves the upstream Preview-classification defect; or
 2. the owner separately authorizes a staged Production bootstrap with domain
@@ -92,7 +97,8 @@ CLI, Git, or REST deployment until one of these gates is explicitly chosen:
    classified as Preview, followed by deletion of the bootstrap.
 
 Never use `--prod`, promote, or assign the production alias without that new
-authorization. `.vercel/` remains local and ignored.
+authorization. Re-enable automatic Git deployments only as part of the approved
+recovery procedure. `.vercel/` remains local and ignored.
 
 ## Acceptance
 

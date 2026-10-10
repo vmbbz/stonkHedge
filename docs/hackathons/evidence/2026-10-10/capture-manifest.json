@@ -1,0 +1,19 @@
+{
+  "status": "PASS_PUBLIC_BROWSER_EVIDENCE",
+  "capturedAt": "2026-10-10T12:26:26.396Z",
+  "source": "http://127.0.0.1:3000/",
+  "receiver": "0x6719E877C05b2d6c28aBceA405fC033FEeF5750f",
+  "browser": "chrome.exe",
+  "files": [
+    "01-live-comparison-desktop.png",
+    "02-live-quote-desktop.png",
+    "03-live-simulation-desktop.png",
+    "04-live-comparison-mobile.png"
+  ],
+  "publicSummary": {
+    "summary": "Resolved underlyingNVDANvidia Corp Issuer-normalized gap16.24 bps2 BSC representations API observation0s ago10 Oct 2026, 14:26",
+    "quote": "Best bounded route5.1 USDT → NVDAonRead-only quote clear Estimated output0.02210062 NVDAonLiquidMesh · SWAP · no transaction built Price impact0.00% Freshness window20s remaining Liquidity evidence1 vendor route Reported pathKipseli + Uniswap V4 Receiver binding0x6719e8…f5750f Approval target0xb44446…5fdda5 Fresh bounded SWAP route returned Route availability and reported impact are quote-level evidence; they do not prove pool reserves, fill certainty, or future execution. Compile & simulate a fresh route Build and simulation stay server-side. No calldata is returned, no wallet is connected, and nothing can be signed or broadcast.",
+    "simulation": "Unsigned transaction rehearsal5.1 USDT → NVDAon Blocked as expected No signing gate opened The exact route remains non-executable and requires remediation plus a fresh simulation. ApprovalSUCCESS SwapFAILED Exact approval5.1 USDT Slippage cap0.5% Approval selector0x095ea7b3 Swap selector0xad43f73d Minimum output21989932605147877 raw VendorLiquidMesh Swap simulation failed: execution reverted: BEP20: transfer amount exceeds balance Inspect non-executable byte fingerprints Quote ID SHA-2560xbe4045dc9ff39c9811197664c6c820758541abfe8d8d366e242c62e644d5d601 Approval SHA-2560x6f727a116c93879700852666b2e8728ce91393f9322457f4fb1b5b31fc917975 Swap SHA-2560x6e68c4281401ac4149f64f2d2276c8a3ddfc5010c3a69cb167375b05446c139a Simulation only · no raw calldata · no wallet · no private key · no signing · no broadcast"
+  },
+  "boundary": "LIVE_API_UNSIGNED_SIMULATION_NO_WALLET_NO_SIGNING_NO_BROADCAST"
+}

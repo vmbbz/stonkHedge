@@ -17,8 +17,43 @@ resolves both Ondo `NVDAon` and bStocks `NVDAB`, retrieves their public price,
 profile, protection, and market-status records, and feeds the read-only Gap
 Guardian comparison on the website. It also returns a strictly bounded,
 short-lived `5.10 USDT` read-only quote for either representation while
-building no transaction. Read the
+building no transaction. A separate server-only path compiles exact approval
+and swap payloads, sends both unsigned calls to the Binance Transaction API
+simulator, and returns only redacted proof fields. No wallet, signing, or
+broadcast surface exists in this branch. Read the
 [component architecture](./docs/architecture/bnb-gap-guardian.md).
+
+### 60-second judge path
+
+The branch is live-API and simulation-only. It requires Node.js 22 and
+judge-provided Binance Web3 developer credentials; never place them in a
+`VITE_` variable or paste them into the browser.
+
+```powershell
+git clone https://github.com/vmbbz/stonkHedge.git
+cd stonkHedge
+git switch hackathon/bnb-tokenized-stocks-2026
+npm ci
+Copy-Item .env.example .env.local
+notepad .env.local
+npm run check
+npm run bnb:rwa:check -- NVDA
+npm run bnb:rwa:quote -- 0x6719E877C05b2d6c28aBceA405fC033FEeF5750f NVDA 5.1 ondo
+npm run bnb:rwa:simulate -- NVDA 0xa9ee28c80f960b889dfbd1902055218cba016f75 0x6719E877C05b2d6c28aBceA405fC033FEeF5750f
+npm run build
+npm run bnb:rwa:demo
+```
+
+The last command serves the built UI and server-only API on
+`http://127.0.0.1:3000/`. It is a local judge/demo server, not a public host.
+
+For the recorded unfunded public sender, the expected fail-closed result is
+approval `SUCCESS`, swap `FAILED` for insufficient balance, and final verdict
+`BLOCKED`. Live external state can change, so the program reports the current
+result rather than forcing this outcome. The
+[submission-readiness gate](./docs/hackathons/2026-10-10-submission-readiness.md)
+and [demo/evidence runbook](./docs/hackathons/2026-10-10-demo-and-evidence.md)
+state what is proven, missing, and safe to claim.
 
 Reproduce the credential-safe live check with:
 
@@ -27,16 +62,22 @@ Copy-Item .env.example .env.local
 notepad .env.local
 npm run bnb:rwa:check -- NVDA
 npm run bnb:rwa:quote -- 0xYourPublicBscReceiver NVDA 5.1 ondo
+npm run bnb:rwa:simulate -- NVDA 0xa9ee28c80f960b889dfbd1902055218cba016f75 0xYourPublicBscReceiver
 ```
 
 Both `BINANCE_WEB3_API_KEY` and `BINANCE_WEB3_SECRET_KEY` are required. They
 remain server-side and `.env.local` is ignored. Never use a `VITE_` prefix for
 either credential. The check lists supported RWA platforms and BSC ticker
-representations and the second command prints route metadata for one exact
-input. Both have no wallet connection, transaction building, approval,
-signing, or broadcast capability. Use only a public receiver address—never a
-private key. Record
+representations, and the quote command prints route metadata for one exact
+input without building a transaction. The simulation command builds exact
+approval and swap payloads server-side, submits them unsigned to the
+Transaction API, discards the raw bytes, and prints only redacted proof. None
+of these commands connects a wallet, accepts a private key, signs, or
+broadcasts. Use only a public receiver address—never a private key. Record
 observed integration facts in the [DX log](./docs/hackathons/2026-10-09-binance-web3-dx-log.md).
+The final form worksheet is intentionally separate in the
+[builder-review DX draft](./docs/hackathons/2026-10-10-developer-experience-report-draft.md);
+the builder must supply personal ratings and rewrite/review it before submission.
 For a hosted deployment, configure the same two variables as encrypted
 server-side environment variables; the browser calls `/api/bnb/rwa` and never
 receives either credential.

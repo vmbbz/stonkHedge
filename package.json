@@ -14,6 +14,8 @@
     "bnb:rwa:quote": "node --env-file-if-exists=.env.local --import tsx scripts/check_bnb_rwa_quote.ts",
     "bnb:rwa:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/check_bnb_rwa_simulation.ts",
     "bnb:rwa:preview": "node --import tsx scripts/check_bnb_rwa_preview.ts",
+    "bnb:rwa:demo": "node --env-file-if-exists=.env.local --import tsx scripts/serve_bnb_demo.ts",
+    "bnb:rwa:evidence": "node scripts/capture_bnb_demo_evidence.mjs",
     "test": "vitest run",
     "check": "npm run test && npm run build"
   },

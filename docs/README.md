@@ -15,6 +15,14 @@ Robinhood Chain testnet deployment and its transaction authorizations.
 The [Binance Web3 integration experience log](./hackathons/2026-10-09-binance-web3-dx-log.md)
 records only observed onboarding and API behavior for the required Developer
 Experience Report.
+The [submission-readiness gate](./hackathons/2026-10-10-submission-readiness.md)
+maps every official requirement to current evidence, blockers, and owner-only
+actions. Use the [demo and evidence runbook](./hackathons/2026-10-10-demo-and-evidence.md)
+for the sub-four-minute recording sequence and capture checklist, the
+[submission-copy worksheet](./hackathons/2026-10-10-submission-copy.md) for the
+project form, and the
+[builder-review DX draft](./hackathons/2026-10-10-developer-experience-report-draft.md)
+to prepare—not auto-submit—the mandatory experience report.
 The [BNB Gap Guardian architecture](./architecture/bnb-gap-guardian.md)
 documents the live two-issuer NVDA comparison, bounded `5.10 USDT` read-only
 quotes for both representations, exact server-only approval/swap preparation,

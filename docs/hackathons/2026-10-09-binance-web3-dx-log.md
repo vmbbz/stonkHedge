@@ -216,3 +216,28 @@ AI-generated reports.
   `2026-10-10T11:50:32.190Z` again produced exact-approval `SUCCESS`, swap
   `FAILED` for insufficient USDT balance, and final verdict `BLOCKED` for the
   unfunded public sender.
+
+## 2026-10-10: live-evidence rehearsal rate limit
+
+### Observed
+
+- Repeating the live acceptance and browser-evidence rehearsal later in the
+  same session triggered Binance business code `42900` with `Rate limit
+  exceeded`.
+- The credential-safe CLI stopped with that upstream message. The public route
+  returned its redacted HTTP `502` envelope with `UPSTREAM_ERROR`, the
+  upstream code, and a request ID; it did not return authentication material.
+- The exact quota window and safe retry time were not present in the surfaced
+  response, so the evidence capture was paused instead of running an automatic
+  retry loop.
+
+### Engineering response
+
+- Kept the product's own per-IP request-cost budget in place and stopped fresh
+  calls while the upstream quota recovered.
+- The reusable browser-capture command treats an upstream error as a failed
+  evidence run and records no replacement fixture as live proof.
+- A production SDK or documentation catalog should classify `42900` as a
+  typed, retryable limit and expose quota-window or retry-after guidance. That
+  would let clients distinguish throttling from a generic upstream failure
+  without guessing.

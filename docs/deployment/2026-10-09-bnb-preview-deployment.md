@@ -9,8 +9,9 @@ exact deployed SHA during live preview acceptance
 
 **Deployment state:** blocked by upstream Vercel first-deployment target bug;
 project linked and branch-scoped Preview secrets configured, but no deployment
-has passed the Preview-target acceptance gate; Git auto-deployment disconnected
-for containment
+has passed the Preview-target acceptance gate; Git auto-deployment is
+disconnected and the separately authorized domainless bootstrap was rejected
+because Vercel assigned an alias despite `--skip-domain`
 
 **Boundary:** preview only; no wallet, private key, signing, broadcast, or
 mainnet spend
@@ -70,14 +71,15 @@ is linked locally to `katzs-projects-2f9ffaf0/stonkhedge`. The Vercel project's
 Git connection to `vmbbz/stonkHedge` was removed during containment; before
 disconnecting, `main` was confirmed as its production branch.
 
-On 2026-10-10, Vercel CLI `62.7.0` classified both a default deployment and an
-explicit `--target=preview` deployment as `production`. A subsequent Git
+On 2026-10-10, the local Vercel CLI `51.6.1` classified both a default
+deployment and an explicit `--target=preview` deployment as `production`.
+Vercel's remote build image reported CLI `62.7.0`. A subsequent Git
 integration build from the non-production hackathon branch and a REST
 deployment with the target omitted were also classified as `production`. This
 matches the open upstream Vercel issue
 [`vercel/vercel#17069`](https://github.com/vercel/vercel/issues/17069).
 
-The operator removed all six rejected deployments:
+The operator removed all seven rejected deployments:
 
 - `dpl_F95uiwe9aoBCeeptXKmVFw5wiwVU` — default CLI;
 - `dpl_GPZgKiqmhzsNwuPDTQfy1q8PHh5w` — explicit CLI Preview target;
@@ -87,23 +89,38 @@ The operator removed all six rejected deployments:
   documentation commit; and
 - `dpl_7YUuVrEWKv12jwtQvG3UJvBLn6BL` — Git integration after automatic
   deployments were set to `disabled`, showing that setting had not contained
-  the webhook path.
+  the webhook path; and
+- `dpl_chc4sYLSDhZB3ZGMbnuBYyiqViFN` — explicitly authorized, Production-target
+  bootstrap with `--skip-domain`; rejected before any Preview attempt because
+  Vercel nevertheless assigned the project alias
+  `stonkhedge-katzs-projects-2f9ffaf0.vercel.app`.
+
+The seventh attempt began only after confirming that Production had no
+environment variables, the public Production alias returned `404`, and the
+project had no deployments. The command was limited to the simulation-only
+site and did not contain a wallet, signer, private key, blockchain broadcast,
+or transaction path. When the alias mismatch appeared, the operator did not
+attempt the planned Preview. The bootstrap was deleted immediately. At
+`2026-10-10T11:32:35Z`, the immutable deployment URL, assigned project alias,
+and public Production alias all returned `404`; Vercel listed zero deployments
+and Production still had no environment variables.
 
 Vercel now lists zero deployments for the project, and the production alias
 returns `404`. The Git integration is disconnected to prevent future
 feature-branch pushes from silently recreating Production. The Vercel project,
 local project link, and branch-scoped encrypted Preview variables remain intact.
-None of those deployments is accepted evidence. Do not retry CLI, Git, or REST
-deployment until one of these gates is explicitly chosen:
+None of those deployments is accepted Preview evidence. Do not retry CLI, Git,
+REST, or bootstrap deployment until one of these gates is explicitly chosen:
 
 1. Vercel resolves the upstream Preview-classification defect; or
-2. the owner separately authorizes a staged Production bootstrap with domain
-   assignment disabled, solely to test whether a subsequent deployment can be
-   classified as Preview, followed by deletion of the bootstrap.
+2. Vercel Support provides a documented path that can create the first Preview
+   without assigning any Production or project alias, and the owner separately
+   authorizes that exact procedure.
 
-Never use `--prod`, promote, or assign the production alias without that new
-authorization. Reconnect Git only as part of the approved recovery procedure.
-`.vercel/` remains local and ignored.
+The one-time domainless bootstrap authorization has been consumed and failed
+closed. Never repeat `--prod`, promote, assign an alias, or reconnect Git
+without new authorization for an exact reviewed procedure. `.vercel/` remains
+local and ignored.
 
 ## Acceptance
 
@@ -158,9 +175,10 @@ usage.
 
 ## Next gate
 
-Resolve the Vercel first-deployment target gate. Then record the immutable
-Preview URL, deployed Git SHA, timestamp, response boundaries, and smoke-test
-output. Only after that acceptance should work begin on the separately reviewed,
+Resolve the Vercel first-deployment target gate through an upstream fix or a
+documented no-alias Support procedure. Then record the immutable Preview URL,
+deployed Git SHA, timestamp, response boundaries, and smoke-test output. Only
+after that acceptance should work begin on the separately reviewed,
 disabled-by-default wallet confirmation state machine.
 
 ## Sources

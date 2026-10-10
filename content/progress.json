@@ -3,7 +3,7 @@
   "project": "StonkHedge",
   "network": "Robinhood Chain Testnet",
   "chainId": 46630,
-  "updatedAt": "2026-10-09",
+  "updatedAt": "2026-10-10",
   "entries": [
     {
       "id": "foundation-and-research",
@@ -155,7 +155,8 @@
       "outcomes": [
         "Both issuer representations passed fresh live route construction and exact approval simulation on BSC mainnet",
         "Both swap simulations failed closed because the public buyer has zero USDT, proving that a failed rehearsal cannot open a signing gate",
-        "Raw quote IDs and calldata remain server-side; the public proof contains only selectors, SHA-256 fingerprints, bounded amounts, statuses, and reasons"
+        "Raw quote IDs and calldata remain server-side; the public proof contains only selectors, SHA-256 fingerprints, bounded amounts, statuses, and reasons",
+        "The one-time no-domain Vercel bootstrap failed closed when Vercel assigned an alias despite --skip-domain; it was deleted before any Preview attempt"
       ],
       "commits": ["6367f01", "dc0b53b208c0b84601bd0890df0238eed0a2375d"],
       "contractRefs": [],
@@ -165,6 +166,7 @@
         "NVDAon approval SUCCESS · swap FAILED insufficient balance",
         "NVDAB approval SUCCESS · swap FAILED insufficient balance",
         "46/46 automated tests and production build passed after preview hardening",
+        "Vercel containment reverified: zero deployments, zero Production variables, and all attempted aliases return 404",
         "No wallet · no private key · no signing · no broadcast"
       ],
       "media": ["/media/stonkhedge-crystal.png"],

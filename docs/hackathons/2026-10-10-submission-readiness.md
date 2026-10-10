@@ -6,11 +6,12 @@
 
 **Branch:** `hackathon/bnb-tokenized-stocks-2026`
 
-**Assessment time:** 2026-10-10 11:55 UTC / 13:55 SAST
+**Assessment time:** 2026-10-10 23:26 UTC / 2026-10-11 01:26 SAST
 
 **Submission lock:** 2026-10-11 12:00 UTC / 14:00 SAST
 
-**Status:** technically demonstrable, not yet submission-complete
+**Status:** technically demonstrable; DX report submitted; video and project
+form still outstanding
 
 This is the release gate for the hackathon package. It separates evidence that
 already exists from work that still has to happen. A checked item means the
@@ -32,10 +33,11 @@ then demonstrate with a small live amount. That proof does not exist today.
 It must not be implied by the successful approval simulation or the expected
 insufficient-balance failure.
 
-Irrespective of that optional implementation decision, four submission tasks
-are mandatory in practice: make the judge path accessible, record and publish
-the demo video, personally review and submit the Developer Experience Report,
-and complete the project form before the lock.
+The public repository and judge quickstart are accessible, and the builder has
+confirmed submission of the Developer Experience Report. The remaining
+submission-critical tasks are to record and publish the final demo video,
+verify its URL signed out, complete the project form, and retain the final
+submission confirmation before the lock.
 
 ## Official requirement matrix
 
@@ -48,8 +50,8 @@ and complete the project form before the lock.
 | Small live-amount demonstration | **Blocker against full track compliance** | No wallet, signature, broadcast, receipt, or post-state exists | Either implement and separately authorize a bounded browser-wallet proof, or submit with this limitation disclosed |
 | Public repository | **Pass** | Public branch at the exact remote revision recorded below | Freeze/tag the final submission revision and keep it public through judging |
 | Demo video, at most four minutes | **Missing** | Script and evidence plan are prepared separately | Record, review for secrets, upload, and test the public URL |
-| Deployed link or judge-run instructions | **Partial** | Reproducible local commands exist; Vercel Preview is blocked by an upstream target/alias defect | Prefer a secure hosted preview; otherwise polish and test the local judge path with a clean checkout |
-| Developer Experience Report | **Draftable, not submitted** | Contemporaneous DX log contains exact errors, timings, drift, and responses | Builder must edit in their own voice, choose subjective ratings, and submit the official form |
+| Deployed link or judge-run instructions | **Pass via instructions** | Public README and submission-readiness quickstart both resolve without credentials; the linked Vercel project has no deployment | Submit the public judge-instruction permalink, and do not claim a hosted site exists |
+| Developer Experience Report | **Submitted — user confirmed** | Builder completed the official form after editing the evidence-led draft | Retain the Google Forms receipt or confirmation screenshot privately |
 | Submission form | **Not submitted** | Copy-ready draft is prepared separately | Owner supplies contact, prize wallet/Binance UID, optional Telegram, video URL, and run URL/instructions |
 | Assets remain accessible through judging | **Not yet locked** | Repository is public | Keep repo, video, and run link accessible until judging ends on 23 October |
 
@@ -104,18 +106,17 @@ unfunded public sender. This is successful fail-closed acceptance, not a trade.
 Complete these in order so that optional product work cannot consume the
 submission window:
 
-1. **Judge path:** choose and verify a secure hosted simulation-only URL, or
-   accept the lower-quality local quickstart path. Do not expose API secrets to
-   the browser or repository.
-2. **Evidence capture:** capture the live comparison, bounded quote, blocked
-   unsigned simulation, test/build result, architecture, and repository SHA.
+1. **Judge path:** use the verified public quickstart permalink. Do not enter a
+   Vercel URL because the linked project currently has no deployment.
+2. **Evidence capture:** E1 through E6 are stored under
+   `docs/hackathons/evidence/2026-10-10/`; recheck Git provenance after the
+   final evidence commit and push.
 3. **Demo recording:** record the prepared sub-four-minute story; inspect the
    entire frame and audio for secrets, unrelated tabs, notifications, wallet
    balances, or personal information before upload.
-4. **DX report:** the builder edits the draft against the contemporaneous log,
-   supplies personal timings/ratings, and submits it. Do not paste an
-   unreviewed AI-written answer into the form.
-5. **Project form:** add the public repo, video, and deployed link or exact run
+4. **DX report:** submitted according to the builder. Preserve private proof of
+   submission; do not add the email receipt or personal form response to Git.
+5. **Project form:** add the public repo, video, and exact public run
    instructions; select only the Main Track unless additional stacks are
    actually integrated.
 6. **Freeze:** run all checks, tag or record the final SHA, test every URL in a

@@ -22,10 +22,30 @@ unfunded receiver `0x6719E877C05b2d6c28aBceA405fC033FEeF5750f` and never loaded 
 | [`03-live-simulation-desktop.png`](./03-live-simulation-desktop.png) | Exact approval simulation returned `SUCCESS`; swap returned `FAILED` for insufficient balance; verdict remained blocked and exposed no raw calldata | `602CEB50B71D36F24F35DAE6D2CA636A55BEBA344E6DB039735F6EF3E43B870E` |
 | [`04-live-comparison-mobile.png`](./04-live-comparison-mobile.png) | The same live two-issuer comparison reflowed at a `390 px` mobile viewport without a second upstream request | `1510D0C25B7DBD8314FC313CA65409F409242209E6099CBD4FB0318328CCBDAA` |
 | [`capture-manifest.json`](./capture-manifest.json) | Machine-readable capture time, filenames, browser, public receiver, redacted UI summaries, and the no-signing/no-broadcast boundary | `892CE06A5E20DF4E41ECABFF36F26C569E404F1A7AB86B5B630C642D16A971BB` |
+| [`05-test-build-transcript.md`](./05-test-build-transcript.md) | A fresh `npm run check` passed 48 tests in 9 files and completed the TypeScript/Vite production build | `846CD4E4894239ED09AF1E130E6DFE5B6F856523E1EF3B1C417655D873A50C5D` |
+| [`06-live-acceptance-transcript.md`](./06-live-acceptance-transcript.md) | Public-safe comparison, quote, and unsigned-simulation results transcribed from the capture manifest without raw quote IDs or calldata | `60DBBD0BA340D0BE93B47F24FAC4CFFC51F017293976891BA6AF1799AC1AB295` |
+| [`07-public-access-check.md`](./07-public-access-check.md) | Unauthenticated HTTP checks for the repository, README, and judge instructions, plus the honest video/deployment boundary | `5F5C9EC659D3F726B7B9A2AF9972CD7B9F57FA0513A4079906FBE115FE450946` |
 
 The final capture completed at `2026-10-10T12:26:26.396Z` (14:26 SAST). Quote
 and simulation values are ephemeral and must not be reused as current market
 data.
+
+## Final evidence status
+
+| Gate | Status | Evidence or next action |
+|---|---|---|
+| E1 desktop comparison | PASS | `01-live-comparison-desktop.png` |
+| E2 bounded quote | PASS | `02-live-quote-desktop.png` |
+| E3 blocked simulation | PASS | `03-live-simulation-desktop.png` |
+| E4 mobile layout | PASS | `04-live-comparison-mobile.png` |
+| E5 test/build transcript | PASS | `05-test-build-transcript.md` |
+| E6 live acceptance transcript | PASS | `06-live-acceptance-transcript.md` and `capture-manifest.json` |
+| E7 Git provenance | RECHECK AT HANDOFF | Compare local `HEAD` with the public remote branch after the final evidence commit is pushed |
+| E8 public access | PARTIAL | `07-public-access-check.md` proves the repo and judge instructions; upload the final video and verify its URL signed out |
+
+No Vercel deployment existed when this matrix was updated on 2026-10-11.
+The official requirement permits a deployed link **or** instructions a judge
+can follow, so the public judge quickstart is the truthful fallback.
 
 ## Visual review
 

@@ -1,8 +1,9 @@
 # BNB Tokenized Stocks submission copy
 
-This is a copy-ready worksheet, not evidence that either official form has
-been submitted. Replace every `OWNER INPUT REQUIRED` marker and recheck all
-links in a signed-out browser.
+This is a copy-ready worksheet, not evidence that the project form has been
+submitted. The builder confirmed that the separate Developer Experience Report
+was submitted on 2026-10-11. Replace every `OWNER INPUT REQUIRED` marker and
+recheck all links in a signed-out browser.
 
 ## Project submission form
 
@@ -79,13 +80,19 @@ Fallback judge instructions:
 
 `https://github.com/vmbbz/stonkHedge/blob/hackathon/bnb-tokenized-stocks-2026/docs/hackathons/2026-10-10-submission-readiness.md#judge-quickstart-boundary`
 
-The fallback requires judge-provided Binance Web3 developer credentials. It is
-technically reproducible but materially weaker than a safe hosted deployment.
+The linked Vercel project had no deployment on 2026-10-11. Use the public
+judge-instruction permalink rather than a guessed Vercel alias. The quickstart
+requires judge-provided Binance Web3 developer credentials, but those remain
+server-side and the official form explicitly accepts runnable instructions in
+place of a deployment.
 
 ### Developer Experience Report confirmation
 
-Select the confirmation only after the builder has edited and submitted the
-official DX form.
+Select exactly: `Yes, I have submitted it`.
+
+The builder confirmed completing the official DX form on 2026-10-11. Keep the
+Google Forms receipt or confirmation screenshot private unless it contains no
+personal information.
 
 ## Final one-line pitch
 

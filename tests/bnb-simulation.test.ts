@@ -169,6 +169,15 @@ describe("BNB simulation-only transaction compiler", () => {
     expect(sources).not.toContain("signTransaction");
   });
 
+  it("runs the jurisdiction-sensitive Binance API function from Cape Town", () => {
+    const config = JSON.parse(readFileSync(
+      resolve(process.cwd(), "vercel.json"),
+      "utf8",
+    )) as { regions?: string[] };
+
+    expect(config.regions).toEqual(["cpt1"]);
+  });
+
   it("records only non-executable live acceptance evidence", () => {
     const evidence = JSON.parse(readFileSync(resolve(
       process.cwd(),

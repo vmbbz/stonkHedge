@@ -131,13 +131,16 @@ app.innerHTML = `
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="StonkHedge home"><span class="mark">S</span><span>StonkHedge</span></a>
     <nav aria-label="Primary">
-      <a href="#gap-guardian">BNB Gap</a>
-      <a href="#architecture">Architecture</a>
-      <a href="#timeline">Timeline</a>
-      <a href="#contracts">Contracts</a>
-      <a href="#transactions">Transactions</a>
+      <a href="#gap-guardian">BSC Gap</a>
+      <a href="#chain-map">Chain map</a>
+      <a href="#architecture">RH architecture</a>
+      <a href="#timeline">Progress</a>
+      <a href="#contracts">RH ledgers</a>
     </nav>
-    <a class="network-chip" href="${explorerBase}" target="_blank" rel="noreferrer"><span></span>Testnet · 46630</a>
+    <div class="network-context" aria-label="Supported network lanes">
+      <a class="network-chip robinhood" data-short="RH 46630" href="${explorerBase}" target="_blank" rel="noreferrer"><span></span>RH testnet · 46630</a>
+      <a class="network-chip bsc" data-short="BSC 56" href="https://bscscan.com" target="_blank" rel="noreferrer"><span></span>BSC mainnet · 56</a>
+    </div>
   </header>
 
   <main id="main">
@@ -146,19 +149,19 @@ app.innerHTML = `
       <div class="hero-copy">
         <div class="eyebrow"><span class="live-dot"></span>Building in public · updated ${progress.updatedAt}</div>
         <h1>Hedging gets<br/><em>a little weird.</em></h1>
-        <p class="hero-lede">Follow a proof-backed trail from test assets and deployed contracts into a live, one-transaction-at-a-time Panoptic lifecycle.</p>
+        <p class="hero-lede">StonkHedge is building two isolated, proof-backed lanes: a deployed Panoptic options mechanism test on Robinhood Chain testnet and an issuer-aware, unsigned tokenized-stock route simulator on BSC.</p>
         <div class="hero-actions">
           <a class="primary-button" href="#timeline">Explore the build ${icon("arrow")}</a>
           <a class="secondary-button" href="${repoUrl("docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md")}" target="_blank" rel="noreferrer">Read the live checkpoint ${icon("external")}</a>
         </div>
-        <p class="truth-note">Valueless mechanism test. Not a market quote, audit, endorsement, or mainnet release.</p>
+        <p class="truth-note">Robinhood: valueless testnet mechanism test. BSC: live mainnet data and unsigned simulation only—no StonkHedge contracts, signing, broadcast, or spend.</p>
       </div>
       <div class="hero-visual" aria-label="StonkHedge green crystal character">
         <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
         <img src="${assetUrl("/media/stonkhedge-crystal.png")}" alt="A cheerful translucent green crystal character wearing a red bow tie" />
-        <div class="float-card card-one"><span>${transactions.filter((transaction) => transaction.signedByProject).length}</span>canonical txs</div>
-        <div class="float-card card-two"><span>19</span>deployments</div>
-        <div class="float-card card-three"><span>${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls}</span>lifecycle</div>
+        <div class="float-card card-one"><span>${transactions.filter((transaction) => transaction.signedByProject).length}</span>RH canonical txs</div>
+        <div class="float-card card-two"><span>19</span>RH deployments</div>
+        <div class="float-card card-three"><span>${lifecycleFacts.completedCalls}/${lifecycleFacts.totalCalls}</span>RH lifecycle</div>
       </div>
       <div class="scroll-cue">Scroll the ledger <span>↓</span></div>
     </section>
@@ -215,10 +218,42 @@ app.innerHTML = `
       </div>
     </section>
 
+    <section class="section chain-map-section" id="chain-map">
+      <div class="wrap section-heading split-heading">
+        <div><span class="kicker">Two chains · separate state</span><h2>One product.<br/>Two honest boundaries.</h2></div>
+        <p>StonkHedge shares research, interface, evidence, and fail-closed controls across both lanes. Contract addresses, transaction histories, assets, permissions, and authorization never cross between them.</p>
+      </div>
+      <div class="wrap chain-lanes">
+        <article class="chain-lane robinhood-lane">
+          <div class="chain-lane-top"><span class="chain-dot"></span><span>Deployed mechanism test</span><strong>46630</strong></div>
+          <h3>Robinhood Chain testnet</h3>
+          <p>Panoptic perpetual-options infrastructure around a synthetic PLTR/WETH Uniswap V4 market, advanced through individually verified public receipts.</p>
+          <dl>
+            <div><dt>StonkHedge deployments</dt><dd>19</dd></div>
+            <div><dt>Public state</dt><dd>Canonical testnet receipts</dd></div>
+            <div><dt>Value boundary</dt><dd>Valueless test assets</dd></div>
+          </dl>
+          <a href="#architecture">Inspect RH architecture ${icon("arrow")}</a>
+        </article>
+        <article class="chain-lane bsc-lane">
+          <div class="chain-lane-top"><span class="chain-dot"></span><span>API + unsigned simulation</span><strong>56</strong></div>
+          <h3>BNB Smart Chain mainnet</h3>
+          <p>Issuer-aware comparison of Ondo and bStocks representations, a fixed 5.10 USDT quote, and redacted approval/swap simulation evidence.</p>
+          <dl>
+            <div><dt>StonkHedge deployments</dt><dd>0</dd></div>
+            <div><dt>Public transactions</dt><dd>0</dd></div>
+            <div><dt>Execution boundary</dt><dd>No signing or broadcast</dd></div>
+          </dl>
+          <a href="#gap-guardian">Inspect BSC simulator ${icon("arrow")}</a>
+        </article>
+      </div>
+      <p class="chain-map-note wrap">Support does not mean cloning one protocol deployment onto both networks. Robinhood currently hosts the options contracts; BSC currently hosts the external stock tokens and live route data. Any BSC wallet execution or contract deployment is a later, separately reviewed gate.</p>
+    </section>
+
     <section class="section architecture-section" id="architecture">
       <div class="wrap section-heading split-heading">
-        <div><span class="kicker">Protocol constellation</span><h2>See how the pieces connect.</h2></div>
-        <p>Blue is infrastructure we qualified and reused. Acid green is the shared Panoptic layer StonkHedge deployed. Coral is the first per-market graph. Violet is what comes next.</p>
+        <div><span class="kicker">Robinhood testnet architecture · chain 46630</span><h2>See how the options pieces connect.</h2></div>
+        <p>This diagram is Robinhood-specific. Blue is qualified external infrastructure. Acid green is the shared Panoptic layer StonkHedge deployed. Coral is the first per-market graph. Violet is what comes next.</p>
       </div>
       <div class="architecture-shell wrap">
         <div class="architecture-canvas" id="architecture-canvas">
@@ -278,16 +313,16 @@ app.innerHTML = `
 
     <section class="section timeline-section" id="timeline">
       <div class="wrap section-heading split-heading">
-        <div><span class="kicker">Build log</span><h2>Every leap leaves a receipt.</h2></div>
-        <p>Targets, decisions, commits, evidence, and boundaries travel together. The final card stays open until the two-actor lifecycle is genuinely proven.</p>
+        <div><span class="kicker">Cross-chain build log</span><h2>Every leap leaves evidence.</h2></div>
+        <p>Each milestone names its own chain and proof type. Robinhood entries can cite receipts and deployments; the BSC entry cites API observations and unsigned simulations, never transactions.</p>
       </div>
       <div class="timeline wrap">${progress.entries.map(milestoneCard).join("")}</div>
     </section>
 
     <section class="section ledger-section" id="contracts">
       <div class="wrap section-heading split-heading">
-        <div><span class="kicker">Contract atlas</span><h2>Deployed by us—or clearly not.</h2></div>
-        <p>Search all 19 StonkHedge deployments alongside the qualified Robinhood and candidate V4 dependencies they connect to.</p>
+        <div><span class="kicker">Robinhood testnet contract atlas · chain 46630</span><h2>Deployed by us—or clearly not.</h2></div>
+        <p>This ledger is Robinhood-only: all 19 StonkHedge deployments plus the qualified Robinhood and candidate V4 dependencies they connect to. The BSC lane has no StonkHedge contract deployment.</p>
       </div>
       <div class="wrap toolbar">
         <div class="filter-group" role="group" aria-label="Filter contracts">
@@ -303,8 +338,8 @@ app.innerHTML = `
 
     <section class="section transaction-section" id="transactions">
       <div class="wrap section-heading split-heading">
-        <div><span class="kicker">Transaction trail</span><h2>Why this transaction, right now?</h2></div>
-        <p>The answer sits next to every receipt. Faucet events remain visibly separate from the project-signed deployment, genesis, and lifecycle totals.</p>
+        <div><span class="kicker">Robinhood testnet transaction trail · chain 46630</span><h2>Why this transaction, right now?</h2></div>
+        <p>This is the Robinhood receipt trail. Faucet events remain separate from project-signed deployment, genesis, and lifecycle totals. BSC API calls and simulations are intentionally absent because they are not transactions.</p>
       </div>
       <div class="wrap toolbar">
         <div class="filter-group" role="group" aria-label="Filter transactions">
@@ -342,9 +377,9 @@ app.innerHTML = `
 
   <footer>
     <div class="wrap footer-grid">
-      <div><a class="wordmark" href="#top"><span class="mark">S</span><span>StonkHedge</span></a><p>Mechanism testing in public, with receipts.</p></div>
-      <div><span>Source of truth</span><a href="${repoUrl("docs/architecture/robinhood-testnet-system.md")}" target="_blank" rel="noreferrer">Architecture</a><a href="${repoUrl("manifests/markets/robinhood-testnet-pltr-weth-lifecycle-index-17-reconciliation-2026-10-10.json")}" target="_blank" rel="noreferrer">Lifecycle manifest</a></div>
-      <div><span>Boundaries</span><p>Robinhood Chain Testnet only. No real value, withdrawal, liquidation, or mainnet activity.</p></div>
+      <div><a class="wordmark" href="#top"><span class="mark">S</span><span>StonkHedge</span></a><p>Chain-scoped mechanism testing in public, with receipts or explicitly labelled simulation evidence.</p></div>
+      <div><span>Source of truth</span><a href="${repoUrl("docs/architecture/multichain-product-boundary.md")}" target="_blank" rel="noreferrer">Two-chain boundary</a><a href="${repoUrl("docs/architecture/robinhood-testnet-system.md")}" target="_blank" rel="noreferrer">Robinhood architecture</a><a href="${repoUrl("docs/architecture/bnb-gap-guardian.md")}" target="_blank" rel="noreferrer">BSC architecture</a></div>
+      <div><span>Boundaries</span><p>Robinhood is a valueless testnet deployment. BSC uses mainnet data and unsigned simulation only; it has no StonkHedge deployment, signing, broadcast, or spend.</p></div>
     </div>
   </footer>
 

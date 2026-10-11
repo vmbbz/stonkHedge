@@ -1,7 +1,11 @@
 # StonkHedge documentation map
 
-This directory is the source-of-truth documentation set for the StonkHedge
-testnet project. The Markdown is intentionally organized so it can later move
+This directory is the source-of-truth documentation set for StonkHedge's
+chain-scoped product lanes. Start with the
+[multichain product boundary](./architecture/multichain-product-boundary.md)
+to distinguish the deployed Robinhood testnet options system from the BSC
+mainnet API and unsigned-simulation system. The Markdown is intentionally
+organized so it can later move
 into Docusaurus without rewriting the technical content. Docusaurus is a
 publishing layer, not a substitute for accurate manifests and runbooks.
 

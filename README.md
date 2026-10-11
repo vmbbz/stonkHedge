@@ -1,6 +1,13 @@
 # StonkHedge
 
-StonkHedge is an early-stage project exploring Panoptic-native perpetual options and risk-management workflows for Robinhood Stock Tokens. The first public integration lane targets Robinhood Chain testnet; Base Sepolia remains a secondary ERC-8056 compatibility lane.
+StonkHedge is an early-stage, chain-scoped product for tokenized-stock risk
+workflows. Its deployed options lane runs a valueless Panoptic mechanism test
+on Robinhood Chain testnet. Its separate BSC mainnet lane compares issuer
+representations and rehearses bounded routes without signing or broadcasting.
+These lanes share product and safety controls, not contracts, balances,
+authorizations, or transaction history. Base Sepolia remains a secondary
+ERC-8056 compatibility lane. See the
+[multichain product boundary](./docs/architecture/multichain-product-boundary.md).
 
 The current repository is the product and delivery control plane. It contains the researched execution plan and will later hold chain manifests, deployment verification, monitoring, and the developer-facing application. Protocol and SDK changes remain isolated in auditable upstream forks.
 
@@ -10,6 +17,10 @@ The `hackathon/bnb-tokenized-stocks-2026` branch adds a separate, spot-only BSC
 product lane for the BNB Hack: Tokenized Stocks Edition. It reuses the
 StonkHedge product shell and fail-closed transaction discipline, but it does
 not port Robinhood/Panoptic contracts or public-testnet authorizations to BSC.
+There are currently zero StonkHedge contracts and zero StonkHedge broadcasts
+on BSC; support ends at live data, bounded quote construction, and unsigned
+simulation.
+
 Read the [entry architecture and 51-hour delivery plan](./docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
 
 The first two integration gates are now live: the server-only Binance Web3 adapter

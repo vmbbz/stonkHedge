@@ -61,4 +61,13 @@ describe("build-in-public content", () => {
       expect(existsSync(resolve(process.cwd(), document.path)), document.path).toBe(true);
     });
   });
+
+  it("keeps the BSC simulation lane free of deployment and transaction claims", () => {
+    const bscEntry = progress.entries.find((entry) => entry.id === "bnb-gap-guardian-simulation");
+    expect(bscEntry).toBeDefined();
+    expect(bscEntry?.contractRefs).toEqual([]);
+    expect(bscEntry?.transactionRefs).toEqual([]);
+    expect(bscEntry?.evidence.join(" ")).toContain("No wallet");
+    expect(existsSync(resolve(process.cwd(), "docs/architecture/multichain-product-boundary.md"))).toBe(true);
+  });
 });

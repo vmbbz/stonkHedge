@@ -4,7 +4,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import {
   BinanceWeb3Error,
   createBinanceWeb3ClientFromEnv,
-} from "../../server/binanceWeb3";
+} from "../../server/binanceWeb3.js";
 
 const WINDOW_MS = 60_000;
 const REQUESTS_PER_WINDOW = 30;

@@ -164,7 +164,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
   `hackathon/bnb-tokenized-stocks-2026`, and verify its remote SHA equals local
   `HEAD`.
 
-- [ ] **Step 4: Fast-forward main and verify again**
+- [x] **Step 4: Fast-forward main and verify again**
 
   Switch to `main`, fetch `origin`, require that `origin/main` is an ancestor of
   the feature branch, fast-forward `main`, rerun `npm run check`, push `main`,

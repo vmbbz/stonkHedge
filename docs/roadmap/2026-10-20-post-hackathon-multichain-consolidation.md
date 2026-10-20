@@ -157,7 +157,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
   Expected: all Vitest files pass and the TypeScript/Vite production build exits
   zero.
 
-- [ ] **Step 3: Commit and push the feature branch**
+- [x] **Step 3: Commit and push the feature branch**
 
   Stage only the roadmap and reconciled documentation, commit with
   `docs(roadmap): consolidate post-hackathon multichain plan`, push

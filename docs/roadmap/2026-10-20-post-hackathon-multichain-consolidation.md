@@ -41,19 +41,19 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
 - Modify: `docs/architecture/robinhood-testnet-system.md`
 - Modify: `plan.md`
 
-- [ ] **Step 1: Replace event-time BNB language with post-hackathon product language**
+- [x] **Step 1: Replace event-time BNB language with post-hackathon product language**
 
   Describe Gap Guardian as a retained BSC simulation-only lane, link the live
   site, and preserve the exact zero-contract/zero-broadcast boundary.
 
-- [ ] **Step 2: Reconcile Robinhood state through index 17**
+- [x] **Step 2: Reconcile Robinhood state through index 17**
 
   Update every current-state summary, flow label, and next-step paragraph that
   still reports `0..16`, `17/29`, or a stop before buyer WETH approval. The
   accepted state is `0..17`, `18/29`, stopped after the exact buyer WETH
   approval and before index `18`, the buyer WETH deposit.
 
-- [ ] **Step 3: Add the multichain decision to the master plan**
+- [x] **Step 3: Add the multichain decision to the master plan**
 
   Add a post-hackathon roadmap section and decision-log entry defining
   Robinhood as the primary deployed options lane and BSC as the current
@@ -61,7 +61,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
   own infrastructure, issuer, liquidity, licensing, security, and authority
   qualification.
 
-- [ ] **Step 4: Check the edited claims**
+- [x] **Step 4: Check the edited claims**
 
   Run:
 
@@ -80,7 +80,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
 - Modify: `docs/hackathons/evidence/2026-10-10/07-public-access-check.md`
 - Modify: `docs/hackathons/2026-10-10-submission-readiness.md`
 
-- [ ] **Step 1: Record the actual hosted release**
+- [x] **Step 1: Record the actual hosted release**
 
   Record stable URL `https://stonkhedge.vercel.app`, immutable deployment URL
   `https://stonkhedge-emrdylgvn-katzs-projects-2f9ffaf0.vercel.app`, deployment
@@ -88,7 +88,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
   `eb76e6d`. Preserve the earlier failed Preview attempts as chronology rather
   than presenting them as the current state.
 
-- [ ] **Step 2: Record the runtime boundary honestly**
+- [x] **Step 2: Record the runtime boundary honestly**
 
   State that the server-side module-resolution and US-origin jurisdiction
   failures were fixed, that static hosting returned HTTP 200, and that the
@@ -96,7 +96,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
   business code `42900` after repeated acceptance traffic. Do not describe a
   rate-limited call as a product or deployment failure.
 
-- [ ] **Step 3: Close event-time evidence without publishing PII**
+- [x] **Step 3: Close event-time evidence without publishing PII**
 
   Mark the event package as owner-reported submitted and the delivery window as
   closed. Do not commit the raw Google Form screenshot, email address, wallet
@@ -109,14 +109,14 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
 - Modify: `docs/README.md`
 - Modify: `docs/roadmap/2026-10-20-post-hackathon-multichain-consolidation.md`
 
-- [ ] **Step 1: Add this roadmap to the documentation map**
+- [x] **Step 1: Add this roadmap to the documentation map**
 
   Place it before event-specific documents and make the immediate sequence
   explicit: consolidate BSC evidence, complete Robinhood indexes `18..28`,
   derive withdrawals from canonical post-close state, then decide whether BSC
   remains a safety lens or receives a separately qualified execution design.
 
-- [ ] **Step 2: Self-review the roadmap**
+- [x] **Step 2: Self-review the roadmap**
 
   Run:
 
@@ -133,7 +133,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
 - Verify: all tracked files changed by Tasks 1-3
 - Preserve untracked: `buildl.md`
 
-- [ ] **Step 1: Verify documentation and source hygiene**
+- [x] **Step 1: Verify documentation and source hygiene**
 
   Run:
 
@@ -146,7 +146,7 @@ connection, a BSC broadcast, a BSC contract deployment, or any mainnet spend.
   Expected: no whitespace error, no credential file, and `buildl.md` remains
   untracked and unstaged.
 
-- [ ] **Step 2: Run the full repository gate**
+- [x] **Step 2: Run the full repository gate**
 
   Run:
 

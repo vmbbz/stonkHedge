@@ -4,19 +4,15 @@
 
 **Branch:** `hackathon/bnb-tokenized-stocks-2026`
 
-**Prepared revision:** the branch commit containing this runbook; record the
-exact deployed SHA during live preview acceptance
+**Accepted hosted revision:** `eb76e6d`
 
-**Deployment state:** blocked by upstream Vercel first-deployment target bug;
-project linked and branch-scoped Preview secrets configured, but no deployment
-has passed the Preview-target acceptance gate; Git auto-deployment is
-disconnected and the separately authorized domainless bootstrap was rejected
-because Vercel assigned an alias despite `--skip-domain`; a subsequently
-authorized explicit Preview attempt was still classified and aliased as
-Production
+**Deployment state:** accepted simulation-only hosted release at
+<https://stonkhedge.vercel.app/>; immutable deployment
+<https://stonkhedge-emrdylgvn-katzs-projects-2f9ffaf0.vercel.app/>; deployment
+ID `dpl_FGePgh7U19tUZRymumfxbY6jJ8Kh`; function region `cpt1`
 
-**Boundary:** preview only; no wallet, private key, signing, broadcast, or
-mainnet spend
+**Boundary:** hosted review surface only; no wallet, private key, signing,
+broadcast, BSC contract deployment, or mainnet spend
 
 ## Purpose
 
@@ -36,7 +32,35 @@ avoiding an unreviewed runtime jump during deployment.
 dependency/build artifacts, transaction build directories, and the unrelated
 local `buildl.md` file from the CLI upload boundary.
 
-## Vercel settings
+## Post-hackathon resolution
+
+The original Preview-only procedure below repeatedly failed closed because
+Vercel classified the first deployment as Production. The owner later
+authorized one Production-target bootstrap solely to unblock and verify the
+simulation-only site. That authorization did not include a custom domain,
+wallet, signing, broadcast, blockchain transaction, or production secret
+expansion.
+
+Two application fixes were required before the hosted lane was accepted:
+
+- commit `4bbbb28` corrected serverless module resolution; and
+- commit `eb76e6d` pinned the Binance-facing function to Vercel region `cpt1`,
+  avoiding the Binance jurisdiction denial observed from a US function region.
+
+The accepted deployment is `dpl_FGePgh7U19tUZRymumfxbY6jJ8Kh`, with stable URL
+<https://stonkhedge.vercel.app/> and immutable URL
+<https://stonkhedge-emrdylgvn-katzs-projects-2f9ffaf0.vercel.app/>. Both public
+URLs returned HTTP 200 in the unauthenticated 2026-10-20 consolidation check.
+The final live API smoke test reached Binance successfully and then returned
+business code `42900` after repeated acceptance traffic. That is an upstream
+rate-limit boundary, not evidence of a failed Vercel build or a successful
+trade.
+
+The hosted lane remains simulation-only. No subsequent documentation or branch
+integration grants permission to connect a wallet, sign, broadcast, spend, or
+deploy contracts on BSC.
+
+## Original Preview settings
 
 Use these exact project settings:
 
@@ -49,7 +73,7 @@ Use these exact project settings:
 | Install command | default (`npm install`) |
 | Build command | `npm run build` |
 | Output directory | `dist` |
-| Production deployment | **No**; create a Preview deployment |
+| Original target | **Preview**; the later accepted bootstrap is documented above |
 
 Configure these values in **Project Settings → Environment Variables** and
 scope both to **Preview**. If Vercel offers branch scoping, restrict them to
@@ -66,7 +90,7 @@ logs, screenshots, chat, or this document. `BINANCE_WEB3_BASE_URL` and
 Vercel applies changed environment variables only to new deployments, so
 redeploy after adding or rotating either credential.
 
-## Authentication and deployment
+## Original authentication and failed Preview chronology
 
 The local Vercel CLI is authenticated as `cosychiruka-7184`, and this checkout
 is linked locally to `katzs-projects-2f9ffaf0/stonkhedge`. The Vercel project's
@@ -121,24 +145,25 @@ again listed zero deployments, Production had no environment variables, and
 the rejected deployment URL, assigned public alias, and project alias all
 returned `404`.
 
-Vercel now lists zero deployments for the project, and the production alias
-returns `404`. The Git integration is disconnected to prevent future
-feature-branch pushes from silently recreating Production. The Vercel project,
-local project link, and branch-scoped encrypted Preview variables remain intact.
-None of those deployments is accepted Preview evidence. Do not retry CLI, Git,
-REST, or bootstrap deployment until one of these gates is explicitly chosen:
+At the end of the eighth attempt, Vercel listed zero deployments for the
+project and the production alias returned `404`. The Git integration was
+disconnected to prevent feature-branch pushes from silently recreating
+Production. None of those eight deployments is accepted Preview evidence. At
+that time, no retry was permitted until one of these gates was explicitly
+chosen:
 
 1. Vercel resolves the upstream Preview-classification defect; or
 2. Vercel Support provides a documented path that can create the first Preview
    without assigning any Production or project alias, and the owner separately
    authorizes that exact procedure.
 
-The one-time domainless bootstrap and follow-up Preview authorizations have
-been consumed and failed closed. Never repeat `--prod`, `--target=preview`,
-promote, assign an alias, or reconnect Git without new authorization for an
-exact reviewed procedure. `.vercel/` remains local and ignored.
+Those one-time domainless bootstrap and follow-up Preview authorizations were
+consumed and failed closed. The separately authorized accepted hosted release
+is recorded above; it does not retroactively turn the failed attempts into
+Preview evidence or create standing permission for another deployment.
+`.vercel/` remains local and ignored.
 
-## Acceptance
+## Original acceptance procedure
 
 After Vercel reports the preview as Ready, run the repository smoke test with
 the public, unfunded buyer address:
@@ -161,7 +186,7 @@ Confirm that Compare live, Get read-only quote, and Compile & simulate a fresh
 route work, that the simulation proof contains no raw calldata, and that the
 browser console has no Content Security Policy violations.
 
-Repository preparation passed `46/46` automated tests, the TypeScript/Vite
+Repository preparation originally passed `46/46` automated tests, the TypeScript/Vite
 production build, and JSON/configuration validation. The production dependency
 audit reports zero advisories. The full audit reports one high-severity advisory
 in development-only transitive dependency `source-map-js@1.2.1`; it is not part
@@ -171,7 +196,7 @@ Robinhood lifecycle evidence and the provenance test correctly detected the
 hash drift. Resolve this only through an explicit evidence-baseline migration,
 not by rewriting historical manifests during preview preparation.
 
-## Stop conditions
+## Hosted-lane stop conditions
 
 Stop and do not promote the preview if any of these occur:
 
@@ -181,8 +206,9 @@ Stop and do not promote the preview if any of these occur:
 - the preview lacks `no-store` on API responses;
 - the selected chain, sender, token, amount, approval, or slippage changes;
 - a simulation error is converted into a clear verdict;
-- Vercel deploys from `main` instead of the hackathon branch; or
-- the command attempts a production deployment.
+- a deployment revision is not traceable to the reviewed repository state; or
+- a new deployment, alias, secret-scope change, wallet path, signing path, or
+  broadcast is attempted without explicit review and authority.
 
 The in-memory request budget is defense in depth, not a globally durable rate
 limit across serverless instances. Before a broad public launch, add a durable
@@ -191,11 +217,13 @@ usage.
 
 ## Next gate
 
-Resolve the Vercel first-deployment target gate through an upstream fix or a
-documented no-alias Support procedure. Then record the immutable Preview URL,
-deployed Git SHA, timestamp, response boundaries, and smoke-test output. Only
-after that acceptance should work begin on the separately reviewed,
-disabled-by-default wallet confirmation state machine.
+Keep the hosted BSC lane read-only and unsigned. Retest the API only after the
+upstream rate-limit window clears, preserve credential redaction and `no-store`
+responses, and do not add a wallet confirmation state machine by extension of
+the hackathon deployment. Any BSC execution path requires a new architecture,
+threat model, tests, and explicit authority. The immediate state-changing
+product milestone remains the separately planned Robinhood testnet lifecycle
+continuation from index `18`.
 
 ## Sources
 

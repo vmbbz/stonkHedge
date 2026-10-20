@@ -410,10 +410,12 @@ Write comprehensive tests (Foundry) + fuzzing for edge cases (splits, dividends,
 # StonkHedge build and Robinhood Chain testnet launch plan
 
 **Planning baseline:** 2026-09-09
-**Status:** The shared 16-contract Panoptic V4 stack and PLTR/WETH public genesis are deployed and reconciled on Robinhood Chain Testnet. The exact no-hook PoolKey is initialized at the synthetic mechanism-test policy of `0.001` test WETH per PLTR, V4 liquidity NFT `3903` holds bounded two-sided liquidity `138450781996976174`, and PanopticPool `0x042c0d9c497d62a85b3410f2773cfa748d18e586` plus both CollateralTrackers are registered and wired. Deployment and genesis contributed 29 StonkHedge-signed transactions and 19 StonkHedge addresses. A separately authorized two-actor lifecycle has since reached a verified public prefix of indexes `0..16` (`17/29` lifecycle calls): two bounded baseline swaps passed, the writer deposited exactly `0.5 PLTR` and `0.0005 WETH`, the buyer deposited exactly `0.25 PLTR` into tracker0, writer nonce is `27`, buyer nonce is `3`, and no option leg is open. Execution is stopped before buyer WETH approval index `17`; option open, premium/solvency observation, ordered close, permission cleanup, withdrawals, liquidation, second markets, and mainnet remain incomplete or excluded. See `docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md`, `docs/architecture/robinhood-testnet-system.md`, and the lifecycle public-progress manifest.
+**Status:** The shared 16-contract Panoptic V4 stack and PLTR/WETH public genesis are deployed and reconciled on Robinhood Chain Testnet. The exact no-hook PoolKey is initialized at the synthetic mechanism-test policy of `0.001` test WETH per PLTR, V4 liquidity NFT `3903` holds bounded two-sided liquidity `138450781996976174`, and PanopticPool `0x042c0d9c497d62a85b3410f2773cfa748d18e586` plus both CollateralTrackers are registered and wired. Deployment and genesis contributed 29 StonkHedge-signed transactions and 19 StonkHedge addresses. A separately authorized two-actor lifecycle has since reached a verified public prefix of indexes `0..17` (`18/29` lifecycle calls): two bounded baseline swaps passed, the writer deposited exactly `0.5 PLTR` and `0.0005 WETH`, the buyer deposited exactly `0.25 PLTR` into tracker0, and the buyer approved exactly `0.00025 WETH` to tracker1. Writer nonce is `27`, buyer nonce is `4`, and no option leg is open. Execution is stopped before the buyer WETH deposit at index `18`; option open, premium/solvency observation, ordered close, permission cleanup, withdrawals, liquidation, second markets, and mainnet remain incomplete or excluded. Separately, the completed BNB hackathon delivery survives as a BSC mainnet discovery, quote, and unsigned-simulation lane with zero StonkHedge BSC contracts, signatures, broadcasts, or spend. See `docs/progress/2026-10-10-lifecycle-index-17-reconciliation.md`, `docs/architecture/multichain-product-boundary.md`, and `docs/roadmap/2026-10-20-post-hackathon-multichain-consolidation.md`.
 **Primary objective:** Deliver a reproducible Robinhood Chain testnet vertical slice for perpetual options and one-click equity hedging using Robinhood-provided, valueless test Stock Tokens, then harden it into a public testnet alpha.
-**Primary pair for the vertical slice:** PLTR/testnet WETH with fee `3000`, tick spacing `60`, and no hook. Its bounded public genesis is complete and reconciled. Its separately planned and authorized public lifecycle is verified through index `16`, including both bounded writer collateral deposits and the buyer's exact PLTR tracker deposit; every remaining buyer-WETH-collateral, option, premium/solvency, close, withdrawal, or cleanup action remains subject to the frozen two-actor plan, fresh one-step preflight, receipt/state review, and stop-on-mismatch policy. The deterministic local failure lane still uses a controllable ERC-8056 mock.
+**Primary pair for the vertical slice:** PLTR/testnet WETH with fee `3000`, tick spacing `60`, and no hook. Its bounded public genesis is complete and reconciled. Its public lifecycle is verified through index `17`, including both bounded writer collateral deposits, the buyer's exact PLTR tracker deposit, and the buyer's exact WETH tracker approval. Every remaining buyer-WETH-deposit, option, premium/solvency, close, withdrawal, or cleanup action requires a fresh state capture, regenerated plan, exact-head replay, new authorization, one-step preflight, receipt/state review, and stop-on-mismatch policy. The deterministic local failure lane still uses a controllable ERC-8056 mock.
 **Secondary compatibility lane:** Base Sepolia remains the B20/official test-USDC integration target; it is not the fastest route to an issuer-shaped public stock-token demo.
+
+**BSC product lane:** Gap Guardian compares issuer representations, constructs bounded live quotes, and performs unsigned transaction simulation on BSC mainnet. It is an issuer/route-safety surface, not a Panoptic deployment. A future BSC options lane would require an independent infrastructure, issuer, liquidity, licensing, security, operations, and authority qualification before any contract deployment or transaction design.
 **Mainnet:** Explicitly out of scope until the licensing, issuer, legal, audit, economic-risk, and operational gates below are all cleared.
 
 This section supersedes the earlier draft from line 410 onward. The material before this section is a research conversation, not an approved specification.
@@ -1078,7 +1080,29 @@ The initial architecture is a hypothesis to test, not a commitment to preserve P
 
 Each track needs an owner, measurable acceptance evidence, a review date or triggering event, and an explicit decision. An unresolved challenge remains `BLOCKED`; it must not disappear into a generic future-work list.
 
-Mainnet requires a separate explicit authorization. Nothing in a green Robinhood testnet or Base Sepolia run authorizes movement of real funds or deployment to Robinhood chain ID `4663` or Base chain ID `8453`.
+### 10.3 Post-hackathon multichain sequence
+
+The completed BNB hackathon work does not replace the deployed Robinhood testnet
+options roadmap. The immediate order is:
+
+1. preserve BSC Gap Guardian as a simulation-only issuer and route-safety lane;
+2. capture fresh read-only Robinhood state from the canonical prefix through
+   index `17`;
+3. regenerate, exact-head replay, and separately authorize only the remaining
+   Robinhood lifecycle indexes `18..28`;
+4. derive any withdrawal plan from canonical post-close state rather than from
+   rehearsal estimates; and
+5. only then decide whether BSC remains a safety lens or receives a separately
+   qualified execution architecture.
+
+Shared UI, policy language, and evidence schemas may be reused. Contracts,
+addresses, balances, nonces, permissions, legal conclusions, and transaction
+authority never cross chain boundaries by implication.
+
+Mainnet requires a separate explicit authorization. Nothing in a green
+Robinhood testnet, Base Sepolia run, or BSC unsigned simulation authorizes
+movement of real funds or deployment to Robinhood chain ID `4663`, Base chain
+ID `8453`, or BSC chain ID `56`.
 
 ## 11. Planning-round and implementation commit cadence
 
@@ -1132,6 +1156,7 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 | D-027 | Use the exact PLTR/WETH fee-`3000`, spacing-`60`, no-hook PoolKey and a clearly labelled synthetic `0.001` test-WETH-per-PLTR price for offline market-genesis rehearsal; assign LP and factory-NFT roles to the second actor. | PLTR preserves Stock Token as currency0, both tokens use 18 decimals, the synthetic ratio fits faucet balances without pretending to be an equity quote, and role separation keeps the protocol-admin deployer out of ordinary LP actions. | Fresh qualification fails, owner rejects the proposed exposure/range/salt, source or address bindings drift, or a reference-derived price is explicitly required. |
 | D-028 | Accept the exact-head PLTR/WETH genesis rehearsal as local mechanism evidence only, using a verified one-block Anvil compatibility child and snapshot-isolated CREATE3-proxy collision injection. | The public pre-state passed `79/79` plus `17/17`; all 12 positive transitions reconciled and four negative cases reverted, while the local child fixes an imported L2-header tooling mismatch without changing public state or contract semantics. | The owner rejects the exact exposure, a source/state binding changes, a fresh replay fails, Robinhood or V4 publishes a conflicting deployment, or any public execution is proposed without a separately reviewed operator and authorization. |
 | D-029 | Generate market execution calldata offline, then use a hash-bound, phase-aware one-step operator that signs at most one testnet transaction per invocation and reconciles the complete state before stopping. | Nonces and deadlines are short-lived; V4/Permit2 preserve unused allowance headroom after mint; and the generic qualification's “pool uninitialized” assertion becomes intentionally false after initialization. Separating generation from execution and permitting only the exact planned PLTR initialization failure keeps every unrelated one of the 79 baseline checks strict while the operator verifies allowances, pool/liquidity/NFT state, clone wiring, receipt, and nonce. | Any plan/operator/report/source hash changes, nonce or deadline drifts, a non-PLTR qualification check fails, initialized state differs from the plan, the user expands beyond valueless chain `46630`, or authorization is absent. |
+| D-030 | Keep Robinhood Chain testnet as the primary deployed options mechanism lane and retain BSC Gap Guardian as an issuer-aware discovery, bounded-quote, and unsigned-simulation lane. | The two lanes now have different proven capabilities and authority: Robinhood has deployed Panoptic contracts and canonical valueless lifecycle receipts, while BSC has live issuer/route data and fail-closed simulation but zero StonkHedge contracts or broadcasts. | A BSC options design passes its own infrastructure, issuer, liquidity, licensing, security, operations, and authority qualification, or Robinhood evidence shows Panoptic is no longer the right product architecture. |
 
 ## 13. Open blockers and questions to resolve during execution
 
@@ -1147,5 +1172,8 @@ This keeps protocol diffs narrow and prevents a planning commit from falsely imp
 - Which jurisdiction, entity, and user eligibility model would apply to a later public UI? This needs qualified counsel, not a code-only answer.
 - Who will hold deployer, guardian, treasurer, registry, and Safe roles for public alpha?
 - What quantitative loss tolerance and liquidity assumptions define “conservative” for the first real-asset market?
+- After the Robinhood lifecycle and state-derived withdrawals are complete,
+  should BSC remain an issuer/route-safety lens or enter a separate options
+  architecture review? No BSC execution design exists today.
 
 These are gates, not footnotes. Any answer that changes architecture, authority, license scope, or real-asset eligibility triggers a new planning round and commit before implementation continues.

@@ -9,20 +9,31 @@ organized so it can later move
 into Docusaurus without rewriting the technical content. Docusaurus is a
 publishing layer, not a substitute for accurate manifests and runbooks.
 
-## Active BNB hackathon lane
+The active sequence is documented in the
+[post-hackathon multichain consolidation roadmap](./roadmap/2026-10-20-post-hackathon-multichain-consolidation.md):
+preserve the BSC evidence and simulation-only boundary, complete Robinhood
+lifecycle indexes `18..28` under a fresh plan and authorization, derive
+withdrawals from canonical post-close state, and only then decide whether BSC
+remains a safety lens or enters a separately qualified execution-design round.
 
-The `hackathon/bnb-tokenized-stocks-2026` branch contains a time-boxed,
-spot-only BSC entry plan for the BNB Hack: Tokenized Stocks Edition. Start with
-the [entry architecture, compliance boundary, and hour-by-hour plan](./hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
-This lane reuses product and safety patterns but remains separate from the
-Robinhood Chain testnet deployment and its transaction authorizations.
+## Post-hackathon BSC Gap Guardian lane
+
+The BNB Hack: Tokenized Stocks Edition delivery is closed and its useful work
+continues as the spot-only BSC Gap Guardian lane. Start with the
+[post-hackathon multichain consolidation roadmap](./roadmap/2026-10-20-post-hackathon-multichain-consolidation.md),
+then use the original
+[entry architecture, compliance boundary, and hour-by-hour plan](./hackathons/2026-10-09-bnb-tokenized-stocks-entry.md)
+as event history. This lane reuses product and safety patterns but remains
+separate from the Robinhood Chain testnet deployment and its transaction
+authorizations.
 The [Binance Web3 integration experience log](./hackathons/2026-10-09-binance-web3-dx-log.md)
 records only observed onboarding and API behavior for the required Developer
 Experience Report.
-The [submission-readiness gate](./hackathons/2026-10-10-submission-readiness.md)
-maps every official requirement to current evidence, blockers, and owner-only
-actions. Use the [demo and evidence runbook](./hackathons/2026-10-10-demo-and-evidence.md)
-for the sub-four-minute recording sequence and capture checklist, the
+The [submission-readiness archive](./hackathons/2026-10-10-submission-readiness.md)
+maps every official requirement to the evidence supplied, known limitations,
+and owner-reported completion state. Use the
+[demo and evidence runbook](./hackathons/2026-10-10-demo-and-evidence.md)
+for the recording sequence and capture checklist, the
 [submission-copy worksheet](./hackathons/2026-10-10-submission-copy.md) for the
 project form, and the
 [builder-review DX draft](./hackathons/2026-10-10-developer-experience-report-draft.md)
@@ -36,9 +47,11 @@ policy, and observed API schema drift. The
 records both live fail-closed issuer rehearsals and the non-executable evidence
 boundary. No wallet, signing, broadcast, or BSC mainnet spend is implemented.
 The [simulation-only preview runbook](./deployment/2026-10-09-bnb-preview-deployment.md)
-pins the Vercel branch settings, Preview-scoped secret handling, deployment
-headers, deployed smoke test, and stop conditions. A preview URL is not yet
-recorded and must not be inferred from repository readiness.
+preserves the failed Preview attempts and the subsequently accepted hosted
+release. The stable simulation-only surface is
+[stonkhedge.vercel.app](https://stonkhedge.vercel.app/); its deployment record
+pins the immutable URL, deployed commit, function region, headers, smoke-test
+boundary, and stop conditions.
 The [Robinhood index-17 reconciliation](./progress/2026-10-10-lifecycle-index-17-reconciliation.md)
 records the later canonical buyer WETH approval and corrects the public
 lifecycle boundary to indexes `0..17`. Copy-ready, no-repository-link

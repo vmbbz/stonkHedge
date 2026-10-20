@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| State date | 2026-09-20 |
+| State date | 2026-10-10 |
 | Network | Robinhood Chain Testnet, chain ID `46630` |
-| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; the public lifecycle is verified through index `16` (`17/29` canonical calls), including both bounded writer collateral deposits and the buyer's exact PLTR deposit, and is stopped before buyer WETH approval |
+| Current state | Shared Panoptic V4 infrastructure and the first PLTR/WETH per-market graph are deployed; bounded LP NFT `3903` exists; the public lifecycle is verified through index `17` (`18/29` canonical calls), including both bounded writer collateral deposits, the buyer's exact PLTR deposit, and the buyer's exact WETH approval; execution is stopped before index `18`, the buyer WETH deposit |
 | Deployment source | Panoptic core commit `f4abdd7de13ea1414eb1b8f97b53ecbc448b9b8d` |
 | Local issuer-failure evidence | Core commit `cfaf42c29b5c59304540e2a31e24daee4d977797` |
 
@@ -54,19 +54,20 @@ sandbox:
   exact-head lifecycle and buffered withdrawal sequence on a discarded fork,
   including receipt-level interest and share-burn reconciliation; and
 - the separately authorized public lifecycle now has a canonical prefix of
-  indexes `0..16`: buyer funding, exact swap permissions and renewals, both
+  indexes `0..17`: buyer funding, exact swap permissions and renewals, both
   bounded baseline swaps, exact writer deposits of `0.5 PLTR` plus
-  `0.0005 WETH`, and the buyer's exact `0.25 PLTR` tracker deposit. Every call
-  was independently receipt/state reconciled before the next index, and no
-  option leg is open.
+  `0.0005 WETH`, the buyer's exact `0.25 PLTR` tracker deposit, and the buyer's
+  exact `0.00025 WETH` approval to tracker1. Every call was independently
+  receipt/state reconciled before the next index, and no option leg is open.
 
 This is now a deployed and wired Panoptic market over a functioning Uniswap V4
 liquidity pool with public swap and writer-collateral evidence. “Collateral
-prefix” is intentionally narrower than “validated user lifecycle”: buyer
-collateral, option positions, premium/solvency observation, close, liquidation,
-and withdrawal are not yet public. The currently authorized plan preserves
-one-transaction execution with mandatory receipt/state review and stop on any
-nonce, state, hash, or time-window mismatch.
+prefix” is intentionally narrower than “validated user lifecycle”: the buyer
+WETH deposit, option positions, premium/solvency observation, close,
+liquidation, and withdrawal are not yet public. The prior authorization cannot
+be reused: a fresh plan and authorization must preserve one-transaction
+execution with mandatory receipt/state review and stop on any nonce, state,
+hash, or time-window mismatch.
 
 ### Milestone memory aid
 
@@ -83,8 +84,8 @@ flowchart LR
     J --> K[Allowances zeroed and Panoptic market registered]
     K --> L[Lifecycle safety and withdrawal tooling]
     L --> M[Third-actor lifecycle and withdrawals rehearsed]
-    M --> N[Public lifecycle 0..16 verified]
-    N --> G[Next: buyer WETH approval index 17]
+    M --> N[Public lifecycle 0..17 verified]
+    N --> G[Next: buyer WETH deposit index 18]
 
     classDef done fill:#d7f7df,stroke:#176b2c,color:#111;
     classDef next fill:#fff1b8,stroke:#8a6700,color:#111;
@@ -562,7 +563,7 @@ For a complete address-by-address and transaction-by-transaction explanation,
 including why direct-CREATE and market-genesis ordering mattered, use the
 [public-genesis milestone ledger](../progress/2026-09-11-public-genesis-milestone.md).
 
-The **two-actor public lifecycle execution** now has `17/29` canonical calls.
+The **two-actor public lifecycle execution** now has `18/29` canonical calls.
 Indexes `0..7` funded the buyer, installed and renewed the writer's exact swap
 permissions, and completed the first bounded PLTR-to-WETH baseline swap. The
 next reverse swap then failed closed before signing because its deadline
@@ -573,18 +574,23 @@ than pretending an expired plan is still fresh. The second read-only qualifier
 binds all eight predecessor receipts and state; the offline transformer
 preserves indexes `0..7`, derives renewals from only the unexecuted swap inputs,
 refreshes future deadlines, and recomputes both nonce streams. Its separately
-authorized continuation has now completed indexes `8..16`: exact remaining
+authorized continuation completed indexes `8..16`: exact remaining
 Permit2 renewals, the bounded WETH-to-PLTR reverse swap, and the writer's PLTR
 and WETH tracker approvals/deposits, followed by the buyer's exact `0.25 PLTR`
 approval and deposit into tracker0. Writer nonce is `27`, buyer nonce is `3`,
 and both actors have zero open option legs.
 
+The later index-17 reconciliation proves that the buyer then approved exactly
+`0.00025 WETH` to tracker1, advancing the buyer nonce to `4`. It did not deposit
+that WETH and did not open an option leg. The prior lifecycle authorization is
+historical evidence, not authority for any remaining call.
+
 The next boundary remains narrow:
 
-1. preflight and execute at most index `17`, the buyer's exact WETH tracker
-   approval, then reconcile and stop;
-2. continue the authorized sequence only while every nonce, state, hash, and
-   time-window condition matches;
+1. capture a fresh read-only state snapshot and regenerate the remaining
+   index-`18..28` plan from the canonical prefix;
+2. exact-head replay the regenerated plan and request a new, separately
+   hash-bound authorization before index `18`, the buyer's exact WETH deposit;
 3. do not claim the options lifecycle complete until matched open, premium
    movement, buyer-first close, writer close, and permission cleanup reconcile;
 4. derive withdrawals only from the eventual public post-close state under a
@@ -594,6 +600,7 @@ The next boundary remains narrow:
    milestone.
 
 See the [receipt-bound continuation ledger](../progress/2026-09-19-lifecycle-receipt-bound-continuation.md),
+[index-17 reconciliation](../progress/2026-10-10-lifecycle-index-17-reconciliation.md),
 [public-prefix and refresh ledger](../progress/2026-09-16-lifecycle-prefix-and-refresh.md),
 [three-account lifecycle rehearsal ledger](../progress/2026-09-14-three-account-lifecycle-rehearsal.md),
 and [execution-preparation ledger](../progress/2026-09-15-lifecycle-execution-preparation.md).

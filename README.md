@@ -9,19 +9,27 @@ authorizations, or transaction history. Base Sepolia remains a secondary
 ERC-8056 compatibility lane. See the
 [multichain product boundary](./docs/architecture/multichain-product-boundary.md).
 
-The current repository is the product and delivery control plane. It contains the researched execution plan and will later hold chain manifests, deployment verification, monitoring, and the developer-facing application. Protocol and SDK changes remain isolated in auditable upstream forks.
+The current repository is the product and delivery control plane. It contains
+the researched execution plan, chain manifests, deployment verification,
+monitoring, and the developer-facing application. Protocol and SDK changes
+remain isolated in auditable upstream forks.
 
-## BNB tokenized-stocks hackathon lane
+## BSC Gap Guardian lane
 
-The `hackathon/bnb-tokenized-stocks-2026` branch adds a separate, spot-only BSC
-product lane for the BNB Hack: Tokenized Stocks Edition. It reuses the
-StonkHedge product shell and fail-closed transaction discipline, but it does
-not port Robinhood/Panoptic contracts or public-testnet authorizations to BSC.
-There are currently zero StonkHedge contracts and zero StonkHedge broadcasts
-on BSC; support ends at live data, bounded quote construction, and unsigned
-simulation.
+The BNB Hack: Tokenized Stocks Edition delivery has been retained as a
+separate, spot-only BSC product lane. It reuses the StonkHedge product shell and
+fail-closed transaction discipline, but it does not port Robinhood/Panoptic
+contracts or public-testnet authorizations to BSC. There are currently zero
+StonkHedge contracts and zero StonkHedge broadcasts on BSC; support ends at
+live data, bounded quote construction, and unsigned simulation.
 
-Read the [entry architecture and 51-hour delivery plan](./docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
+The simulation-only site is available at
+[stonkhedge.vercel.app](https://stonkhedge.vercel.app/). The event submission
+and Developer Experience Report are owner-reported complete; the repository
+does not publish private form receipts or participant details. Read the
+[post-hackathon consolidation roadmap](./docs/roadmap/2026-10-20-post-hackathon-multichain-consolidation.md)
+and the original
+[entry architecture and 51-hour delivery plan](./docs/hackathons/2026-10-09-bnb-tokenized-stocks-entry.md).
 
 The first two integration gates are now live: the server-only Binance Web3 adapter
 resolves both Ondo `NVDAon` and bStocks `NVDAB`, retrieves their public price,
@@ -31,19 +39,18 @@ short-lived `5.10 USDT` read-only quote for either representation while
 building no transaction. A separate server-only path compiles exact approval
 and swap payloads, sends both unsigned calls to the Binance Transaction API
 simulator, and returns only redacted proof fields. No wallet, signing, or
-broadcast surface exists in this branch. Read the
+broadcast surface exists in this lane. Read the
 [component architecture](./docs/architecture/bnb-gap-guardian.md).
 
-### 60-second judge path
+### Reproduction path
 
-The branch is live-API and simulation-only. It requires Node.js 22 and
-judge-provided Binance Web3 developer credentials; never place them in a
-`VITE_` variable or paste them into the browser.
+The lane is live-API and simulation-only. It requires Node.js 22 and your own
+Binance Web3 developer credentials; never place them in a `VITE_` variable or
+paste them into the browser.
 
 ```powershell
 git clone https://github.com/vmbbz/stonkHedge.git
 cd stonkHedge
-git switch hackathon/bnb-tokenized-stocks-2026
 npm ci
 Copy-Item .env.example .env.local
 notepad .env.local
@@ -56,7 +63,8 @@ npm run bnb:rwa:demo
 ```
 
 The last command serves the built UI and server-only API on
-`http://127.0.0.1:3000/`. It is a local judge/demo server, not a public host.
+`http://127.0.0.1:3000/`. It is a local reproduction server; the public hosted
+surface remains simulation-only.
 
 For the recorded unfunded public sender, the expected fail-closed result is
 approval `SUCCESS`, swap `FAILED` for insufficient balance, and final verdict
@@ -102,9 +110,10 @@ receives either credential.
   for the complete 19-deployment, 29-transaction architecture and
   communications record.
 - Use the [receipt-bound lifecycle ledger](./docs/progress/2026-09-19-lifecycle-receipt-bound-continuation.md)
-  for the current public prefix through index `16`, including both bounded
-  writer collateral deposits, the buyer's exact PLTR deposit, and the next stop
-  boundary.
+  for the historical continuation through index `16`, and the
+  [index-17 reconciliation](./docs/progress/2026-10-10-lifecycle-index-17-reconciliation.md)
+  for the current public prefix through index `17`, including the buyer's exact
+  WETH approval and the next stop boundary.
 - Read [`plan.md`](./plan.md), beginning with **StonkHedge build and Robinhood Chain testnet launch plan**.
 - Use the [`docs` index](./docs/README.md) to navigate architecture, evidence,
   deployment, review, testing, and roadmap records.
@@ -137,10 +146,11 @@ receives either credential.
   both CollateralTrackers are registered. The [final public-genesis
   manifest](./manifests/markets/robinhood-testnet-pltr-weth-public-genesis-2026-09-11.json)
   binds all 13 receipts and the terminal wiring. Its authorization is closed.
-  A separate hash-bound lifecycle plan has since reached `17/29` verified
+  A separate hash-bound lifecycle plan has since reached `18/29` verified
   public calls, including two bounded swaps and exact writer PLTR/WETH
   collateral deposits. The buyer's exact PLTR collateral deposit is also live.
-  No option leg is open; buyer WETH collateral, matched
+  The buyer has approved exactly `0.00025 WETH` to tracker1 but has not deposited
+  it. No option leg is open; buyer WETH collateral, matched
   positions, close, cleanup, withdrawals, other markets, and mainnet remain
   incomplete or excluded.
 - Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before starting work across the product, protocol, or SDK repositories.
@@ -157,9 +167,9 @@ receives either credential.
 - The shared 16-contract Panoptic V4 stack is deployed and fully reconciled on
   Robinhood Chain testnet. The PLTR/WETH PoolKey is initialized and bounded V4
   liquidity NFT `3903` is public. The first per-market Panoptic contracts are
-  deployed and wired. Public lifecycle evidence now covers indexes `0..16`,
-  including both writer collateral deposits and the buyer's bounded PLTR
-  deposit. Buyer WETH collateral, options,
+  deployed and wired. Public lifecycle evidence now covers indexes `0..17`,
+  including both writer collateral deposits, the buyer's bounded PLTR deposit,
+  and the exact buyer WETH approval. Buyer WETH collateral deposit, options,
   close/cleanup, withdrawals, and the user application remain incomplete.
 
 ## Repository map

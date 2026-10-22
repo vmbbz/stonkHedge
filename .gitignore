@@ -15,6 +15,9 @@ Thumbs.db
 *.log
 tmp/
 
+# Local isolated Git worktrees
+.worktrees/
+
 # Python interpreter caches
 __pycache__/
 *.py[cod]
